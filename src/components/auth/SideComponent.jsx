@@ -70,11 +70,11 @@ const SideComponent = () => {
         </div>
 
         {/* Progress Tabs */}
-        <div className="flex gap-2 mt-10">
+        <div className="flex gap-2 mt-10 w-full px-10">
           {slides.map((_, idx) => (
             <div
               key={idx}
-              className="w-10 h-2 bg-white/30 rounded overflow-hidden"
+              className="flex-1 h-2 bg-white/30 rounded overflow-hidden"
             >
               <div
                 className="h-full bg-white transition-all duration-[100ms]"
