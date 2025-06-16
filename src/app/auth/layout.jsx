@@ -4,6 +4,7 @@ import AuthFooter from "@/components/auth/AuthFooter";
 import { usePathname, useRouter } from "next/navigation";
 import { MoveLeft } from "lucide-react";
 import React from "react";
+import SideComponent from "@/components/auth/SideComponent";
 
 export default function AuthLayout({ children }) {
   const pathname = usePathname();
@@ -13,7 +14,7 @@ export default function AuthLayout({ children }) {
 
   return (
     <div className="flex bg-white h-screen">
-      <div className="w-1/2 p-5">
+      <div className="w-1/2 h-screen flex flex-col  justify-between p-5">
         <div className="flex items-center gap-2 mb-2">
           {isSignupPage ? (
             <button
@@ -38,17 +39,14 @@ export default function AuthLayout({ children }) {
           )}
         </div>
 
-        <div className="flex h-[90vh] justify-center items-center">
+        <div className="flex flex-1  justify-center items-center">
           {children}
         </div>
 
         <AuthFooter />
       </div>
 
-      <div
-        className="flex my-auto rounded-4xl p-5 overflow-hidden w-1/2 mr-2 h-[99vh] bg-cover bg-center"
-        style={{ backgroundImage: "url('/auth/Right_Image.png')" }}
-      ></div>
+      <SideComponent />
     </div>
   );
 }
