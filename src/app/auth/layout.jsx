@@ -4,7 +4,7 @@ import React from "react";
 
 export default function AuthLayout({ children }) {
   return (
-    <div className="flex h-screen">
+    <div className="flex bg-white h-screen">
       {/* Left Side (Logo + Form + Footer) */}
       <div className="w-1/2 p-5">
         {/* Logo */}

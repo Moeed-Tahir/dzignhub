@@ -50,11 +50,11 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="w-[80%] mx-auto p-6 justify-center items-center bg-white">
+    <div className="w-[80%] mx-auto p-6 justify-center items-center ">
       <h2 className="text-3xl font-medium text-[#2A0856] mb-4 text-center">
         Welcome back!
       </h2>
-      <p className="text-gray-600 mb-6 text-center">
+      <p className="text-[#44444A] mb-6 text-center">
         Sign in to your allmyai account to access all allmyai products.
       </p>
       <form onSubmit={handleSubmit}>
@@ -89,7 +89,7 @@ const LoginForm = () => {
             </label>
           </div>
           <Link
-            href="/auth/forgot-password"
+            href="/auth/forget-password"
             className="text-[#2A0856] font-medium text-sm hover:underline"
           >
             Forgot password?
@@ -104,20 +104,27 @@ const LoginForm = () => {
         </button>
         <div className="text-center mb-4">or</div>
         <div className="flex justify-between gap-2">
-          <button className="w-full bg-white border border-gray-300 p-2 font-bold rounded-full flex items-center justify-center">
+          <button
+            type="button" 
+            className="w-full bg-white border border-gray-300 p-2 font-bold rounded-full flex items-center justify-center"
+          >
             <img
               src="https://www.google.com/favicon.ico"
               alt="Google"
               className="w-8 h-8 mr-2"
-            />{" "}
+            />
             Google
           </button>
-          <button className="w-full bg-white border border-gray-300 font-bold p-2 rounded-full flex items-center justify-center">
+
+          <button
+            type="button" 
+            className="w-full bg-white border border-gray-300 font-bold p-2 rounded-full flex items-center justify-center"
+          >
             <img
               src="https://www.apple.com/favicon.ico"
               alt="Apple"
               className="w-8 h-8 mr-2"
-            />{" "}
+            />
             Apple
           </button>
         </div>

@@ -1,9 +1,8 @@
+import ForgetPass from '@/components/auth/ForgetPass'
 import React from 'react'
 
 const page = () => {
-  return (
-    <div>page</div>
-  )
+  return <ForgetPass />
 }
 
 export default page
