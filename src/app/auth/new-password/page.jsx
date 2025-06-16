@@ -1,9 +1,8 @@
+import NewPass from '@/components/auth/NewPass'
 import React from 'react'
 
 const page = () => {
-  return (
-    <div>page</div>
-  )
+  return  <NewPass />
 }
 
 export default page

@@ -1,15 +1,15 @@
 "use client";
 import React, { useRef } from "react";
 
-const OtpInput = ({ length , onChange }) => {
+const OtpInput = ({ length, onChange, isError,isPassReset }) => {
   const inputs = useRef([]);
 
   const handleChange = (e, index) => {
     const value = e.target.value;
 
-    if (!/^\d*$/.test(value)) return; // Only digits allowed
+    if (!/^\d*$/.test(value)) return;
 
-    e.target.value = value.slice(0, 1); // Limit to 1 digit
+    e.target.value = value.slice(0, 1);
 
     if (value && index < length - 1) {
       inputs.current[index + 1].focus();
@@ -39,7 +39,11 @@ const OtpInput = ({ length , onChange }) => {
           type="text"
           inputMode="numeric"
           maxLength={1}
-          className="w-12 h-12 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C209C1] text-xl"
+          className={`w-12 h-12 text-center border rounded-md text-xl focus:outline-none focus:ring-2 ${
+            isError
+              ? "border-red-500 focus:ring-red-400"
+              : "border-gray-300 focus:ring-[#C209C1]"
+          }`}
           onChange={(e) => handleChange(e, index)}
           onKeyDown={(e) => handleKeyDown(e, index)}
           ref={(el) => (inputs.current[index] = el)}

@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import CustomInput from "../ui/CustomInput";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 const LoginForm = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -44,8 +45,7 @@ const LoginForm = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      alert("Login successful!");
-      // You can redirect or do something here.
+      router.push("/dashboard");
     }
   };
 
@@ -105,7 +105,7 @@ const LoginForm = () => {
         <div className="text-center mb-4">or</div>
         <div className="flex justify-between gap-2">
           <button
-            type="button" 
+            type="button"
             className="w-full bg-white border border-gray-300 p-2 font-bold rounded-full flex items-center justify-center"
           >
             <img
@@ -117,7 +117,7 @@ const LoginForm = () => {
           </button>
 
           <button
-            type="button" 
+            type="button"
             className="w-full bg-white border border-gray-300 font-bold p-2 rounded-full flex items-center justify-center"
           >
             <img
@@ -130,9 +130,9 @@ const LoginForm = () => {
         </div>
         <p className="text-center mt-4 text-[#6C7278]">
           Don't have an account?{" "}
-          <a href="#" className="hover:underline text-[#C209C1]">
+          <Link href="/auth/sign-up" className="hover:underline text-[#C209C1]">
             Create
-          </a>
+          </Link>
         </p>
       </form>
     </div>

@@ -27,7 +27,7 @@ const CustomInput = ({
           name={name}
           value={value}
           onChange={onChange}
-          className={`w-full p-2 pr-10 border rounded-xl focus:outline-none transition duration-200 ${
+          className={`w-full p-2 pr-10 border rounded-xl  focus:outline-none transition duration-200 ${
             error
               ? "border-red-500 focus:ring-2 focus:ring-red-400"
               : "border-gray-300 focus:ring-2 focus:ring-[#C209C1]"

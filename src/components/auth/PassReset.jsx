@@ -3,16 +3,16 @@ import React, { useState } from "react";
 import OtpInput from "../ui/OtpInput";
 import { useRouter } from "next/navigation";
 
-const PassReset = () => {
+const PassReset = ({ isPassReset }) => {
   const router = useRouter();
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
 
-  const correctOtp = "123456"; // mock OTP value
+  const correctOtp = "123456";
 
   const handleOtpChange = (value) => {
     setOtp(value);
-    if (error) setError("");
+    if (error) setError(""); // clear error when typing again
   };
 
   const handleSubmit = (e) => {
@@ -21,29 +21,32 @@ const PassReset = () => {
     if (otp !== correctOtp) {
       setError("Invalid OTP. Please try again.");
     } else {
-      // OTP is correct, navigate to reset password page
       router.push("/auth/new-password");
     }
   };
 
   return (
-    <div className="w-[80%] mx-auto p-6 justify-center items-center ">
+    <div className="w-[80%] mx-auto p-6 justify-center items-center">
       <h2 className="text-3xl font-medium text-[#111113] mb-4 text-center">
-        Enter OTP
+        {isPassReset ? " Password reset" : "Check you inbox"}{" "}
       </h2>
       <p className="text-[#44444A] text-sm mb-6 text-center">
-        We sent a recovery code to user@example.com
+        {isPassReset
+          ? "        We sent a recovery code to user@example.com"
+          : "Secure your account by verifying your email. Enter the 6-digit verification code we sent to example@mail.com"}
       </p>
 
       <form onSubmit={handleSubmit}>
-        <OtpInput length={6} onChange={handleOtpChange} />
+        <OtpInput length={6} onChange={handleOtpChange} isError={!!error} />
 
         {error && (
           <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
         )}
         <p className="text-[#44444A] mt-6 text-sm text-center">
           Didn't get a code?
-          <button className="ml-1" type="button"> Click to resend</button>
+          <button className="ml-1" type="button">
+            Click to resend
+          </button>
         </p>
         <button
           type="submit"
