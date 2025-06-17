@@ -2,9 +2,10 @@
 import Navbar from '@/components/common/Navbar'
 import ToolCard from '@/components/homepage/ToolCard'
 import { Camera, CameraIcon, Pen, Search, Star, ChevronLeft, ChevronRight } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-function page() {
+
+function Page() {
   const [currentSlide, setCurrentSlide] = useState(0)
   
   const aiAssistants = [
@@ -149,4 +150,4 @@ function page() {
   )
 }
 
-export default page
+export default Page
