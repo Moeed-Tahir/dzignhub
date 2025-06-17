@@ -45,7 +45,7 @@ const SideComponent = () => {
 
   return (
     <div
-      className="flex items-end justify-center rounded-4xl p-5 overflow-hidden w-1/2 mr-2 h-[95vh] my-auto bg-cover bg-center"
+      className="flex items-end justify-center rounded-4xl p-5 overflow-hidden w-1/2 mr-2 h-[95vh] my-auto bg-cover bg-center fixed top-2 right-2 bottom-2"
       style={{ backgroundImage: "url('/auth/Right_Image.png')" }}
     >
       <div className="flex justify-center items-center flex-col gap-4">

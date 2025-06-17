@@ -13,7 +13,7 @@ export default function AuthLayout({ children }) {
   const isSignupPage = pathname === "/auth/sign-up";
 
   return (
-    <div className="flex bg-white h-screen">
+    <div className="flex h-max w-full max-w-[1440px] mx-auto">
       <div className="w-1/2 h-screen flex flex-col  justify-between p-5">
         <div className="flex items-center gap-2 mb-2">
           {isSignupPage ? (

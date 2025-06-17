@@ -52,7 +52,7 @@ const Signup = () => {
   return (
     <div className="w-[80%] mx-auto p-6 justify-center items-center ">
       <h2 className="text-3xl font-medium text-[#2A0856] mb-4 text-center">
-        Let’s Create Your Account
+        Let's Create Your Account
       </h2>
       <p className="text-[#44444A] mb-6 text-center">
         Get started with allmyai and start using our AI assistance
