@@ -68,7 +68,7 @@ const ForgetPass = () => {
 
         <button
           type="submit"
-          className="w-full bg-[#BDFF00] text-[16px] cursor-pointer text-black font-medium p-3 rounded-full mb-4"
+          className="w-full bg-[#BDFF00] text-[16px] cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
           disabled={!formData.email}
         >
           Reset Password
@@ -77,7 +77,7 @@ const ForgetPass = () => {
         <button
           type="button"
           onClick={() => router.push("/auth/login")}
-          className="w-full border border-gray-200 text-[16px] cursor-pointer text-black font-medium p-3 rounded-full mb-4"
+          className="w-full border border-gray-200 text-[16px] cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
         >
           Back to Login
         </button>
