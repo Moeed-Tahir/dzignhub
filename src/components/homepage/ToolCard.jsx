@@ -10,11 +10,11 @@ const ToolCard = ({
 }) => {
   return (
     <div 
-      className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden ${className}`}
+      className={` rounded-xl hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden ${className}`}
       onClick={onClick}
     >
       {/* Image */}
-      <div className="w-full h-55 relative">
+      <div className="bg-[#eff1f3] w-full h-55 relative">
         <Image
           src={image}
           alt={title}
