@@ -106,7 +106,7 @@ const LoginForm = () => {
         <div className="flex justify-between gap-2">
           <button
             type="button"
-            className="w-full bg-white border text-[16px] border-gray-300 p-2 font-bold rounded-full flex items-center justify-center"
+            className="w-full bg-white border text-[16px] border-gray-300 p-2 font-semibold rounded-full flex items-center justify-center"
           >
             <img
               src="https://www.google.com/favicon.ico"
@@ -118,7 +118,7 @@ const LoginForm = () => {
 
           <button
             type="button"
-            className="w-full bg-white border text-[16px] border-gray-300 font-bold p-2 rounded-full flex items-center justify-center"
+            className="w-full bg-white border text-[16px] border-gray-300 font-semibold p-2 rounded-full flex items-center justify-center"
           >
             <img
               src="https://www.apple.com/favicon.ico"
@@ -130,7 +130,7 @@ const LoginForm = () => {
         </div>
         <p className="text-center text-[14px] mt-4 text-[#6C7278]">
           Don't have an account?{" "}
-          <Link href="/auth/sign-up" className="hover:underline text-[#C209C1]">
+          <Link href="/auth/sign-up" className="hover:underline font-semibold text-[#C209C1]">
             Create
           </Link>
         </p>

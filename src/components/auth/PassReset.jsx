@@ -50,7 +50,7 @@ const PassReset = ({ isPassReset }) => {
         </p>
         <button
           type="submit"
-          className="w-full mt-6 bg-[#BDFF00] cursor-pointer text-black font-medium p-3 rounded-full mb-4"
+          className="w-full mt-6 bg-[#BDFF00] cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
           disabled={otp.length !== 6}
         >
           Verify
@@ -59,7 +59,7 @@ const PassReset = ({ isPassReset }) => {
         <button
           type="button"
           onClick={() => router.push("/auth/forget-password")}
-          className="w-full border border-gray-200 cursor-pointer text-black font-medium p-3 rounded-full mb-4"
+          className="w-full border border-gray-200 cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
         >
           Change email address
         </button>

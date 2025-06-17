@@ -67,11 +67,9 @@ const NewPass = () => {
   return (
     <div className="w-[80%] mx-auto p-6 justify-center items-center ">
       <h2 className="text-[30px] font-medium text-[#111113] mb-4 text-center">
-        Create New Password
-      </h2>
+Set new password      </h2>
       <p className="text-[#44444A] mb-6 text-center">
-        Enter a secure password for your account.
-      </p>
+Enter a new password for your account. Make sure it’s strong and secure.      </p>
 
       <form onSubmit={handleSubmit}>
         <CustomInput
@@ -120,7 +118,7 @@ const NewPass = () => {
 
         <button
           type="submit"
-          className="w-full bg-[#BDFF00] cursor-pointer text-black font-medium p-3 rounded-full mb-4"
+          className="w-full bg-[#BDFF00] cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
           disabled={!formData.password || !formData.confirmPassword}
         >
           Set Password
@@ -129,7 +127,7 @@ const NewPass = () => {
         <button
           type="button"
           onClick={() => router.push("/auth/forget-password")}
-          className="w-full border border-gray-200 cursor-pointer text-black font-medium p-3 rounded-full mb-4"
+          className="w-full border border-gray-200 cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
         >
           Change email address
         </button>

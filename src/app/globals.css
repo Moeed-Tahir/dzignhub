@@ -110,6 +110,13 @@
 
 /* Jakarta Sans Font Family */
 @font-face {
+    font-family: 'General Sans';
+    src: url('/fonts/GeneralSans-Semibold.otf') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
     font-family: 'Jakarta Sans';
     src: url('/fonts/Jakarta-Sans/PlusJakartaSans-Bold.ttf') format('truetype');
     font-weight: 700;

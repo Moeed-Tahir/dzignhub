@@ -121,9 +121,9 @@ const Signup = () => {
           and Privacy Policy.
         </p>
 
-        <p className="text-center mt-4 text-[#6C7278]">
+        <p className="text-center  mt-4 text-[#6C7278]">
           Already have an account?{" "}
-          <Link href="/auth/login" className="hover:underline text-[#C209C1]">
+          <Link href="/auth/login" className="hover:underline font-semibold text-[#C209C1]">
             Login
           </Link>
         </p>
