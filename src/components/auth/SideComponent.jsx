@@ -22,7 +22,7 @@ const slides = [
   },
 ];
 
-const SideComponent = () => {
+const SideComponent = ({ isProfilePage, title, desc }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [progress, setProgress] = useState(0);
 
@@ -45,52 +45,68 @@ const SideComponent = () => {
 
   return (
     <div
-      className="flex items-end justify-center rounded-4xl p-5 overflow-hidden w-1/2 mr-2 h-[95vh] my-auto bg-cover bg-center fixed top-2 right-2 bottom-2"
+      className={`flex ${
+        isProfilePage != true ? "items-start w-[40%]" : "items-end w-1/2 "
+      } justify-center rounded-3xl p-5 overflow-hidden  mr-2 h-[95vh] my-auto bg-cover bg-center fixed top-2 right-2 bottom-2`}
       style={{ backgroundImage: "url('/auth/Right_Image.png')" }}
     >
-      <div className="flex justify-center items-center flex-col gap-4">
-        <div className="flex gap-1 w-[80%] justify-center items-center">
-          <Image
-            src={"/white-logo.png"}
-            alt="Logo"
-            width={100}
-            height={100}
-            className="w-[44px] h-[44px] object-contain"
-          />
-          <p className="text-white text-[27px] font-medium">allmyai</p>
-        </div>
+      {isProfilePage === true ? (
+        <div className="flex justify-center items-center flex-col gap-4">
+          <div className="flex gap-1 w-[80%] justify-center items-center">
+            <Image
+              src={"/white-logo.png"}
+              alt="Logo"
+              width={100}
+              height={100}
+              className="w-[44px] h-[44px] object-contain"
+            />
+            <p className="text-white text-[27px] font-medium">allmyai</p>
+          </div>
 
-        <div  className="w-[80%] flex flex-col items-center justify-center">
-          <p className="text-[#BDFF00] font-bold text-[40px] text-center px-10">
-            {slides[currentSlide].title}
-          </p>
-          <p className="text-white text-center text-[18px] px-20 mt-4">
-            {slides[currentSlide].desc}
-          </p>
-        </div>
+          <div className="w-[80%] flex flex-col items-center justify-center">
+            <p className="text-[#BDFF00] font-bold text-[40px] text-center px-10">
+              {slides[currentSlide].title}
+            </p>
+            <p className="text-white text-center text-[18px] px-20 mt-4">
+              {slides[currentSlide].desc}
+            </p>
+          </div>
 
-        {/* Progress Tabs */}
-        <div className="flex gap-2 mt-10 w-full px-10">
-          {slides.map((_, idx) => (
-            <div
-              key={idx}
-              className="flex-1 h-2 bg-white/30 rounded overflow-hidden"
-            >
+          {/* Progress Tabs */}
+          <div className="flex gap-2 mt-10 w-full px-10">
+            {slides.map((_, idx) => (
               <div
-                className="h-full bg-white transition-all duration-[100ms]"
-                style={{
-                  width:
-                    idx < currentSlide
-                      ? "100%"
-                      : idx === currentSlide
-                      ? `${progress}%`
-                      : "0%",
-                }}
-              />
-            </div>
-          ))}
+                key={idx}
+                className="flex-1 h-2 bg-white/30 rounded overflow-hidden"
+              >
+                <div
+                  className="h-full bg-white transition-all duration-[100ms]"
+                  style={{
+                    width:
+                      idx < currentSlide
+                        ? "100%"
+                        : idx === currentSlide
+                        ? `${progress}%`
+                        : "0%",
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="mx-10">
+            <p className="text-[40px] text-[#BDFF00] font-semibold text-start">
+              {title}{" "}
+            </p>
+            <p className="text-[20px] text-white text-start opacity-70 mt-4">
+              Before we begin, we’ll align with your goals, vision, and creative
+              preferences. This isn’t a form. It’s a mirror.
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 };
