@@ -97,7 +97,7 @@ const LoginForm = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-medium p-3 rounded-full mb-4"
+          className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4"
           disabled={!formData.email || !formData.password}
         >
           Login

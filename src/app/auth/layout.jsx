@@ -19,9 +19,9 @@ export default function AuthLayout({ children }) {
           {isSignupPage ? (
             <button
               onClick={() => router.back()}
-              className="flex items-center border p-1 border-[#E3E3E3] rounded-full hover:underline text-sm"
+              className="flex items-center w-[44px] h-[44px]  justify-center border p-1 border-[#E3E3E3] rounded-full hover:underline text-sm"
             >
-              <MoveLeft className="w-8 h-8 " />
+              <MoveLeft className="w-[24px] h-[24px] " />
             </button>
           ) : (
             <>
