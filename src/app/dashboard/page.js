@@ -1,7 +1,9 @@
 'use client'
 import Navbar from '@/components/common/Navbar'
+import CommunityFeed from '@/components/homepage/CommunityFeed'
 import ToolCard from '@/components/homepage/ToolCard'
 import { Camera, CameraIcon, Pen, Search, Star, ChevronLeft, ChevronRight } from 'lucide-react'
+import Image from 'next/image'
 import { useState } from 'react'
 
 
@@ -53,7 +55,7 @@ function Page() {
     <div className='px-8 py-6'>
       
       {/* Main container for both sections side by side */}
-      <div className='flex gap-12'>
+      <div id='mainContainer' className='flex gap-8'>
         
         {/* Manual tools section */}
         <div className='flex-1'>
@@ -81,12 +83,12 @@ function Page() {
           <h1 className='text-2xl font-bold mb-6'>AI Assistants</h1>
           
           {/* Carousel container with side controls */}
-          <div className="relative flex items-center">
+          <div className="relative flex items-center gap-6">
             
             {/* Left arrow */}
             <button 
               onClick={prevSlide}
-              className="absolute left-0 z-10 p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-colors border border-gray-200"
+              className="absolute left-5 z-10 p-2 rounded-full bg-white shadow-lg hover:bg-gray-50 transition-colors border border-gray-200"
               style={{ transform: 'translateX(-50%)' }}
             >
               <ChevronLeft size={20} />
@@ -96,7 +98,7 @@ function Page() {
             <div className="overflow-hidden mx-8 flex-1">
               <div 
                 className="flex transition-transform duration-300 ease-in-out gap-4"
-                style={{ transform: `translateX(-${currentSlide * (100 / cardsPerView)}%)` }}
+                style={{ transform: `translateX(-${currentSlide * (100 / cardsPerView)}%)`, gap: '24px' }}
               >
                 {aiAssistants.map((assistant, index) => (
                   <div 
@@ -119,7 +121,7 @@ function Page() {
             {/* Right arrow */}
             <button 
               onClick={nextSlide}
-              className="absolute right-0 z-10 p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-colors border border-gray-200"
+              className="absolute right-5 z-10 p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-colors border border-gray-200"
               style={{ transform: 'translateX(50%)' }}
             >
               <ChevronRight size={20} />
@@ -144,6 +146,35 @@ function Page() {
         </div>
 
       </div>
+
+
+      <CommunityFeed className="mt-16" />
+
+      {/* Let's talk button - Fixed position bottom right */}
+      <button 
+        className="fixed bottom-8 right-8 bg-[#C209C1] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50"
+        onClick={() => console.log('Let\'s talk clicked')}
+        style={{
+          width: 'auto',
+          height: 48,
+          gap: "10px",
+          borderRadius: "100px",
+          paddingTop: "12px",
+          paddingRight: "24px",
+          paddingBottom: "12px",
+          paddingLeft: "24px"
+
+        }}
+      >
+        <Image
+          src="/white-logo.png" 
+          alt="Logo" 
+          width={20} 
+          height={20}
+          className="w-5 h-5 mr-2"
+        />
+        <span className="font-medium">Let's talk</span>
+      </button>
     </div>
       
     </>

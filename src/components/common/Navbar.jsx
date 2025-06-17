@@ -84,7 +84,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="m-8 bg-white border-b border-gray-200 px-4 py-2 rounded-full shadow-md">
+    <nav className="m-8 bg-white px-4 py-4 rounded-full">
       <div className="flex items-center justify-between">
         
         {/* Left - Logo */}
@@ -102,14 +102,14 @@ const Navbar = () => {
         </div>
 
         {/* Center - Navigation Menu */}
-        <div className="p-3 flex items-center bg-[#F7F8F8] rounded-full space-x-1">
+        <div className="p-2 flex items-center bg-[#F7F8F8] rounded-full space-x-1">
           {menuItems.map((item) => (
             <div key={item.name} className="relative">
               <button
                 onClick={() => handleMenuClick(item)}
                 className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
                   activeMenu === item.name
-                    ? 'text-black px-10'
+                    ? 'text-black px-15'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 }`}
                 style={{
@@ -118,7 +118,10 @@ const Navbar = () => {
               >
                 <span>{item.name}</span>
                 {item.badge && (
-                  <span className="bg-[#C209C11A] text-[#C209C1] text-xs px-2 py-0.5 rounded-full font-semibold">
+                  <span className="bg-[#C209C11A] text-[#C209C1] text-xs px-2 py-0.5 rounded-full font-semibold " style={{
+    fontFamily: 'Jakarta Sans',
+    fontWeight: '700',
+                  }}>
                     {item.badge}
                   </span>
                 )}
@@ -169,7 +172,7 @@ const Navbar = () => {
         </div>
 
         {/* Right - Notifications & Profile */}
-        <div className="flex items-center space-x-4">
+        <div id='rightNav' className="flex items-center" style={{ gap: '10px' }}>
           
           {/* Notification Icon */}
           <div className="relative">
@@ -177,13 +180,8 @@ const Navbar = () => {
               onClick={handleNotificationClick}
               className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors relative"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-              {/* Notification Badge */}
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                2
-              </span>
+            <Image src="/homepage/notification.png" alt="bell" width={24} height={24} />
+              
             </button>
 
             {/* Notification Dropdown */}
