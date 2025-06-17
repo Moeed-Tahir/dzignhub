@@ -49,22 +49,22 @@ const SideComponent = () => {
       style={{ backgroundImage: "url('/auth/Right_Image.png')" }}
     >
       <div className="flex justify-center items-center flex-col gap-4">
-        <div className="flex gap-1 items-center">
+        <div className="flex gap-1 w-[80%] justify-center items-center">
           <Image
             src={"/white-logo.png"}
             alt="Logo"
             width={100}
             height={100}
-            className="w-10 h-10 object-contain"
+            className="w-[44px] h-[44px] object-contain"
           />
-          <p className="text-white text-[22px] font-medium">allmyai</p>
+          <p className="text-white text-[27px] font-medium">allmyai</p>
         </div>
 
-        <div>
-          <p className="text-[#BDFF00] font-bold text-4xl text-center px-10">
+        <div  className="w-[80%] flex flex-col items-center justify-center">
+          <p className="text-[#BDFF00] font-bold text-[40px] text-center px-10">
             {slides[currentSlide].title}
           </p>
-          <p className="text-white text-center text-sm px-20 mt-4">
+          <p className="text-white text-center text-[18px] px-20 mt-4">
             {slides[currentSlide].desc}
           </p>
         </div>
