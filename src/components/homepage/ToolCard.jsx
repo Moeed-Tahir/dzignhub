@@ -10,7 +10,7 @@ const ToolCard = ({
 }) => {
   return (
     <div 
-      className={` rounded-xl hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden ${className}`}
+      className={` rounded-xl  cursor-pointer overflow-hidden ${className}`}
       onClick={onClick}
     >
       {/* Image */}
@@ -24,19 +24,20 @@ const ToolCard = ({
       </div>
       
       {/* Content */}
-      <div className="p-6">
+      <div className="mt-3">
         {/* Icon and Title */}
-        <div className="flex items-center space-x-3 mb-3">
+        <div className="flex items-center space-x-2 mb-1">
           <div className="flex-shrink-0">
-            {icon}
+            <Image src={icon} alt={title} width={24} height={24} className="w-6 h-6" />
+     
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 font-general-sans">
+          <h3 className="text-lg font-semibold text-[#000000] font-general-sans">
             {title}
           </h3>
         </div>
         
         {/* Description */}
-        <p className="text-gray-600 text-sm leading-relaxed">
+        <p className="text-[#000000] text-sm font-general-sans">
           {description}
         </p>
       </div>

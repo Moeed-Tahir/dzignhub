@@ -6,32 +6,31 @@ import { Camera, CameraIcon, Pen, Search, Star, ChevronLeft, ChevronRight } from
 import Image from 'next/image'
 import { useState } from 'react'
 
-
 function Page() {
   const [currentSlide, setCurrentSlide] = useState(0)
   
   const aiAssistants = [
     {
       image: "/homepage/ai-assistant-ui-ux.png",
-      icon: <Pen size={24} />,
+      icon: "/homepage/ux-ui.png",
       title: "UX/UI",
       description: "Produce unique content with AI assistance"
     },
     {
       image: "/homepage/ai-assistant-seo.png",
-      icon: <Search size={24} />,
+      icon: "/homepage/seo.png",
       title: "SEO Optimizer",
       description: "Produce unique content with AI assistance"
     },
     {
       image: "/homepage/ai-assistant-marketing.png",
-      icon: <Star size={24} />,
+      icon: "/homepage/marketing.png",
       title: "Marketing Strategist",
       description: "Produce unique content with AI assistance"
     },
     {
       image: "/homepage/ai-assistant-marketing.png",
-      icon: <Star size={24} />,
+      icon: "/homepage/marketing.png",
       title: "Marketing Strategist 2",
       description: "Produce unique content with AI assistance"
     }
@@ -55,22 +54,37 @@ function Page() {
     <div className='px-8 py-6'>
       
       {/* Main container for both sections side by side */}
-      <div id='mainContainer' className='flex gap-8'>
+      <div 
+        id='mainContainer' 
+        className='flex'
+        style={{
+          width: '1280px',
+          height: '401px',
+          gap: '32px'
+        }}
+      >
         
         {/* Manual tools section */}
-        <div className='flex-1'>
-          <h1 className='text-2xl font-bold mb-6'>Manual tools</h1>
+        <div 
+          className='flex flex-col'
+          style={{
+            width: '544px',
+            height: '401px',
+            gap: '24px'
+          }}
+        >
+          <h1 className='text-2xl font-semibold text-[#000000] font-bold'>Manual tools</h1>
           <div className='flex gap-4'>
             <ToolCard
               image={"/homepage/manual-tools-image-creation.png"}
-              icon={<Camera size={24} />}
+              icon={"/homepage/image-generation.png"}
               title="Image creation"
               description="Create and refine visuals manually"
               className="flex-1"
             />
             <ToolCard
               image={"/homepage/manual-tools-video-creation.png"}
-              icon={<CameraIcon size={24} />}
+              icon={"/homepage/video-creation.png"}
               title="Video creation"
               description="Edit and enhance videos with manual tools"
               className="flex-1"
@@ -79,32 +93,42 @@ function Page() {
         </div>
 
         {/* AI Assistants section with carousel */}
-        <div className='flex-1'>
-          <h1 className='text-2xl font-bold mb-6'>AI Assistants</h1>
+        <div 
+          className='flex flex-col'
+          style={{
+            width: '784px',
+            height: '401px',
+            gap: '24px'
+          }}
+        >
+          <h1 className='text-2xl font-semibold text-[#000000]'>AI assistants</h1>
           
           {/* Carousel container with side controls */}
-          <div className="relative flex items-center gap-6">
+          <div className="relative flex items-center">
             
             {/* Left arrow */}
             <button 
               onClick={prevSlide}
-              className="absolute left-5 z-10 p-2 rounded-full bg-white shadow-lg hover:bg-gray-50 transition-colors border border-gray-200"
+              className="absolute left-0 z-10 p-2 rounded-full bg-white shadow-2xl hover:bg-gray-50 transition-colors border border-gray-200"
               style={{ transform: 'translateX(-50%)' }}
             >
               <ChevronLeft size={20} />
             </button>
 
             {/* Slider content */}
-            <div className="overflow-hidden mx-8 flex-1">
+            <div className="overflow-hidden flex-1">
               <div 
-                className="flex transition-transform duration-300 ease-in-out gap-4"
-                style={{ transform: `translateX(-${currentSlide * (100 / cardsPerView)}%)`, gap: '24px' }}
+                className="flex transition-transform duration-300 ease-in-out"
+                style={{ 
+                  transform: `translateX(-${currentSlide * (100 / cardsPerView)}%)`,
+                  gap: '8px'
+                }}
               >
                 {aiAssistants.map((assistant, index) => (
                   <div 
                     key={index} 
                     className="flex-shrink-0"
-                    style={{ width: `calc(${100 / cardsPerView}% - ${16 * (cardsPerView - 1) / cardsPerView}px)` }}
+                    style={{ width: `calc(${100 / cardsPerView}% - ${12 * (cardsPerView - 1) / cardsPerView}px)` }}
                   >
                     <ToolCard
                       image={assistant.image}
@@ -121,7 +145,7 @@ function Page() {
             {/* Right arrow */}
             <button 
               onClick={nextSlide}
-              className="absolute right-5 z-10 p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-colors border border-gray-200"
+              className="absolute right-0 z-10 p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-colors border border-gray-200"
               style={{ transform: 'translateX(50%)' }}
             >
               <ChevronRight size={20} />
@@ -147,7 +171,6 @@ function Page() {
 
       </div>
 
-
       <CommunityFeed className="mt-16" />
 
       {/* Let's talk button - Fixed position bottom right */}
@@ -163,7 +186,6 @@ function Page() {
           paddingRight: "24px",
           paddingBottom: "12px",
           paddingLeft: "24px"
-
         }}
       >
         <Image

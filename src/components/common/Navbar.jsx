@@ -17,9 +17,11 @@ const Navbar = () => {
   ]
 
   const assistants = [
-    { name: 'Zara', role: '(Brand Design)', isPro: false },
-    { name: 'Sana', role: '(Content Creator)', isPro: false },
-    { name: 'Mira', role: '(Strategy Specialist)', isPro: false },
+    { name: 'Zara', role: '(Brand Design)', isPro: false, avatar: "/zara.png" },
+    { name: 'Sana', role: '(Content Creator)', isPro: false, avatar: "/sana.png" },
+    { name: 'Mira', role: '(Strategy Specialist)', isPro: false, avatar: "/mira.png" },
+    { name: 'Novi', role: '(SEO Specialist)', isPro: true, avatar: "/novi.png" },
+    { name: 'Kano', role: '(UX/UI Assistant)', isPro: true, avatar: "/kano.png" },
   ]
 
   const notifications = [
@@ -96,7 +98,7 @@ const Navbar = () => {
             height={32}
             className="w-6 h-6"
           />
-          <span className="text-xl font-bold text-gray-900">
+          <span className="text-lg font-semibold text-gray-900">
           allmyai
           </span>
         </div>
@@ -107,10 +109,10 @@ const Navbar = () => {
             <div key={item.name} className="relative">
               <button
                 onClick={() => handleMenuClick(item)}
-                className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
+                className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${
                   activeMenu === item.name
                     ? 'text-black px-15'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                    : ''
                 }`}
                 style={{
                   backgroundColor: activeMenu === item.name ? 'var(--color-green)' : 'transparent'
@@ -133,11 +135,11 @@ const Navbar = () => {
 
               {/* Workspace Dropdown */}
               {item.key === 'workspace' && isWorkspaceDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                <div className="absolute top-full left-0 mt-8 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                  <a href="#" className="block px-4 py-2 text-sm font-normal text-gray-700 hover:bg-gray-50">
                     Image Creation
                   </a>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                  <a href="#" className="block px-4 py-2 font-normal text-sm text-gray-700 hover:bg-gray-50">
                     Video Creation
                   </a>
                 </div>
@@ -145,13 +147,13 @@ const Navbar = () => {
 
               {/* Assistants Dropdown */}
               {item.key === 'assistants' && isAssistantsDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div className="absolute top-full -left-15 mt-8 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                   {assistants.map((assistant, index) => (
                     <div key={assistant.name}>
-                      <a href="#" className="flex items-center px-4 py-3 text-sm hover:bg-gray-50">
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
                         <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">
                           <Image 
-                            src="/avatar.png" 
+                            src={`/homepage/ai-assistants-dropdown${assistant.avatar}`}
                             width={32} 
                             height={32} 
                             alt={assistant.name}
@@ -159,8 +161,8 @@ const Navbar = () => {
                           />
                         </div>
                         <div className="flex justify-center items-center flex-row min-w-0">
-                            <p className="text-black font-medium truncate">{assistant.name}</p>
-                            <p className="mx-2 text-gray-500 text-xs truncate">{assistant.role}</p>
+                            <p className="text-black text-base font-semibold text-[#1B1F3B] truncate">{assistant.name}</p>
+                            <p className="mx-2 text-gray-500 text-[#68686B] font-normal text-sm truncate">{assistant.role}</p>
                         </div>
                       </a>
                     </div>
@@ -172,13 +174,13 @@ const Navbar = () => {
         </div>
 
         {/* Right - Notifications & Profile */}
-        <div id='rightNav' className="flex items-center" style={{ gap: '10px' }}>
+        <div id='rightNav' className="flex items-center bg-[#F7F8F8] rounded-full px-2 py-1" style={{ gap: '10px' }}>
           
           {/* Notification Icon */}
           <div className="relative">
             <button 
               onClick={handleNotificationClick}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors relative"
+              className="py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors relative"
             >
             <Image src="/homepage/notification.png" alt="bell" width={24} height={24} />
               
@@ -245,12 +247,12 @@ const Navbar = () => {
           <div className="relative">
             <button
               onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-              className="flex items-center space-x-2 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                <Image src="/avatar.png" width={32} height={32} alt="Profile" className="rounded-full" />
+              <div className="w-9 h-9 bg-gray-300 rounded-full flex items-center justify-center">
+                <Image src="/avatar.png" width={50} height={50} alt="Profile" className="rounded-full" />
               </div> 
-              <ChevronDown className="w-5 h-5 ml-1" />
+              <ChevronDown className="w-5 h-5" />
             </button>
 
             {/* Profile Dropdown Menu */}
