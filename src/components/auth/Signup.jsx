@@ -51,10 +51,10 @@ const Signup = () => {
 
   return (
     <div className="w-[80%] mx-auto p-6 justify-center items-center ">
-      <h2 className="text-3xl font-medium text-[#2A0856] mb-4 text-center">
+      <h2 className="text-[30px] font-medium text-[#2A0856]  text-center">
         Let's Create Your Account
       </h2>
-      <p className="text-[#44444A] mb-6 text-center">
+      <p className="text-[#44444A] text-[14px] mb-6 text-center">
         Get started with allmyai and start using our AI assistance
       </p>
 
@@ -78,7 +78,7 @@ const Signup = () => {
           onChange={handleChange}
           error={errors.phone}
         />
-        <p className="text-[#6C7278] text-sm -mt-2 mb-6 text-start">
+        <p className="text-[#6C7278] text-[12px] -mt-3 mb-6 text-start">
           This helps secure and verify your account.
         </p>
 
@@ -117,8 +117,8 @@ const Signup = () => {
 
         <p className="text-[#44444A] mb-6 text-center text-sm">
           By clicking the Create Account button, you acknowledge that you have
-          read and agree to our <span className="underline">Terms of Use</span>{" "}
-          and <span className="underline">Privacy Policy</span>.
+          read and agree to our Terms of Use
+          and Privacy Policy.
         </p>
 
         <p className="text-center mt-4 text-[#6C7278]">

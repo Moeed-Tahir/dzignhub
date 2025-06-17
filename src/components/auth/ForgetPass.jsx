@@ -48,10 +48,10 @@ const ForgetPass = () => {
 
   return (
     <div className="w-[80%] mx-auto p-6 justify-center items-center ">
-      <h2 className="text-3xl font-medium text-[#111113] mb-4 text-center">
+      <h2 className="text-[30px] font-medium text-[#2A0856] text-center">
         Forgot Password?
       </h2>
-      <p className="text-[#44444A] mb-6 text-center">
+      <p className="text-[#44444A] text-[14px] mb-6 text-center">
         Just follow the steps to get back into your Koajo account!
       </p>
 
@@ -68,7 +68,7 @@ const ForgetPass = () => {
 
         <button
           type="submit"
-          className="w-full bg-[#BDFF00] cursor-pointer text-black font-medium p-3 rounded-full mb-4"
+          className="w-full bg-[#BDFF00] text-[16px] cursor-pointer text-black font-medium p-3 rounded-full mb-4"
           disabled={!formData.email}
         >
           Reset Password
@@ -77,7 +77,7 @@ const ForgetPass = () => {
         <button
           type="button"
           onClick={() => router.push("/auth/login")}
-          className="w-full border border-gray-200 cursor-pointer text-black font-medium p-3 rounded-full mb-4"
+          className="w-full border border-gray-200 text-[16px] cursor-pointer text-black font-medium p-3 rounded-full mb-4"
         >
           Back to Login
         </button>

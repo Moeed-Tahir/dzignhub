@@ -17,7 +17,7 @@ const CustomInput = ({
 
   return (
     <div className="mb-4 relative">
-      <label className="block text-[#2A0856] font-medium mb-2">
+      <label className="block text-[#2A0856]  text-[12px]  font-medium mb-1">
         {label} <span className="text-red-500">*</span>
       </label>
       <div className="relative">
@@ -27,7 +27,7 @@ const CustomInput = ({
           name={name}
           value={value}
           onChange={onChange}
-          className={`w-full p-2 pr-10 border rounded-xl  focus:outline-none transition duration-200 ${
+          className={`w-full pl-[20px] pr-[16px] py-[16px] border rounded-lg text-[12px]  focus:outline-none transition duration-200 ${
             error
               ? "border-red-500 focus:ring-2 focus:ring-red-400"
               : "border-gray-300 focus:ring-2 focus:ring-[#C209C1]"

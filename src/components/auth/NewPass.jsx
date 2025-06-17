@@ -66,7 +66,7 @@ const NewPass = () => {
 
   return (
     <div className="w-[80%] mx-auto p-6 justify-center items-center ">
-      <h2 className="text-3xl font-medium text-[#111113] mb-4 text-center">
+      <h2 className="text-[30px] font-medium text-[#111113] mb-4 text-center">
         Create New Password
       </h2>
       <p className="text-[#44444A] mb-6 text-center">

@@ -51,10 +51,10 @@ const LoginForm = () => {
 
   return (
     <div className="w-[80%] mx-auto p-6 justify-center items-center ">
-      <h2 className="text-3xl font-medium text-[#2A0856] mb-4 text-center">
+      <h2 className="text-[30px] font-medium text-[#2A0856]  text-center">
         Welcome back!
       </h2>
-      <p className="text-[#44444A] mb-6 text-center">
+      <p className="text-[#44444A] text-[14px] mb-6 text-center">
         Sign in to your allmyai account to access all allmyai products.
       </p>
       <form onSubmit={handleSubmit}>
@@ -84,20 +84,20 @@ const LoginForm = () => {
               name="remember"
               className="mr-2 accent-[#C209C1]"
             />
-            <label htmlFor="remember" className="text-[#44444A] text-sm">
+            <label htmlFor="remember" className="text-[#44444A] text-[12px]">
               Remember me
             </label>
           </div>
           <Link
             href="/auth/forget-password"
-            className="text-[#2A0856] font-medium text-sm hover:underline"
+            className="text-[#2A0856] font-medium text-[12px] hover:underline"
           >
             Forgot password?
           </Link>
         </div>
         <button
           type="submit"
-          className="w-full bg-[#BDFF00] cursor-pointer text-black font-medium p-3 rounded-full mb-4"
+          className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-medium p-3 rounded-full mb-4"
           disabled={!formData.email || !formData.password}
         >
           Login
@@ -106,7 +106,7 @@ const LoginForm = () => {
         <div className="flex justify-between gap-2">
           <button
             type="button"
-            className="w-full bg-white border border-gray-300 p-2 font-bold rounded-full flex items-center justify-center"
+            className="w-full bg-white border text-[16px] border-gray-300 p-2 font-bold rounded-full flex items-center justify-center"
           >
             <img
               src="https://www.google.com/favicon.ico"
@@ -118,7 +118,7 @@ const LoginForm = () => {
 
           <button
             type="button"
-            className="w-full bg-white border border-gray-300 font-bold p-2 rounded-full flex items-center justify-center"
+            className="w-full bg-white border text-[16px] border-gray-300 font-bold p-2 rounded-full flex items-center justify-center"
           >
             <img
               src="https://www.apple.com/favicon.ico"
@@ -128,7 +128,7 @@ const LoginForm = () => {
             Apple
           </button>
         </div>
-        <p className="text-center mt-4 text-[#6C7278]">
+        <p className="text-center text-[14px] mt-4 text-[#6C7278]">
           Don't have an account?{" "}
           <Link href="/auth/sign-up" className="hover:underline text-[#C209C1]">
             Create

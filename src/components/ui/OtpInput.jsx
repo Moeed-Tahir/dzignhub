@@ -39,7 +39,7 @@ const OtpInput = ({ length, onChange, isError,isPassReset }) => {
           type="text"
           inputMode="numeric"
           maxLength={1}
-          className={`w-12 h-12 text-center border rounded-md text-xl focus:outline-none focus:ring-2 ${
+          className={`w-[76px] h-[74px] font-medium text-center border rounded-md text-[24px] focus:outline-none focus:ring-2 ${
             isError
               ? "border-red-500 focus:ring-red-400"
               : "border-gray-300 focus:ring-[#C209C1]"

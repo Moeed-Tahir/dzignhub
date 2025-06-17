@@ -26,11 +26,11 @@ const PassReset = ({ isPassReset }) => {
   };
 
   return (
-    <div className="w-[80%] mx-auto p-6 justify-center items-center">
-      <h2 className="text-3xl font-medium text-[#111113] mb-4 text-center">
+    <div className="w-[80%] mx-auto py-6 justify-center items-center">
+      <h2 className="text-[30px] font-medium text-[#2A0856]  text-center">
         {isPassReset ? " Password reset" : "Check you inbox"}{" "}
       </h2>
-      <p className="text-[#44444A] text-sm mb-6 text-center">
+      <p className="text-[#44444A] text-[14px] text-sm mb-6 text-center">
         {isPassReset
           ? "        We sent a recovery code to user@example.com"
           : "Secure your account by verifying your email. Enter the 6-digit verification code we sent to example@mail.com"}
@@ -40,7 +40,7 @@ const PassReset = ({ isPassReset }) => {
         <OtpInput length={6} onChange={handleOtpChange} isError={!!error} />
 
         {error && (
-          <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
+          <p className="text-red-500 text-sm mt-2 ml-3 text-start">{error}</p>
         )}
         <p className="text-[#44444A] mt-6 text-sm text-center">
           Didn't get a code?
