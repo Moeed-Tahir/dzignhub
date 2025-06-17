@@ -104,7 +104,7 @@ const Signup = () => {
 
         <button
           type="submit"
-          className="w-full bg-[#BDFF00] cursor-pointer text-black font-medium p-3 rounded-full mb-4"
+          className="w-full bg-[#BDFF00] cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
           disabled={
             !formData.email ||
             !formData.phone ||
@@ -121,7 +121,7 @@ const Signup = () => {
           and Privacy Policy.
         </p>
 
-        <p className="text-center  mt-4 text-[#6C7278]">
+        <p className="text-center  text-[14px] mt-4 text-[#6C7278]">
           Already have an account?{" "}
           <Link href="/auth/login" className="hover:underline font-semibold text-[#C209C1]">
             Login
