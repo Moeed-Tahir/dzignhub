@@ -1,3 +1,4 @@
+import Navbar from "@/components/common/Navbar";
 import Sidebar from "@/components/creation/Sidebar";
 import React from "react";
 
@@ -8,7 +9,9 @@ const page = () => {
         <Sidebar />
       </div>
 
-      <div className="w-[70%]">Main</div>
+      <div className="w-full lg:w-[calc(100%-342px)]">
+        <Navbar isCreationPage={true} />
+      </div>
     </div>
   );
 };
