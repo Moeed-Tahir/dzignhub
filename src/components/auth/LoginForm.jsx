@@ -29,23 +29,52 @@ const LoginForm = () => {
     });
   };
 
+  const loginToAccount = async(formData) => {
+    const newErrors = {};
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+    console.log(data)
+    if (data.type === "success") {
+      // Store the token in localStorage
+      localStorage.setItem("token", data.token);
+      router.push(`/dashboard`);
+    }
+    else {
+      if (data.field === "email") {
+        newErrors.email = "The email you entered is not registered, please check again";
+      }
+      if (data.field === "password") {
+        newErrors.password = "The password you provided is incorrect. Please try again.";
+      }
+
+      setErrors(newErrors);
+    }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newErrors = {};
-    if (formData.email !== adminCredentials.email) {
-      newErrors.email =
-        "The email you entered is not registered, please check again";
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
     }
-    if (formData.password !== adminCredentials.password) {
-      newErrors.password =
-        " The password you provided is incorrect. Please try again.";
+    if (!formData.password) {
+      newErrors.password = "Password is required";
     }
-
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      router.push("/dashboard");
+      loginToAccount(formData);
     }
   };
 
@@ -98,7 +127,7 @@ const LoginForm = () => {
         <button
           type="submit"
           className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4"
-          disabled={!formData.email || !formData.password}
+         
         >
           Login
         </button>
