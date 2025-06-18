@@ -1,10 +1,17 @@
 
+"use client";
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+  const router = useRouter();
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
       <h1 className="text-7xl font-bold underline">
         Hello world!
       </h1>
+      <button onClick={()=>router.push("/auth/login")}>
+        Login
+      </button>
     </div>
   )
 }

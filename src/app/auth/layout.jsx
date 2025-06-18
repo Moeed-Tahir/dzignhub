@@ -46,7 +46,7 @@ export default function AuthLayout({ children }) {
         <AuthFooter />
       </div>
 
-      <SideComponent />
+      <SideComponent isProfilePage={true} />
     </div>
   );
 }

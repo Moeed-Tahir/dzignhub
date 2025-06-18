@@ -21,7 +21,11 @@ const PassReset = ({ isPassReset }) => {
     if (otp !== correctOtp) {
       setError("Invalid OTP. Please try again.");
     } else {
-      router.push("/auth/new-password");
+      {
+        isPassReset
+          ? router.push("/auth/new-password")
+          : router.push("/profile/onboarding");
+      }
     }
   };
 
