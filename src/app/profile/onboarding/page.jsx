@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 const page = () => {
   const router = useRouter();
   return (
-    <div className="flex items-center overflow-hidden justify-center bg-white  h-screen my-auto bg-cover bg-center ">
+    <div className="flex items-center  overflow-hidden justify-center bg-white  h-screen my-auto bg-cover bg-center ">
       <div>
         <div>
           <div className="relative">
@@ -56,7 +56,7 @@ const page = () => {
               className="text-[#1B1F3B] z-10 mt-4 bg-[#BDFF00] py-[12px] px-[24px] flex rounded-full text-[16px] font-semibold  items-center gap-2 cursor-pointer mx-auto "
             >
               <Image
-                src={"/onboarding/star.png"}
+                src={"/onboarding/star.svg"}
                 alt=""
                 width={400}
                 height={400}

@@ -13,8 +13,8 @@ export default function AuthLayout({ children }) {
   const isSignupPage = pathname === "/auth/sign-up";
 
   return (
-    <div className="flex h-max w-full max-w-[1440px] mx-auto">
-      <div className="w-1/2 h-screen flex flex-col  justify-between p-5">
+    <div className="bg-[#f8f8f8] max-w-[1440px]  mx-auto justify-center items-start  flex gap-2 h-auto min-h-screen">
+      <div className="lg:w-1/2 mx-auto min-h-screen flex flex-col  justify-between p-5">
         <div className="flex items-center gap-2 mb-2">
           {isSignupPage ? (
             <button
@@ -24,7 +24,7 @@ export default function AuthLayout({ children }) {
               <MoveLeft className="w-[24px] h-[24px] " />
             </button>
           ) : (
-            <>
+            <div onClick={() => router.push("/")}>
               <Image
                 src="/Logo.svg"
                 alt="Logo"
@@ -35,7 +35,7 @@ export default function AuthLayout({ children }) {
               <span className="font-medium text-[22px] leading-none">
                 allmyai
               </span>
-            </>
+            </div>
           )}
         </div>
 
@@ -45,8 +45,9 @@ export default function AuthLayout({ children }) {
 
         <AuthFooter />
       </div>
-
-      <SideComponent isProfilePage={true} />
+      <div className="w-[50%] sticky top-0 h-fit">
+        <SideComponent isProfilePage={true} />
+      </div>
     </div>
   );
 }

@@ -46,8 +46,8 @@ const SideComponent = ({ isProfilePage, title, desc }) => {
   return (
     <div
       className={`flex ${
-        isProfilePage != true ? "items-start w-[40%]" : "items-end w-1/2 "
-      } justify-center rounded-3xl p-5 overflow-hidden  mr-2 h-[95vh] my-auto bg-cover bg-center fixed top-2 right-2 bottom-2`}
+        isProfilePage != true ? "items-start " : "items-end  "
+      } justify-center rounded-3xl p-5 overflow-hidden  mr-2 h-[95vh] mt-[20px] w-full px-[40px]  hidden lg:flex bg-cover bg-center `}
       style={{ backgroundImage: "url('/auth/Right_Image.png')" }}
     >
       {isProfilePage === true ? (
@@ -67,7 +67,7 @@ const SideComponent = ({ isProfilePage, title, desc }) => {
             <p className="text-[#BDFF00] font-bold text-[40px] text-center px-10">
               {slides[currentSlide].title}
             </p>
-            <p className="text-white text-center text-[18px] px-20 mt-4">
+            <p className="text-white opacity-70 text-center text-[18px] px-20 mt-4">
               {slides[currentSlide].desc}
             </p>
           </div>

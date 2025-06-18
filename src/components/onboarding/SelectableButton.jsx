@@ -20,8 +20,8 @@ export default function SelectableButton({
       {/* <img src={icon} alt={title} className="w-[32px] h-[32px] mb-2" /> */}
 
       {isSelected && (
-        <div className=" top-2 right-2 bg-[#C209C1] rounded-full p-1 text-white">
-          <Check size={14} />
+        <div className=" top-2 right-2 w-[16px] h-[16px] bg-[#C209C1] rounded-full p-1 text-white">
+          <Check size={8} />
         </div>
       )}
 

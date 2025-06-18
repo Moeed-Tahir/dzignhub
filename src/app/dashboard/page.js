@@ -54,14 +54,14 @@ function Page() {
     <>
     <Navbar/>
 
-    <div className='px-8 py-6'>
+    <div className='px-8 mx-auto max-w-[1440px] py-6'>
       
       {/* Main container for both sections side by side */}
       <div 
         id='mainContainer' 
         className='flex'
         style={{
-          width: '1280px',
+          // width: '1280px',
           height: '401px',
           gap: '32px'
         }}
@@ -76,7 +76,7 @@ function Page() {
             gap: '24px'
           }}
         >
-          <h1 className='text-2xl font-semibold text-[#000000] font-bold'>Manual tools</h1>
+          <h1 className='text-2xl font-semibold text-[#000000] '>Manual tools</h1>
           <div className='flex gap-4'>
             <ToolCard
               image={"/homepage/manual-tools-image-creation.png"}
@@ -107,7 +107,7 @@ function Page() {
           <h1 className='text-2xl font-semibold text-[#000000]'>AI assistants</h1>
           
           {/* Carousel container with side controls */}
-          <div className="relative flex items-center">
+          <div className="relative flex-1  flex items-center">
             
             {/* Left arrow */}
             <button 
