@@ -1,10 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import CustomInput from "../ui/CustomInput";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const NewPass = () => {
   const router = useRouter();
+    const searchParams = useSearchParams();
+    const email = searchParams.get('email'); // Get email from URL params
+    const token = searchParams.get('token'); // Get email from URL params
 
   const [formData, setFormData] = useState({
     password: "",
@@ -13,6 +16,24 @@ const NewPass = () => {
 
   const [errors, setErrors] = useState({});
   const [strength, setStrength] = useState(0);
+
+  const resetPassword = async (password, email, token) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ newPassword:password, email, resetToken:token }),
+    });
+
+    const data = await response.json();
+    if (data.type === "success") {
+      router.push("/auth/login");
+    } else {
+      setErrors({ password: data.message || "Failed to reset password" });
+    }
+  }
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +78,7 @@ const NewPass = () => {
 
     if (Object.keys(newErrors).length === 0) {
       // Password reset complete
-      router.push("/auth/login");
+      resetPassword(formData.password, email, token);
     }
   };
 

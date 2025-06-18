@@ -19,22 +19,24 @@ const PassReset = ({ isPassReset }) => {
   };
 
   const confirmOtp = async (otp) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/confirm-otp`, {
+    let Email = decodeURIComponent(email);
+    let apiEndpoint = isPassReset ? "verify-reset-otp" : "confirm-otp";
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${apiEndpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({otp, email}),
+      body: JSON.stringify({otp, email:Email}),
     });
 
     const data = await response.json();
-    if (data.type === "error") {
-      setError("Invalid OTP. Please try again.");
+    if (data.type === "success") {
+      isPassReset
+      ? router.push(`/auth/new-password?token=${data.resetSessionToken}&email=${encodeURIComponent(email)}`)
+      : router.push("/profile/onboarding");
     }
     else {
-      isPassReset
-        ? router.push("/auth/new-password")
-        : router.push("/profile/onboarding");
+      setError("Invalid OTP. Please try again.");
     }
   }
 
@@ -46,6 +48,27 @@ const PassReset = ({ isPassReset }) => {
     }
     confirmOtp(otp, email)
   };
+
+
+  const handleResendOtp = async () => {
+    let Email = decodeURIComponent(email);
+    let apiEndpoint = isPassReset ? "forgot-password" : "resend-otp";
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${apiEndpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: Email }),
+    });
+
+    const data = await response.json();
+    if (data.type === "success") {
+      setError(""); // Clear any previous error
+      alert("OTP resent successfully!");
+    } else {
+      setError("Failed to resend OTP. Please try again.");
+    }
+  }
 
   return (
     <div className="w-[80%] mx-auto py-6 justify-center items-center">
@@ -66,7 +89,7 @@ const PassReset = ({ isPassReset }) => {
         )}
         <p className="text-[#44444A] mt-6 text-sm text-center">
           Didn't get a code?
-          <button className="ml-1" type="button">
+          <button onClick={handleResendOtp} className="ml-1" type="button">
             Click to resend
           </button>
         </p>

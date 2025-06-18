@@ -16,6 +16,27 @@ const ForgetPass = () => {
     email: "admin@example.com",
   };
 
+
+  const sendResetOtp = async (email) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({email: email}),
+    });
+
+    const data = await response.json();
+    console.log(data)
+    if (data.type === "success") {
+      router.push(`/auth/password-reset?email=${encodeURIComponent(formData.email)}`);
+    } else {
+      setErrors({ email: data.message || "Failed to send reset link" });
+    }
+  }
+
+
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -33,16 +54,16 @@ const ForgetPass = () => {
 
     const newErrors = {};
 
-    if (formData.email !== adminCredentials.email) {
+    if (formData.email == "" || formData.email == null) {
       newErrors.email =
-        "The email you entered is not registered, please check again";
+        "Email is required";
     }
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
       // alert("Password reset link sent!");
-      router.push("/auth/password-reset");
+      sendResetOtp(formData.email);
     }
   };
 
