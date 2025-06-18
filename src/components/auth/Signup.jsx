@@ -29,6 +29,22 @@ const Signup = () => {
     });
   };
 
+  const createAccount = async (formData) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+    console.log(data)
+    if (data.type === "success") {
+      router.push(`/auth/confirm-otp?email=${encodeURIComponent(formData.email)}`);
+    }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -38,14 +54,17 @@ const Signup = () => {
     if (!formData.email) newErrors.email = "Please enter a valid email address.";
     if (!formData.phone) newErrors.phone = "Please enter a valid phone number.";
     if (!formData.password) newErrors.password = "Minimum 8 characters";
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.password !== formData.confirmPassword || formData.confirmPassword === "") {
       newErrors.confirmPassword = "Passwords do not match.";
     }
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      router.push("/auth/confirm-otp");
+      console.log("Form submitted successfully", formData);
+      createAccount(formData)
+      // router.push("/auth/confirm-otp");
+
     }
   };
 
@@ -105,12 +124,7 @@ const Signup = () => {
         <button
           type="submit"
           className="w-full bg-[#BDFF00] cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
-          disabled={
-            !formData.email ||
-            !formData.phone ||
-            !formData.password ||
-            !formData.confirmPassword
-          }
+         
         >
           Create account
         </button>

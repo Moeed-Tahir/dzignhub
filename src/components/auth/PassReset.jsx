@@ -1,10 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import OtpInput from "../ui/OtpInput";
-import { useRouter } from "next/navigation";
+import { useRouter,useSearchParams } from "next/navigation";
 
 const PassReset = ({ isPassReset }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams.get('email'); // Get email from URL params
+  
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
 
@@ -15,18 +18,33 @@ const PassReset = ({ isPassReset }) => {
     if (error) setError(""); // clear error when typing again
   };
 
+  const confirmOtp = async (otp) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/confirm-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({otp, email}),
+    });
+
+    const data = await response.json();
+    if (data.type === "error") {
+      setError("Invalid OTP. Please try again.");
+    }
+    else {
+      isPassReset
+        ? router.push("/auth/new-password")
+        : router.push("/profile/onboarding");
+    }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (otp !== correctOtp) {
-      setError("Invalid OTP. Please try again.");
-    } else {
-      {
-        isPassReset
-          ? router.push("/auth/new-password")
-          : router.push("/profile/onboarding");
-      }
+    if (otp.length !== 6) {
+      setError("Please enter a valid 6-digit OTP.");
+      return;
     }
+    confirmOtp(otp, email)
   };
 
   return (
