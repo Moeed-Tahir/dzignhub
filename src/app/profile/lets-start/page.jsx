@@ -11,8 +11,8 @@ const page = () => {
   const [currentTab, setCurrentTab] = useState(0);
 
   return (
-    <div className="bg-[#f8f8f8] max-w-[1440px]  mx-auto justify-center items-start  flex gap-2 h-auto min-h-screen">
-      <div className="bg-white m-5 lg:w-[56%] pt-[40px] px-[40px] min-h-[95vh] flex flex-col justify-between  rounded-3xl">
+    <div className="bg-[#f8f8f8] max-w-[1440px]  mx-auto justify-center items-start  flex lg:gap-2 h-auto min-h-screen">
+      <div className="bg-white m-5 xl:w-[56%] w-full mx-auto  pt-[10px] lg:pt-[40px] overflow-x-hidden px-[20px] lg:px-[40px] min-h-[95vh] flex flex-col justify-between  rounded-3xl">
         <div
           onClick={() => router.push("/")}
           className="flex justify-start items-center  gap-2"
@@ -35,7 +35,7 @@ const page = () => {
             {[1, 2].map((tab) => (
               <div
                 key={tab}
-                className={` w-[240px] h-[8px] rounded-full transition-all ease-in-out duration-300 ${
+                className={` w-[30vw] lg:w-[240px] h-[8px] rounded-full transition-all ease-in-out duration-300 ${
                   currentTab >= tab ? "bg-[#C209C1]" : "bg-[#F8F8F8]"
                 }`}
               ></div>
@@ -55,7 +55,7 @@ const page = () => {
         </div>
       </div>
 
-      <div className="w-[40%] lg:flex hidden sticky top-0 h-fit">
+      <div className="w-[40%] xl:flex hidden sticky top-0 h-fit">
         <SideComponent
           title={currentTab === 0 ? " Identity Spark" : "Brand Essence Mapping"}
           isProflePage={true}

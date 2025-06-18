@@ -14,7 +14,7 @@ export default function SelectableCard({
   return (
     <div
       onClick={() => onSelect(id)}
-      className={`relative lg:w-[32%] h-[100px] p-[14px] rounded-[10px] cursor-pointer border transition-all duration-300 ${
+      className={`relative lg:w-[32%] w-[47%] h-[120px] lg:h-[100px] p-[14px] rounded-[10px] cursor-pointer border transition-all duration-300 ${
         isSelected
           ? "border-[#C209C1] ring-1 ring-[#C209C1]"
           : "border-[#DFE1E7]"
@@ -27,9 +27,9 @@ export default function SelectableCard({
         <h3 className="text-[14px] font-medium text-[#1B1F3B]">{title}</h3>
       )}
       {isThemeCard === false ? (
-        <h3 className="text-[14px] font-medium text-[#1B1F3B]">{title}</h3>
+        <h3 className="text-[12px] lg:text-[14px] font-medium text-[#1B1F3B]">{title}</h3>
       ) : null}
-      <p className="text-[#6F6F6F] text-[12px] font-normal">{description}</p>
+      <p className="text-[#6F6F6F] text-[10px] lg:text-[12px] font-normal">{description}</p>
 
       {isSelected === true ? (
         <div className="absolute top-3 right-3 bg-[#C209C1] w-[16px] h-[16px] rounded-full p-1 text-white">

@@ -11,7 +11,7 @@ export default function SelectableButton({
   return (
     <div
       onClick={() => onSelect(id)}
-      className={`relative flex   py-[12px]  px-[20px] rounded-full gap-1 cursor-pointer border flex-row  items-center justify-center text-center transition-all ease-in-out duration-300 ${
+      className={`relative flex  py-[10px] px-[16px] lg:py-[12px]  lg:px-[20px] rounded-full gap-1 cursor-pointer border flex-row  items-center justify-center text-center transition-all ease-in-out duration-300 ${
         isSelected
           ? "border-[#C209C1] ring-1 ring-[#C209C1]"
           : "border-[#DFE1E7]"
@@ -26,7 +26,7 @@ export default function SelectableButton({
       )}
 
       <p>{icon}</p>
-      <p className="text-[14px] font-medium whitespace-nowrap text-[#1B1F3B]">
+      <p className="text-[12px] lg:text-[14px] font-medium whitespace-nowrap text-[#1B1F3B]">
         {title}
       </p>
     </div>

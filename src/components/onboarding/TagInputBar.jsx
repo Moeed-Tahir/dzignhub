@@ -15,7 +15,7 @@ export default function TagInputBar() {
   };
 
   return (
-    <div className="flex items-center gap-2 px-3 py-2 rounded-full border max-w-[500px] border-[#DFE1E7] w-fit min-w-[300px]  overflow-x-scroll flex-wrap">
+    <div className="flex items-center gap-2  py-[10px] px-[16px] lg:py-[12px]  lg:px-[20px]  rounded-full border max-w-[500px] border-[#DFE1E7] w-fit min-w-[300px]  overflow-x-scroll flex-wrap">
       {tags.map((tag, index) => (
         <span
           key={index}
