@@ -8,9 +8,12 @@ import {
   Plus,
   MoreVertical,
 } from "lucide-react";
+import { usePathname } from 'next/navigation';
+import Link from "next/link";
 
 const Navbar = ({ isCreationPage }) => {
-  const [activeMenu, setActiveMenu] = useState("Home");
+  const pathname = usePathname();
+  // Determine if the current page is a creation page
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isWorkspaceDropdownOpen, setIsWorkspaceDropdownOpen] = useState(false);
   const [isAssistantsDropdownOpen, setIsAssistantsDropdownOpen] =
@@ -18,8 +21,18 @@ const Navbar = ({ isCreationPage }) => {
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
     useState(false);
 
+    const getActiveMenu = (pathname) => {
+      if (pathname === "/dashboard") return "Home";
+      if (pathname.startsWith("/workspace") || pathname.startsWith("/dashboard")) return "Manual workspace";
+      if (pathname.startsWith("/assistants")) return "Assistants";
+      return "";
+    };
+  
+    const activeMenu = getActiveMenu(pathname);
+  
+
   const menuItems = [
-    { name: "Home", href: "/", type: "link" },
+    { name: "Home", href: "/dashboard", type: "link" },
     {
       name: "Manual workspace",
       href: "/workspace",
@@ -97,7 +110,6 @@ const Navbar = ({ isCreationPage }) => {
       isRead: true,
     },
   ];
-
   const handleMenuClick = (item) => {
     if (item.type === "dropdown") {
       if (item.key === "workspace") {
@@ -110,14 +122,12 @@ const Navbar = ({ isCreationPage }) => {
         setIsNotificationDropdownOpen(false);
       }
     } else {
-      console.log(`Navigating to ${item.href}`);
-      setActiveMenu(item.name);
+      // For link type, close all dropdowns
       setIsWorkspaceDropdownOpen(false);
       setIsAssistantsDropdownOpen(false);
       setIsNotificationDropdownOpen(false);
     }
   };
-
   const handleNotificationClick = () => {
     setIsNotificationDropdownOpen(!isNotificationDropdownOpen);
     setIsWorkspaceDropdownOpen(false);
@@ -142,34 +152,65 @@ const Navbar = ({ isCreationPage }) => {
 
         {/* Center - Navigation Menu */}
         <div className="p-2 flex items-center bg-[#F7F8F8] rounded-full space-x-1">
-          {menuItems.map((item) => (
+        {menuItems.map((item) => (
             <div key={item.name} className="relative">
-              <button
-                onClick={() => handleMenuClick(item)}
-                className={`relative px-4 py-2 rounded-full text-sm  transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${
-                  activeMenu === item.name ? "text-black px-15" : ""
-                }`}
-                style={{
-                  backgroundColor:
-                    activeMenu === item.name
-                      ? "var(--color-green)"
-                      : "transparent",
-                }}
-              >
-                <span>{item.name}</span>
-                {item.badge && (
-                  <span
-                    className="bg-[#C209C11A] text-[#C209C1] text-xs px-2 py-0.5 rounded-full font-semibold "
+              {/* Conditional rendering based on item type */}
+              {item.type === "link" ? (
+                <Link href={item.href}>
+                  <button
+                    onClick={() => handleMenuClick(item)}
+                    className={`relative px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${
+                      activeMenu === item.name ? "text-black px-15" : ""
+                    }`}
                     style={{
-                      fontFamily: "Jakarta Sans",
-                      fontWeight: "700",
+                      backgroundColor:
+                        activeMenu === item.name
+                          ? "var(--color-green)"
+                          : "transparent",
                     }}
                   >
-                    {item.badge}
-                  </span>
-                )}
-                {item.key === "workspace" && <Plus className="w-3 h-3 ml-1" />}
-              </button>
+                    <span>{item.name}</span>
+                    {item.badge && (
+                      <span
+                        className="bg-[#C209C11A] text-[#C209C1] text-xs px-2 py-0.5 rounded-full font-semibold"
+                        style={{
+                          fontFamily: "Jakarta Sans",
+                          fontWeight: "700",
+                        }}
+                      >
+                        {item.badge}
+                      </span>
+                    )}
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  onClick={() => handleMenuClick(item)}
+                  className={`relative px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${
+                    activeMenu === item.name ? "text-black px-15" : ""
+                  }`}
+                  style={{
+                    backgroundColor:
+                      activeMenu === item.name
+                        ? "var(--color-green)"
+                        : "transparent",
+                  }}
+                >
+                  <span>{item.name}</span>
+                  {item.badge && (
+                    <span
+                      className="bg-[#C209C11A] text-[#C209C1] text-xs px-2 py-0.5 rounded-full font-semibold"
+                      style={{
+                        fontFamily: "Jakarta Sans",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                  {item.key === "workspace" && <Plus className="w-3 h-3 ml-1" />}
+                </button>
+              )}
 
               {/* Workspace Dropdown */}
               {item.key === "workspace" && isWorkspaceDropdownOpen && (
