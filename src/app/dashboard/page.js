@@ -5,9 +5,12 @@ import ToolCard from '@/components/homepage/ToolCard'
 import { Camera, CameraIcon, Pen, Search, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
+import ModalPopup from '@/components/homepage/ModalPopup'
 
 function Page() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  
   
   const aiAssistants = [
     {
@@ -176,7 +179,8 @@ function Page() {
       {/* Let's talk button - Fixed position bottom right */}
       <button 
         className="fixed bottom-8 right-8 bg-[#C209C1] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50"
-        onClick={() => console.log('Let\'s talk clicked')}
+        onClick={() => setIsModalOpen(true)}
+
         style={{
           width: 'auto',
           height: 48,
@@ -197,6 +201,12 @@ function Page() {
         />
         <span className="font-medium">Let's talk</span>
       </button>
+
+      {/* Modal Popup */}
+      <ModalPopup 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
       
     </>
