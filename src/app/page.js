@@ -18,7 +18,6 @@ export default function Landing() {
             <Navbar />
           </div>
         </div>
-        {/* Hero Section (center box + CTA + carousel) */}
         <Hero />
       </div>
       <div className="w-[1440px] h-[775px] bg-[#FAFAFA] mx-auto">

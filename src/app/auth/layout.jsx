@@ -24,7 +24,10 @@ export default function AuthLayout({ children }) {
               <MoveLeft className="w-[24px] h-[24px] " />
             </button>
           ) : (
-            <div onClick={() => router.push("/")}>
+            <div
+              className="flex justify-center items-center gap-1"
+              onClick={() => router.push("/")}
+            >
               <Image
                 src="/Logo.svg"
                 alt="Logo"
@@ -32,7 +35,7 @@ export default function AuthLayout({ children }) {
                 height={100}
                 className="w-[44px] h-[44px] object-contain"
               />
-              <span className="font-medium text-[22px] leading-none">
+              <span className="font-medium text-[#1B1F3B] text-[22px] leading-none">
                 allmyai
               </span>
             </div>

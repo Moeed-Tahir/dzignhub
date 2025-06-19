@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import TextArea from "./TextArea";
@@ -9,10 +9,23 @@ import Size from "./Size";
 import Quality from "./Quality";
 import Duration from "./Duration";
 import ProCard from "./ProCard";
-const Sidebar = () => {
+const Sidebar = ({ onGenerate }) => {
   const router = useRouter();
+  const [textValue, setTextValue] = useState("");
+  const [selectedStyle, setSelectedStyle] = useState(null);
+  const [selectedQuality, setSelectedQuality] = useState(null);
+  const [selectedDuration, setSelectedDuration] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const isValid = textValue.trim().split(/\s+/).length >= 6;
+  const handleGenerate = () => {
+    console.log("Selected Style:", selectedStyle);
+    console.log("Selected Size:", selectedSize);
+    console.log("Selected Quality:", selectedQuality);
+    console.log("Selected Duration:", selectedDuration);
+    if (onGenerate) onGenerate();
+  };
   return (
-    <div className="flex flex-col gap-4 p-4 bg-white rounded-[24px] shadow-md">
+    <div className="flex flex-col gap-4 p-4 bg-white rounded-[24px] ">
       <div
         onClick={() => router.push("/")}
         className="flex items-center gap-2 cursor-pointer"
@@ -24,20 +37,22 @@ const Sidebar = () => {
           height={100}
           className="w-[25px] h-[25px] object-contain"
         />
-        <span className="font-semibold text-[16px] leading-none">allmyai</span>
+        <span className="font-semibold text-[16px] text-[#1B1F3B] leading-none">allmyai</span>
       </div>
 
-      <TextArea />
+      <TextArea value={textValue} onChange={e => setTextValue(e.target.value)} />
 
       <UploadImage />
-      <Style />
-      <Size />
-      <Quality />
-      <Duration />
+      <Style selected={selectedStyle} onChange={setSelectedStyle} />
+      <Size selected={selectedSize} onChange={setSelectedSize} />
+      <Quality selected={selectedQuality} onChange={setSelectedQuality} />
+      <Duration selected={selectedDuration} onChange={setSelectedDuration} />
 
       <button
         type="submit"
-        className="w-full bg-[#BDFF00] cursor-pointer text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4"
+        className={`w-full ${isValid ? "bg-[#BDFF00] cursor-pointer" : "bg-[#BDFF005C] bg-opacity-[36%] cursor-not-allowed"} text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4`}
+        disabled={!isValid}
+        onClick={handleGenerate}
       >
         Generate
       </button>
