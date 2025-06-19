@@ -4,6 +4,7 @@ import CustomInput from "../ui/CustomInput";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { useUserStore } from "@/store/store";
 
 const LoginForm = () => {
   const { data: session } = useSession();
@@ -16,6 +17,8 @@ const LoginForm = () => {
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const {SetIsLogin, SetEmail, SetUserId} = useUserStore()
 
   const adminCredentials = {
     email: "admin@example.com",
@@ -54,7 +57,11 @@ const LoginForm = () => {
       if (data.type === "success") {
         // Store the token in localStorage
         localStorage.setItem("token", data.token);
+        SetIsLogin(true);
+        SetEmail(data.user.email);
+        SetUserId(data.user.userId);
         router.push(`/dashboard`);
+
       }
       else {
         if (data.field === "email") {
