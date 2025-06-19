@@ -15,6 +15,7 @@ const LoginForm = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const adminCredentials = {
     email: "admin@example.com",
@@ -34,32 +35,42 @@ const LoginForm = () => {
   };
 
   const loginToAccount = async(formData) => {
+    setIsLoading(true);
+
     const newErrors = {};
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await response.json();
-    console.log(data)
-    if (data.type === "success") {
-      // Store the token in localStorage
-      localStorage.setItem("token", data.token);
-      router.push(`/dashboard`);
-    }
-    else {
-      if (data.field === "email") {
-        newErrors.email = "The email you entered is not registered, please check again";
+      const data = await response.json();
+      console.log(data)
+      if (data.type === "success") {
+        // Store the token in localStorage
+        localStorage.setItem("token", data.token);
+        router.push(`/dashboard`);
       }
-      if (data.field === "password") {
-        newErrors.password = "The password you provided is incorrect. Please try again.";
+      else {
+        if (data.field === "email") {
+          newErrors.email = "The email you entered is not registered, please check again";
+        }
+        if (data.field === "password") {
+          newErrors.password = "The password you provided is incorrect. Please try again.";
+        }
+  
+        setErrors(newErrors);
       }
-
-      setErrors(newErrors);
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrors({ ...newErrors, form: "An unexpected error occurred." });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -130,10 +141,14 @@ const LoginForm = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4"
-         
+          className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4 flex justify-center items-center"
+          disabled={isLoading}
         >
-          Login
+          {isLoading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+          ) : (
+            "Login"
+          )}
         </button>
         <div className="text-center mb-4">or</div>
         <div className="flex justify-between gap-2">

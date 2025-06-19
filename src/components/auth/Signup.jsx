@@ -14,6 +14,7 @@ const Signup = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,19 +31,34 @@ const Signup = () => {
   };
 
   const createAccount = async (formData) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await response.json();
-    console.log(data)
-    if (data.type === "success") {
-      router.push(`/auth/confirm-otp?email=${encodeURIComponent(formData.email)}`);
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const data = await response.json();
+      console.log(data)
+      if (data.type === "success") {
+        router.push(`/auth/confirm-otp?email=${encodeURIComponent(formData.email)}`);
+      }
+      else {
+        if (data.field == "email") {
+          setErrors({ email: data.message });
+        }
+      }
     }
+    catch (error) {
+      console.error("Error creating account:", error);
+      setErrors({ general: "An error occurred while creating your account. Please try again." });
+    } finally {
+      setIsLoading(false);
+    }
+    
   }
 
   const handleSubmit = (e) => {
@@ -121,12 +137,16 @@ const Signup = () => {
           error={errors.confirmPassword}
         />
 
-        <button
+<button
           type="submit"
-          className="w-full bg-[#BDFF00] cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
-         
+          className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4 flex justify-center items-center"
+          disabled={isLoading}
         >
-          Create account
+            {isLoading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+          ) : (
+            "Create Account"
+          )}
         </button>
 
         <p className="text-[#44444A] mb-6 text-center text-sm">

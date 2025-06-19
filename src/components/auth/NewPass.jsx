@@ -9,6 +9,9 @@ const NewPass = () => {
     const email = searchParams.get('email'); // Get email from URL params
     const token = searchParams.get('token'); // Get email from URL params
 
+      const [isLoading, setIsLoading] = useState(false);
+    
+
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
@@ -18,20 +21,30 @@ const NewPass = () => {
   const [strength, setStrength] = useState(0);
 
   const resetPassword = async (password, email, token) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reset-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ newPassword:password, email, resetToken:token }),
-    });
-
-    const data = await response.json();
-    if (data.type === "success") {
-      router.push("/auth/login");
-    } else {
-      setErrors({ password: data.message || "Failed to reset password" });
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reset-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newPassword:password, email, resetToken:token }),
+      });
+  
+      const data = await response.json();
+      if (data.type === "success") {
+        router.push("/auth/login");
+      } else {
+        setErrors({ password: data.message || "Failed to reset password" });
+      }
     }
+    catch (error) {
+      setErrors({ password: "An error occurred. Please try again." });
+    }
+    finally {
+      setIsLoading(false);
+    }
+  
   }
 
 
@@ -139,10 +152,16 @@ Enter a new password for your account. Make sure it’s strong and secure.      
 
         <button
           type="submit"
-          className="w-full bg-[#BDFF00] cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
+          className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4 flex justify-center items-center"
           disabled={!formData.password || !formData.confirmPassword}
         >
-          Set Password
+          
+          {isLoading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+          ) : (
+            "Set Password"
+          )}
+          
         </button>
 
         <button

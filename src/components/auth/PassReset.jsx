@@ -10,6 +10,8 @@ const PassReset = ({ isPassReset }) => {
   
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+  
 
   const correctOtp = "123456";
 
@@ -19,8 +21,10 @@ const PassReset = ({ isPassReset }) => {
   };
 
   const confirmOtp = async (otp) => {
+    setIsLoading(true);
     let Email = decodeURIComponent(email);
     let apiEndpoint = isPassReset ? "verify-reset-otp" : "confirm-otp";
+   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${apiEndpoint}`, {
       method: "POST",
       headers: {
@@ -30,14 +34,22 @@ const PassReset = ({ isPassReset }) => {
     });
 
     const data = await response.json();
+    console.log(data)
     if (data.type === "success") {
       isPassReset
       ? router.push(`/auth/new-password?token=${data.resetSessionToken}&email=${encodeURIComponent(email)}`)
       : router.push("/profile/onboarding");
     }
     else {
-      setError("Invalid OTP. Please try again.");
+      setError(data.message);
     }
+   }
+   catch(error){
+    setError("An error occurred. Please try again.");
+   }
+   finally {
+      setIsLoading(false);
+   }
   }
 
   const handleSubmit = (e) => {
@@ -53,15 +65,17 @@ const PassReset = ({ isPassReset }) => {
   const handleResendOtp = async () => {
     let Email = decodeURIComponent(email);
     let apiEndpoint = isPassReset ? "forgot-password" : "resend-otp";
+    console.log(apiEndpoint)
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${apiEndpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: Email }),
+      body: JSON.stringify({ email: Email, isPasswordReset: isPassReset }),
     });
 
     const data = await response.json();
+    console.log(data)
     if (data.type === "success") {
       setError(""); // Clear any previous error
       alert("OTP resent successfully!");
@@ -77,8 +91,8 @@ const PassReset = ({ isPassReset }) => {
       </h2>
       <p className="text-[#44444A] text-[14px] text-sm mb-6 text-center">
         {isPassReset
-          ? "        We sent a recovery code to user@example.com"
-          : "Secure your account by verifying your email. Enter the 6-digit verification code we sent to example@mail.com"}
+          ? `We sent a recovery code to ${decodeURIComponent(email)}`
+          : `Secure your account by verifying your email. Enter the 6-digit verification code we sent to ${decodeURIComponent(email)}`}
       </p>
 
       <form onSubmit={handleSubmit}>
@@ -87,19 +101,26 @@ const PassReset = ({ isPassReset }) => {
         {error && (
           <p className="text-red-500 text-sm mt-2 ml-3 text-start">{error}</p>
         )}
-        <p className="text-[#44444A] mt-6 text-sm text-center">
+        <p className="text-[#44444A] mt-6 mb-3 text-sm text-center">
           Didn't get a code?
-          <button onClick={handleResendOtp} className="ml-1" type="button">
+          <button onClick={handleResendOtp} className="ml-1 underline cursor-pointer" type="button">
             Click to resend
           </button>
         </p>
-        <button
+      
+          <button
           type="submit"
-          className="w-full mt-6 bg-[#BDFF00] cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
-          disabled={otp.length !== 6}
+          className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4 flex justify-center items-center"
+          disabled={otp.length !== 6 || isLoading}
         >
-          Verify
+           {isLoading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+          ) : (
+            "Verify"
+          )}
+
         </button>
+    
 
         <button
           type="button"

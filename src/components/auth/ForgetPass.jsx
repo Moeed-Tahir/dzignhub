@@ -9,6 +9,7 @@ const ForgetPass = () => {
   const [formData, setFormData] = useState({
     email: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -18,20 +19,29 @@ const ForgetPass = () => {
 
 
   const sendResetOtp = async (email) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/forgot-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({email: email}),
-    });
-
-    const data = await response.json();
-    console.log(data)
-    if (data.type === "success") {
-      router.push(`/auth/password-reset?email=${encodeURIComponent(formData.email)}`);
-    } else {
-      setErrors({ email: data.message || "Failed to send reset link" });
+    setIsLoading(true)
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/forgot-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email: email}),
+      });
+  
+      const data = await response.json();
+      console.log(data)
+      if (data.type === "success") {
+        router.push(`/auth/password-reset?email=${encodeURIComponent(formData.email)}`);
+      } else {
+        setErrors({ email: data.message || "Failed to send reset link" });
+      }
+    }
+    catch(error) {
+      setErrors({ email: "Failed to send reset link" });
+    }
+    finally {
+      setIsLoading(false);
     }
   }
 
@@ -89,10 +99,15 @@ const ForgetPass = () => {
 
         <button
           type="submit"
-          className="w-full bg-[#BDFF00] text-[16px] cursor-pointer text-black font-semibold p-3 rounded-full mb-4"
-          disabled={!formData.email}
+           className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4 flex justify-center items-center"
+          disabled={!formData.email || isLoading}
         >
-          Reset Password
+           {isLoading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+          ) : (
+            "Reset Password"
+          )}
+          
         </button>
 
         <button
