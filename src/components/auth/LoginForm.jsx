@@ -3,7 +3,11 @@ import React, { useState } from "react";
 import CustomInput from "../ui/CustomInput";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn, signOut, useSession } from 'next-auth/react';
+
 const LoginForm = () => {
+  const { data: session } = useSession();
+
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -134,6 +138,7 @@ const LoginForm = () => {
         <div className="text-center mb-4">or</div>
         <div className="flex justify-between gap-2">
           <button
+           onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
             type="button"
             className="w-full bg-white border text-[16px] border-gray-300 p-2 font-semibold rounded-full flex items-center justify-center"
           >
