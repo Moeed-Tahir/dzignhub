@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "tailwindcss";
-
+@plugin "daisyui";
 
 /* Color Variables */
 :root {

@@ -1,17 +1,41 @@
-
 "use client";
-import { useRouter } from 'next/navigation';
 
-export default function Home() {
+import { useRouter } from "next/navigation";
+import Navbar from "../components/landing/Navbar";
+import Templates from "@/components/landing/Templates";
+import Hero from "../components/landing/Hero";
+import Work from "@/components/landing/Work";
+export default function Landing() {
   const router = useRouter();
+
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
-      <h1 className="text-7xl font-bold underline">
-        Hello world!
-      </h1>
-      <button onClick={()=>router.push("/auth/login")}>
-        Login
-      </button>
-    </div>
-  )
+    <>
+      <div className="w-[1440px] h-[982px] bg-[#1B1F3B] mx-auto">
+        <div className="flex flex-col gap-[61px]">
+          {/* Navbar */}
+          <div className="mt-[24px] ml-[89px]">
+            <Navbar />
+          </div>
+        </div>
+        {/* Hero Section (center box + CTA + carousel) */}
+        <Hero />
+      </div>
+      <div className="w-[1440px] h-[775px] bg-[#FAFAFA] mx-auto">
+        <div className="w-[1280px] h-[138px]   mx-auto pt-[80px]">
+          <div className="flex gap-[8px] font-semibold font-sans text-[48px]  text-black ">
+            <span className="text-[#C209C1]">Endless</span>
+            <span className="">possibilites</span>
+          </div>
+          <h1 className="font-semibold font-sans text-[48px]  text-black">
+            with AI art
+          </h1>
+
+          <div className="w-[1060px] h-[499px] mx-auto  border-2 border-black mt-[56px]"></div>
+        </div>
+      </div>
+     <Work/>
+     <Templates/>
+    </>
+  );
 }
