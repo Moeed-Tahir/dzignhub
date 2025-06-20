@@ -32,6 +32,7 @@ const img = [
 
 const StartingSuggestion = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   return (
     <>
@@ -96,14 +97,17 @@ const StartingSuggestion = () => {
             key={index}
             width={300}
             height={300}
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setSelectedImage(image.src);
+              setIsModalOpen(true);
+            }}
             style={{ cursor: "pointer" }}
-            className="object-cover w-[328px] height-[450px] rounded-[24px]"
+            className="object-cover w-[328px] height-[450px] rounded-[12px]"
           />
         ))}
       </div>
 
-      <ImageModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <ImageModal href={selectedImage} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 };
