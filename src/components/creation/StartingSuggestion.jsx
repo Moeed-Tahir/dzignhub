@@ -1,5 +1,8 @@
+"use client";
 import React from "react";
 import Image from "next/image";
+import { useState } from "react";
+import ImageModal from "./ImageModal";
 const img = [
   {
     src: "/creation/imges/1.jpg",
@@ -28,6 +31,8 @@ const img = [
 ];
 
 const StartingSuggestion = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <>
       <div className="h-[173px] my-[10px] flex justify-between items-center flex-col gap-2 mt-[24px]">
@@ -91,10 +96,14 @@ const StartingSuggestion = () => {
             key={index}
             width={300}
             height={300}
+            onClick={() => setIsModalOpen(true)}
+            style={{ cursor: "pointer" }}
             className="object-cover w-[328px] height-[450px] rounded-[24px]"
           />
         ))}
       </div>
+
+      <ImageModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 };
