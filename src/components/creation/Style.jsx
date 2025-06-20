@@ -2,8 +2,8 @@ import React from "react";
 import Image from "next/image";
 import { Check } from "lucide-react";
 
-const Style = ({ selected, onChange }) => {
-  const styles = [
+const Style = ({ selected, onChange,isImagePage }) => {
+  const videoStyle = [
     {
       id: 1,
       name: "Golder hour",
@@ -35,6 +35,42 @@ const Style = ({ selected, onChange }) => {
       image: "/creation/styles/6.jpg",
     },
   ];
+
+  const imageStyle = [
+    {
+      id: 1,
+      name: "Cartoon",
+      image: "/creation/imges/11.jpg",
+    },
+    {
+      id: 2,
+      name: "3D",
+      image: "/creation/imges/12.jpg",
+    },
+    {
+      id: 3,
+      name: "Anime",
+      image: "/creation/imges/13.png",
+    },
+    {
+      id: 4,
+      name: "Pencil",
+      image: "/creation/imges/14.jpg",
+    },
+    {
+      id: 5,
+      name: "Illustration",
+      image: "/creation/imges/15.png",
+    },
+    {
+      id: 6,
+      name: "Fantasy",
+      image: "/creation/imges/16.jpg",
+    },
+  ];
+
+    const styles = isImagePage ? imageStyle : videoStyle;
+
   return (
     <div>
       <div className="flex justify-start my-2 items-center gap-2">
