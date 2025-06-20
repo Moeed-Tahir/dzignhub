@@ -6,6 +6,7 @@ import Templates from "@/components/landing/Templates";
 import Hero from "../components/landing/Hero";
 import Work from "@/components/landing/Work";
 import Carousel from "@/components/landing/Carousel";
+import StickyCardStack from "@/components/landing/StickyCardStack";
 export default function Landing() {
   const router = useRouter();
 
@@ -40,7 +41,9 @@ export default function Landing() {
             with AI art
           </h1>
 
-          <div className="w-[1060px] h-[499px] mx-auto  border-2 border-black mt-[56px]"></div>
+          <div className="w-[1060px] h-[499px] mx-auto  mt-[56px]  overflow-y-scroll scrollbar-hide">
+             <StickyCardStack/>
+          </div>
         </div>
       </div>
       <Work />
