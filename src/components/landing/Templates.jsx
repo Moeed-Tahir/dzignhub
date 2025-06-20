@@ -16,31 +16,41 @@ function Templates() {
         </div>
       </div>
 
-      <div className="w-[1280px] h-[1150px] flex flex-col gap-[32px] ">
+      <div className="w-[1280px] h-[1150px] flex flex-col gap-[32px]  ">
         {/* Row 1 */}
-        <div className="w-[1280px] h-[362px] bg-[#E4E7FA] rounded-[20px] overflow-hidden">
-          <div className="w-[434px] h-[72.25px] pt-[20px] pl-[20px] gap-[8px] flex flex-col">
+        <div className="w-[1280px] h-[362px] bg-[#E4E7FA] rounded-[20px] overflow-hidden relative">
+          <div className="w-[434px] h-[72.25px] absolute top-[20px] left-[20px] gap-[8px] flex flex-col">
             <p className="text-[30px] text-[#C209C1] font-sans font-medium">
-              Wesbite
+              Website
             </p>
             <p className="text-[18px] text-[#3D4050] font-sans">
               Create gorgeous landing pages with a simple prompt.
             </p>
           </div>
-          <div className="w-[1258px] h-[309px] pt-[57px] pl-[22px]  border-2">
-            <div className="w-[255.38px]  relative left-[0.48px] z-1   rounded-[10.64px] pt-[30.42px]  pl-[0.48px] rotate-[-2deg] inline-block">
+          <div className="w-[1258px] h-[309px] absolute top-[57px] left-[22px]">
+            <div className="w-[255.38px]  absolute left-[0.48px] top-[118.42px] z-2  overflow-hidden rounded-[10.64px]  rotate-[-2deg] inline-block">
               <img
                 src="/landing/templates/1/1.jpg"
                 alt="Image"
                 className="  "
               />
             </div>
-            <div className="w-[255.38px] relative right-[30px]  rounded-[8.87px] pt-[30.42px]  pl-[0.48px] rotate-[-2deg] inline-block ">
+            <div className="w-[255.38px] absolute left-[183.12px] overflow-hidden top-[92.75px] z-1   rounded-[8.87px] rotate-[-2deg]  ">
               <img src="/landing/templates/1/2.jpg" alt="Image" className=" " />
             </div>
+            <div className="w-[255.38px] absolute left-[365.76px] top-[67.08px] overflow-hidden  rounded-[8.87px] rotate-[-2deg] ">
+              <img src="/landing/templates/1/3.jpg" alt="Image" className=" " />
+            </div>
+            <div className="w-[255.38px] absolute left-[548.76px] top-[118.58px] z-1 overflow-hidden  rounded-[8.87px] rotate-[-2deg]  ">
+              <img src="/landing/templates/1/4.jpg" alt="Image" className=" " />
+            </div>
+             <div className="w-[255.38px] absolute left-[730.64px] top-[92.91px] overflow-hidden  rounded-[8.87px] rotate-[-2deg] ">
+              <img src="/landing/templates/1/5.jpg" alt="Image" className=" " />
+            </div>
+             <div className="w-[505.17px]  absolute left-[964px] top-[149.63px] overflow-hidden  rounded-[8.87px] rotate-[-2deg] ">
+              <img src="/landing/templates/1/6.jpg" alt="Image" className=" " />
+            </div>
           </div>
-          
-
         </div>
 
         {/* Row 2 */}
