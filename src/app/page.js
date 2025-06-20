@@ -12,7 +12,7 @@ export default function Landing() {
   return (
     <>
       <div
-        className=" h-[982px] w-full"
+        className=" h-[982px]  overflow-hidden w-full"
         style={{
           background: "linear-gradient(to bottom, #1B1F3B 50%, #c209c1 100%)",
           height: "982px",
