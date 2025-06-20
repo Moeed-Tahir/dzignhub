@@ -8,23 +8,27 @@ import {
   Plus,
   MoreVertical,
 } from "lucide-react";
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUserStore } from "@/store/store";
+import { MoveLeft } from "lucide-react";
 
 const Navbar = ({ isCreationPage }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { IsLogin } = useUserStore();
-  
+
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isWorkspaceDropdownOpen, setIsWorkspaceDropdownOpen] = useState(false);
-  const [isAssistantsDropdownOpen, setIsAssistantsDropdownOpen] = useState(false);
-  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
+  const [isAssistantsDropdownOpen, setIsAssistantsDropdownOpen] =
+    useState(false);
+  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
+    useState(false);
 
   const getActiveMenu = (pathname) => {
     if (pathname === "/dashboard") return "Home";
-    if (pathname.startsWith("/workspace") || pathname.startsWith("/dashboard")) return "Manual workspace";
+    if (pathname.startsWith("/workspace") || pathname.startsWith("/dashboard"))
+      return "Manual workspace";
     if (pathname.startsWith("/assistants")) return "Assistants";
     return "";
   };
@@ -50,17 +54,65 @@ const Navbar = ({ isCreationPage }) => {
 
   const assistants = [
     { name: "Zara", role: "(Brand Design)", isPro: false, avatar: "/zara.png" },
-    { name: "Sana", role: "(Content Creator)", isPro: false, avatar: "/sana.png" },
-    { name: "Mira", role: "(Strategy Specialist)", isPro: false, avatar: "/mira.png" },
-    { name: "Novi", role: "(SEO Specialist)", isPro: true, avatar: "/novi.png" },
-    { name: "Kano", role: "(UX/UI Assistant)", isPro: true, avatar: "/kano.png" },
+    {
+      name: "Sana",
+      role: "(Content Creator)",
+      isPro: false,
+      avatar: "/sana.png",
+    },
+    {
+      name: "Mira",
+      role: "(Strategy Specialist)",
+      isPro: false,
+      avatar: "/mira.png",
+    },
+    {
+      name: "Novi",
+      role: "(SEO Specialist)",
+      isPro: true,
+      avatar: "/novi.png",
+    },
+    {
+      name: "Kano",
+      role: "(UX/UI Assistant)",
+      isPro: true,
+      avatar: "/kano.png",
+    },
   ];
 
   const notifications = [
-    { id: 1, icon: "/homepage/notifications/document.png", title: "allmyai", time: "17:10", description: "allmyai allmyai allmyai", isRead: false },
-    { id: 2, icon: "/homepage/notifications/message-text.png", title: "allmyai", time: "17:10", description: "allmyai allmyai allmyai", isRead: false },
-    { id: 3, icon: "/homepage/notifications/notification.png", title: "allmyai", time: "17:10", description: "allmyai allmyai allmyai", isRead: true },
-    { id: 4, icon: "/homepage/notifications/document.png", title: "allmyai", time: "17:10", description: "allmyai allmyai allmyai", isRead: true },
+    {
+      id: 1,
+      icon: "/homepage/notifications/document.png",
+      title: "allmyai",
+      time: "17:10",
+      description: "allmyai allmyai allmyai",
+      isRead: false,
+    },
+    {
+      id: 2,
+      icon: "/homepage/notifications/message-text.png",
+      title: "allmyai",
+      time: "17:10",
+      description: "allmyai allmyai allmyai",
+      isRead: false,
+    },
+    {
+      id: 3,
+      icon: "/homepage/notifications/notification.png",
+      title: "allmyai",
+      time: "17:10",
+      description: "allmyai allmyai allmyai",
+      isRead: true,
+    },
+    {
+      id: 4,
+      icon: "/homepage/notifications/document.png",
+      title: "allmyai",
+      time: "17:10",
+      description: "allmyai allmyai allmyai",
+      isRead: true,
+    },
   ];
 
   const handleMenuClick = (item) => {
@@ -88,26 +140,61 @@ const Navbar = ({ isCreationPage }) => {
     setIsProfileDropdownOpen(false);
   };
 
-
-  const logout = async() => {
-    localStorage.removeItem("token"); 
+  const logout = async () => {
+    localStorage.removeItem("token");
     setIsProfileDropdownOpen(false);
     router.push("/auth/login");
-  }
+  };
 
   return (
-    <nav className={`  ${isCreationPage ? "" : "m-8"} bg-white px-4 py-4 rounded-full`}>
+    <nav
+      className={`  ${
+        isCreationPage ? "" : "m-8"
+      } bg-white px-4 py-4 rounded-full`}
+    >
       <div className="flex items-center justify-between">
         {/* Left - Logo */}
-        <div className="flex items-center space-x-3">
-          <Image
-            src="/logo-icon.png"
-            alt="Logo"
-            width={32}
-            height={32}
-            className="w-6 h-6"
-          />
-          <span className="text-lg font-semibold text-gray-900">allmyai</span>
+        <div className="flex items-center ">
+          {pathname === "/dashboard/image-creation" ? (
+            <>
+              {" "}
+              <button
+                onClick={() => router.back()}
+                className="flex items-center w-[44px] h-[44px] cursor-pointer justify-center border p-1 border-[#E3E3E3] rounded-full hover:underline text-sm"
+              >
+                <MoveLeft className="w-[24px] h-[24px] " />
+              </button>
+              <p className="text-[18px] ml-[10px] font-bold text-black">
+                Image Creation
+              </p>
+            </>
+          ) : pathname === "/dashboard/video-creation" ? (
+            <>
+              {" "}
+              <button
+                onClick={() => router.back()}
+                className="flex items-center w-[44px] cursor-pointer h-[44px]  justify-center border p-1 border-[#E3E3E3] rounded-full hover:underline text-sm"
+              >
+                <MoveLeft className="w-[24px] h-[24px] " />
+              </button>
+              <p className="text-[18px] ml-[10px] font-bold text-black">
+                Video Creation
+              </p>
+            </>
+          ) : (
+            <div className="flex justify-center items-center gap-2" onClick={() => router.push("/")}>
+              <Image
+                src="/logo-icon.png"
+                alt="Logo"
+                width={32}
+                height={32}
+                className="w-[26px] h-[26px]"
+              />
+              <span className="text-lg font-semibold text-gray-900">
+                allmyai
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Center - Navigation Menu */}
@@ -118,8 +205,9 @@ const Navbar = ({ isCreationPage }) => {
                 <Link href={item.href}>
                   <button
                     onClick={() => handleMenuClick(item)}
-                    className={`relative px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${activeMenu === item.name ? "text-black px-15" : ""
-                      }`}
+                    className={`relative px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${
+                      activeMenu === item.name ? "text-black px-15" : ""
+                    }`}
                     style={{
                       backgroundColor:
                         activeMenu === item.name
@@ -144,8 +232,9 @@ const Navbar = ({ isCreationPage }) => {
               ) : (
                 <button
                   onClick={() => handleMenuClick(item)}
-                  className={`relative px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${activeMenu === item.name ? "text-black px-15" : ""
-                    }`}
+                  className={`relative px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center  font-semibold text-[#202126] ${
+                    activeMenu === item.name ? "text-black px-4" : ""
+                  }`}
                   style={{
                     backgroundColor:
                       activeMenu === item.name
@@ -165,14 +254,16 @@ const Navbar = ({ isCreationPage }) => {
                       {item.badge}
                     </span>
                   )}
-                  {item.key === "workspace" && <Plus className="w-3 h-3 ml-1" />}
+                  {item.key === "workspace" && (
+                    <Plus className="w-3 h-3 ml-1" />
+                  )}
                 </button>
               )}
 
               {item.key === "workspace" && isWorkspaceDropdownOpen && (
                 <div className="absolute top-full left-0 mt-8 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                   <a
-                    href="#"
+                    href="dashboard/image-creation"
                     className="block px-4 py-2 text-sm font-normal text-gray-700 hover:bg-gray-50"
                   >
                     Image Creation
