@@ -73,8 +73,15 @@ const ImagesResults = () => {
       )}
 
       <div>
-
-        {isImageOpen && <Image src={selectedImage} alt="Selected" width={500} height={400} className="rounded-[16px] w-full h-[90vh] object-cover" />}
+        {isImageOpen && (
+          <Image
+            src={selectedImage}
+            alt="Selected"
+            width={500}
+            height={400}
+            className="rounded-[16px] w-full h-[90vh] mt-[20px] object-cover"
+          />
+        )}
       </div>
     </>
   );
