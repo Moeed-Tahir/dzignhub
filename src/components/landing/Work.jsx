@@ -25,7 +25,7 @@ function Work() {
     <div className="w-[1440px] h-[1367px] pt-[64px] pr-[40px] pb-[64px] pl-[40px] mx-auto">
       <div className="w-[1360px] h-[1239px] p-[40px] gap-[64px] rounded-[40px] bg-[#1B1F3B] flex flex-col shadow-md">
         <div className="flex justify-between items-center">
-          <h2 className="font-sans text-[48px] font-semibold text-white">
+          <h2 className=" text-[48px] font-semibold text-white">
             How Dzignhub works
           </h2>
 
@@ -94,10 +94,10 @@ function Work() {
 
                     {/* Text Content */}
                     <div className="w-[340px] h-[112.89px] gap-[7px] flex flex-col">
-                      <p className="text-[20px] font-medium font-sans text-[#FAFAFA]">
+                      <p className="text-[20px] font-medium  text-[#FAFAFA]">
                         {item.title}
                       </p>
-                      <p className="text-[14px] font-normal font-sans text-[#FAFAFA]">
+                      <p className="text-[14px] font-normal text-[#FAFAFA]">
                         {item.description}
                       </p>
                     </div>

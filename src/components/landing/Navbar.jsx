@@ -1,6 +1,6 @@
 import React from "react";
 import { Syne } from "next/font/google";
-
+import Link from "next/link";
 const syne = Syne({
   subsets: ["latin"],
   weight: ["400"],
@@ -18,7 +18,7 @@ function Navbar() {
         <button
           className={`${syne.classname} bg-[#BDFF00] w-[100px] h-[47px] text-[#000000]  rounded-full   cursor-pointer`}
         >
-          Sign In
+          <Link href="/auth/login">Sign In</Link>
         </button>
         <button className="w-[47px] h-[47px] bg-[#BDFF00] rounded-full flex items-center justify-center cursor-pointer">
           <img
