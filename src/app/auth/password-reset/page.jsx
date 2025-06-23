@@ -1,8 +1,13 @@
 import PassReset from '@/components/auth/PassReset'
 import React from 'react'
+import { Suspense } from 'react'
 
 const page = () => {
-  return  <PassReset isPassReset={true} />
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PassReset isPassReset={true} />
+    </Suspense>
+  )
 }
 
 export default page

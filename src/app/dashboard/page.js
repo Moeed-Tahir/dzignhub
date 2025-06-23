@@ -201,7 +201,7 @@ function Page() {
           height={20}
           className="w-5 h-5 mr-2"
         />
-        <span className="font-medium">Let's talk</span>
+        <span className="font-medium">Let&apos;s talk</span>
       </button>
 
       {/* Modal Popup */}
