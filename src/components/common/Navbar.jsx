@@ -12,50 +12,50 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUserStore } from "@/store/store";
 import { MoveLeft } from "lucide-react";
+import { Menu } from "lucide-react";
 
 const Navbar = ({ isCreationPage }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { IsLogin, SetIsLogin, SetEmail, SetUserId } = useUserStore();
 
-  
   const verifyToken = async () => {
-    const token = localStorage.getItem("token")
-    if (!token) return
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
-      })
-      const data = await res.json()
-      console.log("Token verification response:", data)
+      });
+      const data = await res.json();
+      console.log("Token verification response:", data);
 
       if (data.type === "success") {
         SetIsLogin(true);
         SetEmail(data.user.email);
         SetUserId(data.user.userId);
       } else {
-        SetIsLogin(false)
+        SetIsLogin(false);
       }
     } catch (error) {
-      SetIsLogin(false)
-      console.error("Token verification failed", error)
+      SetIsLogin(false);
+      console.error("Token verification failed", error);
     }
-  }
+  };
 
   useEffect(() => {
     verifyToken();
   }, []);
 
-  
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isWorkspaceDropdownOpen, setIsWorkspaceDropdownOpen] = useState(false);
   const [isAssistantsDropdownOpen, setIsAssistantsDropdownOpen] =
     useState(false);
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
     useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const getActiveMenu = (pathname) => {
     if (pathname === "/dashboard") return "Home";
@@ -214,23 +214,34 @@ const Navbar = ({ isCreationPage }) => {
               </p>
             </>
           ) : (
-            <div className="flex justify-center items-center gap-2" onClick={() => router.push("/")}>
-              <Image
-                src="/logo-icon.png"
-                alt="Logo"
-                width={32}
-                height={32}
-                className="w-[26px] h-[26px]"
-              />
-              <span className="text-lg font-semibold text-gray-900">
-                allmyai
-              </span>
-            </div>
+            <>
+              <div>
+                <Menu
+                  className="w-[26px] h-[26px] mr-3 cursor-pointer xl:hidden"
+                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                />
+              </div>
+              <div
+                className="flex justify-center items-center gap-2"
+                onClick={() => router.push("/")}
+              >
+                <Image
+                  src="/logo-icon.png"
+                  alt="Logo"
+                  width={32}
+                  height={32}
+                  className="w-[26px] h-[26px]"
+                />
+                <span className="text-lg font-semibold text-gray-900">
+                  allmyai
+                </span>
+              </div>
+            </>
           )}
         </div>
 
         {/* Center - Navigation Menu */}
-        <div className="p-2 flex items-center bg-[#F7F8F8] rounded-full space-x-1">
+        <div className="p-2 xl:flex items-center hidden  bg-[#F7F8F8] rounded-full space-x-1">
           {menuItems.map((item) => (
             <div key={item.name} className="relative">
               {item.type === "link" ? (
@@ -341,6 +352,138 @@ const Navbar = ({ isCreationPage }) => {
               )}
             </div>
           ))}
+        </div>
+
+        {/* Mobile Sidebar */}
+        <div className="fixed inset-0 z-50 flex justify-start xl:hidden pointer-events-none">
+          {/* Overlay */}
+          <div
+            className={`fixed inset-0 bg-opacity-30 transition-opacity duration-300 ${
+              isSidebarOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+            }`}
+            onClick={() => setIsSidebarOpen(false)}
+          ></div>
+          {/* Sidebar with animation */}
+          <div
+            className={`relative w-64 max-w-full h-full bg-white shadow-lg p-6 flex flex-col transform transition-transform duration-300 ease-in-out
+              ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} pointer-events-auto`}
+            style={{ willChange: 'transform' }}
+          >
+            <button
+              className="absolute top-4 right-4 text-gray-500 hover:text-black"
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <nav className="mt-10 space-y-2">
+              {menuItems.map((item) => (
+                <div key={item.name} className="relative mb-2">
+                  {item.type === "link" ? (
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsSidebarOpen(false)}
+                    >
+                      <button
+                        className={`w-full text-left px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 flex items-center space-x-2 ${
+                          activeMenu === item.name
+                            ? "bg-[#F7F8F8] text-black"
+                            : "text-[#202126]"
+                        }`}
+                      >
+                        <span>{item.name}</span>
+                        {item.badge && (
+                          <span className="bg-[#C209C11A] text-[#C209C1] text-xs px-2 py-0.5 rounded-full font-semibold ml-2">
+                            {item.badge}
+                          </span>
+                        )}
+                      </button>
+                    </Link>
+                  ) : (
+                    <div>
+                      <button
+                        onClick={() => handleMenuClick(item)}
+                        className={`w-full text-left px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 flex items-center ${
+                          activeMenu === item.name
+                            ? "bg-[#F7F8F8] text-black"
+                            : "text-[#202126]"
+                        }`}
+                      >
+                        <span>{item.name}</span>
+                        {item.badge && (
+                          <span className="bg-[#C209C11A] text-[#C209C1] text-xs px-2 py-0.5 rounded-full font-semibold ml-2">
+                            {item.badge}
+                          </span>
+                        )}
+                        {item.key === "workspace" && (
+                          <Plus className="w-3 h-3 ml-1" />
+                        )}
+                      </button>
+                      {/* Dropdowns for mobile sidebar */}
+                      {item.key === "workspace" &&
+                        isWorkspaceDropdownOpen && (
+                          <div className="ml-4 mt-2 space-y-1">
+                            <a
+                              href="/dashboard/image-creation"
+                              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"
+                            >
+                              Image Creation
+                            </a>
+                            <a
+                              href="/dashboard/video-creation"
+                              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"
+                            >
+                              Video Creation
+                            </a>
+                          </div>
+                        )}
+                      {item.key === "assistants" &&
+                        isAssistantsDropdownOpen && (
+                          <div className="ml-4 mt-2 space-y-1">
+                            {assistants.map((assistant) => (
+                              <div
+                                key={assistant.name}
+                                className="flex items-center py-2"
+                              >
+                                <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">
+                                  <Image
+                                    src={`/homepage/ai-assistants-dropdown${assistant.avatar}`}
+                                    width={32}
+                                    height={32}
+                                    alt={assistant.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                                <div className="flex flex-col min-w-0">
+                                  <p className="text-black text-base font-semibold truncate">
+                                    {assistant.name}
+                                  </p>
+                                  <p className="text-gray-500 text-xs truncate">
+                                    {assistant.role}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
+          </div>
         </div>
 
         {/* Right - Conditionally Rendered Section */}
@@ -487,7 +630,7 @@ const Navbar = ({ isCreationPage }) => {
                 Login
               </button>
             </Link>
-            <Link href="/auth/sign-up">
+            <Link href="/auth/sign-up" className="hidden xl:flex">
               <button
                 className="px-6 py-2 text-sm font-semibold text-black rounded-full transition-colors"
                 style={{ backgroundColor: "var(--color-green)" }}
