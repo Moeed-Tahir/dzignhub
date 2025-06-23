@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   LogOut,
@@ -15,7 +15,39 @@ import { useUserStore } from "@/store/store";
 const Navbar = ({ isCreationPage }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { IsLogin } = useUserStore();
+  const { IsLogin, SetIsLogin, SetEmail, SetUserId } = useUserStore();
+
+  
+  const verifyToken = async () => {
+    const token = localStorage.getItem("token")
+    if (!token) return
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      })
+      const data = await res.json()
+      console.log("Token verification response:", data)
+
+      if (data.type === "success") {
+        SetIsLogin(true);
+        SetEmail(data.user.email);
+        SetUserId(data.user.userId);
+      } else {
+        SetIsLogin(false)
+      }
+    } catch (error) {
+      SetIsLogin(false)
+      console.error("Token verification failed", error)
+    }
+  }
+
+  useEffect(() => {
+    verifyToken();
+  }, []);
+
   
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isWorkspaceDropdownOpen, setIsWorkspaceDropdownOpen] = useState(false);
