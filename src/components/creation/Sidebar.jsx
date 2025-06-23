@@ -11,7 +11,7 @@ import Duration from "./Duration";
 import ProCard from "./ProCard";
 import Colors from "./Colors";
 
-const Sidebar = ({ onGenerate, isImagePage }) => {
+const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const router = useRouter();
   const [textValue, setTextValue] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -49,8 +49,15 @@ const Sidebar = ({ onGenerate, isImagePage }) => {
             allmyai
           </span>
         </div>
-
-        
+        {showClose && (
+          <button
+            className="ml-2 text-gray-500 hover:text-black text-lg px-2 py-1 rounded-full"
+            onClick={onClose}
+            aria-label="Close sidebar"
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       <TextArea

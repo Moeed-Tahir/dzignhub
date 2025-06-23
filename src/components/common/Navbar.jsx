@@ -178,6 +178,14 @@ const Navbar = ({ isCreationPage }) => {
     router.push("/auth/login");
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (window.innerWidth < 1280) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, []);
   return (
     <nav
       className={`  ${
@@ -187,7 +195,7 @@ const Navbar = ({ isCreationPage }) => {
       <div className="flex items-center justify-between">
         {/* Left - Logo */}
         <div className="flex items-center ">
-          {pathname === "/dashboard/image-creation" ? (
+          {pathname === "/dashboard/image-creation" && !isMobile ? (
             <>
               {" "}
               <button
@@ -200,7 +208,7 @@ const Navbar = ({ isCreationPage }) => {
                 Image Creation
               </p>
             </>
-          ) : pathname === "/dashboard/video-creation" ? (
+          ) : pathname === "/dashboard/video-creation" && !isMobile ? (
             <>
               {" "}
               <button
@@ -359,15 +367,19 @@ const Navbar = ({ isCreationPage }) => {
           {/* Overlay */}
           <div
             className={`fixed inset-0 bg-opacity-30 transition-opacity duration-300 ${
-              isSidebarOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+              isSidebarOpen
+                ? "opacity-100 pointer-events-auto"
+                : "opacity-0 pointer-events-none"
             }`}
             onClick={() => setIsSidebarOpen(false)}
           ></div>
           {/* Sidebar with animation */}
           <div
             className={`relative w-64 max-w-full h-full bg-white shadow-lg p-6 flex flex-col transform transition-transform duration-300 ease-in-out
-              ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} pointer-events-auto`}
-            style={{ willChange: 'transform' }}
+              ${
+                isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+              } pointer-events-auto`}
+            style={{ willChange: "transform" }}
           >
             <button
               className="absolute top-4 right-4 text-gray-500 hover:text-black"
@@ -432,23 +444,22 @@ const Navbar = ({ isCreationPage }) => {
                         )}
                       </button>
                       {/* Dropdowns for mobile sidebar */}
-                      {item.key === "workspace" &&
-                        isWorkspaceDropdownOpen && (
-                          <div className="ml-4 mt-2 space-y-1">
-                            <a
-                              href="/dashboard/image-creation"
-                              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"
-                            >
-                              Image Creation
-                            </a>
-                            <a
-                              href="/dashboard/video-creation"
-                              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"
-                            >
-                              Video Creation
-                            </a>
-                          </div>
-                        )}
+                      {item.key === "workspace" && isWorkspaceDropdownOpen && (
+                        <div className="ml-4 mt-2 space-y-1">
+                          <a
+                            href="/dashboard/image-creation"
+                            className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"
+                          >
+                            Image Creation
+                          </a>
+                          <a
+                            href="/dashboard/video-creation"
+                            className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"
+                          >
+                            Video Creation
+                          </a>
+                        </div>
+                      )}
                       {item.key === "assistants" &&
                         isAssistantsDropdownOpen && (
                           <div className="ml-4 mt-2 space-y-1">

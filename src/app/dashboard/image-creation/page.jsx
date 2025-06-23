@@ -30,16 +30,16 @@ const Page = () => {
         />
       </div>
 
-      {isMobile && isSidebarOpen && (
-        <div className="fixed inset-0 z-50 bg-white overflow-y-scroll p-4">
-          <button
-            className="text-sm text-gray-500 mb-4"
-            onClick={() => setIsSidebarOpen(false)}
-          >
-            Close ✕
-          </button>
+      {isMobile && (
+        <div
+          className={`fixed inset-0 z-50 bg-white overflow-y-auto transition-transform duration-300 ease-in-out transform ${
+            isSidebarOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
           <Sidebar
             isImagePage={true}
+            showClose={true}
+            onClose={() => setIsSidebarOpen(false)}
             onGenerate={() => {
               setShowSuggestion(false);
               setIsSidebarOpen(false);
