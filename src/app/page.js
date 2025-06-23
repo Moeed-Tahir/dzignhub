@@ -5,20 +5,31 @@ import Navbar from "../components/landing/Navbar";
 import Templates from "@/components/landing/Templates";
 import Hero from "../components/landing/Hero";
 import Work from "@/components/landing/Work";
+import Carousel from "@/components/landing/Carousel";
+import StickyCardStack from "@/components/landing/StickyCardStack";
 export default function Landing() {
   const router = useRouter();
 
-
   return (
     <>
-      <div className="w-[1440px] h-[982px] bg-[#1B1F3B] mx-auto">
-        <div className="flex flex-col gap-[61px]">
-          {/* Navbar */}
-          <div className="mt-[24px] ml-[89px]">
-            <Navbar />
+      <div
+        className=" h-[982px]  overflow-hidden w-full"
+        style={{
+          background: "linear-gradient(to bottom, #1B1F3B 50%, #c209c1 100%)",
+          height: "982px",
+        }}
+      >
+        <div className="w-[1440px]   mx-auto ">
+          <div className="flex flex-col gap-[61px]">
+            {/* Navbar */}
+            <div className="mt-[24px] ml-[89px]">
+              <Navbar />
+            </div>
+            <Hero />
           </div>
         </div>
-        <Hero />
+        {/* Carousel Section */}
+        <Carousel />
       </div>
       <div className="w-[1440px] h-[775px] bg-[#FAFAFA] mx-auto">
         <div className="w-[1280px] h-[138px]   mx-auto pt-[80px]">
@@ -30,11 +41,13 @@ export default function Landing() {
             with AI art
           </h1>
 
-          <div className="w-[1060px] h-[499px] mx-auto  border-2 border-black mt-[56px]"></div>
+          <div className="w-[1060px] h-[499px] mx-auto  mt-[56px]  overflow-y-scroll scrollbar-hide">
+             <StickyCardStack/>
+          </div>
         </div>
       </div>
-     <Work/>
-     <Templates/>
+      <Work />
+      <Templates />
     </>
   );
 }

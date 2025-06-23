@@ -8,9 +8,7 @@ import { Syne } from "next/font/google";
 const syne = Syne({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-syne" });
 const anybody = Anybody({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-anybody" });
 
-const images = [
-  // add URLs here if you have them
-];
+
 
 export default function Hero() {
   return (
@@ -61,35 +59,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Carousel Section */}
-      <div className="h-[420px] flex flex-col overflow-x-auto gap-[20px] mt-[40px]">
-        <div className="h-[200px] border-2 flex">
-          <div className="carousel carousel-center space-x-[20px]">
-            {images.map((url, index) => (
-              <div className="carousel-item" key={index}>
-                <img
-                  src={url}
-                  alt={`Slide ${index + 1}`}
-                  className="w-[200px] h-[200px] object-cover rounded-box"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="h-[200px] border-2">
-          <div className="carousel carousel-center space-x-[20px]">
-            {images.map((url, index) => (
-              <div className="carousel-item" key={index}>
-                <img
-                  src={url}
-                  alt={`Slide ${index + 1}`}
-                  className="w-[200px] h-[200px] object-cover rounded-box"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </>
+     
+          </>
   );
 }

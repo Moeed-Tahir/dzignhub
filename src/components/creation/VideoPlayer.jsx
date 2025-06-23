@@ -1,11 +1,8 @@
 "use client";
 import React, { useRef, useState } from "react";
-import {
-  Pause,
-  Play,
-  Volume2,
-} from "lucide-react";
+import { Pause, Play, Volume2 } from "lucide-react";
 import Image from "next/image";
+import DownloadModal from "./DownloadModal";
 
 export default function VideoPlayer({ src }) {
   const videoRef = useRef(null);
@@ -27,8 +24,12 @@ export default function VideoPlayer({ src }) {
   };
 
   const formatTime = (time) => {
-    const min = Math.floor(time / 60).toString().padStart(1, "0");
-    const sec = Math.floor(time % 60).toString().padStart(2, "0");
+    const min = Math.floor(time / 60)
+      .toString()
+      .padStart(1, "0");
+    const sec = Math.floor(time % 60)
+      .toString()
+      .padStart(2, "0");
     return `${min}:${sec}`;
   };
 
@@ -37,6 +38,8 @@ export default function VideoPlayer({ src }) {
     const percent = (e.clientX - rect.left) / rect.width;
     videoRef.current.currentTime = percent * videoRef.current.duration;
   };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="rounded-[20px] overflow-hidden shadow-lg w-full max-w-4xl mx-auto bg-black">
@@ -102,18 +105,19 @@ export default function VideoPlayer({ src }) {
 
       {/* Bottom black control bar (below video) */}
       <div className="bg-black flex items-center h-[48px] px-[20px] justify-end gap-4">
-        <a href={src} download className="hover:opacity-80">
+        <a className="hover:opacity-80 cursor-pointer">
           <Image
             src={"/creation/Import.svg"}
             alt="Download"
             width={20}
+            onClick={() => setIsModalOpen(true)}
             height={20}
           />
         </a>
 
         <p className="font-semibold text-white">|</p>
 
-        <button onClick={() => alert("Delete handler goes here")}>
+        <button className="hover:opacity-80 cursor-pointer">
           <Image
             src={"/creation/trash.svg"}
             alt="Delete"
@@ -122,6 +126,11 @@ export default function VideoPlayer({ src }) {
           />
         </button>
       </div>
+
+      <DownloadModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

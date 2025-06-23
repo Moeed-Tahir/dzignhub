@@ -2,7 +2,7 @@
 import Navbar from '@/components/common/Navbar'
 import CommunityFeed from '@/components/homepage/CommunityFeed'
 import ToolCard from '@/components/homepage/ToolCard'
-import { Camera, CameraIcon, Pen, Search, Star, ChevronLeft, ChevronRight } from 'lucide-react'
+import {  ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import ModalPopup from '@/components/homepage/ModalPopup'
@@ -84,6 +84,7 @@ function Page() {
               title="Image creation"
               description="Create and refine visuals manually"
               className="flex-1"
+              href="/dashboard/image-creation"
             />
             <ToolCard
               image={"/homepage/manual-tools-video-creation.png"}
@@ -91,6 +92,7 @@ function Page() {
               title="Video creation"
               description="Edit and enhance videos with manual tools"
               className="flex-1"
+              href="/dashboard/video-creation"
             />
           </div>
         </div>
