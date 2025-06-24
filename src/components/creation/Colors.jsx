@@ -47,9 +47,9 @@ const Colors = ({ selected, onChange }) => {
           <div
             key={index}
             className={`bg-[#F7F8F8] flex justify-center items-center flex-1 rounded-[12px] px-[12px] py-[8px] cursor-pointer border-2 ${
-              selected === quality.id ? "border-[#C209C1]" : "border-transparent"
+              selected.id === quality.id ? "border-[#C209C1]" : "border-transparent"
             }`}
-            onClick={() => onChange && onChange(quality.id)}
+            onClick={() => onChange && onChange(quality)}
           >
             <div className="w-[28px] h-[28px] flex items-center justify-center">
               <div

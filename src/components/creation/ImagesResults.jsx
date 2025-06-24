@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { useState } from "react";
+import { useUserStore } from "@/store/store";
 const ImagesResults = () => {
   const img = [
     {
@@ -41,6 +42,7 @@ const ImagesResults = () => {
     },
   ];
   const [isImageOpen, setIsImageOpen] = useState(false);
+  const {GenerateImages} = useUserStore();
   const [selectedImage, setSelectedImage] = useState(null);
   return (
     <>
@@ -54,15 +56,16 @@ const ImagesResults = () => {
       )}
       {!isImageOpen && (
         <div className="grid grid-cols-1 mt-[24px] sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {img.map((image, index) => (
+          
+          {GenerateImages.map((image, index) => (
             <Image
-              src={image.src}
-              alt={image.alt}
+              src={image.imageUrl}
+              alt={image.fileName}
               key={index}
               width={300}
               height={300}
               onClick={() => {
-                setSelectedImage(image.src);
+                setSelectedImage(image.imageUrl);
                 setIsImageOpen(true);
               }}
               style={{ cursor: "pointer" }}

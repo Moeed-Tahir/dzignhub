@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.10.0",
+    "color-namer": "^1.4.0",
     "daisyui": "^5.0.43",
     "framer-motion": "^12.18.1",
     "lucide-react": "^0.515.0",

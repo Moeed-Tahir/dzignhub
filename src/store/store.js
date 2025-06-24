@@ -4,6 +4,8 @@ export const useUserStore = create((set) => ({
   IsLogin: false,
   Email: "",
   UserId: "",
+  GenerateImages: [],
+  SetGenerateImages: (newState) => set({ GenerateImages:newState}),
   SetUserId: (newState) => set({ UserId:newState}),
   SetIsLogin: (newState) => set({ IsLogin:newState}),
   SetEmail: (newState) => set({ Email:newState}),
