@@ -19,14 +19,19 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const [selectedQuality, setSelectedQuality] = useState(null);
   const [selectedDuration, setSelectedDuration] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [selectedColors, setSelectedColors] = useState({id:0, c1: "#F2E8DF", c2: "#D9C3B0", c3: "#BFA293"});
+  const [selectedColors, setSelectedColors] = useState({ id: 0, c1: "#F2E8DF", c2: "#D9C3B0", c3: "#BFA293" });
   const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const {SetGenerateImages} = useUserStore();
+  const { SetGenerateImages, SetGenerateVideo } = useUserStore();
+
+
+  // Add states for uploaded images
+  const [startImage, setStartImage] = useState(null);
+  const [endImage, setEndImage] = useState(null);
 
   const isValid = textValue.trim().split(/\s+/).length >= 6;
-  const handleGenerate = async() => {
+  const handleGenerate = async () => {
     console.log("Selected Style:", selectedStyle);
-    console.log("Selected Size:", selectedSize);``
+    console.log("Selected Size:", selectedSize); ``
     console.log("Selected Colors:", selectedColors);
     console.log("Selected Quality:", selectedQuality);
     console.log("Selected Duration:", selectedDuration);
@@ -40,22 +45,74 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       colors: [selectedColors.c1, selectedColors.c2, selectedColors.c3],
       quality: selectedQuality,
       quantity: selectedQuantity,
+      Duration: selectedDuration,
+      startImage: null,
+      endImage: null,
     }
     console.log("Data to be sent:", data);
 
+    if (isImagePage) {
+      const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/generate-image`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/generate-image`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const res = await req.json();
-    if (res.type=="success" || res.type== "partial_success") {
-      if (onGenerate) onGenerate();
-      SetGenerateImages(res.images)
+      const res = await req.json();
+      if (res.type == "success" || res.type == "partial_success") {
+        if (onGenerate) onGenerate();
+        SetGenerateImages(res.images)
+      }
+    }
+    else {
+       // Video generation - use FormData for file uploads
+       const formData = new FormData();
+       formData.append('prompt', textValue);
+ 
+       // Make sure we're sending the correct style value
+       const styleValue = selectedStyle?.name || selectedStyle;
+    formData.append('style', styleValue);
+ 
+       // Send duration as-is (it's already in "4 sec" format from Duration component)
+       formData.append('duration', selectedDuration);
+       formData.append('size', selectedSize);
+ 
+       // Add image files if selected
+       if (startImage) {
+         formData.append('startImage', startImage);
+       }
+       if (endImage) {
+         formData.append('endImage', endImage);
+       }
+ 
+       console.log("FormData contents:");
+       for (let [key, value] of formData.entries()) {
+         console.log(key, value);
+       }
+ 
+       try {
+         const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/generate-video`, {
+           method: "POST",
+           body: formData, // Don't set Content-Type header for FormData
+         });
+ 
+         const res = await req.json();
+         console.log("Video generation response:", res);
+ 
+         if (res.type == "success") {
+           if (onGenerate) onGenerate();
+           // Store the complete video object as an array for consistency with ImagesResults
+           SetGenerateVideo([res.video]);
+         } else {
+           console.error("Video generation failed:", res);
+           alert(`Video generation failed: ${res.error || 'Unknown error'}`);
+         }
+       } catch (error) {
+         console.error("Error during video generation:", error);
+         alert("An error occurred while generating the video. Please try again.");
+       }
     }
   };
 
@@ -98,7 +155,14 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         onChange={(e) => setTextValue(e.target.value)}
       />
 
-      {!isImagePage && <UploadImage />}
+      {!isImagePage && (
+        <UploadImage
+          startImage={startImage}
+          endImage={endImage}
+          onStartImageChange={setStartImage}
+          onEndImageChange={setEndImage}
+        />
+      )}
 
       {/* Collapsible Style Section */}
       <details open className="block lg:hidden">
@@ -174,9 +238,8 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
 
       <button
         type="submit"
-        className={`w-full ${
-          isValid ? "bg-[#BDFF00]" : "bg-[#BDFF005C] cursor-not-allowed"
-        } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4`}
+        className={`w-full ${isValid ? "bg-[#BDFF00]" : "bg-[#BDFF005C] cursor-not-allowed"
+          } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4`}
         disabled={!isValid}
         onClick={handleGenerate}
       >

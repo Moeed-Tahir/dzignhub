@@ -128,6 +128,7 @@ export default function VideoPlayer({ src }) {
       </div>
 
       <DownloadModal
+      src={src}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />

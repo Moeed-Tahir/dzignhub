@@ -6,7 +6,7 @@ const Style = ({ selected, onChange,isImagePage }) => {
   const videoStyle = [
     {
       id: 1,
-      name: "Golder hour",
+      name: "Golden hour",
       image: "/creation/styles/1.jpg",
     },
     {

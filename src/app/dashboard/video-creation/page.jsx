@@ -59,7 +59,7 @@ const Page = () => {
 
       <div className="w-full ">
         <Navbar isCreationPage={true} />
-        {showSuggestion ? <StartingSuggestion /> : <ImagesResults />}
+        {showSuggestion ? <StartingSuggestion /> : <ImagesResults isVideoPage={true}/>}
 
         <button
           className="fixed bottom-8 right-8 bg-[#C209C1] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50"
