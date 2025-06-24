@@ -20,7 +20,7 @@ const cardData = [
 ];
 function Work() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selected, setSelected] = useState("right"); 
+  const [selected, setSelected] = useState("right");
   return (
     <div className="w-[1440px] h-[1367px] pt-[64px] pr-[40px] pb-[64px] pl-[40px] mx-auto">
       <div className="w-[1360px] h-[1239px] p-[40px] gap-[64px] rounded-[40px] bg-[#1B1F3B] flex flex-col shadow-md">
@@ -51,17 +51,16 @@ function Work() {
                   : "w-[121px] h-[40px] bg-[#212e62] text-[#FFFFFF]"
               } px-[32px] py-[10px] gap-[4px] rounded-full text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center`}
             >
-                <img
-                src='/landing/starVector.svg'
-                className={`w-[24px] h-[24px] object-contain ${
-                selected === "right"
-                  ? "  text-[#000000]"
-                  : " text-[#FFFFFF]"
-              }`}
-                />
-                <p>
-              Pro
-                </p>
+              <img
+                src={`/landing/${
+                  selected === "right"
+                    ? "starVector.svg"
+                    : "starVectorWhite.svg"
+                }`}
+                className="w-[24px] h-[24px] object-contain"
+              />
+              
+              <p>Pro</p>
             </button>
           </div>
         </div>

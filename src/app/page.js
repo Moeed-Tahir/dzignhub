@@ -11,6 +11,9 @@ import Download from "@/components/landing/Download";
 import FeatureSection from "@/components/landing/FeatureSection";
 import Pricing from "@/components/landing/Pricing";
 import FAQ from "@/components/landing/FAQ";
+import Assistants from "@/components/landing/Assistants";
+import Footer from "@/components/common/Footer";
+import Testimonials from "@/components/landing/Testimonials";
 export default function Landing() {
   const router = useRouter();
 
@@ -55,7 +58,10 @@ export default function Landing() {
       <Download/>
       <FeatureSection/>
       <Pricing/>
+      <Testimonials/>
       <FAQ/>
+      <Assistants/>
+      <Footer/>
     </>
   );
 }
