@@ -190,7 +190,7 @@ const Navbar = ({ isCreationPage }) => {
     <nav
       className={`  ${
         isCreationPage ? "" : "m-8"
-      } bg-white px-4 py-4 rounded-full`}
+      } bg-white px-4 max-w-[1440px] mx-auto py-4 rounded-full`}
     >
       <div className="flex items-center justify-between">
         {/* Left - Logo */}
@@ -617,7 +617,7 @@ const Navbar = ({ isCreationPage }) => {
               {isProfileDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                   <a
-                    href="#"
+                    href="/setting/edit-profile"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                   >
                     <SettingsIcon className="w-4 h-4 inline-block mr-2" />{" "}
