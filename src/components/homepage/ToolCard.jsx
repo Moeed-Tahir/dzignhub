@@ -17,7 +17,7 @@ const ToolCard = ({
       onClick={onClick || (() => router.push(href))}
     >
       {/* Image */}
-      <div className="bg-[#eff1f3] w-full h-55 relative">
+      <div className="bg-[#eff1f3] w-full md:h-[300px] h-[220px]  xl:h-[220px] relative">
         <Image
           src={image}
           alt={title}
@@ -36,16 +36,16 @@ const ToolCard = ({
               alt={title}
               width={24}
               height={24}
-              className="w-6 h-6"
+              className="xl:w-6 w-5 h-5 xl:h-6"
             />
           </div>
-          <h3 className="text-lg font-semibold text-[#000000] font-general-sans">
+          <h3 className="xl:text-lg text-sm font-semibold text-[#000000] font-general-sans">
             {title}
           </h3>
         </div>
 
         {/* Description */}
-        <p className="text-[#000000] text-sm font-general-sans">
+        <p className="text-[#000000] text-xs xl:text-sm font-general-sans">
           {description}
         </p>
       </div>

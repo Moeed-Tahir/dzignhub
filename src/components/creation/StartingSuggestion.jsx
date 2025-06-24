@@ -36,7 +36,7 @@ const StartingSuggestion = () => {
 
   return (
     <>
-      <div className="h-[173px] my-[10px] flex justify-between items-center flex-col gap-2 mt-[24px]">
+      <div className="h-[173px] w-full my-[10px] flex justify-between items-center flex-col gap-2 mt-[24px]">
         <div className="w-[95px] h-[95px] bg-white rounded-full flex justify-center items-center mx-auto ">
           <Image
             src="/Logo.svg"
@@ -90,7 +90,7 @@ const StartingSuggestion = () => {
         
       </div>
 
-      <div className="grid grid-cols-1 mt-[24px] sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid   mt-[24px] grid-cols-2 lg:grid-cols-3 gap-4">
         {img.map((image, index) => (
           <Image
             src={image.src}
@@ -103,7 +103,7 @@ const StartingSuggestion = () => {
               setIsModalOpen(true);
             }}
             style={{ cursor: "pointer" }}
-            className="object-cover w-[328px] height-[450px] rounded-[12px]"
+            className="object-cover mx-auto w-[328px]  xl:h-[450px] rounded-[12px]"
           />
         ))}
       </div>

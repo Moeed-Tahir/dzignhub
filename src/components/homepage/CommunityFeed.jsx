@@ -20,7 +20,7 @@ function CommunityFeed() {
             </div>
 
             {/* Community feed content - 4 divs on one row with 16px gap */}
-            <div className='grid grid-cols-4 gap-4 w-full'>
+            <div className='grid grid-cols-2 xl:grid-cols-4 gap-4 w-full'>
                 {Array.from({ length: 4 }).map((_, index) => (
                     <div 
                         key={index} 

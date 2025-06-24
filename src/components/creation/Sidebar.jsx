@@ -11,7 +11,8 @@ import Duration from "./Duration";
 import ProCard from "./ProCard";
 import Colors from "./Colors";
 import { useUserStore } from "@/store/store";
-const Sidebar = ({ onGenerate, isImagePage }) => {
+
+const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const router = useRouter();
   const [textValue, setTextValue] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -21,10 +22,11 @@ const Sidebar = ({ onGenerate, isImagePage }) => {
   const [selectedColors, setSelectedColors] = useState({id:0, c1: "#F2E8DF", c2: "#D9C3B0", c3: "#BFA293"});
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const {SetGenerateImages} = useUserStore();
+
   const isValid = textValue.trim().split(/\s+/).length >= 6;
   const handleGenerate = async() => {
     console.log("Selected Style:", selectedStyle);
-    console.log("Selected Size:", selectedSize);
+    console.log("Selected Size:", selectedSize);``
     console.log("Selected Colors:", selectedColors);
     console.log("Selected Quality:", selectedQuality);
     console.log("Selected Duration:", selectedDuration);
@@ -56,22 +58,34 @@ const Sidebar = ({ onGenerate, isImagePage }) => {
       SetGenerateImages(res.images)
     }
   };
+
   return (
-    <div className="flex flex-col gap-4 p-4 bg-white rounded-[24px] ">
-      <div
-        onClick={() => router.push("/")}
-        className="flex items-center gap-2 cursor-pointer"
-      >
-        <Image
-          src="/Logo.svg"
-          alt="Logo"
-          width={100}
-          height={100}
-          className="w-[25px] h-[25px] object-contain"
-        />
-        <span className="font-semibold text-[16px] text-[#1B1F3B] leading-none">
-          allmyai
-        </span>
+    <div className="flex flex-col gap-4 p-4 bg-white rounded-[24px]">
+      <div className="flex items-center justify-between gap-2 ">
+        <div
+          onClick={() => router.push("/")}
+          className="flex items-center gap-2 cursor-pointer"
+        >
+          <Image
+            src="/Logo.svg"
+            alt="Logo"
+            width={100}
+            height={100}
+            className="w-[25px] h-[25px] object-contain"
+          />
+          <span className="font-semibold text-[16px] text-[#1B1F3B] leading-none">
+            allmyai
+          </span>
+        </div>
+        {showClose && (
+          <button
+            className="ml-2 text-gray-500 hover:text-black text-lg px-2 py-1 rounded-full"
+            onClick={onClose}
+            aria-label="Close sidebar"
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       <TextArea
@@ -83,18 +97,35 @@ const Sidebar = ({ onGenerate, isImagePage }) => {
         value={textValue}
         onChange={(e) => setTextValue(e.target.value)}
       />
+
       {!isImagePage && <UploadImage />}
-      <Style
-        selected={selectedStyle}
-        onChange={setSelectedStyle}
-        isImagePage={isImagePage}
-      />
+
+      {/* Collapsible Style Section */}
+      <details open className="block lg:hidden">
+        <summary className="font-medium text-[16px] mb-2 cursor-pointer">
+          Style
+        </summary>
+        <Style
+          selected={selectedStyle}
+          onChange={setSelectedStyle}
+          isImagePage={isImagePage}
+        />
+      </details>
+      <div className="hidden lg:block">
+        <Style
+          selected={selectedStyle}
+          onChange={setSelectedStyle}
+          isImagePage={isImagePage}
+        />
+      </div>
+
+      {/* Size */}
       <Size selected={selectedSize} onChange={setSelectedSize} />
 
       {isImagePage && (
         <>
           <Colors selected={selectedColors} onChange={setSelectedColors} />
-
+          {/* Quantity Selector */}
           <div>
             <div className="flex justify-start my-2 items-center gap-2">
               <Image
@@ -109,22 +140,19 @@ const Sidebar = ({ onGenerate, isImagePage }) => {
               </span>
             </div>
 
-            <div
-              className={`bg-[#F7F8F8] flex justify-between items-center flex-1 rounded-full px-[12px] py-[8px] cursor-pointer   `}
-            >
+            <div className="bg-[#F7F8F8] flex justify-between items-center rounded-full px-[12px] py-[8px]">
               <p
                 className="bg-white rounded-full flex justify-center items-center h-[28px] text-[18px] w-[28px]"
-                onClick={() => {
-                  if (selectedQuantity > 1) {
-                    setSelectedQuantity(selectedQuantity - 1);
-                  }
-                }}
+                onClick={() =>
+                  selectedQuantity > 1 &&
+                  setSelectedQuantity(selectedQuantity - 1)
+                }
               >
                 -
               </p>
               <p>{selectedQuantity}</p>
               <p
-                className="bg-white rounded-full flex justify-center items-center h-[28px] w-[28px] text-[18px] "
+                className="bg-white rounded-full flex justify-center items-center h-[28px] w-[28px] text-[18px]"
                 onClick={() => setSelectedQuantity(selectedQuantity + 1)}
               >
                 +
@@ -134,7 +162,7 @@ const Sidebar = ({ onGenerate, isImagePage }) => {
         </>
       )}
 
-      {isImagePage ? null : (
+      {!isImagePage && (
         <>
           <Quality selected={selectedQuality} onChange={setSelectedQuality} />
           <Duration
@@ -147,9 +175,7 @@ const Sidebar = ({ onGenerate, isImagePage }) => {
       <button
         type="submit"
         className={`w-full ${
-          isValid
-            ? "bg-[#BDFF00] cursor-pointer"
-            : "bg-[#BDFF005C] bg-opacity-[36%] cursor-not-allowed"
+          isValid ? "bg-[#BDFF00]" : "bg-[#BDFF005C] cursor-not-allowed"
         } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4`}
         disabled={!isValid}
         onClick={handleGenerate}
