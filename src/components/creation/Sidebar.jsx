@@ -22,14 +22,18 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const [selectedColors, setSelectedColors] = useState({ id: 0, c1: "#F2E8DF", c2: "#D9C3B0", c3: "#BFA293" });
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const { SetGenerateImages, SetGenerateVideo } = useUserStore();
-
+  const [isLoading, setIsLoading] = useState(false);
 
   // Add states for uploaded images
   const [startImage, setStartImage] = useState(null);
   const [endImage, setEndImage] = useState(null);
 
+  const [isError, setIsError] = useState("");
+  const [error, setError] = useState("")
+
   const isValid = textValue.trim().split(/\s+/).length >= 6;
   const handleGenerate = async () => {
+    setIsLoading(true)
     console.log("Selected Style:", selectedStyle);
     console.log("Selected Size:", selectedSize); ``
     console.log("Selected Colors:", selectedColors);
@@ -37,6 +41,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
     console.log("Selected Duration:", selectedDuration);
     console.log("Selected Quantity:", selectedQuantity);
     console.log("Text Value:", textValue);
+
 
     const data = {
       prompt: textValue,
@@ -65,6 +70,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         if (onGenerate) onGenerate();
         SetGenerateImages(res.images)
       }
+      setIsLoading(false)
     }
     else {
        // Video generation - use FormData for file uploads
@@ -83,6 +89,12 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
        if (startImage) {
          formData.append('startImage', startImage);
        }
+       else {
+        setError("Start image is required")
+        setIsError(true);
+        setIsLoading(false);
+        return;
+      }
        if (endImage) {
          formData.append('endImage', endImage);
        }
@@ -106,12 +118,19 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
            // Store the complete video object as an array for consistency with ImagesResults
            SetGenerateVideo([res.video]);
          } else {
+          setError(`${res.message}`)
+          setIsError(true);
            console.error("Video generation failed:", res);
            alert(`Video generation failed: ${res.error || 'Unknown error'}`);
          }
        } catch (error) {
+        setError(`${error}`)
+        setIsError(true);
          console.error("Error during video generation:", error);
          alert("An error occurred while generating the video. Please try again.");
+       }
+       finally{
+        setIsLoading(false);
        }
     }
   };
@@ -236,14 +255,26 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         </>
       )}
 
+      {isError && (
+        <p className="text-red-500 text-sm mt-2 ml-3 text-start">
+          {error}
+        </p>
+      )}
+
+      {/* Generate Button */}
+
       <button
         type="submit"
         className={`w-full ${isValid ? "bg-[#BDFF00]" : "bg-[#BDFF005C] cursor-not-allowed"
-          } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4`}
+          } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
         disabled={!isValid}
         onClick={handleGenerate}
       >
-        Generate
+        {isLoading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+          ) : (
+            "Generate"
+          )}
       </button>
 
       <ProCard />
