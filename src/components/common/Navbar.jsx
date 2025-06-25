@@ -190,7 +190,7 @@ const Navbar = ({ isCreationPage }) => {
     <nav
       className={`  ${
         isCreationPage ? "" : "m-8"
-      } bg-white px-4 max-w-[1440px] mx-auto py-4 rounded-full`}
+      } bg-white px-4 max-w-[1440px] mx-5 lg:mx-auto py-4 rounded-full`}
     >
       <div className="flex items-center justify-between">
         {/* Left - Logo */}
@@ -363,10 +363,10 @@ const Navbar = ({ isCreationPage }) => {
         </div>
 
         {/* Mobile Sidebar */}
-        <div className="fixed inset-0 z-50 flex justify-start xl:hidden pointer-events-none">
+        <div className="fixed inset-0 z-50 flex justify-start  xl:hidden pointer-events-none">
           {/* Overlay */}
           <div
-            className={`fixed inset-0 bg-opacity-30 transition-opacity duration-300 ${
+            className={`fixed inset-0 bg-opacity-30 backdrop-blur-md transition-opacity duration-300 ${
               isSidebarOpen
                 ? "opacity-100 pointer-events-auto"
                 : "opacity-0 pointer-events-none"

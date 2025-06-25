@@ -13,7 +13,7 @@ const LockIcon = (
 
 const page = () => {
   return (
-    <div className="bg-white flex-1 min-h-screen px-[160px] py-[80px] flex flex-col items-start">
+    <div className="flex flex-1 flex-col items-start justify-center py-[40px] xl:py-[80px] bg-white px-[40px] xl:px-[160px]">
       <h1 className="text-[#2A0856] text-[34px] font-semibold mb-12">We’re sorry to see you go</h1>
       <hr className="w-full border-[#E3E9EE] mb-12" />
       <div className="w-full max-w-[800px]">
@@ -43,10 +43,10 @@ const page = () => {
                   Minimum 12 characters
                 </span>
               </div>
-          <div className="flex gap-4 mt-2">
+          <div className="flex flex-col xl:flex-row gap-4 mt-2">
             <button
               type="submit"
-              className="bg-[#D0FF00] hover:bg-[#b8e600] text-[#1B1F3B] font-medium rounded-full px-[24px] py-[12px] text-[14px] flex items-center gap-2 transition"
+              className="bg-[#D0FF00] hover:bg-[#b8e600] text-[#1B1F3B] justify-center font-medium rounded-full px-[24px] py-[12px] text-[14px] flex items-center gap-2 transition"
             >
               Delete my account {TrashIcon}
             </button>

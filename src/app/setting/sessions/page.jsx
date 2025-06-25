@@ -64,7 +64,7 @@ const InfoIcon = (
 
 const page = () => {
   return (
-    <div className="bg-white flex-1 min-h-screen px-[160px] py-[80px] flex flex-col items-start">
+    <div className="flex flex-1 flex-col items-start justify-center py-[40px] xl:py-[80px] bg-white px-[40px] xl:px-[160px]">
       <h1 className="text-[#2A0856] text-[34px] font-semibold mb-2">
         Your sessions
       </h1>
@@ -84,7 +84,7 @@ const page = () => {
           {sessions.map((s, i) => (
             <div
               key={i}
-              className="flex items-center justify-between py-4 border-b border-[#E3E9EE] last:border-b-0"
+              className="flex items-center flex-col xl:flex-row gap-4 justify-between py-4 border-b border-[#E3E9EE] last:border-b-0"
             >
               <div className="flex items-center gap-4">
                 <div className="w-[56px] h-[56px] rounded-[16px] bg-[#F3F4F6] flex items-center justify-center overflow-hidden">

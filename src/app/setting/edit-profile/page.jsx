@@ -10,18 +10,18 @@ const page = () => {
   const location = "Saigon, Vietnam";
 
   return (
-    <div className="flex flex-1 min-h-[970px] flex-col items-start justify-center py-[80px] bg-white px-[160px]">
+    <div className="flex flex-1 flex-col items-start justify-center py-[40px] xl:py-[80px] bg-white px-[40px] xl:px-[160px]">
       <div>
         <p className="text-[#1B1F3B] text-[34px] font-semibold ">
           Edit profile
         </p>
       </div>
       <form className="mt-[48px] w-full  flex flex-col gap-8">
-        <div className="flex items-center gap-8">
-          <div className="w-[120px] h-[120px] rounded-full overflow-hidden bg-[#F3F4F6] flex items-center justify-center">
+        <div className="flex items-center lg:flex-row flex-col  gap-8">
+          <div className="!w-[120px] !h-[120px] rounded-full overflow-hidden  flex items-center justify-center">
             <Image src={avatarUrl} alt="avatar" width={4000} height={4000} />
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col justify-center items-center lg:items-start gap-2">
             <button
               type="button"
               className="border border-[#E3E9EE] w-[200px] rounded-full px-6 py-[12px] flex items-center text-[14px]  gap-2 font-medium text-[#1B1F3B] bg-white hover:bg-[#F6F6F6] transition"
@@ -44,7 +44,7 @@ const page = () => {
               className="hidden"
               ref={fileInputRef}
             />
-            <span className="text-[#68686B] font-medium text-[14px] mt-1">
+            <span className="text-[#68686B] font-medium text-center lg:text-start text-[14px] mt-1">
               800x800 PNG, JPG is recommended. Maximum file size: 2Mb
             </span>
           </div>
