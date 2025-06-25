@@ -80,7 +80,7 @@ const syne = Syne({
 function Footer() {
   return (
     <div className="w-full bg-[#1B1F3B] text-[#EDEDED]">
-      <div className="max-w-[1440px] mx-auto gap-[42px] border-2 md:py-[64px] md:px-[80px] py-[32px] px-[24px] md:gap-[64px]   flex flex-col ">
+      <div className="max-w-[1440px] mx-auto gap-[42px]  md:py-[64px] md:px-[80px] py-[32px] px-[24px] md:gap-[64px]   flex flex-col ">
         <div className="max-w-[1280px] w-full mx-auto  gap-[42px] md:gap-[64px]  flex md:flex-row flex-wrap flex-col justify-between">
           <div className="max-w-[320px] w-full border-black  flex flex-col  gap-[32px]">
             <img
