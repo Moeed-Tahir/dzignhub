@@ -23,22 +23,20 @@ export default function Landing() {
         className="overflow-hidden w-full lg:h-[1055px] h-[1146px]"
         style={{
           background: "linear-gradient(to bottom, #1B1F3B 50%, #c209c1 100%)",
-          
         }}
       >
         <div className="lg:w-[1440px] w-[100%] relative lg:mx-auto ">
-          
-            {/* Navbar */}
-            <div className="lg:w-[1280px] w-[382px] absolute top-[24px] left-[24px] lg:left-[89px] flex flex-col lg:gap-[61px]">
-              <Navbar />
+          {/* Navbar */}
+          <div className="lg:w-[1280px] w-[382px] absolute top-[24px] left-[24px] lg:left-[89px] flex flex-col lg:gap-[61px]">
+            <Navbar />
             <Hero />
-            </div>
-          
+          </div>
         </div>
         {/* Carousel Section */}
         <Carousel />
       </div>
-      <div className="  bg-[#FAFAFA]  flex flex-col p-[24px] gap-[24px] lg:pt-[80px] lg:px-[80px] lg:gap-[56px] ">
+
+      <div className="  bg-[#FAFAFA] max-w-[1440px] mx-auto flex flex-col p-[24px] gap-[24px] lg:pt-[80px] lg:px-[80px] lg:gap-[56px] ">
         <div className="">
           <div className="flex gap-[8px] font-semibold  lg:text-[48px] text-[28px]  text-black ">
             <span className="text-[#C209C1]">Endless</span>
@@ -48,10 +46,10 @@ export default function Landing() {
             with AI art
           </h1>
         </div>
-        <div className="w-[382px] h-[519.61px] lg:h-[499px] lg:w-[1060px] relative">
-        <div className="lg:w-[1060px] lg:h-[459px] w-[382px] h-[530.83px] absolute lg:top-[0px]  lg:left-[190px] top-[37.78px]  lg:rounded-[24px] rounded-[12.38px] overflow-y-scroll scrollbar-hide">
-          <StickyCardStack />
-        </div>
+        <div className=" h-[519.61px] lg:h-[499px]  mx-auto relative">
+          <div className="lg:w-[1060px] lg:h-[459px] w-[382px] h-[530.83px] absolute lg:top-[0px] top-[37.78px] left-1/2 -translate-x-1/2 lg:rounded-[24px] rounded-[12.38px] overflow-y-scroll scrollbar-hide">
+            <StickyCardStack />
+          </div>
         </div>
       </div>
       <Work />

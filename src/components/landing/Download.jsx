@@ -8,8 +8,8 @@ function Download() {
         background: "#1B1F3B",
       }}
     >
-      <div className="w-[1440px] h-[867px] py-[64px] px-[80px]">
-        <div className="w-[1280px] h-[739px] flex items-center justify-between">
+      <div className="max-w-[1440px] mx-auto h-[867px] py-[64px] px-[80px]">
+        <div className="max-w-[1280px] h-[739px] flex items-center justify-between">
           <div className="w-[688px] h-[690px] flex flex-col gap-[78px] text-[48px] font-semibold text-[#FFFFFF]">
             <div className="gap-[119px] flex flex-col h-[552px] w-[668px]">
               <div>
