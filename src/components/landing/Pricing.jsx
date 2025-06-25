@@ -52,9 +52,9 @@ function Pricing() {
 
   return (
     <div className="w-full bg-[#FAFAFA]">
-      <div className="max-w-[1440px]  p-[80px] gap-[56px] flex flex-col mx-auto">
+      <div className="max-w-[1440px] px-[20px] py-[40px] xl:p-[80px] gap-[56px] flex flex-col mx-auto">
         {/* Heading */}
-        <div className="text-[48px] font-semibold flex gap-[10px]">
+        <div className="xl:text-[48px] text-[26px] font-semibold flex gap-[10px]">
           <span className="text-[#C209C1]">Flexible</span>
           <span className="text-[#000000]">Pricing</span>
         </div>
@@ -67,7 +67,7 @@ function Pricing() {
             return (
               <div
                 key={index}
-                className={`xl:w-[32%] w-[500px] h-auto py-10 xl:py-5 rounded-[16px] flex flex-col gap-[8px] justify-center ${
+                className={`xl:w-[32%] px-5 h-auto py-10 xl:py-5 rounded-[16px] flex flex-col gap-[8px] justify-center ${
                   isPro ? "" : "bg-[#1B1F3B]"
                 }`}
                 style={
