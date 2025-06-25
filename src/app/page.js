@@ -25,9 +25,9 @@ export default function Landing() {
           background: "linear-gradient(to bottom, #1B1F3B 50%, #c209c1 100%)",
         }}
       >
-        <div className="lg:w-[1440px] w-[100%] relative lg:mx-auto ">
+        <div className="lg:max-w-[1440px]  w-[100%] relative lg:mx-auto ">
           {/* Navbar */}
-          <div className="lg:w-[1280px] w-[382px] absolute top-[24px] left-[24px] lg:left-[89px] flex flex-col lg:gap-[61px]">
+          <div className="lg:max-w-[1280px] mx-auto lg:w-auto w-[382px]  top-[24px]  flex flex-col lg:gap-[61px]">
             <Navbar />
             <Hero />
           </div>

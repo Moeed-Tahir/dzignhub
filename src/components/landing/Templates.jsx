@@ -24,7 +24,7 @@ function Templates() {
   return (
     <div className="w-full">
       <div className="max-w-[1440px] h-[1592px] gap-[64px] p-[80px] flex flex-col mx-auto">
-        <div className="w-[1280px] h-[218px] gap-[32px] flex flex-col">
+        <div className="max-w-[1280px] h-[218px] gap-[32px] flex flex-col">
           <div className=" font-semibold text-[48px] text-black w-[991px] h-[130px]">
             Over <span className="text-[#C209C1]">150,000</span> ready-made
             templates to choose from

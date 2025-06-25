@@ -8,7 +8,7 @@ const syne = Syne({
 
 function Navbar() {
   return (
-    <div className=" h-[48px] justify-between flex">
+    <div className=" h-[48px] px-[40px] py-10 xl:px-0 justify-between flex">
       <img
         src="/landing/Group.png"
         alt="logo"
