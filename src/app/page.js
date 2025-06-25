@@ -59,7 +59,7 @@ export default function Landing() {
       <Pricing />
       <Testimonials />
       <FAQ />
-      <Assistants />
+      <Assistants /> 
       <Footer />
     </>
   );
