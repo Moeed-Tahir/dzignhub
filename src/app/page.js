@@ -20,48 +20,49 @@ export default function Landing() {
   return (
     <>
       <div
-        className="overflow-hidden w-full"
+        className="overflow-hidden w-full lg:h-[1055px] h-[1146px]"
         style={{
           background: "linear-gradient(to bottom, #1B1F3B 50%, #c209c1 100%)",
-          height: "982px",
+          
         }}
       >
-        <div className="w-[1440px]   mx-auto ">
-          <div className="flex flex-col gap-[61px]">
+        <div className="lg:w-[1440px] w-[100%] relative lg:mx-auto ">
+          
             {/* Navbar */}
-            <div className="mt-[24px] ml-[89px]">
+            <div className="lg:w-[1280px] w-[382px] absolute top-[24px] left-[24px] lg:left-[89px] flex flex-col lg:gap-[61px]">
               <Navbar />
-            </div>
             <Hero />
-          </div>
+            </div>
+          
         </div>
         {/* Carousel Section */}
         <Carousel />
       </div>
-      <div className="w-[1440px] h-[775px] bg-[#FAFAFA] mx-auto">
-        <div className="w-[1280px] h-[138px]   mx-auto pt-[80px]">
-          <div className="flex gap-[8px] font-semibold  text-[48px]  text-black ">
+      <div className="  bg-[#FAFAFA]  flex flex-col p-[24px] gap-[24px] lg:pt-[80px] lg:px-[80px] lg:gap-[56px] ">
+        <div className="">
+          <div className="flex gap-[8px] font-semibold  lg:text-[48px] text-[28px]  text-black ">
             <span className="text-[#C209C1]">Endless</span>
             <span className="">possibilites</span>
           </div>
-          <h1 className="font-semibold  text-[48px]  text-black">
+          <h1 className="font-semibold  lg:text-[48px] text-[28px]  text-black">
             with AI art
           </h1>
-
-          <div className="w-[1060px] h-[499px] mx-auto  mt-[56px]  overflow-y-scroll scrollbar-hide">
-             <StickyCardStack/>
-          </div>
+        </div>
+        <div className="w-[382px] h-[519.61px] lg:h-[499px] lg:w-[1060px] relative">
+        <div className="lg:w-[1060px] lg:h-[459px] w-[382px] h-[530.83px] absolute lg:top-[0px]  lg:left-[190px] top-[37.78px]  lg:rounded-[24px] rounded-[12.38px] overflow-y-scroll scrollbar-hide">
+          <StickyCardStack />
+        </div>
         </div>
       </div>
       <Work />
       <Templates />
-      <Download/>
-      <FeatureSection/>
-      <Pricing/>
-      <Testimonials/>
-      <FAQ/>
-      <Assistants/>
-      <Footer/>
+      <Download />
+      <FeatureSection />
+      <Pricing />
+      <Testimonials />
+      <FAQ />
+      <Assistants />
+      <Footer />
     </>
   );
 }

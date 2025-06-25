@@ -22,8 +22,8 @@ function Work() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selected, setSelected] = useState("right");
   return (
-    <div className="w-[1440px] h-[1367px] pt-[64px] pr-[40px] pb-[64px] pl-[40px] mx-auto">
-      <div className="w-[1360px] h-[1239px] p-[40px] gap-[64px] rounded-[40px] bg-[#1B1F3B] flex flex-col shadow-md">
+    <div className="lg:w-[1440px] pt-[64px] pr-[40px] pb-[64px] pl-[40px] mx-auto">
+      <div className=" p-[40px] gap-[64px] rounded-[40px] bg-[#1B1F3B] flex flex-col shadow-md">
         <div className="flex justify-between items-center">
           <h2 className=" text-[48px] font-semibold text-white">
             How Dzignhub works
@@ -65,8 +65,8 @@ function Work() {
           </div>
         </div>
 
-        <div className="w-[1280px] h-[1030px] gap-[24px] flex flex-col">
-          <div className="w-[1280px] h-[152.89px] flex flex-row gap-[16px] rounded-xl">
+        <div className=" gap-[24px] flex flex-col">
+          <div className=" flex flex-row gap-[16px] rounded-xl">
             {cardData.map((item, index) => {
               const isSelected = index === selectedIndex;
 
@@ -110,7 +110,7 @@ function Work() {
           <img
             src={cardData[selectedIndex].image}
             alt={cardData[selectedIndex].title}
-            className="w-[1280px] h-[853.1px] object-contain  rounded-[20px]"
+            className=" object-contain  rounded-[20px]"
           />
         </div>
       </div>

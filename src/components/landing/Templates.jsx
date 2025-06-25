@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import {
   IoIosArrowDropleftCircle,
   IoIosArrowDroprightCircle,
@@ -22,172 +22,215 @@ function Templates() {
   };
 
   return (
-    <div className="w-[1440px] h-[1592px] gap-[64px] p-[80px] flex flex-col">
-      <div className="w-[1280px] h-[218px] gap-[32px] flex flex-col">
-        <div className=" font-semibold text-[48px] text-black w-[991px] h-[130px]">
-          Over <span className="text-[#C209C1]">150,000</span> ready-made
-          templates to choose from
-        </div>
-        <div className="w-[664px] h-[56px]">
-          <p className="font-[400] text-[18px] leading-[28px] align-middle text-[#3D4050] font-[general-sans]">
-            Discover our curated website design catalog featuring a range of
-            categories to match your preferences and projects.
-          </p>
-        </div>
-      </div>
-
-      <div className="w-[1280px] h-[1150px] flex flex-col gap-[32px]  ">
-        {/* Row 1 */}
-        <div className="w-[1280px] h-[362px] bg-[#E4E7FA] rounded-[20px] overflow-hidden relative">
-          <div className="w-[434px] h-[72.25px] absolute top-[20px] left-[20px] gap-[8px] flex flex-col">
-            <p className="text-[30px] text-[#C209C1]  font-medium">
-              Website
-            </p>
-            <p className="text-[18px] text-[#3D4050] ">
-              Create gorgeous landing pages with a simple prompt.
-            </p>
+    <div className="w-full">
+      <div className="w-[1440px] h-[1592px] gap-[64px] p-[80px] flex flex-col mx-auto">
+        <div className="w-[1280px] h-[218px] gap-[32px] flex flex-col">
+          <div className=" font-semibold text-[48px] text-black w-[991px] h-[130px]">
+            Over <span className="text-[#C209C1]">150,000</span> ready-made
+            templates to choose from
           </div>
-          <div className="w-[1258px] h-[309px] absolute top-[57px] left-[22px]">
-            <div className="w-[255.38px]  absolute left-[0.48px] top-[118.42px] z-2 overflow-hidden  rounded-[10.64px]  rotate-[-2deg] inline-block">
-              <img
-                src="/landing/templates/1/1.jpg"
-                alt="Image"
-                className="  "
-              />
-            </div>
-            <div className="w-[255.38px] absolute left-[183.12px]  top-[92.75px] z-1  overflow-hidden rounded-[8.87px] rotate-[-2deg]  ">
-              <img src="/landing/templates/1/2.jpg" alt="Image" className=" " />
-            </div>
-            <div className="w-[255.38px] absolute left-[365.76px] top-[67.08px]  overflow-hidden rounded-[8.87px] rotate-[-2deg] ">
-              <img src="/landing/templates/1/3.jpg" alt="Image" className=" " />
-            </div>
-            <div className="w-[255.38px] absolute left-[548.76px] top-[118.58px] z-1  overflow-hidden rounded-[8.87px] rotate-[-2deg]  ">
-              <img src="/landing/templates/1/4.jpg" alt="Image" className=" " />
-            </div>
-            <div className="w-[255.38px] absolute left-[730.64px] top-[92.91px] overflow-hidden  rounded-[8.87px] rotate-[-2deg] ">
-              <img src="/landing/templates/1/5.jpg" alt="Image" className=" " />
-            </div>
-            <div className="w-[505.17px]  absolute left-[964px] top-[149.63px] overflow-hidden rounded-[8.87px] rotate-[-2deg] ">
-              <img src="/landing/templates/1/6.jpg" alt="Image" className=" " />
-            </div>
+          <div className="w-[664px] h-[56px]">
+            <p className="font-[400] text-[18px] leading-[28px] align-middle text-[#3D4050] font-[general-sans]">
+              Discover our curated website design catalog featuring a range of
+              categories to match your preferences and projects.
+            </p>
           </div>
         </div>
 
-        {/* Row 2 */}
-        <div className="grid grid-cols-3 w-full h-[362px]  gap-[32px] overflow-hidden">
-          <div className="col-span-1 bg-[#E4E7FA] rounded-[20px]  relative">
-            <div className="absolute top-[20.04px] left-[20.5px] flex flex-col gap-[8.64px]">
-              <p className="text-[30px] text-[#C209C1]  font-medium  ">
-                Lummi
-              </p>
-              <p className="text-[18px] text-[#3D4050]  ">
-                Unlock 20,000+ AI-generated images made by global creators.
-              </p>
-            </div>
-            <div className="w-[219.36px] h-[250.7px]  absolute left-[-62.84px] top-[190.13px]  rounded-[3.92px] rotate-[-12deg] border-[6px] border-[#C209C1] ">
-              <img src="/landing/templates/2/1.jpg" alt="Image" className=" " />
-            </div>
-            <div className="w-[250.7px] h-[250.7px]  absolute left-[34.59px] top-[197.96px]  rounded-[3.92px] rotate-[-6deg] border-[6px] border-[#C209C1]">
-              <img src="/landing/templates/2/2.jpg" alt="Image" className=" " />
-            </div>
-            <div className="w-[250.7px] h-[219.36px]  absolute left-[98.33px] top-[214.76px]  rounded-[3.92px] rotate-[6deg] border-[6px] border-[#C209C1]">
-              <img src="/landing/templates/2/3.jpg" alt="Image" className=" " />
-            </div>
-          </div>
-          <div className="col-span-2 bg-[#E4E7FA]  rounded-[20px] relative">
-            <div className="top-[20px] left-[20px] flex flex-col gap-[8px] absolute">
-              <p className="text-[30px] text-[#C209C1]  font-medium ">
-                Brands
-              </p>
+        <div className="w-[1280px] h-[1150px] flex flex-col gap-[32px]  ">
+          {/* Row 1 */}
+          <div className="w-[1280px] h-[362px] bg-[#E4E7FA] rounded-[20px] overflow-hidden relative">
+            <div className="w-[434px] h-[72.25px] absolute top-[20px] left-[20px] gap-[8px] flex flex-col">
+              <p className="text-[30px] text-[#C209C1]  font-medium">Website</p>
               <p className="text-[18px] text-[#3D4050] ">
-                Get on-brand, consistent designs with every iteration.
+                Create gorgeous landing pages with a simple prompt.
               </p>
             </div>
-            <div className=" h-[246px] top-[100px] left-[32.31px] flex flex-col gap-[14.5px] absolute overflow-hidden">
-              <div>
+            <div className="w-[1258px] h-[309px] absolute top-[57px] left-[22px]">
+              <div className="w-[255.38px]  absolute left-[0.48px] top-[118.42px] z-2 overflow-hidden  rounded-[10.64px]  rotate-[-2deg] inline-block">
                 <img
-                  src="/landing/templates/3/1.jpg"
+                  src="/landing/templates/1/1.jpg"
                   alt="Image"
-                  className="h-[130.5px] rounded-[10.88px] w-[379.59px]   "
+                  className="  "
                 />
               </div>
-              <div>
+              <div className="w-[255.38px] absolute left-[183.12px]  top-[92.75px] z-1  overflow-hidden rounded-[8.87px] rotate-[-2deg]  ">
                 <img
-                  src="/landing/templates/3/2.jpg"
+                  src="/landing/templates/1/2.jpg"
                   alt="Image"
-                  className="h-[130.5px] rounded-[10.88px] w-[379.59px] object-fill   "
+                  className=" "
+                />
+              </div>
+              <div className="w-[255.38px] absolute left-[365.76px] top-[67.08px]  overflow-hidden rounded-[8.87px] rotate-[-2deg] ">
+                <img
+                  src="/landing/templates/1/3.jpg"
+                  alt="Image"
+                  className=" "
+                />
+              </div>
+              <div className="w-[255.38px] absolute left-[548.76px] top-[118.58px] z-1  overflow-hidden rounded-[8.87px] rotate-[-2deg]  ">
+                <img
+                  src="/landing/templates/1/4.jpg"
+                  alt="Image"
+                  className=" "
+                />
+              </div>
+              <div className="w-[255.38px] absolute left-[730.64px] top-[92.91px] overflow-hidden  rounded-[8.87px] rotate-[-2deg] ">
+                <img
+                  src="/landing/templates/1/5.jpg"
+                  alt="Image"
+                  className=" "
+                />
+              </div>
+              <div className="w-[505.17px]  absolute left-[964px] top-[149.63px] overflow-hidden rounded-[8.87px] rotate-[-2deg] ">
+                <img
+                  src="/landing/templates/1/6.jpg"
+                  alt="Image"
+                  className=" "
                 />
               </div>
             </div>
-            <div className="w-[380.43px] h-[318.56px] top-[97.57px] left-[433.64px] rounded-[10.88px]  absolute">
-              <img
-                src="/landing/templates/3/3.jpg"
-                alt="Image"
-                className=" rounded-[10.88px]   object-fill   "
-              />
-            </div>
           </div>
-        </div>
 
-        {/* Row 3 */}
-        <div className="grid grid-cols-3 w-full h-[362px] gap-[32px] ">
-          <div className="col-span-2 bg-[#E4E7FA] rounded-[20px] relative overflow-hidden">
-            <div className="top-[20px] left-[20px] flex flex-col gap-[8px] absolute">
-              <p className="text-[30px] text-[#C209C1] font-medium ">
-                Social
-              </p>
-              <p className="text-[18px] w-[285px] text-[#3D4050] ">
-                Streamline your content with our AI social media post generator
-              </p>
-            </div>
-            <div className="w-[508.42px] h-[381.93px] top-[196.22px] left-[39.92px] rounded-[9.71px] rotate-[6deg] overflow-hidden absolute">
-              <img src="/landing/templates/4/1.jpg" alt="Image" className="" />
-            </div>
-            <div className="w-[500.66px] h-[457.62px] top-[159px]  left-[337.05px] rounded-[9.32px] rotate-[6deg] overflow-hidden absolute">
-              <img src="/landing/templates/4/2.jpg" alt="Image" className="" />
-            </div>
-          </div>
-          <div className="col-span-1 relative bg-[#E4E7FA] rounded-[20px] h-[362px] overflow-hidden">
-            {/* Text */}
-            <div className="absolute top-[20px] left-[20px] flex flex-col gap-[8px]">
-              <p className="text-[30px] text-[#C209C1]  font-medium">
-                Slides
-              </p>
-              <p className="text-[18px] w-[322px] text-[#3D4050] ">
-                Make convincing presentations and pitches in seconds.
-              </p>
-            </div>
-
-            {/* Image */}
-            <div className="w-[270px] h-[151.88px] top-[153.34px] left-[66.08px] rounded-[10.13px] overflow-hidden absolute">
-              <img
-                src={slides[currentIndex]}
-                alt="Slide"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Arrows */}
-            <IoIosArrowDropleftCircle
-              onClick={prevSlide}
-              className="w-[32px] h-[32px] top-[215px] left-[22px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
-            />
-            <IoIosArrowDroprightCircle
-              onClick={nextSlide}
-              className="w-[32px] h-[32px] top-[215px] left-[352px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
-            />
-
-            {/* Dots */}
-            <div className="absolute top-[333.5px] left-[135px] flex gap-[8px]">
-              {slides.map((_, index) => (
-                <GoDot
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-[7.25px] h-[7.25px] rounded-full cursor-pointer ${
-                    currentIndex === index ? "bg-black " : "bg-[#c2c4d5] text-[#c2c4d5]"
-                  }`}
+          {/* Row 2 */}
+          <div className="grid grid-cols-3 w-full h-[362px]  gap-[32px] overflow-hidden">
+            <div className="col-span-1 bg-[#E4E7FA] rounded-[20px]  relative">
+              <div className="absolute top-[20.04px] left-[20.5px] flex flex-col gap-[8.64px]">
+                <p className="text-[30px] text-[#C209C1]  font-medium  ">
+                  Lummi
+                </p>
+                <p className="text-[18px] text-[#3D4050]  ">
+                  Unlock 20,000+ AI-generated images made by global creators.
+                </p>
+              </div>
+              <div className="w-[219.36px] h-[250.7px]  absolute left-[-62.84px] top-[190.13px]  rounded-[3.92px] rotate-[-12deg] border-[6px] border-[#C209C1] ">
+                <img
+                  src="/landing/templates/2/1.jpg"
+                  alt="Image"
+                  className=" "
                 />
-              ))}
+              </div>
+              <div className="w-[250.7px] h-[250.7px]  absolute left-[34.59px] top-[197.96px]  rounded-[3.92px] rotate-[-6deg] border-[6px] border-[#C209C1]">
+                <img
+                  src="/landing/templates/2/2.jpg"
+                  alt="Image"
+                  className=" "
+                />
+              </div>
+              <div className="w-[250.7px] h-[219.36px]  absolute left-[98.33px] top-[214.76px]  rounded-[3.92px] rotate-[6deg] border-[6px] border-[#C209C1]">
+                <img
+                  src="/landing/templates/2/3.jpg"
+                  alt="Image"
+                  className=" "
+                />
+              </div>
+            </div>
+            <div className="col-span-2 bg-[#E4E7FA]  rounded-[20px] relative">
+              <div className="top-[20px] left-[20px] flex flex-col gap-[8px] absolute">
+                <p className="text-[30px] text-[#C209C1]  font-medium ">
+                  Brands
+                </p>
+                <p className="text-[18px] text-[#3D4050] ">
+                  Get on-brand, consistent designs with every iteration.
+                </p>
+              </div>
+              <div className=" h-[246px] top-[100px] left-[32.31px] flex flex-col gap-[14.5px] absolute overflow-hidden">
+                <div>
+                  <img
+                    src="/landing/templates/3/1.jpg"
+                    alt="Image"
+                    className="h-[130.5px] rounded-[10.88px] w-[379.59px]   "
+                  />
+                </div>
+                <div>
+                  <img
+                    src="/landing/templates/3/2.jpg"
+                    alt="Image"
+                    className="h-[130.5px] rounded-[10.88px] w-[379.59px] object-fill   "
+                  />
+                </div>
+              </div>
+              <div className="w-[380.43px] h-[318.56px] top-[97.57px] left-[433.64px] rounded-[10.88px]  absolute">
+                <img
+                  src="/landing/templates/3/3.jpg"
+                  alt="Image"
+                  className=" rounded-[10.88px]   object-fill   "
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Row 3 */}
+          <div className="grid grid-cols-3 w-full h-[362px] gap-[32px] ">
+            <div className="col-span-2 bg-[#E4E7FA] rounded-[20px] relative overflow-hidden">
+              <div className="top-[20px] left-[20px] flex flex-col gap-[8px] absolute">
+                <p className="text-[30px] text-[#C209C1] font-medium ">
+                  Social
+                </p>
+                <p className="text-[18px] w-[285px] text-[#3D4050] ">
+                  Streamline your content with our AI social media post
+                  generator
+                </p>
+              </div>
+              <div className="w-[508.42px] h-[381.93px] top-[196.22px] left-[39.92px] rounded-[9.71px] rotate-[6deg] overflow-hidden absolute">
+                <img
+                  src="/landing/templates/4/1.jpg"
+                  alt="Image"
+                  className=""
+                />
+              </div>
+              <div className="w-[500.66px] h-[457.62px] top-[159px]  left-[337.05px] rounded-[9.32px] rotate-[6deg] overflow-hidden absolute">
+                <img
+                  src="/landing/templates/4/2.jpg"
+                  alt="Image"
+                  className=""
+                />
+              </div>
+            </div>
+            <div className="col-span-1 relative bg-[#E4E7FA] rounded-[20px] h-[362px] overflow-hidden">
+              {/* Text */}
+              <div className="absolute top-[20px] left-[20px] flex flex-col gap-[8px]">
+                <p className="text-[30px] text-[#C209C1]  font-medium">
+                  Slides
+                </p>
+                <p className="text-[18px] w-[322px] text-[#3D4050] ">
+                  Make convincing presentations and pitches in seconds.
+                </p>
+              </div>
+
+              {/* Image */}
+              <div className="w-[270px] h-[151.88px] top-[153.34px] left-[66.08px] rounded-[10.13px] overflow-hidden absolute">
+                <img
+                  src={slides[currentIndex]}
+                  alt="Slide"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Arrows */}
+              <IoIosArrowDropleftCircle
+                onClick={prevSlide}
+                className="w-[32px] h-[32px] top-[215px] left-[22px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
+              />
+              <IoIosArrowDroprightCircle
+                onClick={nextSlide}
+                className="w-[32px] h-[32px] top-[215px] left-[352px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
+              />
+
+              {/* Dots */}
+              <div className="absolute top-[333.5px] left-[135px] flex gap-[8px]">
+                {slides.map((_, index) => (
+                  <GoDot
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`w-[7.25px] h-[7.25px] rounded-full cursor-pointer ${
+                      currentIndex === index
+                        ? "bg-black "
+                        : "bg-[#c2c4d5] text-[#c2c4d5]"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
