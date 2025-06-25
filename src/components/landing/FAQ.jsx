@@ -55,8 +55,8 @@ function FAQ() {
 
   return (
     <div className="w-full">
-      <div className="w-[1440px] h-auto flex mx-auto p-[80px] gap-[56px] ">
-        <div className="w-[1280px] rounded-[24px] gap-[56px] flex">
+      <div className="max-w-[1440px] h-auto flex mx-auto p-[80px] gap-[56px] ">
+        <div className="max-w-[1280px] rounded-[24px] gap-[56px] flex flex-col xl:flex-row">
           <div className="gap-[40px] w-[483px] flex flex-col">
             <div className="flex flex-col gap-[24px]">
               <div className="font-semibold text-[48px] text-black leading-tight">
@@ -74,7 +74,7 @@ function FAQ() {
             </button>
           </div>
 
-          <div className="w-[741px] flex flex-col gap-[16px]">
+          <div className="max-w-[741px] flex flex-col gap-[16px]">
             {faqData.map((item, index) => (
               <div
                 key={index}

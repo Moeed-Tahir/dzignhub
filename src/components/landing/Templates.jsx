@@ -23,8 +23,8 @@ function Templates() {
 
   return (
     <div className="w-full">
-      <div className="w-[1440px] h-[1592px] gap-[64px] p-[80px] flex flex-col mx-auto">
-        <div className="w-[1280px] h-[218px] gap-[32px] flex flex-col">
+      <div className="max-w-[1440px] h-[1592px] gap-[64px] p-[80px] flex flex-col mx-auto">
+        <div className="max-w-[1280px] h-[218px] gap-[32px] flex flex-col">
           <div className=" font-semibold text-[48px] text-black w-[991px] h-[130px]">
             Over <span className="text-[#C209C1]">150,000</span> ready-made
             templates to choose from
@@ -37,9 +37,9 @@ function Templates() {
           </div>
         </div>
 
-        <div className="w-[1280px] h-[1150px] flex flex-col gap-[32px]  ">
+        <div className="max-w-[1280px] h-[1150px] flex flex-col gap-[32px]  ">
           {/* Row 1 */}
-          <div className="w-[1280px] h-[362px] bg-[#E4E7FA] rounded-[20px] overflow-hidden relative">
+          <div className="max-w-[1280px] h-[362px] bg-[#E4E7FA] rounded-[20px] overflow-hidden relative">
             <div className="w-[434px] h-[72.25px] absolute top-[20px] left-[20px] gap-[8px] flex flex-col">
               <p className="text-[30px] text-[#C209C1]  font-medium">Website</p>
               <p className="text-[18px] text-[#3D4050] ">

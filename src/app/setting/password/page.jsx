@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const page = () => {
   return (
-    <div className="bg-white flex-1 min-h-screen px-[160px] py-[80px] flex flex-col items-start">
+    <div className="flex flex-1 flex-col items-start justify-center py-[40px] xl:py-[80px] bg-white px-[40px] xl:px-[160px]">
       <h1 className="text-[#2A0856] text-[34px] font-semibold mb-[56px]">
         Edit password
       </h1>

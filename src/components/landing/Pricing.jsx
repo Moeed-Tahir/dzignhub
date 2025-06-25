@@ -52,7 +52,7 @@ function Pricing() {
 
   return (
     <div className="w-full bg-[#FAFAFA]">
-      <div className="w-[1440px] h-[847px] p-[80px] gap-[56px] flex flex-col mx-auto">
+      <div className="max-w-[1440px]  p-[80px] gap-[56px] flex flex-col mx-auto">
         {/* Heading */}
         <div className="text-[48px] font-semibold flex gap-[10px]">
           <span className="text-[#C209C1]">Flexible</span>
@@ -60,21 +60,21 @@ function Pricing() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="w-[1280px] h-[566px] gap-[28px] flex">
+        <div className="max-w-[1280px] flex-col xl:flex-row gap-[28px] justify-center items-center flex">
           {pricing.map((plan, index) => {
             const isPro = plan.plan === "Pro Plan";
 
             return (
               <div
                 key={index}
-                className={`w-[408px] rounded-[16px] flex flex-col gap-[8px] justify-center ${
+                className={`xl:w-[32%] w-[500px] h-auto py-10 xl:py-5 rounded-[16px] flex flex-col gap-[8px] justify-center ${
                   isPro ? "" : "bg-[#1B1F3B]"
                 }`}
                 style={
                   isPro
                     ? {
-                        background: "linear-gradient(0deg, #050912 25%, #a00aa1 100%)"
-,
+                        background:
+                          "linear-gradient(0deg, #050912 25%, #a00aa1 100%)",
                       }
                     : undefined
                 }

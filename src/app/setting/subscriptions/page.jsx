@@ -47,13 +47,13 @@ const CheckIcon = (
 
 const page = () => {
 	return (
-		<div className="bg-white flex-1 min-h-screen px-[160px] py-[80px] flex flex-col items-start">
+    <div className="flex flex-1 flex-col items-start justify-center py-[40px] xl:py-[80px] bg-white px-[40px] xl:px-[160px]">
 			<h1 className="text-[#1B1F3B] text-[34px] font-semibold mb-12">Subscriptions</h1>
-			<div className="flex gap-[16px] w-full">
+			<div className="flex gap-[16px] flex-col xl:flex-row w-full">
 				{plans.map((plan, idx) => (
 					<div
 						key={plan.name}
-						className="flex-1 rounded-[20px] border border-[#E3E9EE] bg-white p-10 flex flex-col min-w-[380px] max-w-[440px] shadow-sm"
+						className="flex-1 rounded-[20px] border border-[#E3E9EE] bg-white p-10 flex flex-col xl:min-w-[380px] xl:max-w-[440px] shadow-sm"
 					>
 						<div className="flex items-center justify-between mb-2">
 							<span className="text-[#68686B] text-[12px]">{plan.label}</span>
