@@ -142,30 +142,30 @@ function Templates() {
                 </p>
               </div>
 
-              {/* Mobile Layout */}
-              <div className="md:hidden p-[20px] pt-[100px] flex flex-col gap-[16px]">
-                <div className="w-full">
-                  <img
-                    src="/landing/templates/3/1.jpg"
-                    alt="Image"
-                    className="h-[120px] rounded-[10.88px] w-full object-cover"
-                  />
-                </div>
-                <div className="flex gap-[16px]">
-                  <div className="flex-1">
+              {/* Mobile Layout - Match desktop structure */}
+              <div className="md:hidden mt-10 p-[20px] pt-[100px] flex gap-[16px]">
+                <div className="flex-1 flex flex-col gap-[14px]">
+                  <div className="w-full">
+                    <img
+                      src="/landing/templates/3/1.jpg"
+                      alt="Image"
+                      className="h-[120px] rounded-[10.88px] w-full object-cover"
+                    />
+                  </div>
+                  <div className="w-full">
                     <img
                       src="/landing/templates/3/2.jpg"
                       alt="Image"
                       className="h-[120px] rounded-[10.88px] w-full object-cover"
                     />
                   </div>
-                  <div className="flex-1">
-                    <img
-                      src="/landing/templates/3/3.jpg"
-                      alt="Image"
-                      className="h-[120px] rounded-[10.88px] w-full object-cover"
-                    />
-                  </div>
+                </div>
+                <div className="flex-1">
+                  <img
+                    src="/landing/templates/3/3.jpg"
+                    alt="Image"
+                    className="h-[254px] rounded-[10.88px] w-full object-cover"
+                  />
                 </div>
               </div>
 
