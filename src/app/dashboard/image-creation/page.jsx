@@ -11,6 +11,7 @@ const Page = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+
   // Detect mobile screen
   useEffect(() => {
     const handleResize = () => {
