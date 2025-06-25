@@ -39,9 +39,9 @@ function Testimonials() {
   );
 
   return (
-    <div className="relative  w-full bg-[#1B1F3B] flex flex-col h-[767px] gap-[56px] overflow-hidden ">
-      <div className="max-w-[1440px] pt-[80px]  overflow-hidden px-[80px]">
-        <div className="max-w-[1280px] flex flex-col gap-[24px] text-[40px] font-semibold text-[#FAFAFA]">
+    <div className="relative  w-full bg-[#1B1F3B] flex flex-col md:max-h-[767px] h-full max-h-[697px] gap-[56px] overflow-hidden ">
+      <div className="max-w-[1440px] md:pt-[80px]  overflow-hidden md:px-[80px]">
+        <div className="max-w-[1280px] hidden md:flex flex-col gap-[24px] border-2  text-[28px] md:text-[40px] font-semibold text-[#FAFAFA]">
           <div className="flex gap-[10px]">
             <p className="text-[#C209C1]">What</p> <p>Our Users</p>
           </div>
@@ -50,6 +50,7 @@ function Testimonials() {
             <p>Saying</p>
           </div>
         </div>
+        
       </div>
 
       {/* Scrollable container */}
@@ -64,7 +65,7 @@ function Testimonials() {
 
         {/* Left Fade */}
         <div
-          className="pointer-events-none absolute top-0 left-0 h-[796px] w-[392px]"
+          className="pointer-events-none hidden md:block absolute top-0 left-0 h-[796px] w-[392px]"
           style={{
             background:
               "linear-gradient(270deg, rgba(3, 2, 21, 0) 38.52%, #030215 100%)",
@@ -73,7 +74,7 @@ function Testimonials() {
 
         {/* Right Fade */}
         <div
-          className="pointer-events-none absolute top-0 right-0 h-[796px] w-[392px] rotate-180"
+          className="pointer-events-none hidden md:block absolute top-0 right-0 h-[796px] w-[392px] rotate-180"
           style={{
             background:
               "linear-gradient(270deg, rgba(3, 2, 21, 0) 38.52%, #030215 100%)",
