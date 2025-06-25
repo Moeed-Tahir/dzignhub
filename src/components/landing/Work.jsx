@@ -22,10 +22,10 @@ function Work() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selected, setSelected] = useState("right");
   return (
-    <div className="max-w-[1440px] pt-[64px] pr-[40px] pb-[64px] pl-[40px] mx-auto">
+    <div className="max-w-[1440px] pt-[64px] xl:px-[40px] px-[20px]  pb-[64px]  mx-auto">
       <div className=" p-[40px] gap-[64px] rounded-[40px] bg-[#1B1F3B] flex flex-col shadow-md">
-        <div className="flex justify-between items-center">
-          <h2 className=" text-[48px] font-semibold text-white">
+        <div className="flex justify-between items-center flex-col xl:flex-row gap-[24px]">
+          <h2 className=" xl:text-[48px] text-center xl:text-start text-[28px] font-semibold text-white">
             How Dzignhub works
           </h2>
 
@@ -66,7 +66,7 @@ function Work() {
         </div>
 
         <div className=" gap-[24px] flex flex-col">
-          <div className=" flex flex-row justify-between  rounded-xl">
+          <div className=" flex flex-col xl:flex-row justify-between gap-[10px]  rounded-xl">
             {cardData.map((item, index) => {
               const isSelected = index === selectedIndex;
 
@@ -74,7 +74,7 @@ function Work() {
                 <div
                   key={index}
                   onClick={() => setSelectedIndex(index)}
-                  className={`max-w-[416px] h-auto max-h-[152.89px] bg-[#212e62] p-[20px] w-[32%] gap-[8px] rounded-[12px] flex flex-col cursor-pointer
+                  className={`max-w-[416px] h-full xl:max-h-[152.89px] bg-[#212e62] p-[20px] xl:w-[32%] gap-[8px] rounded-[12px] flex flex-col cursor-pointer
             ${isSelected ? "border border-[#BDFF00]" : ""}`}
                 >
                   {/* Wrap Number Box + Content */}
@@ -92,7 +92,7 @@ function Work() {
                     </div>
 
                     {/* Text Content */}
-                    <div className="w-[340px] h-[112.89px] gap-[7px] flex flex-col">
+                    <div className="w-[340px] xl:h-[112.89px] gap-[7px] flex flex-col">
                       <p className="text-[20px] font-medium  text-[#FAFAFA]">
                         {item.title}
                       </p>

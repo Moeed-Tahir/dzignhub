@@ -8,7 +8,7 @@ const syne = Syne({
 
 function Navbar() {
   return (
-    <div className=" h-[48px] px-[40px] py-10 xl:px-0 justify-between flex">
+    <div className=" h-[48px] py-10  justify-between flex">
       <img
         src="/landing/Group.png"
         alt="logo"
@@ -16,7 +16,7 @@ function Navbar() {
       />
       <div className="flex gap-[10px]">
         <button
-          className={`${syne.classname} bg-[#BDFF00] w-[100px] h-[47px] text-[#000000]  rounded-full   cursor-pointer`}
+          className={` bg-[#BDFF00] w-[100px] h-[47px] text-[#000000]  rounded-full   cursor-pointer`}
         >
           <Link href="/auth/login">Sign In</Link>
         </button>

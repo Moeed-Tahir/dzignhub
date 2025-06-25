@@ -55,11 +55,11 @@ function FAQ() {
 
   return (
     <div className="w-full">
-      <div className="max-w-[1440px] h-auto flex mx-auto p-[80px] gap-[56px] ">
+      <div className="max-w-[1440px] h-auto flex mx-auto px-[20px] py-[40px] xl:p-[80px] gap-[56px] ">
         <div className="max-w-[1280px] rounded-[24px] gap-[56px] flex flex-col xl:flex-row">
-          <div className="gap-[40px] w-[483px] flex flex-col">
+          <div className="gap-[40px] xl:w-[483px] flex flex-col">
             <div className="flex flex-col gap-[24px]">
-              <div className="font-semibold text-[48px] text-black leading-tight">
+              <div className="font-semibold text-[26px] xl:text-[48px] text-black leading-tight">
                 <span>Have </span>
                 <span className="text-[#C209C1]">questions?</span>
               </div>
@@ -81,8 +81,8 @@ function FAQ() {
                 className="w-full rounded-[24px] bg-[#E4E7FA] p-[24px] flex gap-[24px] items-start cursor-pointer"
                 onClick={() => toggle(index)}
               >
-                <div className="w-[629px] flex flex-col gap-[16px]">
-                  <h2 className="text-[24px] text-[#000000] font-semibold">
+                <div className="xl:w-[629px] w-full flex flex-col gap-[16px]">
+                  <h2 className="text-[24px] text-[#000000] font-medium">
                     {item.question}
                   </h2>
 

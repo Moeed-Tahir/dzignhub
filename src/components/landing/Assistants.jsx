@@ -26,25 +26,27 @@ const assistants2 = [
 function Assistants() {
   return (
     <div className="w-full bg-[#1B1F3B] relative overflow-hidden ">
-      <div className="w-[1440px] h-[1235px] mx-auto   ">
+      <div className="md:max-w-[1440px] w-full  md:h-[1235px] max-w-[430px] h-[430px] mx-auto   ">
         {assistants.map((item, index) => (
           <AssistantCard
             key={`top-${index}`}
             src={item.src}
             name={item.name}
+            
             style={{ left: `${-136 + index * 444}px`, top: "64px" }}
           />
         ))}
 
-        <div className="flex gap-[24px] items-center justify-center absolute top-[443px] w-full h-[348px]">
+        <div className="flex gap-[24px] items-center justify-center absolute  left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2  w-full h-full max-h-[348px]">
           <AssistantCard
             src="/landing/assistants/5.png"
-            style={{ left: `-111px` }}
+            
             name={"Mira (Growth Strategist)"}
+            positionClass="left-[-111px]"
           />
 
           <div
-            className={`w-[764px] ${syne.className} font-semibold text-[80px] text-[#FFFFFF] text-center uppercase`}
+            className={`max-w-[764px]  w-full ${syne.className} font-semibold md:text-[80px] text-[28px] text-[#FFFFFF] text-center uppercase`}
           >
             <span>Your</span> <span className="text-[#BDFF00]">AI</span>{" "}
             <span>Assistants</span>

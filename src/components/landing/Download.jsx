@@ -3,22 +3,22 @@ import React from "react";
 function Download() {
   return (
     <div
-      className="w-full"
+      className="w-full h-auto"
       style={{
         background: "#1B1F3B",
       }}
     >
-      <div className="max-w-[1440px] mx-auto h-[867px] py-[64px] px-[80px]">
-        <div className="max-w-[1280px] h-[739px] flex items-center justify-between">
-          <div className="w-[688px] h-[690px] flex flex-col gap-[78px] text-[48px] font-semibold text-[#FFFFFF]">
-            <div className="gap-[119px] flex flex-col h-[552px] w-[668px]">
+      <div className="max-w-[1440px] mx-auto xl:h-[867px] py-[64px] px-[20px] xl:px-[80px]">
+        <div className="max-w-[1280px] xl:h-[739px] flex-col xl:flex-row flex items-center justify-between">
+          <div className="max-w-[688px] w-full xl:h-[690px] flex flex-col gap-10 xl:gap-[78px] text-[26px] xl:text-[48px] font-semibold text-[#FFFFFF]">
+            <div className="  gap-10 xl:gap-[119px] flex flex-col xl:h-[552px] w-auto max-w-[668px]">
               <div>
                 <span className="text-[#C209C1]">Download the app </span>
                 <span className="">
                   and start creating with AI — anytime, anywhere.
                 </span>
               </div>
-              <p className="w-[525px] text-[24px] ">
+              <p className="max-w-[525px] text-[20px] !font-normal xl:text-[24px] ">
                 Our AI-powered creative app gives you access to your personal
                 team of assistants — wherever you are.
                 <br />
@@ -27,12 +27,15 @@ function Download() {
                 skills required. Just your ideas.
               </p>
             </div>
-            <div className="flex gap-[11.13px]">
+            <div className="flex mb-[40px] xl:mb-0 gap-[11.13px]">
               <div className="w-[200px] h-[60px]">
                 <img src="/landing/download/app-store.svg" alt="App Store" />
               </div>
               <div className="w-[200px] h-[60px]">
-                <img src="/landing/download/google-play.svg" alt="Google Play" />
+                <img
+                  src="/landing/download/google-play.svg"
+                  alt="Google Play"
+                />
               </div>
             </div>
           </div>
