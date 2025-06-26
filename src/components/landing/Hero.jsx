@@ -70,7 +70,7 @@ export default function Hero() {
           </div>
 
           {/* CTA Section Mobile*/}
-          <div className="  h-[144px] flex flex-col justify-center items-center gap-[12px] lg:hidden">
+          <div className=" max-w-[382px] mx-auto h-[144px] flex flex-col gap-[12px] lg:hidden">
             <div className="bg-[#212e62] flex flex-col border-t-[0.49px] border-[#1B1F3B] py-[12px] px-[24px] rounded-[490.57px]">
               <p className="lg:text-[18px] text-[16px] text-[#9997A0]">
                 A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape

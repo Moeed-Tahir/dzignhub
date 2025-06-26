@@ -46,6 +46,7 @@ const socialLinks = [
   { alt: "Instagram", icon: "/common/footer/instagram.svg", href: "#" },
   { alt: "LinkedIn", icon: "/common/footer/linkedin.svg", href: "#" },
   { alt: "YouTube", icon: "/common/footer/youtube.svg", href: "#" },
+  { alt: "Pinterest", icon: "/common/footer/pinterest.svg", href: "#" },
 ];
 
 const policyLinks = [
