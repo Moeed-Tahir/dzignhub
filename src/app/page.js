@@ -20,9 +20,9 @@ export default function Landing() {
   return (
     <>
       <div
-        className="overflow-hidden w-full lg:h-[1055px] h-[1146px]"
+        className="overflow-hidden w-full lg:h-[1095px] h-[1146px]"
         style={{
-          background: "linear-gradient(to bottom, #1B1F3B 50%, #c209c1 100%)",
+          background: "linear-gradient(to bottom, #1B1F3B 56%, #c209c1 100%)",
         }}
       >
         <div className="lg:max-w-[1440px]  w-[100%] relative lg:mx-auto ">

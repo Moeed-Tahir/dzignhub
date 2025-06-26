@@ -23,7 +23,7 @@ function Carousel() {
   ];
 
   return (
-    <div className="lg:h-[420px] h-[280px] flex flex-col gap-[20px] lg:mt-[40px]  absolute top-[867px] lg:top-[595px]  w-full overflow-hidden">
+    <div className="lg:h-[420px] h-[280px] flex flex-col gap-[20px] lg:mt-[40px]  absolute top-[867px] lg:top-[635px]  w-full overflow-hidden">
       {/* First Carousel */}
       <div className="lg:h-[200px] h-[130px] relative overflow-hidden">
         <div className="flex w-max animate-scroll-left gap-[20px]">
