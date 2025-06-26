@@ -27,7 +27,7 @@ export default function Landing() {
       >
         <div className="lg:max-w-[1440px]  w-[100%] relative lg:mx-auto ">
           {/* Navbar */}
-          <div className="lg:max-w-[1280px] mx-auto lg:w-auto min-w-[382px]  w-full  top-[24px]  flex flex-col lg:gap-[61px]">
+          <div className="lg:max-w-[1280px] mx-auto lg:w-auto min-w-[382px] px-[20px] xl:px-0  w-full  top-[24px]  flex flex-col lg:gap-[61px]">
             <Navbar />
             <Hero />
           </div>
@@ -47,7 +47,7 @@ export default function Landing() {
           </h1>
         </div>
         <div className=" h-[519.61px] lg:h-[499px]  mx-auto relative">
-         <div className="lg:max-w-[1060px] lg:w-full w-[350px] lg:h-[459px] max-w-[382px] px-[20px] h-[530.83px]  lg:top-[0px] top-[37.78px]  lg:rounded-[24px] rounded-[12.38px] overflow-y-scroll scrollbar-hide">
+         <div className="lg:max-w-[1060px] lg:w-full w-[330px] lg:h-[459px] max-w-[382px] xl:px-[20px] h-[530.83px]  lg:top-[0px] top-[37.78px]  lg:rounded-[24px] rounded-[12.38px] overflow-y-scroll scrollbar-hide">
             <StickyCardStack />
           </div>
         </div>

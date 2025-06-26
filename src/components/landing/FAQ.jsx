@@ -78,11 +78,11 @@ function FAQ() {
             {faqData.map((item, index) => (
               <div
                 key={index}
-                className="w-full rounded-[24px] bg-[#E4E7FA] p-[24px] flex gap-[24px] items-start cursor-pointer"
+                className="w-full rounded-[24px] bg-[#E4E7FA] p-[16px] xl:p-[24px] flex gap-[24px] items-start cursor-pointer"
                 onClick={() => toggle(index)}
               >
                 <div className="xl:w-[629px] w-full flex flex-col gap-[16px]">
-                  <h2 className="text-[24px] text-[#000000] font-medium">
+                  <h2 className="xl:text-[24px] text-[18px] text-[#000000] font-medium">
                     {item.question}
                   </h2>
 

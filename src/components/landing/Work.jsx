@@ -35,7 +35,7 @@ function Work() {
   const [selected, setSelected] = useState("right");
   return (
     <div className="max-w-[1280px] pt-[64px] xl:px-[40px] px-[20px]  pb-[64px]  mx-auto">
-      <div className=" p-[40px] gap-[64px] rounded-[40px] bg-[#1B1F3B] flex flex-col shadow-md">
+      <div className="p-[20px] xl:p-[40px] gap-[64px] rounded-[40px] bg-[#1B1F3B] flex flex-col shadow-md">
         <div className="flex justify-between items-center flex-col xl:flex-row gap-[24px]">
           <h2 className=" xl:text-[48px] text-center xl:text-start text-[28px] font-semibold text-white">
             How Dzignhub works
