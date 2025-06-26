@@ -5,19 +5,31 @@ const cardData = [
     title: "Describe your idea",
     description:
       "Start your project by uploading assets or choosing a template. You control the direction from the very beginning, shaping your vision exactly the way you want.",
-    image: "/landing/work/1.svg",
+    mobileManualImage: "/landing/work/mobile/manual-1.png",
+    desktopManualImage: "/landing/work/desktop/manual-1.jpg",
+    mobileProImage: "/landing/work/mobile/pro-1.png",
+    desktopProImage: "/landing/work/desktop/pro-1.svg",
   },
   {
     title: "Let the System do your work",
     description:
       "Access powerful manual tools for image editing, video creation, or content design. You guide the process — the platform provides the flexibility and tools you need.",
+    mobileManualImage: "/landing/work/mobile/manual-2.jpg",
+    desktopManualImage: "/landing/work/desktop/manual-2.svg",
+    mobileProImage: "/landing/work/mobile/pro-2.jpg",
+    desktopProImage: "/landing/work/desktop/pro-2.svg",
   },
   {
     title: "Customize & download",
     description:
       "Make final adjustments to suit your preferences. Once you’re done, download your finished files and bring your project to life with confidence.",
+    mobileManualImage: "/landing/work/mobile/manual-3.jpg",
+    desktopManualImage: "/landing/work/desktop/manual-3.svg",
+    mobileProImage: "/landing/work/mobile/pro-3.jpg",
+    desktopProImage: "/landing/work/desktop/pro-3.svg",
   },
 ];
+
 function Work() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selected, setSelected] = useState("right");
@@ -107,11 +119,31 @@ function Work() {
           </div>
 
           {/* Additional section */}
-          <img
-            src={cardData[selectedIndex].image}
-            alt={cardData[selectedIndex].title}
-            className=" object-contain  rounded-[20px]"
-          />
+          {/* Mobile image: visible below md */}
+          <div className="mx-auto">
+            <img
+              src={
+                selected === "right"
+                  ? cardData[selectedIndex].mobileProImage
+                  : cardData[selectedIndex].mobileManualImage
+              }
+              alt={cardData[selectedIndex].title}
+              className="object-contain rounded-[20px] max-h-[724px] md:hidden"
+            />
+          </div>
+
+          {/* Desktop image: visible from md and above */}
+          <div className="mx-auto">
+            <img
+              src={
+                selected === "right"
+                  ? cardData[selectedIndex].desktopProImage
+                  : cardData[selectedIndex].desktopManualImage
+              }
+              alt={cardData[selectedIndex].title}
+              className="object-contain rounded-[20px] md:max-h-[1030px] hidden md:block"
+            />
+          </div>
         </div>
       </div>
     </div>

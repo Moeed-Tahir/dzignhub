@@ -27,7 +27,7 @@ export default function Landing() {
       >
         <div className="lg:max-w-[1440px]  w-[100%] relative lg:mx-auto ">
           {/* Navbar */}
-          <div className="lg:max-w-[1280px] mx-auto lg:w-auto min-w-[382px]  w-full px-[20px] top-[24px]  flex flex-col lg:gap-[61px]">
+          <div className="lg:max-w-[1280px] mx-auto lg:w-auto min-w-[382px]  w-full  top-[24px]  flex flex-col lg:gap-[61px]">
             <Navbar />
             <Hero />
           </div>

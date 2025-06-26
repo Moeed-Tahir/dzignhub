@@ -56,7 +56,7 @@ export default function Hero() {
           {/* Heading + Paragraph */}
           <div className="flex flex-col lg:gap-[32px] gap-[18px]">
             <h1
-              className={`lg:text-[68px] text-[46px] text-white uppercase text-center leading-tight  font-semibold`}
+              className={`lg:text-[68px] max-w-[929px] w-full text-[46px] text-white  text-center leading-tight  font-semibold`}
             >
               Turn Your Words Into Stunning Visuals
             </h1>
