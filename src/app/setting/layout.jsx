@@ -9,8 +9,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="">
-        <Navbar />
+      <body >
+        <Navbar isSettingPage={true}/>
         <div className="flex  max-w-[1440px] overflow-hidden rounded-[20px] mx-5 lg:mx-auto">
             <Sidebar />
           <main className="flex-1  overflow-y-auto">{children}</main>

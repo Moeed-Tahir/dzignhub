@@ -58,7 +58,7 @@ const Page = () => {
         </button>
       )}
 
-      <div className="w-full ">
+      <div className="w-full min-h-screen ">
         <Navbar isCreationPage={true} />
         {showSuggestion ? <StartingSuggestion /> : <ImagesResults />}
 

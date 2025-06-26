@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import {
   LogOut,
@@ -12,13 +12,12 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUserStore } from "@/store/store";
 import { MoveLeft } from "lucide-react";
-import { Menu } from "lucide-react";
 
-const Navbar = ({ isCreationPage }) => {
+const Navbar = ({ isCreationPage, isSettingPage }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { SetIsLogin, SetEmail, SetUserId } = useUserStore();
-  const IsLogin = true;
+  const { IsLogin, SetIsLogin, SetEmail, SetUserId } = useUserStore();
+  // const IsLogin = true;
   const verifyToken = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -57,27 +56,43 @@ const Navbar = ({ isCreationPage }) => {
     useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const profileDropdownRef = useRef(null);
+
   // Close all dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Close all dropdowns
-      setIsProfileDropdownOpen(false);
-      setIsWorkspaceDropdownOpen(false);
-      setIsAssistantsDropdownOpen(false);
-      setIsNotificationDropdownOpen(false);
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target)
+      ) {
+        setIsProfileDropdownOpen(false);
+        setIsWorkspaceDropdownOpen(false);
+        setIsAssistantsDropdownOpen(false);
+        setIsNotificationDropdownOpen(false);
+      }
       // Note: We don't close sidebar here as it has its own overlay handling
     };
 
     // Add event listener when any dropdown is open
-    if (isProfileDropdownOpen || isWorkspaceDropdownOpen || isAssistantsDropdownOpen || isNotificationDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+    if (
+      isProfileDropdownOpen ||
+      isWorkspaceDropdownOpen ||
+      isAssistantsDropdownOpen ||
+      isNotificationDropdownOpen
+    ) {
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     // Cleanup event listener
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isProfileDropdownOpen, isWorkspaceDropdownOpen, isAssistantsDropdownOpen, isNotificationDropdownOpen]);
+  }, [
+    isProfileDropdownOpen,
+    isWorkspaceDropdownOpen,
+    isAssistantsDropdownOpen,
+    isNotificationDropdownOpen,
+  ]);
 
   const getActiveMenu = (pathname) => {
     if (pathname === "/dashboard") return "Home";
@@ -131,6 +146,39 @@ const Navbar = ({ isCreationPage }) => {
       role: "(UX/UI Assistant)",
       isPro: true,
       avatar: "/kano.png",
+    },
+  ];
+
+  const SettingLinks = [
+    {
+      name: "Edit profile",
+      href: "/setting/edit-profile",
+      // icon: (color) => <Edit color={color} />,
+    },
+    {
+      name: "Password",
+      href: "/setting/password",
+      // icon: (color) => <Lock color={color} />,
+    },
+    {
+      name: "Notifications",
+      href: "/setting/notifications",
+      // icon: (color) => <Notification color={color} />,
+    },
+    {
+      name: "Sessions",
+      href: "/setting/sessions",
+      // icon: (color) => <Star color={color} />,
+    },
+    {
+      name: "Subscriptions",
+      href: "/setting/subscriptions",
+      // icon: (color) => <Crown color={color} />,
+    },
+    {
+      name: "Delete Account",
+      href: "/setting/delete-account",
+      // icon: (color) => <Crown color={color} />,
     },
   ];
 
@@ -208,15 +256,22 @@ const Navbar = ({ isCreationPage }) => {
       setIsMobile(false);
     }
   }, []);
+
+  const [isMobileWorkspaceOpen, setIsMobileWorkspaceOpen] = useState(false);
+  const [isMobileAssistantsOpen, setIsMobileAssistantsOpen] = useState(false);
+  const [isMobileSettingsOpen, setIsMobileSettingsOpen] = useState(false);
+
   return (
     <nav
       className={`  ${
-        isCreationPage ? "" : "m-8"
-      } bg-white px-4 max-w-[1440px] mx-5 lg:mx-auto py-4 rounded-full`}
+        isCreationPage ? "" :isSettingPage?"m-5": " m-8"
+      } bg-white px-4 max-w-[1440px]   xl:mx-auto py-4 rounded-full`}
     >
       <div className="flex items-center justify-between">
         {/* Left - Logo */}
         <div className="flex items-center ">
+          {/* Remove Menu icon for mobile sidebar */}
+          {/* Sidebar and its trigger removed as per request */}
           {pathname === "/dashboard/image-creation" && !isMobile ? (
             <>
               {" "}
@@ -257,29 +312,21 @@ const Navbar = ({ isCreationPage }) => {
               </p>
             </>
           ) : (
-            <>
-              <div>
-                <Menu
-                  className="w-[26px] h-[26px] mr-3 cursor-pointer xl:hidden"
-                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                />
-              </div>
-              <div
-                className="flex justify-center items-center gap-2"
-                onClick={() => router.push("/")}
-              >
-                <Image
-                  src="/logo-icon.png"
-                  alt="Logo"
-                  width={32}
-                  height={32}
-                  className="w-[26px] h-[26px]"
-                />
-                <span className="text-lg font-semibold text-gray-900">
-                  allmyai
-                </span>
-              </div>
-            </>
+            <div
+              className="flex justify-center items-center gap-2"
+              onClick={() => router.push("/")}
+            >
+              <Image
+                src="/logo-icon.png"
+                alt="Logo"
+                width={32}
+                height={32}
+                className="w-[26px] h-[26px]"
+              />
+              <span className="text-lg font-semibold text-gray-900">
+                allmyai
+              </span>
+            </div>
           )}
         </div>
 
@@ -349,7 +396,7 @@ const Navbar = ({ isCreationPage }) => {
               {item.key === "workspace" && isWorkspaceDropdownOpen && (
                 <div className="absolute top-full left-0 mt-8 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                   <a
-                    href="dashboard/image-creation"
+                    href="/dashboard/image-creation"
                     className="block px-4 py-2 text-sm font-normal text-gray-700 hover:bg-gray-50"
                   >
                     Image Creation
@@ -395,141 +442,6 @@ const Navbar = ({ isCreationPage }) => {
               )}
             </div>
           ))}
-        </div>
-
-        {/* Mobile Sidebar */}
-        <div className="fixed inset-0 z-50 flex justify-start  xl:hidden pointer-events-none">
-          {/* Overlay */}
-          <div
-            className={`fixed inset-0 bg-opacity-30 backdrop-blur-md transition-opacity duration-300 ${
-              isSidebarOpen
-                ? "opacity-100 pointer-events-auto"
-                : "opacity-0 pointer-events-none"
-            }`}
-            onClick={() => setIsSidebarOpen(false)}
-          ></div>
-          {/* Sidebar with animation */}
-          <div
-            className={`relative w-64 max-w-full h-full bg-white shadow-lg p-6 flex flex-col transform transition-transform duration-300 ease-in-out
-              ${
-                isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-              } pointer-events-auto`}
-            style={{ willChange: "transform" }}
-          >
-            <button
-              className="absolute top-4 right-4 text-gray-500 hover:text-black"
-              onClick={() => setIsSidebarOpen(false)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-            <nav className="mt-10 space-y-2">
-              {menuItems.map((item) => (
-                <div key={item.name} className="relative mb-2">
-                  {item.type === "link" ? (
-                    <Link
-                      href={item.href}
-                      onClick={() => setIsSidebarOpen(false)}
-                    >
-                      <button
-                        className={`w-full text-left px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 flex items-center space-x-2 ${
-                          activeMenu === item.name
-                            ? "bg-[#F7F8F8] text-black"
-                            : "text-[#202126]"
-                        }`}
-                      >
-                        <span>{item.name}</span>
-                        {item.badge && (
-                          <span className="bg-[#C209C11A] text-[#C209C1] text-xs px-2 py-0.5 rounded-full font-semibold ml-2">
-                            {item.badge}
-                          </span>
-                        )}
-                      </button>
-                    </Link>
-                  ) : (
-                    <div>
-                      <button
-                        onClick={() => handleMenuClick(item)}
-                        className={`w-full text-left px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 flex items-center ${
-                          activeMenu === item.name
-                            ? "bg-[#F7F8F8] text-black"
-                            : "text-[#202126]"
-                        }`}
-                      >
-                        <span>{item.name}</span>
-                        {item.badge && (
-                          <span className="bg-[#C209C11A] text-[#C209C1] text-xs px-2 py-0.5 rounded-full font-semibold ml-2">
-                            {item.badge}
-                          </span>
-                        )}
-                        {item.key === "workspace" && (
-                          <Plus className="w-3 h-3 ml-1" />
-                        )}
-                      </button>
-                      {/* Dropdowns for mobile sidebar */}
-                      {item.key === "workspace" && isWorkspaceDropdownOpen && (
-                        <div className="ml-4 mt-2 space-y-1">
-                          <a
-                            href="/dashboard/image-creation"
-                            className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"
-                          >
-                            Image Creation
-                          </a>
-                          <a
-                            href="/dashboard/video-creation"
-                            className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"
-                          >
-                            Video Creation
-                          </a>
-                        </div>
-                      )}
-                      {item.key === "assistants" &&
-                        isAssistantsDropdownOpen && (
-                          <div className="ml-4 mt-2 space-y-1">
-                            {assistants.map((assistant) => (
-                              <div
-                                key={assistant.name}
-                                className="flex items-center py-2"
-                              >
-                                <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">
-                                  <Image
-                                    src={`/homepage/ai-assistants-dropdown${assistant.avatar}`}
-                                    width={32}
-                                    height={32}
-                                    alt={assistant.name}
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                                <div className="flex flex-col min-w-0">
-                                  <p className="text-black text-base font-semibold truncate">
-                                    {assistant.name}
-                                  </p>
-                                  <p className="text-gray-500 text-xs truncate">
-                                    {assistant.role}
-                                  </p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </nav>
-          </div>
         </div>
 
         {/* Right - Conditionally Rendered Section */}
@@ -650,10 +562,164 @@ const Navbar = ({ isCreationPage }) => {
               </button>
 
               {isProfileDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div
+                  ref={profileDropdownRef}
+                  className="absolute right-0 mt-2 w-[280px] xl:w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                >
+                  {/* Show menuItems and sub-links in dropdown only on mobile */}
+                  {isMobile && (
+                    <div className="mb-2">
+                      {menuItems.map((item) => (
+                        <div key={item.name}>
+                          <button
+                            onClick={() => {
+                              if (item.key === "workspace") {
+                                setIsMobileWorkspaceOpen((prev) => !prev);
+                                setIsMobileAssistantsOpen(false);
+                                setIsMobileSettingsOpen(false);
+                              } else if (item.key === "assistants") {
+                                setIsMobileAssistantsOpen((prev) => !prev);
+                                setIsMobileWorkspaceOpen(false);
+                                setIsMobileSettingsOpen(false);
+                              } else {
+                                setIsProfileDropdownOpen(false);
+                              }
+                            }}
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center justify-between"
+                          >
+                            <span>
+                              {item.name}
+                              {item.badge && (
+                                <span className="ml-2 bg-[#C209C11A] text-[#C209C1] text-xs px-2 py-0.5 rounded-full font-semibold">
+                                  {item.badge}
+                                </span>
+                              )}
+                            </span>
+                            {(item.key === "workspace" ||
+                              item.key === "assistants") && (
+                              <ChevronDown
+                                className={`w-4 h-4 ml-2 transition-transform duration-200 ${
+                                  (item.key === "workspace" &&
+                                    isMobileWorkspaceOpen) ||
+                                  (item.key === "assistants" &&
+                                    isMobileAssistantsOpen)
+                                    ? "rotate-180"
+                                    : ""
+                                }`}
+                              />
+                            )}
+                          </button>
+                          {/* Sub-links for Manual workspace */}
+                          {item.key === "workspace" && (
+                            <div
+                              className={`ml-4 overflow-hidden transition-all duration-500 ease-in-out ${
+                                isMobileWorkspaceOpen ? "max-h-40" : "max-h-0"
+                              }`}
+                            >
+                              <Link href="/dashboard/image-creation">
+                                <button
+                                  onClick={() =>
+                                    setIsProfileDropdownOpen(false)
+                                  }
+                                  className="w-full text-left px-4 py-2 text-xs text-gray-600 hover:bg-gray-50"
+                                >
+                                  Image Creation
+                                </button>
+                              </Link>
+                              <Link href="/dashboard/video-creation">
+                                <button
+                                  onClick={() =>
+                                    setIsProfileDropdownOpen(false)
+                                  }
+                                  className="w-full text-left px-4 py-2 text-xs text-gray-600 hover:bg-gray-50"
+                                >
+                                  Video Creation
+                                </button>
+                              </Link>
+                            </div>
+                          )}
+                          {/* Sub-links for Assistants */}
+                          {item.key === "assistants" && (
+                            <div
+                              className={`ml-4 overflow-hidden transition-all duration-500 ease-in-out ${
+                                isMobileAssistantsOpen ? "max-h-96" : "max-h-0"
+                              }`}
+                            >
+                              {assistants.map((assistant) => (
+                                <div key={assistant.name}>
+                                  <a
+                                    href="#"
+                                    className="flex items-center px-4 py-2 text-sm hover:bg-gray-50"
+                                  >
+                                    <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">
+                                      <Image
+                                        src={`/homepage/ai-assistants-dropdown${assistant.avatar}`}
+                                        width={32}
+                                        height={32}
+                                        alt={assistant.name}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    </div>
+                                    <div className="flex justify-center items-center flex-row min-w-0">
+                                      <p className=" text-base font-semibold text-[#1B1F3B] truncate">
+                                        {assistant.name}
+                                      </p>
+                                      <p className="mx-2  text-[#68686B] font-normal text-sm truncate">
+                                        {assistant.role}
+                                      </p>
+                                    </div>
+                                  </a>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                      {/* Settings dropdown for /setting routes */}
+                      {pathname.startsWith("/setting") && (
+                        <div>
+                          <button
+                            onClick={() => {
+                              setIsMobileSettingsOpen((prev) => !prev);
+                              setIsMobileWorkspaceOpen(false);
+                              setIsMobileAssistantsOpen(false);
+                            }}
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center justify-between"
+                          >
+                            <span>Settings</span>
+                            <ChevronDown
+                              className={`w-4 h-4 ml-2 transition-transform duration-200 ${
+                                isMobileSettingsOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
+                          <div
+                            className={`ml-4 overflow-hidden transition-all duration-500 ease-in-out ${
+                              isMobileSettingsOpen ? "max-h-96" : "max-h-0"
+                            }`}
+                          >
+                            {SettingLinks.map((link) => (
+                              <Link key={link.name} href={link.href}>
+                                <button
+                                  onClick={() =>
+                                    setIsProfileDropdownOpen(false)
+                                  }
+                                  className="w-full text-left px-4 py-2 text-xs text-gray-600 hover:bg-gray-50 flex items-center gap-2"
+                                >
+                                  {link.icon && link.icon("#68686B")}
+                                  {link.name}
+                                </button>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      <hr className="my-1 border-gray-200" />
+                    </div>
+                  )}
                   <a
                     href="/setting/edit-profile"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    className="xl:block px-4 hidden py-2 text-sm text-gray-700 hover:bg-gray-50"
                   >
                     <SettingsIcon className="w-4 h-4 inline-block mr-2" />{" "}
                     Settings
