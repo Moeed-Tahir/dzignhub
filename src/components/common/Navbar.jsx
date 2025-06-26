@@ -221,6 +221,19 @@ const Navbar = ({ isCreationPage }) => {
                 Video Creation
               </p>
             </>
+          ) : pathname.includes("/setting") && !isMobile ? (
+            <>
+              {" "}
+              <button
+                onClick={() => router.back()}
+                className="flex items-center w-[44px] cursor-pointer h-[44px]  justify-center border p-1 border-[#E3E3E3] rounded-full hover:underline text-sm"
+              >
+                <MoveLeft className="w-[24px] h-[24px] " />
+              </button>
+              <p className="text-[18px] ml-[10px] font-bold text-black">
+                Setting{" "}
+              </p>
+            </>
           ) : (
             <>
               <div>

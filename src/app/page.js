@@ -47,7 +47,7 @@ export default function Landing() {
           </h1>
         </div>
         <div className=" h-[519.61px] lg:h-[499px]  mx-auto relative">
-          <div className="lg:w-[1060px] lg:h-[459px] w-[382px] h-[530.83px] absolute lg:top-[0px] top-[37.78px] left-1/2 -translate-x-1/2 lg:rounded-[24px] rounded-[12.38px] overflow-y-scroll scrollbar-hide">
+          <div className="lg:w-[1060px] w-[350px] lg:h-[459px] max-w-[382px] px-[20px] h-[530.83px] absolute lg:top-[0px] top-[37.78px] left-1/2 -translate-x-1/2 lg:rounded-[24px] rounded-[12.38px] overflow-y-scroll scrollbar-hide">
             <StickyCardStack />
           </div>
         </div>
