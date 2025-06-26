@@ -17,8 +17,8 @@ import { Menu } from "lucide-react";
 const Navbar = ({ isCreationPage }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { IsLogin, SetIsLogin, SetEmail, SetUserId } = useUserStore();
-
+  const { SetIsLogin, SetEmail, SetUserId } = useUserStore();
+  const IsLogin = true;
   const verifyToken = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -56,6 +56,28 @@ const Navbar = ({ isCreationPage }) => {
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
     useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Close all dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Close all dropdowns
+      setIsProfileDropdownOpen(false);
+      setIsWorkspaceDropdownOpen(false);
+      setIsAssistantsDropdownOpen(false);
+      setIsNotificationDropdownOpen(false);
+      // Note: We don't close sidebar here as it has its own overlay handling
+    };
+
+    // Add event listener when any dropdown is open
+    if (isProfileDropdownOpen || isWorkspaceDropdownOpen || isAssistantsDropdownOpen || isNotificationDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    // Cleanup event listener
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isProfileDropdownOpen, isWorkspaceDropdownOpen, isAssistantsDropdownOpen, isNotificationDropdownOpen]);
 
   const getActiveMenu = (pathname) => {
     if (pathname === "/dashboard") return "Home";

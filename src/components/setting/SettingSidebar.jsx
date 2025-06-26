@@ -57,7 +57,7 @@ export default function SettingSidebar() {
 
   return (
     <aside
-      className={`transition-all duration-300 bg-white border-r-4 border-[#E3E9EE]  py-[80px] ${
+      className={`transition-all duration-300 bg-white border-r-4 border-[#E3E9EE] xl:flex hidden  py-[80px] ${
         collapsed ? "w-[75px]" : "w-[360px]"
       }`}
     >
@@ -69,8 +69,10 @@ export default function SettingSidebar() {
             <Link key={item.href} href={item.href}>
               <div
                 className={` py-[14px] ${
-                  !collapsed ? "mx-[48px] py-[14px] px-[32px] " : "mx-[7px] py-[7px]  px-[7px]"
-                } rounded-full flex justify-center lg:justify-start items-center lg:gap-2 cursor-pointer transition ${
+                  !collapsed
+                    ? "mx-[48px] py-[14px] px-[32px] "
+                    : "mx-[7px] py-[7px]  px-[7px]"
+                } rounded-full flex justify-center lg:justify-start   items-center lg:gap-2 cursor-pointer transition ${
                   isActive
                     ? " text-[#1B1F3B] border-[#C209C1] border font-medium text-[14px]"
                     : " text-[#68686B] border border-[#E3E9EE] text-[14px] font-medium"
@@ -90,11 +92,15 @@ export default function SettingSidebar() {
         })}
         <Link
           href="/setting/delete-account"
-          className={`${!collapsed?"px-[48px]":"px-[7px] py-[7px] "}  border-t-[#E3E9EE] border-t-2 `}
+          className={`${
+            !collapsed ? "px-[48px]" : "px-[7px] py-[7px] "
+          }  border-t-[#E3E9EE] border-t-2 `}
         >
           <div
             className={` mt-4 text-red-500 border border-[#E3E9EE] rounded-full text-start transition font-medium flex items-center gap-2 ${
-              collapsed ? "justify-center px-0 py-[12px] " : "py-[14px] px-[32px] "
+              collapsed
+                ? "justify-center px-0 py-[12px] "
+                : "py-[14px] px-[32px] "
             }`}
           >
             <Image
@@ -102,7 +108,7 @@ export default function SettingSidebar() {
               alt="delete account"
               width={20}
               height={20}
-              className={`inline-block ${collapsed?"":"mr-2"}`}
+              className={`inline-block ${collapsed ? "" : "mr-2"}`}
             />
             <span className={`${collapsed ? "hidden" : "inline"} md:inline`}>
               Delete account
