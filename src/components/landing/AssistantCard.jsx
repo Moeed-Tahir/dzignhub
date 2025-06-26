@@ -1,7 +1,7 @@
 function AssistantCard({ src, name="",style = {}, positionClass = "" }) {
   return (
     <div
-      className={`md:max-w-[380px] md:max-h-[315px] max-w-[132px] max-h-[110px] w-full h-full overflow-hidden absolute flex p-[20px] justify-center  border border-[#FFFFFF]/15 rounded-[40px] ${positionClass}`}
+      className={`md:w-[380px] relative  md:max-h-[315px] w-[132px] max-h-[110px]  h-full overflow-hidden  flex flex-col justify-center items-center    border border-[#FFFFFF]/15 rounded-[10px] xl:rounded-[40px] `}
       style={{
         background: `
           linear-gradient(180deg, rgba(46, 51, 90, 0) 0%, rgba(28, 27, 51, 0.1) 100%),
@@ -15,13 +15,12 @@ function AssistantCard({ src, name="",style = {}, positionClass = "" }) {
           0px 4px 4px 0px #00000040,
           0px -54px 24px 0px #00000045 inset
         `,
-        ...style,
       }}
     >
-      <div className="overflow-hidden rounded-[20px] ">
+      <div className="overflow-hidden  rounded-[20px] ">
         <img src={src} className="w-full h-full object-cover " />
       </div>
-      <div className="absolute bottom-[10px] left-[20px] md:text-[20px] text-[6.95px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] font-semibold text-[#bababc]">
+      <div className="  bottom-5 absolute left-5   md:text-[20px] text-[6.95px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] font-semibold text-[#bababc]">
         {name}
       </div>
     </div>

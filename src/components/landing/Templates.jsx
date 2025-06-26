@@ -23,7 +23,7 @@ function Templates() {
 
   return (
     <div className="w-full">
-      <div className="max-w-[1440px] gap-[64px] p-[30px] flex flex-col mx-auto">
+      <div className="max-w-[1280px] gap-[64px] p-[30px] flex flex-col mx-auto">
         <div className="max-w-[1280px] h-[218px] flex flex-col">
           <div style={{
             fontFamily: 'General Sans',
@@ -40,7 +40,7 @@ function Templates() {
           </div>
         </div>
 
-        <div id="templates" className="max-w-[1280px] flex flex-col gap-[32px]  ">
+        <div id="templates" className="max-w-[1280px] mx-auto w-full flex flex-col gap-[32px]  ">
          {/* Row 1 - Website Section */}
          <div className="max-w-[1280px] h-[366px] md:h-[362px] bg-[#E4E7FA] rounded-[20px] overflow-hidden relative">
             <div className="absolute top-[20.04px] left-[20.5px] flex flex-col gap-[8.64px]">
