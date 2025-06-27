@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const CustomSwitch = ({ checked, onChange }) => (
   <button
@@ -41,11 +41,90 @@ const CustomCheckbox = ({ checked, onChange }) => (
 
 const page = () => {
   const [allEnabled, setAllEnabled] = useState(true);
-  const [checks, setChecks] = useState([false, true, false]);
+  const [checks, setChecks] = useState([false, false, false]);
+  const [loading, setLoading] = useState(false);
 
   const handleCheck = (idx, value) => {
     setChecks((prev) => prev.map((c, i) => (i === idx ? value : c)));
   };
+
+  const updateNotificationSettings = async() => {
+    setLoading(true);
+
+    console.log("Updated settings:", {
+      allEnabled,
+      checks,
+    });
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/update-notification-settings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({
+          notifications: allEnabled,
+          newNotifications: checks[0],
+          softwareUpdatesNewsletter: checks[1],
+          newMessagesFromBots: checks[2],
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (data.type === "success") {
+        console.log("Notification settings updated successfully");
+      } else {
+        console.error("Failed to update notification settings");
+      }
+      alert(data.message);
+    }
+    catch (error) {
+      console.error("Error updating notification settings:", error);
+      alert("Failed to update notification settings");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getNotificationSettings = async() => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-notification-settings`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+  
+      const data = await response.json();
+  
+      if (data.type === "success") {
+        console.log("Notification settings fetched successfully");
+        setAllEnabled(data.data.newNotifications && data.data.softwareUpdatesNewsletter && data.data.newMessagesFromBots);
+        setChecks([
+          data.data.newNotifications,
+          data.data.softwareUpdatesNewsletter,
+          data.data.newMessagesFromBots,
+        ]);
+      } else {
+        console.error("Failed to update notification settings");
+      }
+    }
+    catch (error) {
+      console.error("Error updating notification settings:", error);
+      alert("Failed to update notification settings");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    getNotificationSettings();
+  }
+  , []);
+
 
   return (
     <div className="flex flex-1 flex-col items-start justify-center py-[40px] xl:py-[80px] bg-white px-[40px] xl:px-[160px]">
@@ -92,9 +171,14 @@ const page = () => {
         <div className="flex gap-4 mt-2">
          <button
             type="submit"
-            className="bg-[#D0FF00] hover:bg-[#b8e600] text-[#1B1F3B] font-medium rounded-full text-[14px] w-[130px] h-[44px] transition"
+            className="bg-[#D0FF00] hover:bg-[#b8e600] text-[#1B1F3B] font-medium rounded-full text-[14px] w-[130px] h-[44px] transition flex items-center justify-center"
+            onClick={updateNotificationSettings}
           >
-            Save change
+            {loading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+          ) : (
+            "Save Changes"
+          )}
           </button>
              <button
             type="button"
