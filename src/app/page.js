@@ -14,21 +14,35 @@ import FAQ from "@/components/landing/FAQ";
 import Assistants from "@/components/landing/Assistants";
 import Footer from "@/components/common/Footer";
 import Testimonials from "@/components/landing/Testimonials";
+import Sidebar from "@/components/landing/Sidebar";
+import { useState } from "react";
+
 export default function Landing() {
   const router = useRouter();
-
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <>
       <div
-        className="overflow-hidden w-full lg:h-[1095px] h-[1146px]"
+        className={`overflow-hidden w-full relative lg:h-[1095px] h-[1146px] ${sidebarOpen ? "":""}`}
         style={{
           background: "linear-gradient(to bottom, #1B1F3B 56%, #c209c1 100%)",
         }}
       >
+        {/* Sidebar Overlay */}
+        {sidebarOpen && (
+          <div
+            className=" inset-0 absolute z-40 bg-black/40"
+            onClick={() => setSidebarOpen(false)} // Click outside to close
+          >
+            <Sidebar onClose={() => setSidebarOpen(false)} />
+          </div>
+        )}
         <div className="lg:max-w-[1440px]  w-[100%] relative lg:mx-auto ">
           {/* Navbar */}
-          <div className="lg:max-w-[1280px] mx-auto lg:w-auto min-w-[382px] px-[20px] xl:px-0  w-full  top-[24px]  flex flex-col lg:gap-[61px]">
-            <Navbar />
+          <div className="lg:max-w-[1280px] mx-auto lg:w-auto  min-w-[382px]  w-full  top-[24px]  flex flex-col lg:gap-[61px]">
+            <Navbar  showSidebarBtn={!sidebarOpen}
+             onOpenSidebar={() => setSidebarOpen(true)}
+             />
             <Hero />
           </div>
         </div>
@@ -59,7 +73,7 @@ export default function Landing() {
       <Pricing />
       <Testimonials />
       <FAQ />
-      <Assistants /> 
+      <Assistants />
       <Footer />
     </>
   );

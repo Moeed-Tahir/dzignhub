@@ -33,7 +33,7 @@ const StickyCardStack = () => {
           style={{ top: `${index * 25}px` }}
         >
           <div className="w-full h-full flex flex-col gap-[24px] lg:gap-[0px] lg:flex-row justify-between">
-            <div className="flex flex-col gap-[12.38px] lg:gap-[24px] w-full ">
+            <div className="flex flex-col gap-[12.38px] lg:gap-[24px] w-full lg:w-[40%] ">
               <p className="text-[16px] text-[#000000]">0{index + 1}</p>
               <div className="flex flex-col lg:gap-[20px] gap-[10.32px]">
                 <div className="flex flex-col lg:gap-[8px] gap-[4.13px]">
@@ -51,7 +51,7 @@ const StickyCardStack = () => {
                 </p>
               </div>
             </div>
-            <div className="lg:w-[481px] lg:h-[331px] max-w-[318px] h-[184px] relative lg:rounded-[20px] bg-[#C209C1] overflow-hidden">
+            <div className="lg:max-w-[481px] lg:w-[480px] lg:h-[331px] max-w-[318px] h-[184px] relative lg:rounded-[20px] bg-[#C209C1] overflow-hidden">
               <img
                 src="/landing/stickyCards/icon.svg"
                 className="absolute left-[15px] top-[15px] w-[32px] h-[32px] lg:w-[24px] lg:h-[24px]"

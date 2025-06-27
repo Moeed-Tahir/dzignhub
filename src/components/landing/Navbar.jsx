@@ -6,7 +6,7 @@ const syne = Syne({
   weight: ["400"],
 });
 
-function Navbar() {
+function Navbar({ showSidebarBtn, onOpenSidebar }) {
   return (
     <div className=" h-[48px] py-10  justify-between flex">
       <img
@@ -20,13 +20,19 @@ function Navbar() {
         >
           <Link href="/auth/login">Sign In</Link>
         </button>
-        <button className="w-[47px] h-[47px] bg-[#BDFF00] rounded-full flex items-center justify-center cursor-pointer">
-          <img
-            src="/landing/Vector.png"
-            alt="vector"
-            className="w-[16.8px] h-[14.4px] object-contain"
-          />
-        </button>
+        {/* Conditionally show the button */}
+       
+          <button
+            className="w-[47px] h-[47px] bg-[#BDFF00] rounded-full flex items-center justify-center cursor-pointer"
+            onClick={onOpenSidebar}
+          >
+            <img
+              src="/landing/Vector.png"
+              alt="vector"
+              className="w-[16.8px] h-[14.4px] object-contain"
+            />
+          </button>
+       
       </div>
     </div>
   );
