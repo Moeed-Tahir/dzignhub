@@ -1,23 +1,64 @@
+"use client"
 import React from "react";
 import Image from "next/image";
 
 const page = () => {
+  const [oldPassword, setOldPassword] = React.useState("");
+  const [newPassword, setNewPassword] = React.useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+  const changePassword = async () => {
+    setIsLoading(true);
+    if (newPassword !== confirmNewPassword) {
+      alert("New password and confirm password do not match");
+      return;
+    }
+   try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/change-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({oldPassword, newPassword}),
+    });
+
+    const data = await response.json();
+    if (data.type === "success") {
+      alert(data.message);
+      localStorage.setItem("token", data.token);
+    } else {
+      alert(data.message);
+    }
+   }
+   catch (error) {
+      console.error(error.message);
+   }
+   finally{
+    setIsLoading(false);
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmNewPassword("");
+   }
+  }
   return (
     <div className="flex flex-1 flex-col items-start justify-center py-[40px] xl:py-[80px] bg-white px-[40px] xl:px-[160px]">
       <h1 className="text-[#2A0856] text-[34px] font-semibold mb-[56px]">
         Edit password
       </h1>
-      <form className="w-full  flex flex-col gap-10">
+      <div className="w-full  flex flex-col gap-10">
         <div>
           <label className="text-[#68686B] text-[14px] font-semibold  ">
             Old password
           </label>
           <div className="relative">
             <input
+            value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
               type="password"
               className="w-full border border-[#E3E9EE] rounded-[12px] py-[12px] pr-[16px] pl-[40px] text-[#1B1F3B] text-[16px] font-medium focus:outline-none focus:border-[#C209C1] transition"
               placeholder="Old password"
-              defaultValue="password"
+            
             />
             <span className="absolute left-4 top-1/2 -translate-y-1/2">
               {" "}
@@ -36,6 +77,8 @@ const page = () => {
           </label>
           <div className="relative">
             <input
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               type="password"
               className="w-full border  border-[#E3E9EE] rounded-[12px] py-[12px] pr-[16px] pl-[40px] text-[#1B1F3B] text-[16px] font-medium focus:outline-none focus:border-[#C209C1] transition"
               placeholder="New password"
@@ -60,6 +103,8 @@ const page = () => {
           </label>
           <div className="relative">
             <input
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
               type="password"
               className="w-full border border-[#E3E9EE] rounded-[12px] py-[12px] pr-[16px] pl-[40px] text-[#1B1F3B] text-[16px] font-medium focus:outline-none focus:border-[#C209C1] transition"
               placeholder="Confirm new password"
@@ -80,10 +125,15 @@ const page = () => {
         </div>
         <div className="flex gap-4 mt-2">
           <button
+          onClick={changePassword}
             type="submit"
-            className="bg-[#D0FF00] hover:bg-[#b8e600] text-[#1B1F3B] font-medium rounded-full text-[14px] w-[130px] h-[44px] transition"
+            className="bg-[#D0FF00] hover:bg-[#b8e600] text-[#1B1F3B] font-medium rounded-full text-[14px] w-[130px] h-[44px] transition flex items-center justify-center"
           >
-            Save change
+            {isLoading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+          ) : (
+            "Save Change"
+          )}
           </button>
           <button
             type="button"
@@ -92,7 +142,7 @@ const page = () => {
             Cancel
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
