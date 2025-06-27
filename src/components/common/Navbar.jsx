@@ -243,9 +243,18 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
   };
 
   const logout = async () => {
-    localStorage.removeItem("token");
-    setIsProfileDropdownOpen(false);
-    router.push("/auth/login");
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/logout`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const data = await res.json();
+    if (data.type == "success") {
+      localStorage.removeItem("token");
+      setIsProfileDropdownOpen(false);
+      router.push("/auth/login");
+    }
   };
 
   const [isMobile, setIsMobile] = useState(false);
