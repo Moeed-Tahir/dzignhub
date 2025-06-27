@@ -18,7 +18,7 @@ const LoginForm = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const {SetIsLogin, SetEmail, SetUserId} = useUserStore()
+  const {SetIsLogin, SetEmail, SetUserId,SetAvatar} = useUserStore()
 
   const adminCredentials = {
     email: "admin@example.com",
@@ -57,6 +57,7 @@ const LoginForm = () => {
       if (data.type === "success") {
         // Store the token in localStorage
         localStorage.setItem("token", data.token);
+        SetAvatar(data.user.avatar);
         SetIsLogin(true);
         SetEmail(data.user.email);
         SetUserId(data.user.userId);

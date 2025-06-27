@@ -1,13 +1,103 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 
 const page = () => {
   const fileInputRef = useRef(null);
 
-  const avatarUrl = "/avatar.png";
-  const name = "Tran Mau Tri Tam";
-  const location = "Saigon, Vietnam";
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [selectedFile, setSelectedFile] = React.useState(null); // Store the actual file
+  const [avatar, setAvatar] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [location, setLocation] = React.useState("");
+  const [bio, setBio] = React.useState("");
+
+  // Handle file selection
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file && file.size <= 2 * 1024 * 1024) { // Check file size (2MB limit)
+      // Reset previous avatar URL if any
+      setSelectedFile(file);
+      // Create preview URL
+      const previewUrl = URL.createObjectURL(file);
+      setAvatar(previewUrl);
+    }
+    else {
+      alert("File size exceeds 2MB. Please select a smaller file.");
+    }
+  };
+
+  const updateProfileData = async() => {
+    setIsLoading(true);
+    
+    try {
+      // Create FormData for file upload
+      const formData = new FormData();
+      
+      // Append file if selected
+      if (selectedFile) {
+        formData.append('avatar', selectedFile);
+      }
+      
+      // Append other data
+      formData.append('name', name);
+      formData.append('location', location);
+      formData.append('bio', bio);
+
+       // Debug FormData contents - Use this instead of console.log(formData)
+    console.log('FormData contents:');
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+  
+
+      // Send to backend
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/edit-profile`, {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: formData, // Don't set Content-Type header, let browser set it
+      });
+
+      const result = await response.json();
+      if (result.type === "success") {
+        alert("Profile updated successfully!");
+        // Optionally, you can redirect or update the UI further
+      }
+      else {
+        alert(`Error: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const getProfileData = async() => {
+    
+      
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-profile-data`, {
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        }
+      });
+
+      const data = await response.json();
+
+      if (data.type == "success") {
+        setAvatar(data.data.avatar);
+        setName(data.data.name || "");
+        setLocation(data.data.location || "");
+        setBio(data.data.bio || "");  
+      }
+  }
+
+  useEffect(() => {
+    getProfileData();
+  }, []);
 
   return (
     <div className="flex flex-1 flex-col items-start justify-center py-[40px] xl:py-[80px] bg-white px-[40px] xl:px-[160px]">
@@ -16,10 +106,16 @@ const page = () => {
           Edit profile
         </p>
       </div>
-      <form className="mt-[48px] w-full  flex flex-col gap-8">
+      <div className="mt-[48px] w-full  flex flex-col gap-8">
         <div className="flex items-center lg:flex-row flex-col  gap-8">
           <div className="!w-[120px] !h-[120px] rounded-full overflow-hidden  flex items-center justify-center">
-            <Image src={avatarUrl} alt="avatar" width={4000} height={4000} />
+            {avatar ? (
+              <Image src={avatar} alt="avatar" width={120} height={120} />
+            ) : (
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                <span className="text-gray-500">No Image</span>
+              </div>
+            )}
           </div>
           <div className="flex flex-col justify-center items-center lg:items-start gap-2">
             <button
@@ -36,13 +132,13 @@ const page = () => {
                 width={20}
                 height={20}
               />
-              {/* <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M10 3v10m0 0l-3-3m3 3l3-3" stroke="#1B1F3B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><circle cx="10" cy="10" r="9.25" stroke="#E3E9EE" strokeWidth="1.5"/></svg> */}
             </button>
             <input
               type="file"
               accept="image/png, image/jpeg"
               className="hidden"
               ref={fileInputRef}
+              onChange={handleFileChange}
             />
             <span className="text-[#68686B] font-medium text-center lg:text-start text-[14px] mt-1">
               800x800 PNG, JPG is recommended. Maximum file size: 2Mb
@@ -59,7 +155,8 @@ const page = () => {
           <div className="relative">
             <input
               type="text"
-              defaultValue={name}
+              onChange={(e) => setName(e.target.value)}
+              value={name}
               className="w-full border border-[#E3E9EE] rounded-[12px] py-[12px] pr-[16px] pl-[36px] text-[#1B1F3B] text-[16px] font-medium focus:outline-none focus:border-[#C209C1] transition"
               placeholder="Enter your name"
             />
@@ -83,7 +180,8 @@ const page = () => {
           <div className="relative">
             <input
               type="text"
-              defaultValue={location}
+              onChange={(e) => setLocation(e.target.value)}
+              value={location}
               className="w-full border border-[#E3E9EE] rounded-[12px] py-[12px] pr-[16px] pl-[36px] text-[#1B1F3B] text-[16px] font-medium focus:outline-none focus:border-[#C209C1] transition"
               placeholder="Enter your location"
             />
@@ -105,6 +203,8 @@ const page = () => {
             </label>
           </div>
           <textarea
+          onChange={(e) => setBio(e.target.value)}
+          value={bio}
             rows={4}
             className="w-full border border-[#E3E9EE] rounded-[12px] py-4 px-4 text-[#1B1F3B] text-[16px] font-medium focus:outline-none focus:border-[#C209C1] transition resize-none"
             placeholder="Write something here"
@@ -115,10 +215,15 @@ const page = () => {
         </div>
         <div className="flex gap-4 mt-2">
           <button
+          onClick={updateProfileData}
             type="submit"
-            className="bg-[#D0FF00] hover:bg-[#b8e600] text-[#1B1F3B] font-medium rounded-full text-[14px] w-[130px] h-[44px] transition"
+            className="bg-[#D0FF00] hover:bg-[#b8e600] text-[#1B1F3B] font-medium rounded-full text-[14px] w-[130px] h-[44px] transition flex justify-center items-center"
           >
-            Save change
+              {isLoading ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+          ) : (
+            "Save Changes"
+          )}
           </button>
           <button
             type="button"
@@ -127,7 +232,7 @@ const page = () => {
             Cancel
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

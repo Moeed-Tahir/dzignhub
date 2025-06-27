@@ -16,17 +16,16 @@ import { MoveLeft } from "lucide-react";
 const Navbar = ({ isCreationPage, isSettingPage }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { IsLogin, SetIsLogin, SetEmail, SetUserId } = useUserStore();
+  const { IsLogin, SetIsLogin, SetEmail, SetUserId, SetAvatar, Avatar } = useUserStore();
   // const IsLogin = true;
   const verifyToken = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
+        headers: { "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+         },
       });
       const data = await res.json();
       console.log("Token verification response:", data);
@@ -35,6 +34,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
         SetIsLogin(true);
         SetEmail(data.user.email);
         SetUserId(data.user.userId);
+        SetAvatar(data.user.avatar);
       } else {
         SetIsLogin(false);
       }
@@ -551,7 +551,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
               >
                 <div className="w-9 h-9 bg-gray-300 rounded-full flex items-center justify-center">
                   <Image
-                    src="/avatar.png"
+                    src={Avatar || "/avatar.png"}
                     width={50}
                     height={50}
                     alt="Profile"
