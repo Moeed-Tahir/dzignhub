@@ -10,6 +10,31 @@ const Page = () => {
   const [showSuggestion, setShowSuggestion] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+    const [generations, setGenerations] = React.useState([]);
+
+  const getUserGenerations = async() => {
+    
+    const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-user-generations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    const res = await req.json();
+
+    if (res.type === "success") {
+      console.log(res.generations);
+      setGenerations(res.generations);
+    }
+  }
+
+  useEffect(() => {
+
+    getUserGenerations();
+
+  }, []);
 
 
   // Detect mobile screen
@@ -60,7 +85,7 @@ const Page = () => {
 
       <div className="w-full min-h-screen ">
         <Navbar isCreationPage={true} />
-        {showSuggestion ? <StartingSuggestion /> : <ImagesResults />}
+        {showSuggestion ? <StartingSuggestion /> : <ImagesResults generations={generations} />}
 
         <button
           className="fixed bottom-8 right-8 bg-[#C209C1] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50"

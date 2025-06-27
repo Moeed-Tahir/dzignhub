@@ -31,6 +31,30 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const [isError, setIsError] = useState("");
   const [error, setError] = useState("")
 
+  const saveGeneration = async(type, url, prompt, isMultiple) => {
+    try {
+      let data = {
+        type: type,
+        url: url,
+        prompt: prompt,
+        isMultiple: isMultiple
+      }
+      const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/save-generation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      const res = await req.json();
+    }
+    catch (error) {
+      console.error("Error saving generation:", error);
+    }
+  }
+
   const isValid = textValue.trim().split(/\s+/).length >= 6;
   const handleGenerate = async () => {
     setIsLoading(true)
@@ -68,7 +92,16 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       const res = await req.json();
       if (res.type == "success" || res.type == "partial_success") {
         if (onGenerate) onGenerate();
-        SetGenerateImages(res.images)
+        SetGenerateImages(res.images);
+
+        // Save the generation to the database
+        if (selectedQuality > 1) {
+          saveGeneration("image", res.images, textValue, true);
+        }
+        else {
+          saveGeneration("image", res.images[0], textValue, false);
+        }
+
       }
       setIsLoading(false)
     }
@@ -117,6 +150,9 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
            if (onGenerate) onGenerate();
            // Store the complete video object as an array for consistency with ImagesResults
            SetGenerateVideo([res.video]);
+
+           // Save the generation to the database
+           saveGeneration("video", res.video, textValue);
          } else {
           setError(`${res.message}`)
           setIsError(true);
