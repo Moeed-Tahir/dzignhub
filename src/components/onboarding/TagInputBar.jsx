@@ -1,40 +1,75 @@
-"use client";
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+// TagInputBar.jsx
+import React, { useState } from 'react';
 
-export default function TagInputBar() {
+const TagInputBar = ({ onTagsChange, maxTags = 3 }) => {
   const [tags, setTags] = useState([]);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && inputValue.trim() !== "") {
+  const addTag = (tag) => {
+    if (tag.trim() && tags.length < maxTags && !tags.includes(tag.trim())) {
+      const newTags = [...tags, tag.trim()];
+      setTags(newTags);
+      setInputValue('');
+      
+      // Call parent callback
+      if (onTagsChange) {
+        onTagsChange(newTags);
+      }
+    }
+  };
+
+  const removeTag = (indexToRemove) => {
+    const newTags = tags.filter((_, index) => index !== indexToRemove);
+    setTags(newTags);
+    
+    // Call parent callback
+    if (onTagsChange) {
+      onTagsChange(newTags);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
-      setTags([...tags, inputValue.trim()]);
-      setInputValue("");
+      addTag(inputValue);
+    }
+  };
+
+  const handleBlur = () => {
+    if (inputValue.trim()) {
+      addTag(inputValue);
     }
   };
 
   return (
-    <div className="flex items-center gap-2  py-[10px] px-[16px] lg:py-[12px]  lg:px-[20px]  rounded-full border max-w-[500px] border-[#DFE1E7] w-fit min-w-[300px]  overflow-x-scroll flex-wrap">
+    <div className="flex flex-wrap gap-2 p-3 border border-gray-300 rounded-lg min-h-[50px]">
       {tags.map((tag, index) => (
         <span
           key={index}
-          className="bg-[#F5F5F7] text-[#1B1F3B] text-sm px-3 py-1 rounded-full"
+          className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1"
         >
           {tag}
+          <button
+            onClick={() => removeTag(index)}
+            className="ml-1 text-blue-600 hover:text-blue-800 font-bold"
+          >
+            ×
+          </button>
         </span>
       ))}
-
-      <input
-        type="text"
-        // placeholder="Type and hit Enter"
-        className="flex-1 min-w-[100px] outline-none border-none bg-transparent text-sm text-[#1B1F3B]"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-
-      <ChevronDown size={16} className="text-[#1B1F3B]" />
+      {tags.length < maxTags && (
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
+          onBlur={handleBlur}
+          placeholder={`Add ${maxTags - tags.length} more word${maxTags - tags.length !== 1 ? 's' : ''}...`}
+          className="outline-none bg-transparent flex-1 min-w-[120px] text-sm"
+        />
+      )}
     </div>
   );
-}
+};
+
+export default TagInputBar;
