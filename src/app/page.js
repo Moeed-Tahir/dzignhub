@@ -23,30 +23,25 @@ export default function Landing() {
   return (
     <>
       <div
-        className={`overflow-hidden w-full relative lg:h-[1095px] h-[1146px] ${sidebarOpen ? "":""}`}
+        className={`overflow-hidden w-full relative lg:h-[1095px] h-[1146px] ${
+          sidebarOpen ? "" : ""
+        }`}
         style={{
           background: "linear-gradient(to bottom, #1B1F3B 56%, #c209c1 100%)",
         }}
       >
-        {/* Sidebar Overlay */}
-        {sidebarOpen && (
-          <div
-            className=" inset-0 absolute z-40 bg-black/40"
-            onClick={() => setSidebarOpen(false)} // Click outside to close
-          >
-            <Sidebar onClose={() => setSidebarOpen(false)} />
-          </div>
-        )}
+        <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
+
         <div className="lg:max-w-[1440px]  w-[100%] relative lg:mx-auto ">
-          {/* Navbar */}
           <div className="lg:max-w-[1280px] mx-auto lg:w-auto  min-w-[382px]  w-full  top-[24px]  flex flex-col lg:gap-[61px]">
-            <Navbar  showSidebarBtn={!sidebarOpen}
-             onOpenSidebar={() => setSidebarOpen(true)}
-             />
+            <Navbar
+              showSidebarBtn={!sidebarOpen}
+              onOpenSidebar={() => setSidebarOpen(true)}
+            />
             <Hero />
           </div>
         </div>
-        {/* Carousel Section */}
+
         <Carousel />
       </div>
 
@@ -61,7 +56,7 @@ export default function Landing() {
           </h1>
         </div>
         <div className=" h-[519.61px] lg:h-[499px]  mx-auto relative">
-         <div className="lg:max-w-[1060px] lg:w-full w-[330px] lg:h-[459px] max-w-[382px] xl:px-[20px] h-[530.83px]  lg:top-[0px] top-[37.78px]  lg:rounded-[24px] rounded-[12.38px] overflow-y-scroll scrollbar-hide">
+          <div className="lg:max-w-[1060px] lg:w-full w-[330px] lg:h-[459px] max-w-[382px] xl:px-[20px] h-[530.83px]  lg:top-[0px] top-[37.78px]  lg:rounded-[24px] rounded-[12.38px] overflow-y-scroll scrollbar-hide">
             <StickyCardStack />
           </div>
         </div>

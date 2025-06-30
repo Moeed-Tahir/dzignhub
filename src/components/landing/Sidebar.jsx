@@ -1,5 +1,8 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
+import gsap from "gsap";
 
 const links = [
   { href: "#", title: "Video Creation" },
@@ -27,15 +30,36 @@ const socialLinks = [
   { alt: "Pinterest", icon: "/landing/sidebar/pinterest.svg", href: "#" },
 ];
 
-function Sidebar({ onClose }) {
+function Sidebar({ onClose, open }) {
+  const sidebarRef = useRef();
+  useEffect(() => {
+    const el = sidebarRef.current;
+
+    if (open) {
+      gsap.fromTo(
+        el,
+        { x: "100%" },
+        {
+          x: "0%",
+          duration: 0.5,
+          ease: "power3.out",
+        }
+      );
+    }
+  }, [open]);
+
+  if (!open) return null;
+
   return (
-    <div className="md:max-w-[62%] max-w-[94%] w-full absolute md:top-[24px] md:right-[24px] right-[3%] top-[10px] bg-[#FFFFFF] rounded-[40px] md:max-h-[68%] max-h-[75%] h-full z-50 overflow-auto"
-     onClick={(e) => e.stopPropagation()}
+    <div
+      ref={sidebarRef}
+      className="md:max-w-[62%] max-w-[94%] w-full absolute md:top-[24px] md:right-[24px] right-[3%] top-[10px] bg-[#FFFFFF] rounded-[40px] md:max-h-[68%] max-h-[75%] h-full z-50 overflow-auto"
+      onClick={(e) => e.stopPropagation()}
     >
       <div className="relative h-full">
         <img
           src="/landing/sidebar/cross-icon.svg"
-           onClick={onClose}
+          onClick={onClose}
           className="absolute top-[3%] right-[3%] md:h-[47px] md:w-[47px] h-[40px] w-[40px] cursor-pointer"
         />
         <div className="top-[3%] left-[3%] max-h-[55%] h-full  absolute flex flex-col gap-[12px]">
@@ -78,7 +102,6 @@ function Sidebar({ onClose }) {
           style={{ backgroundImage: "url('/landing/sidebar/download-bg.png')" }}
         >
           <div className="relative h-full">
-            {/* Add more images here */}
             <img
               src="/landing/sidebar/iphone.png"
               alt="Iphone"
@@ -93,11 +116,10 @@ function Sidebar({ onClose }) {
                 Chose from a selection of high-quality AI models and experiment
                 a selection of settings and presets.
               </p>
-             
-                <button className="absolute left-[20px] bottom-[10%] text-black w-[186px] h-[48px] px-[24px] py-[spacing-lg] rounded-[40px] border border-[#BDFF00] bg-[#BDFF00] backdrop-blur-[12px] shadow-[0px_8px_10.9px_#0003121F,0px_1px_1px_#0003124D]">
-                  Download App
-                </button>
-              
+
+              <button className="absolute left-[20px] bottom-[10%] text-black w-[186px] h-[48px] px-[24px] py-[spacing-lg] rounded-[40px] border border-[#BDFF00] bg-[#BDFF00] backdrop-blur-[12px] shadow-[0px_8px_10.9px_#0003121F,0px_1px_1px_#0003124D]">
+                Download App
+              </button>
             </div>
           </div>
         </div>

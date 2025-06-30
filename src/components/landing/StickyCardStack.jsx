@@ -4,10 +4,10 @@ import { sfPro } from "@/fonts/sfPro";
 import { motion, useScroll } from "framer-motion";
 
 const cards = [
-  { title: "Card 1", color: "bg-[#E4E7FA]" },
-  { title: "Card 2", color: "bg-[#E4E7FA]" },
-  { title: "Card 3", color: "bg-[#E4E7FA]" },
-  { title: "Card 4", color: "bg-[#E4E7FA]" },
+  { title: "Card 1", color: "bg-[#E5E7FB]" },
+  { title: "Card 2", color: "bg-[#E7E9FA]" },
+  { title: "Card 3", color: "bg-[#EEEFFA]" },
+  // { title: "Card 4", color: "bg-[#E4E7F0]" },
 ];
 
 const syne = Syne({
@@ -25,11 +25,11 @@ const StickyCardStack = () => {
   });
 
   return (
-    <div ref={container} className="relative ">
+    <div ref={container} className="relative  ">
       {cards.map((card, index) => (
         <div
           key={index}
-          className={`sticky h-full w-full flex flex-col lg:p-[64px] p-[32px]  ${card.color} ${syne.className}`}
+          className={`sticky h-full w-full rounded-[24px] overflow-hidden flex flex-col lg:p-[64px] p-[32px]  ${card.color} ${syne.className}`}
           style={{ top: `${index * 25}px` }}
         >
           <div className="w-full h-full flex flex-col gap-[24px] lg:gap-[0px] lg:flex-row justify-between">

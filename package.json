@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.1",
+    "@studio-freight/lenis": "^1.0.42",
     "axios": "^1.10.0",
     "color-namer": "^1.4.0",
     "daisyui": "^5.0.43",
     "framer-motion": "^12.18.1",
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.4",
     "lucide-react": "^0.515.0",
     "next": "15.3.3",
     "next-auth": "^4.24.11",
