@@ -322,7 +322,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
             </>
           ) : (
             <div
-              className="flex justify-center items-center gap-2"
+              className="flex justify-center cursor-pointer items-center gap-2"
               onClick={() => router.push("/")}
             >
               <Image

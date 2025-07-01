@@ -28,7 +28,7 @@ function Templates() {
           <div style={{
             fontFamily: 'General Sans',
             fontWeight: 600
-          }} className=" font-semibold text-[25px] text-black">
+          }} className=" font-semibold text-[25px] lg:text-[48px] lg:w-[80%] text-black">
             Over <span className="text-[#C209C1]">150,000</span> ready-made
             templates to choose from
           </div>

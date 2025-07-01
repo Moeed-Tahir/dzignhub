@@ -3,7 +3,7 @@ import React from "react";
 
 export default function AIIntro() {
   return (
-    <div className="text-center py-10">
+    <div className="text-center absolute top-1/2 translate-y-[-50%] w-full max-w-[1280px] py-10">
       <Image
         src="/ai/ai-dp.png"
         alt="AI Avatar"
