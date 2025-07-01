@@ -16,16 +16,16 @@ import { MoveLeft } from "lucide-react";
 const Navbar = ({ isCreationPage, isSettingPage }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { IsLogin, SetIsLogin, SetEmail, SetUserId, SetAvatar, Avatar } = useUserStore();
+  const {IsLogin, SetIsLogin, SetEmail, SetUserId, SetAvatar, Avatar } = useUserStore();
   // const IsLogin = true;
   const verifyToken = async () => {
-
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
         method: "POST",
-        headers: { "Content-Type": "application/json",
+        headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-         },
+        },
       });
       const data = await res.json();
       console.log("Token verification response:", data);
@@ -273,7 +273,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
   return (
     <nav
       className={`  ${
-        isCreationPage ? "" :isSettingPage?"m-5": " m-8"
+        isCreationPage ? "" : isSettingPage ? "m-5" : " m-8"
       } bg-white px-4 max-w-[1440px]   xl:mx-auto py-4 rounded-full`}
     >
       <div className="flex items-center justify-between">
@@ -347,7 +347,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                 <Link href={item.href}>
                   <button
                     onClick={() => handleMenuClick(item)}
-                    className={`relative px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${
+                    className={`relative px-4 py-2 rounded-full  cursor-pointer text-sm transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${
                       activeMenu === item.name ? "text-black px-15" : ""
                     }`}
                     style={{
@@ -374,7 +374,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
               ) : (
                 <button
                   onClick={() => handleMenuClick(item)}
-                  className={`relative px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center  font-semibold text-[#202126] ${
+                  className={`relative cursor-pointer px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center  font-semibold text-[#202126] ${
                     activeMenu === item.name ? "text-black px-4" : ""
                   }`}
                   style={{
@@ -403,16 +403,19 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
               )}
 
               {item.key === "workspace" && isWorkspaceDropdownOpen && (
-                <div className="absolute top-full left-0 mt-8 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div
+                  ref={profileDropdownRef}
+                  className="absolute top-full left-0 mt-8 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                >
                   <a
                     href="/dashboard/image-creation"
-                    className="block px-4 py-2 text-sm font-normal text-gray-700 hover:bg-gray-50"
+                    className="block px-4 py-2 text-sm font-normal text-gray-700 hover:bg-gray-50 cursor-pointer"
                   >
                     Image Creation
                   </a>
                   <a
                     href="/dashboard/video-creation"
-                    className="block px-4 py-2 font-normal text-sm text-gray-700 hover:bg-gray-50"
+                    className="block px-4 py-2 font-normal text-sm text-gray-700 hover:bg-gray-50 cursor-pointer"
                   >
                     Video Creation
                   </a>
@@ -420,12 +423,15 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
               )}
 
               {item.key === "assistants" && isAssistantsDropdownOpen && (
-                <div className="absolute top-full -left-15 mt-8 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div
+                  ref={profileDropdownRef}
+                  className="absolute top-full -left-15 mt-8 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                >
                   {assistants.map((assistant) => (
                     <div key={assistant.name}>
                       <a
                         href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-gray-50"
+                        className="flex items-center px-4 py-2 text-sm hover:bg-gray-50 cursor-pointer"
                       >
                         <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">
                           <Image
@@ -464,7 +470,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
             <div className="relative">
               <button
                 onClick={handleNotificationClick}
-                className="py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors relative"
+                className="py-2 text-gray-600 cursor-pointer hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors relative"
               >
                 <Image
                   src="/homepage/notification.png"
@@ -476,14 +482,17 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
 
               {/* Notification Dropdown */}
               {isNotificationDropdownOpen && (
-                <div className="absolute top-full right-0 mt-1 w-96 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 transform translate-x-20">
+                <div
+                  ref={profileDropdownRef}
+                  className="absolute top-full right-0 mt-1 w-96 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 transform translate-x-20"
+                >
                   <div className="flex items-center justify-between px-4 py-2">
                     <h3 className="text-lg font-semibold text-gray-900">
                       Notifications
                     </h3>
                     <button
                       onClick={() => setIsNotificationDropdownOpen(false)}
-                      className="hover:bg-gray-100 rounded-full transition-colors"
+                      className="hover:bg-gray-100 rounded-full cursor-pointer transition-colors"
                     >
                       <Image
                         src={"/homepage/notifications/close.png"}
@@ -501,7 +510,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                         key={notification.id}
                         className={`px-4 py-3 hover:bg-gray-50`}
                       >
-                        <div className="flex items-center justify-between">
+                        <div className="flex cursor-pointer items-center justify-between">
                           <div className="mr-3 bg-[#C209C11A] rounded-full">
                             <Image
                               src={notification.icon}
@@ -538,11 +547,11 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                   </div>
 
                   <div className="px-4 py-3 border-t border-gray-200 flex space-x-2">
-                    <button className="flex-1 px-4 py-2  text-[#C209C1] text-sm font-medium rounded-full hover:bg-[#C209C122] transition-colors">
+                    <button className="flex-1 px-4 py-2 cursor-pointer text-[#C209C1] text-sm font-medium rounded-full hover:bg-[#C209C122] transition-colors">
                       Mark all as read
                     </button>
                     <button
-                      className="flex-1 px-4 py-2 text-sm font-medium text-black rounded-full transition-colors"
+                      className="flex-1 px-4 py-2 cursor-pointer text-sm font-medium text-black rounded-full transition-colors"
                       style={{ backgroundColor: "var(--color-green)" }}
                     >
                       View all notifications
@@ -556,7 +565,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
             <div className="relative">
               <button
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                className="flex cursor-pointer items-center space-x-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <div className="w-9 h-9 bg-gray-300 rounded-full flex items-center justify-center">
                   <Image
@@ -658,7 +667,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                                 <div key={assistant.name}>
                                   <a
                                     href="#"
-                                    className="flex items-center px-4 py-2 text-sm hover:bg-gray-50"
+                                    className="flex items-center px-4 py-2 text-sm hover:bg-gray-50 cursor-pointer"
                                   >
                                     <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">
                                       <Image
@@ -747,13 +756,13 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
         ) : (
           <div className="flex items-center space-x-4">
             <Link href="/auth/login">
-              <button className="px-6 py-2 text-sm font-semibold text-gray-700 bg-transparent border border-gray-300 rounded-full hover:bg-gray-50 transition-colors">
+              <button className="px-6 py-2 cursor-pointer text-sm font-semibold text-gray-700 bg-transparent border border-gray-300 rounded-full hover:bg-gray-50 transition-colors">
                 Login
               </button>
             </Link>
             <Link href="/auth/sign-up" className="hidden xl:flex">
               <button
-                className="px-6 py-2 text-sm font-semibold text-black rounded-full transition-colors"
+                className="px-6 py-2 text-sm cursor-pointer font-semibold text-black rounded-full transition-colors"
                 style={{ backgroundColor: "var(--color-green)" }}
               >
                 Get Started

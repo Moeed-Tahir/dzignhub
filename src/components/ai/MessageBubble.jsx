@@ -42,7 +42,7 @@ export default function MessageBubble({
               <button
                 key={i}
                 onClick={() => onOptionSelect(opt)}
-              className="py-[12px] cursor-pointer text-[14px] font-normal px-[14px] bg-white border border-[#E8ECEF] rounded-full  hover:bg-gray-50"
+                className="py-[12px] cursor-pointer text-[14px] font-normal px-[14px] bg-white border border-[#E8ECEF] rounded-full  hover:bg-gray-50"
               >
                 {opt}
               </button>
