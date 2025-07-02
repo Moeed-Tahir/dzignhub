@@ -32,23 +32,32 @@ const socialLinks = [
 
 function Sidebar({ onClose, open }) {
   const sidebarRef = useRef();
-  useEffect(() => {
-    const el = sidebarRef.current;
+useEffect(() => {
+  const el = sidebarRef.current;
 
-    if (open) {
-      gsap.fromTo(
-        el,
-        { x: "100%" },
-        {
-          x: "0%",
-          duration: 0.5,
-          ease: "power3.out",
-        }
-      );
-    }
-  }, [open]);
-
-  if (!open) return null;
+  if (open) {
+    gsap.fromTo(
+      el,
+      { x: "100%" },
+      {
+        x: "0%",
+        duration: 0.5,
+        ease: "power3.out",
+        display: "block",
+      }
+    );
+  } else {
+    gsap.to(el, {
+      x: "100%",
+      duration: 0.4,
+      ease: "power3.in",
+      onComplete: () => {
+        // Optional: hide the sidebar after animation completes
+        el.style.display = "none";
+      },
+    });
+  }
+}, [open]);
 
   return (
     <div
