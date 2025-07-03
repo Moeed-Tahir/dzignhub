@@ -3,7 +3,7 @@ import Link from "next/link";
 
 function Navbar({ showSidebarBtn, onOpenSidebar }) {
   return (
-    <div className=" h-[48px] py-10  justify-between flex">
+    <div className=" h-[48px] py-10 md:px-10 px-5 xl:px-0 justify-between flex">
       <Link href="/">
         <img
           src="/landing/Group.png"

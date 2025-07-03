@@ -45,7 +45,7 @@ export default function Landing() {
         <Carousel />
       </div>
 
-      <div className="  bg-[#FAFAFA] max-w-[1440px] mx-auto flex flex-col p-[24px] gap-[24px] lg:pt-[80px] lg:px-[80px] lg:gap-[56px] ">
+      <div className="  bg-[#FAFAFA] max-w-[1440px]  mx-auto flex flex-col p-[24px]   lg:pt-[80px] lg:px-[80px] ">
         <div className="">
           <div className="flex gap-[8px] font-semibold  lg:text-[48px] text-[28px]  text-black ">
             <span className="text-[#C209C1]">Endless</span>
@@ -55,12 +55,8 @@ export default function Landing() {
             with AI art
           </h1>
         </div>
-        <div className=" h-[519.61px] lg:h-[499px]  mx-auto relative">
-          <div className="lg:max-w-[1060px] lg:w-full w-[330px] lg:h-[459px] max-w-[382px] xl:px-[20px] h-[530.83px]  lg:top-[0px] top-[37.78px]  lg:rounded-[24px] rounded-[12.38px] overflow-y-scroll scrollbar-hide">
-            <StickyCardStack />
-          </div>
-        </div>
       </div>
+      <StickyCardStack />
       <Work />
       <Templates />
       <Download />

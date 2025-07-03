@@ -4,6 +4,8 @@ import { FaArrowRight } from "react-icons/fa";
 import { MdTranslate } from "react-icons/md";
 import { Anybody } from "next/font/google";
 import { Syne } from "next/font/google";
+import HeroCTA from "./HeroCTA";
+import HeroCTAMobile from "./HeroCTAMobile";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -68,45 +70,11 @@ export default function Hero() {
               life.
             </p>
           </div>
-
-          {/* CTA Section Mobile*/}
-          <div className=" max-w-[382px] mx-auto h-[144px] flex flex-col gap-[12px] lg:hidden">
-            <div className="bg-[#212e62] flex flex-col border-t-[0.49px] border-[#1B1F3B] py-[12px] px-[24px] rounded-[490.57px]">
-              <p className="lg:text-[18px] text-[16px] text-[#9997A0]">
-                A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape
-              </p>
-            </div>
-            <div className=" h-[60px] bg-[#BDFF00] py-[16px] px-[20px] xl:px-[12px] gap-[12px] rounded-[49.11px] flex justify-center">
-              <button className={` text-[20px] `}>
-                <img
-                  src="/landing/starVector.svg"
-                  alt="star"
-                  className="lg:w-[24px] w-[20px] h-[20px] lg:h-[24px] object-contain"
-                />
-              </button>
-              <p className="text-[#1B1F3B]  lg:text-[18px] text-[16px]">
-                Create image
-              </p>
-            </div>
-          </div>
+          
+          <HeroCTA/>
         </div>
 
-        {/* CTA Section */}
-        <div className=" hidden lg:flex lg:w-[740px] lg:h-[78px] rounded-[999px] mx-auto  items-center bg-[#212e62] justify-center gap-[10px]">
-          <p className="text-[18px] text-[#9997A0]">
-            A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape
-          </p>
-          <button
-            className={`w-[179px] h-[54px] bg-[#BDFF00] text-[18px]  rounded-full flex items-center justify-center gap-[8px]`}
-          >
-            <img
-              src="/landing/starVector.svg"
-              alt="star"
-              className="w-[24px] h-[24px] object-contain"
-            />
-            <span className="text-[#1B1F3B]">Create image</span>
-          </button>
-        </div>
+        <HeroCTAMobile/>
       </div>
     </>
   );
