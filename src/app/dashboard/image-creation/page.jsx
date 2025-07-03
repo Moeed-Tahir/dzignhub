@@ -7,7 +7,69 @@ import StartingSuggestion from "@/components/creation/StartingSuggestion";
 import ImagesResults from "@/components/creation/ImagesResults";
 
 const Page = () => {
-  const [showSuggestion, setShowSuggestion] = useState(false);
+  const img = [
+    {
+      url: "/creation/imges/1.jpg",
+      alt: "Image 1",
+      type: "image",
+      aspectRatio: "aspect-[4/5]", // 4:5 ratio
+    },
+    {
+      url: "/creation/imges/2.jpg",
+      alt: "Image 2",
+      type: "image",
+      aspectRatio: "aspect-[4/6]", // 4:6 ratio (taller)
+    },
+    {
+      url: "/creation/imges/3.jpg",
+      type: "image",
+      alt: "Image 3",
+      aspectRatio: "aspect-[4/3]", // 4:3 ratio (shorter)
+    },
+    {
+      url: "/creation/imges/4.jpg",
+      type: "image",
+      alt: "Image 4",
+      aspectRatio: "aspect-[4/5]", // 4:5 ratio
+    },
+    {
+      url: "/creation/imges/5.jpg",
+      type: "image",
+      alt: "Image 5",
+      aspectRatio: "aspect-[4/4]", // Square
+    },
+    {
+      url: "/creation/imges/6.png",
+      type: "image",
+      alt: "Image 6",
+      aspectRatio: "aspect-[4/7]", // 4:7 ratio (very tall)
+    },
+    {
+      url: "/creation/imges/11.jpg",
+      type: "image",
+      alt: "Image 7",
+      aspectRatio: "aspect-[4/3]", // 4:3 ratio (short)
+    },
+    {
+      url: "/creation/imges/12.jpg",
+      type: "image",
+      alt: "Image 8",
+      aspectRatio: "aspect-[4/5]", // 4:5 ratio
+    },
+    {
+      url: "/creation/imges/13.jpg",
+      type: "image",
+      alt: "Image 9",
+      aspectRatio: "aspect-[4/6]", // 4:6 ratio (tall)
+    },
+    {
+      url: "/creation/imges/14.jpg",
+      type: "image",
+      alt: "Image 10",
+      aspectRatio: "aspect-[4/4]", // Square
+    },
+  ];
+  const [showSuggestion, setShowSuggestion] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
     const [generations, setGenerations] = React.useState([]);
@@ -20,6 +82,7 @@ const Page = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
+      body: JSON.stringify({type: "image"})
     });
 
     const res = await req.json();

@@ -10,6 +10,94 @@ const Page = () => {
   const [showSuggestion, setShowSuggestion] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [generations, setGenerations] = React.useState([]);
+  const img = [
+    {
+      url: "/creation/imges/1.jpg",
+      alt: "Image 1",
+      type: "image",
+      aspectRatio: "aspect-[4/5]", // 4:5 ratio
+    },
+    {
+      url: "/creation/imges/2.jpg",
+      alt: "Image 2",
+      type: "image",
+      aspectRatio: "aspect-[4/6]", // 4:6 ratio (taller)
+    },
+    {
+      url: "/creation/imges/3.jpg",
+      type: "image",
+      alt: "Image 3",
+      aspectRatio: "aspect-[4/3]", // 4:3 ratio (shorter)
+    },
+    {
+      url: "/creation/imges/4.jpg",
+      type: "image",
+      alt: "Image 4",
+      aspectRatio: "aspect-[4/5]", // 4:5 ratio
+    },
+    {
+      url: "/creation/imges/5.jpg",
+      type: "image",
+      alt: "Image 5",
+      aspectRatio: "aspect-[4/4]", // Square
+    },
+    {
+      url: "/creation/imges/6.png",
+      type: "image",
+      alt: "Image 6",
+      aspectRatio: "aspect-[4/7]", // 4:7 ratio (very tall)
+    },
+    {
+      url: "/creation/imges/11.jpg",
+      type: "image",
+      alt: "Image 7",
+      aspectRatio: "aspect-[4/3]", // 4:3 ratio (short)
+    },
+    {
+      url: "/creation/imges/12.jpg",
+      type: "image",
+      alt: "Image 8",
+      aspectRatio: "aspect-[4/5]", // 4:5 ratio
+    },
+    {
+      url: "/creation/imges/13.jpg",
+      type: "image",
+      alt: "Image 9",
+      aspectRatio: "aspect-[4/6]", // 4:6 ratio (tall)
+    },
+    {
+      url: "/creation/imges/14.jpg",
+      type: "image",
+      alt: "Image 10",
+      aspectRatio: "aspect-[4/4]", // Square
+    },
+  ];
+  
+    const getUserGenerations = async() => {
+      
+      const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-user-generations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      body: JSON.stringify({type: "video"})
+
+        },
+      });
+  
+      const res = await req.json();
+  
+      if (res.type === "success") {
+        console.log(res.generations);
+        setGenerations(res.generations);
+      }
+    }
+  
+    useEffect(() => {
+  
+      getUserGenerations();
+  }, []);
 
   // Detect mobile screen
   useEffect(() => {
@@ -59,7 +147,7 @@ const Page = () => {
 
       <div className="w-full ">
         <Navbar isCreationPage={true} />
-        {showSuggestion ? <StartingSuggestion /> : <ImagesResults isVideoPage={true}/>}
+        {showSuggestion ? <StartingSuggestion /> : <ImagesResults generations={generations} isVideoPage={true}/>}
 
         <button
           className="fixed bottom-8 right-8 bg-[#C209C1] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50"

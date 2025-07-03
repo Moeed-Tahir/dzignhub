@@ -1,58 +1,119 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useState } from "react";
 import { useUserStore } from "@/store/store";
 import VideoPlayer from "./VideoPlayer";
 
 const ImagesResults = ({ isVideoPage = false, generations }) => {
-  const img = [
-    {
-      src: "/creation/ImagesResults/1.jpg",
-      alt: "Image 1",
-    },
-    {
-      src: "/creation/ImagesResults/2.jpg",
-      alt: "Image 2",
-    },
-    {
-      src: "/creation/ImagesResults/3.jpg",
-      alt: "Image 3",
-    },
-    {
-      src: "/creation/ImagesResults/4.jpg",
-      alt: "Image 4",
-    },
-    {
-      src: "/creation/ImagesResults/1.jpg",
-      alt: "Image 5",
-    },
-    {
-      src: "/creation/ImagesResults/4.jpg",
-      alt: "Image 6",
-    },
-    {
-      src: "/creation/ImagesResults/4.jpg",
-      alt: "Image 4",
-    },
-    {
-      src: "/creation/ImagesResults/1.jpg",
-      alt: "Image 5",
-    },
-    {
-      src: "/creation/ImagesResults/2.jpg",
-      alt: "Image 6",
-    },
-  ];
-
   const [isMediaOpen, setIsMediaOpen] = useState(false);
   const { GenerateImages, GenerateVideo } = useUserStore();
   const [selectedMedia, setSelectedMedia] = useState(null);
+  const [imageDimensions, setImageDimensions] = useState({});
+
+  // Function to get random height for immediate display
+  const getRandomHeight = () => {
+    const heights = [15, 18, 20, 22, 25, 28, 30, 32, 35, 40, 45];
+    return heights[Math.floor(Math.random() * heights.length)];
+  };
+
+  // Function to get image dimensions and calculate grid height
+  const getImageDimensions = (url, index) => {
+    return new Promise((resolve) => {
+      // Check if we're on the client side
+      if (typeof window === 'undefined') {
+        // Server-side fallback
+        const fallbackDimensions = {
+          width: 328,
+          height: 400,
+          aspectRatio: 400/328,
+          gridSpans: getRandomHeight()
+        };
+        setImageDimensions(prev => ({
+          ...prev,
+          [index]: fallbackDimensions
+        }));
+        resolve(fallbackDimensions);
+        return;
+      }
+
+      const img = new window.Image(); // Use window.Image explicitly
+      img.onload = () => {
+        const aspectRatio = img.height / img.width;
+        // Calculate grid spans based on aspect ratio
+        const baseHeight = 200; // Base height in pixels
+        const calculatedHeight = Math.max(baseHeight * aspectRatio, 150); // Minimum 150px
+        const gridSpans = Math.ceil(calculatedHeight / 10); // Since auto-rows-[10px]
+        
+        const dimensions = {
+          width: img.width,
+          height: img.height,
+          aspectRatio,
+          gridSpans: Math.min(gridSpans, 50) // Maximum 50 spans
+        };
+        
+        setImageDimensions(prev => ({
+          ...prev,
+          [index]: dimensions
+        }));
+        resolve(dimensions);
+      };
+      img.onerror = () => {
+        // Fallback for broken images - use random height
+        const fallbackDimensions = {
+          width: 328,
+          height: 400,
+          aspectRatio: 400/328,
+          gridSpans: getRandomHeight()
+        };
+        setImageDimensions(prev => ({
+          ...prev,
+          [index]: fallbackDimensions
+        }));
+        resolve(fallbackDimensions);
+      };
+      img.src = url;
+    });
+  };
+
+  // Function to get video dimensions (if available) or use default
+  const getVideoGridSpans = (item) => {
+    if (item.width && item.height) {
+      const aspectRatio = item.height / item.width;
+      const baseHeight = 200;
+      const calculatedHeight = Math.max(baseHeight * aspectRatio, 150);
+      return Math.min(Math.ceil(calculatedHeight / 10), 50);
+    }
+    // Default spans for videos
+    return getRandomHeight();
+  };
+
+  // Load image dimensions when generations change
+  useEffect(() => {
+    if (generations && generations.length > 0) {
+      generations.forEach((item, index) => {
+        if (item.type !== "video" && item.url) {
+          getImageDimensions(item.url, index);
+        }
+      });
+    }
+  }, [generations]);
+
+  // Function to get grid spans for an item
+  const getGridSpans = (item, index) => {
+    if (item.type === "video") {
+      return getVideoGridSpans(item);
+    }
+    
+    // Return calculated spans or random height for immediate display
+    return imageDimensions[index]?.gridSpans || getRandomHeight();
+  };
 
   // Determine what content to display
   const displayContent = isVideoPage ? GenerateVideo : GenerateImages;
   const hasContent = displayContent && displayContent.length > 0;
 
   const handleMediaClick = (mediaUrl) => {
+    console.log("Media clicked:", mediaUrl); // Debug log
     setSelectedMedia(mediaUrl);
     setIsMediaOpen(true);
   };
@@ -68,160 +129,170 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
         </div>
       )}
 
-<div className='grid grid-cols-2 xl:grid-cols-4 gap-4 w-full'>
-
-      {generations.map((item, index) => {
-        if (item.type === "video") {
-          // Handle video display with thumbnail
-          return (
-            <div
-              key={index}
-              className='bg-white rounded-lg shadow-md w-full h-auto relative group'
-              onClick={() => handleMediaClick(item.url)}
-              style={{
-                borderRadius: "12px",
-              }}
-            >
-              <video
-                src={item.url}
-                className="object-cover w-[328px] h-[450px] rounded-[16px]"
-                muted
-                loop
-                onMouseEnter={(e) => e.target.play()}
-                onMouseLeave={(e) => {
-                  e.target.pause();
-                  e.target.currentTime = 0;
+      {/* Masonry Layout for Generations */}
+      {!isMediaOpen && generations && generations.length > 0 && (
+        <div className="mt-[24px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[10px]">
+          {generations.map((item, index) => {
+            const gridSpans = getGridSpans(item, index);
+            
+            return (
+              <div
+                key={index}
+                className="group cursor-pointer"
+                style={{
+                  gridRowEnd: `span ${gridSpans}`,
                 }}
-              />
-              {/* Play button overlay */}
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 hover:bg-opacity-20 transition-all">
-                <div className="bg-white bg-opacity-80 rounded-full p-3">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="text-black"
-                  >
-                    <path
-                      d="M8 5V19L19 12L8 5Z"
-                      fill="currentColor"
+                onClick={() => handleMediaClick(item.url)}
+              >
+                <div className="relative w-full h-full rounded-[12px] overflow-hidden bg-gray-200">
+                  {item.type === "video" ? (
+                    <>
+                      <video
+                        src={item.url}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        muted
+                        loop
+                        onMouseEnter={(e) => e.target.play()}
+                        onMouseLeave={(e) => {
+                          e.target.pause();
+                          e.target.currentTime = 0;
+                        }}
+                      />
+                      {/* Play button overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 hover:bg-opacity-20 transition-all">
+                        <div className="bg-white bg-opacity-80 rounded-full p-3">
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="text-black"
+                          >
+                            <path
+                              d="M8 5V19L19 12L8 5Z"
+                              fill="currentColor"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      {/* Video info */}
+                      <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+                        {item.duration || '10'}s
+                      </div>
+                    </>
+                  ) : (
+                    <Image
+                      src={item.url}
+                      alt={item.fileName || `Generated image ${index + 1}`}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      onLoad={() => {
+                        // Trigger re-calculation if needed
+                        if (!imageDimensions[index]) {
+                          getImageDimensions(item.url, index);
+                        }
+                      }}
                     />
-                  </svg>
-                </div>
-              </div>
-              {/* Video info */}
-              <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
-                {item.duration || '10'}s
-              </div>
-              {/* Hover overlay with prompt */}
-              <div className='absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end p-4'>
-                <p className='text-white text-sm leading-relaxed break-words'>
-                  {item.prompt}
-                </p>
-              </div>
-            </div>
-          );
-        } else {
-          // Handle image display
-          return (
-            <div 
-            key={index} 
-            className='bg-white rounded-lg shadow-md w-full h-auto relative group'
-            style={{
-                borderRadius: "12px",
-            }}
-        >
-            <Image
-              src={item.url}
-              alt={item.fileName}
-              key={index}
-              width={300}
-              height={300}
-              onClick={() => handleMediaClick(item.url)}
-              style={{ cursor: "pointer" }}
-              className="object-cover w-[328px] h-[450px] rounded-[16px]"
-            />
-              {/* Hover overlay with prompt */}
-              <div className='absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end p-4'>
-                                    <p className='text-white text-sm leading-relaxed break-words'>
-                                        {item.prompt}
-                                    </p>
-                                </div>
-                            </div>
-          );
-        }
-      })}
-</div>
+                  )}
+                  
+                  {/* Hover overlay with prompt */}
+                  <div className="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end p-4">
+                    <p className="text-white text-sm leading-relaxed break-words">
+                      {item.prompt || "No prompt available"}
+                    </p>
+                  </div>
 
-      {!isMediaOpen && hasContent && (
-        <div className="grid grid-cols-1 mt-[24px] sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {displayContent.map((item, index) => {
-            if (isVideoPage) {
-              // Handle video display with thumbnail
-              return (
-                <div
-                  key={index}
-                  className="relative cursor-pointer rounded-[16px] overflow-hidden bg-black"
-                  onClick={() => handleMediaClick(item.videoUrl || item.imageUrl)}
-                >
-                  <video
-                    src={item.videoUrl || item.imageUrl}
-                    className="object-cover w-[328px] h-[450px] rounded-[16px]"
-                    muted
-                    loop
-                    onMouseEnter={(e) => e.target.play()}
-                    onMouseLeave={(e) => {
-                      e.target.pause();
-                      e.target.currentTime = 0;
-                    }}
-                  />
-                  {/* Play button overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 hover:bg-opacity-20 transition-all">
-                    <div className="bg-white bg-opacity-80 rounded-full p-3">
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="text-black"
-                      >
-                        <path
-                          d="M8 5V19L19 12L8 5Z"
-                          fill="currentColor"
-                        />
-                      </svg>
+                  {/* Debug info - remove in production */}
+                  {imageDimensions[index] && (
+                    <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                      {imageDimensions[index].width}×{imageDimensions[index].height}
                     </div>
-                  </div>
-                  {/* Video info */}
-                  <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
-                    {item.duration || '10'}s
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Additional content from store (if any) */}
+      {!isMediaOpen && hasContent && (
+        <div className="mt-[24px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[10px]">
+          {displayContent.map((item, index) => {
+            // Use random height for store content since we might not have dimensions
+            const randomHeight = getRandomHeight();
+            
+            return (
+              <div
+                key={`store-${index}`}
+                className="group cursor-pointer"
+                style={{
+                  gridRowEnd: `span ${randomHeight}`,
+                }}
+                onClick={() => handleMediaClick(item.videoUrl || item.imageUrl)}
+              >
+                <div className="relative w-full h-full rounded-[12px] overflow-hidden bg-gray-200">
+                  {isVideoPage ? (
+                    <>
+                      <video
+                        src={item.videoUrl || item.imageUrl}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        muted
+                        loop
+                        onMouseEnter={(e) => e.target.play()}
+                        onMouseLeave={(e) => {
+                          e.target.pause();
+                          e.target.currentTime = 0;
+                        }}
+                      />
+                      {/* Play button overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 hover:bg-opacity-20 transition-all">
+                        <div className="bg-white bg-opacity-80 rounded-full p-3">
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="text-black"
+                          >
+                            <path
+                              d="M8 5V19L19 12L8 5Z"
+                              fill="currentColor"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      {/* Video info */}
+                      <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+                        {item.duration || '10'}s
+                      </div>
+                    </>
+                  ) : (
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.fileName || `Generated image ${index + 1}`}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
+                  
+                  {/* Hover overlay with prompt */}
+                  <div className="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end p-4">
+                    <p className="text-white text-sm leading-relaxed break-words">
+                      {item.prompt || "No prompt available"}
+                    </p>
                   </div>
                 </div>
-              );
-            } else {
-              // Handle image display
-              return (
-                <Image
-                  src={item.imageUrl}
-                  alt={item.fileName}
-                  key={index}
-                  width={300}
-                  height={300}
-                  onClick={() => handleMediaClick(item.imageUrl)}
-                  style={{ cursor: "pointer" }}
-                  className="object-cover w-[328px] h-[450px] rounded-[16px]"
-                />
-              );
-            }
+              </div>
+            );
           })}
         </div>
       )}
 
       {/* No content message */}
-      {!isMediaOpen && !hasContent && generations.length === 0 && (
+      {!isMediaOpen && !hasContent && (!generations || generations.length === 0) && (
         <div className="flex flex-col items-center justify-center mt-[50px] text-center">
           <div className="text-gray-400 mb-4">
             {isVideoPage ? (
@@ -244,8 +315,7 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
         </div>
       )}
 
-      {/* Full screen media viewer */}
-      <div>
+<div>
         {isMediaOpen && (
           <div className="relative">
             {/* Back button */}
@@ -274,6 +344,13 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
           </div>
         )}
       </div>
+
+      {/* Debug info - remove after testing */}
+      {/* <div className="fixed bottom-4 right-4 bg-red-500 text-white p-2 rounded text-sm">
+        isMediaOpen: {isMediaOpen.toString()}
+        <br />
+        selectedMedia: {selectedMedia || "none"}
+      </div> */}
     </>
   );
 };

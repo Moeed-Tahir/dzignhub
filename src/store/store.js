@@ -5,7 +5,7 @@ export const useUserStore = create((set) => ({
   Email: "",
   UserId: "",
   GenerateImages: [],
-  GenerateVideo: "",
+  GenerateVideo: [],
   Avatar: "",
   Name: "",
   SetName: (newState) => set({ Name:newState}),
