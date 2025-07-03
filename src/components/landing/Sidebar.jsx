@@ -63,15 +63,15 @@ useEffect(() => {
   return (
     <div
       ref={sidebarRef}
-      className="md:max-w-[62%] max-w-[94%] w-full absolute md:top-[24px] md:right-[24px] right-[3%] top-[10px] bg-[#FFFFFF] rounded-[40px] md:max-h-[68%] max-h-[75%] h-full z-50 overflow-auto"
+      className="md:max-w-[62%] max-w-[94%] w-full absolute md:top-[24px] md:right-[24px] right-[3%] top-[10px] bg-[#FFFFFF] rounded-[40px] md:max-h-[754px] max-h-[860px] h-full z-50 overflow-auto"
       onClick={(e) => e.stopPropagation()}
-    >
+      >
       <div className="relative h-full">
         <img
           src="/landing/sidebar/cross-icon.svg"
           onClick={onClose}
           className="absolute top-[3%] right-[3%] md:h-[47px] md:w-[47px] h-[40px] w-[40px] cursor-pointer"
-        />
+          />
         <div className="top-[3%] left-[3%] max-h-[55%] h-full  absolute flex flex-col gap-[12px]">
           {links.map((item, index) => (
             <div key={index}>
@@ -93,6 +93,7 @@ useEffect(() => {
               )}
             </div>
           ))}
+            
         </div>
         <div className="absolute md:top-[60%] top-[55%] max-w-[94%] left-[3%]  w-full border-black  flex flex-col md:flex-row  justify-between">
           <img

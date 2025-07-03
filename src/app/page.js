@@ -23,7 +23,7 @@ export default function Landing() {
   return (
     <>
       <div
-        className={`overflow-hidden w-full relative lg:h-[1095px] h-[1146px] ${
+        className={`overflow-hidden w-full relative lg:h-[1095px] h-[1146px]  ${
           sidebarOpen ? "" : ""
         }`}
         style={{
@@ -41,9 +41,9 @@ export default function Landing() {
             <Hero />
           </div>
         </div>
+      </div>
 
         <Carousel />
-      </div>
 
       <div className="  bg-[#FAFAFA] max-w-[1440px]  mx-auto flex flex-col p-[24px]   lg:pt-[80px] lg:px-[80px] ">
         <div className="">

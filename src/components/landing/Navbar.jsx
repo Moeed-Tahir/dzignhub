@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-function Navbar({ showSidebarBtn, onOpenSidebar }) {
+function Navbar({  onOpenSidebar }) {
   return (
     <div className=" h-[48px] py-10 md:px-10 px-5 xl:px-0 justify-between flex">
       <Link href="/">

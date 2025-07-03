@@ -7,7 +7,7 @@ function DownloadApp() {
       <img
         src="/landing/sidebar/iphone.png"
         alt="Iphone"
-        className="absolute md:h-full h-[115.3px] bottom-0 object-contain md:right-[20%] right-[0%]"
+        className="absolute md:h-full h-[115.3px] bottom-0 object-contain  right-[0%]"
       />
       <div className="flex flex-col md:gap-[12px] gap-[10px] w-full md:max-w-[50%]  px-[20px] py-[20px]  text-[#FFFFFF]">
         <h2 className="md:text-[20px] text-[18px] font-semibold">
