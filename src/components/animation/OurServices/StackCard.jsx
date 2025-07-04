@@ -1,40 +1,42 @@
 import React from "react";
-import { FiArrowUpRight, FiArrowUpLeft } from "react-icons/fi";
-
+import { Syne } from "next/font/google";
 import Image from "next/image";
 
-const StackCard = ({ bg, imgLink, heading, num, para, link }) => {
+// Load Syne font with desired weights
+const syne = Syne({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
+
+const StackCard = ({ type, imgLink, heading, num, para,  }) => {
   return (
     <div
-      className={`h-[460px] sm:h-[350px] lg:h-[400px] bg-black  flex   text-white flex-col md:flex-row  gap-5 justify-between sm:gap-10 my-auto lg:w-[65%] rounded-3xl overflow-hidden sm:p-5  p-2 relative `}
+      className={`h-[530px] sm:h-[350px] lg:h-[459px] bg-[#E5E7FB] flex text-white flex-col md:flex-row gap-5 justify-between sm:gap-10 my-auto lg:w-[80%] max-w-[1060px] rounded-3xl overflow-hidden sm:p-[64px] p-[32px] relative ${syne.className}`}
     >
-      <div className="w-full z-20 md:w-[65%] justify-between  flex px-2 md:px-4 md:py-2 flex-col sm:gap-2">
+      <div className="w-full z-20 md:flex-1 justify-between flex px-2 md:px-4 md:py-2 flex-col sm:gap-2">
         <div className="w-full">
-          <h1 className="text-yellow-400  main-heading font-bold  text-start sub_heading">
+          <h1 className="text-black font-normal text-start text-[16px]">
             {num}
           </h1>
         </div>
         <div>
-          <span
-            className={`text-start bg-gradient-to-r  from-white via-blueColor to-blueColor bg-clip-text text-transparent font-extrabold leading-tight `}
-          >
+          <span className="text-[#C209C1] text-[32px] font-semibold text-start">
             {heading}
           </span>
         </div>
-
-        <div className=" text-start text-white">{para}</div>
-
-        <div className=" flex justify-start items-start flex-1 gap-2"></div>
+        <div className="text-start text-[24px] text-black">{type}</div>
+        <div className="text-start text-black">{para}</div>
+        <div className="flex justify-start items-start flex-1 gap-2"></div>
       </div>
 
-      <div className="w-full flex z-20 pb-[15px] sm:mb-0 md:w-1/2 justify-center sm:justify-end items-center">
-        <div className="border-[1px]  sm:w-[95%] border-blue-400 sm:h-[90%] rounded-[20px] ">
+      <div className=" flex z-20 mx-auto sm:mb-0 max-w-[318px] md:max-w-[480px] md:w-full w-full  justify-center sm:justify-end items-center">
+        <div className="border-[1px] sm:w-full w-full sm:max-w-[480px] sm:h-full  rounded-[20px] ">
           <Image
             src={imgLink}
             alt="1"
             width={500}
             height={500}
-            className="!w-full !h-full  "
+            className="!w-full h-[180px] object-cover sm:!h-full  "
           />
         </div>
       </div>

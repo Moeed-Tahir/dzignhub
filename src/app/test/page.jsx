@@ -6,6 +6,7 @@ export default function Page() {
       <div className="h-[100vh]">a</div>
       {/* <div className="h-[300vh]">a</div> */}
       <ScrollStackCards />
+      <div className="h-[100vh]">a</div>
     </div>
   );
 }

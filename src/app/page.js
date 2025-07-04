@@ -16,6 +16,7 @@ import Footer from "@/components/common/Footer";
 import Testimonials from "@/components/landing/Testimonials";
 import Sidebar from "@/components/landing/Sidebar";
 import { useState } from "react";
+import StackingImages from "@/components/animation/OurServices/Stack";
 
 export default function Landing() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function Landing() {
         </div>
       </div>
 
-        <Carousel />
+      <Carousel />
 
       <div className="  bg-[#FAFAFA] max-w-[1440px]  mx-auto flex flex-col p-[24px]   lg:pt-[80px] lg:px-[80px] ">
         <div className="">
@@ -56,7 +57,9 @@ export default function Landing() {
           </h1>
         </div>
       </div>
-      <StickyCardStack />
+      {/* <StickyCardStack /> */}
+
+      <StackingImages />
       <Work />
       <Templates />
       <Download />
