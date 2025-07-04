@@ -9,6 +9,8 @@ function Hero() {
   const slugToKeyMap = {
     "brand-designer": "brandDesigner",
     "content-writer": "contentWriter",
+    "ui-ux":"ui_ux",
+    "seo":"seo"
     // add more as needed
   };
 
@@ -29,6 +31,20 @@ function Hero() {
       leftImage: "/ai-assistants/content-writer/hero-1.png",
       rightImage: "/ai-assistants/content-writer/hero-3.png",
     },
+    ui_ux:{
+      title:"Meet Kano – UI/UX Design Companion",
+      description:"Streamline your workflow with smart layout suggestions, auto wireframes, and consistent UI support. Mano lets you spend less time on repetitive tasks and more time designing great user experiences.",
+         mainImage: "/ai-assistants/ui-ux/kano.jpg",
+      leftImage: "/ai-assistants/ui-ux/hero-1.png",
+      rightImage: "/ai-assistants/ui-ux/hero-3.png",
+    },
+    seo:{
+      title:"Meet Novi – SEO companion",
+      description:"Optimize your website content with smart keyword suggestions, SEO-optimized structure, and real-time performance tips. Novi saves time on manual research, so you can focus on ranking higher and growing organic traffic.",
+         mainImage: "/ai-assistants/seo/novi.jpg",
+      leftImage: "/ai-assistants/seo/hero-1.png",
+      rightImage: "/ai-assistants/seo/hero-3.png",
+    }
   };
 
   const currentKey = slugToKeyMap[slug];
@@ -65,12 +81,12 @@ function Hero() {
         />
       </div>
 
-      <div className="absolute max-w-[1063px] w-full left-1/2 -translate-x-1/2 lg:top-[28%] xl:top-[15%] top-[40%]">
+      <div className="absolute max-w-[1300px] w-full left-1/2 -translate-x-1/2 lg:top-[28%] xl:top-[15%] top-[40%]">
         <div className="flex flex-col gap-[19px] text-center text-[#FFFFFF]">
-          <h2 className="font-bold lg:text-[40px] xl:text-[68px] mx-auto max-w-[95%] md:text-[28px] text-[24px]">
+          <h2 className="font-bold lg:text-[40px] xl:text-[68px] mx-auto  md:text-[28px] text-[24px]">
             {content.title}
           </h2>
-          <p className="md:text-[20px] text-[18px] md:max-w-[80%] max-w-[90%] mx-auto">
+          <p className="md:text-[20px] text-[18px] md:max-w-[70%] max-w-[90%] mx-auto">
             {content.description}
           </p>
         </div>

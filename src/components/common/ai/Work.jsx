@@ -8,6 +8,8 @@ function Work() {
   const slugToKeyMap = {
     "brand-designer": "brandDesigner",
     "content-writer": "contentWriter",
+    "ui-ux":"ui_ux",
+    "seo":"seo"
     // Add more slugs as needed
   };
   const sectionData = {
@@ -81,6 +83,75 @@ function Work() {
         },
       ],
     },
+    ui_ux:{
+      heading: ["How ", "Kano", " Empowers UI/UX Designers"],
+      description:"With Kano, you can elevate your product design process, creating seamless, intuitive user experiences powered by smart AI assistance. From wireframes and prototypes to final handoff, streamline your workflow, spark creativity, and bring user-centric ideas to life with confidence.",
+      data: [
+        {
+          id: 1,
+          logo: "/ai-assistants/ui-ux/1.svg",
+          title: "Boost Your Design Thinking",
+          content:
+            "Generate user flows, journey maps, and layout ideas instantly. Zara helps you stay focused on solving real problems with meaningful design",
+        },
+        {
+          id: 2,
+          logo: "/ai-assistants/ui-ux/2.svg",
+          title: "Create Intuitive Interfaces",
+          content:
+            "Craft pixel-perfect UI with component suggestions, accessibility tips, and consistency checks—while keeping your brand’s design system intact.",
+        },
+        {
+          id: 3,
+          logo: "/ai-assistants/ui-ux/3.svg",
+          title: "Built for Modern Designers",
+          content:
+            "Automate tedious tasks like responsive resizing, style clean-up, and annotation generation so you can focus on crafting better experiences.",
+        },
+        {
+          id: 4,
+          logo: "/ai-assistants/ui-ux/4.svg",
+          title: "Iterate & Deliver Efficiently",
+          content:
+            "Quickly turn wireframes into test-ready prototypes with interactive logic and user flow validation—getting you from concept to delivery in record time.",
+        },
+      ],
+    },
+    seo:{
+      heading: ["How ", "Novi", " Empowers SEO Specialist"],
+      description:"Novi enhances your SEO strategy with AI-driven tools that help you write, refine, and optimize web content efficiently. From keyword planning to metadata creation and performance insights, Novi supports your workflow—so you can achieve better search rankings faster and smarter.",
+      data: [
+        {
+          id: 1,
+          logo: "/ai-assistants/seo/1.svg",
+          title: "Optimize Content with Confidence",
+          content:
+            "Generate user flows, journey maps, and layout ideas instantly. Zara helps you stay focused on solving real problems with meaningful design",
+        },
+        {
+          id: 2,
+          logo: "/ai-assistants/seo/2.svg",
+          title: "Data-Backed Suggestions",
+          content:
+            "Craft pixel-perfect UI with component suggestions, accessibility tips, and consistency checks—while keeping your brand’s design system intact.",
+        },
+        {
+          id: 3,
+          logo: "/ai-assistants/seo/3.svg",
+          title: "Built for Scalable SEO",
+          content:
+            "Automate tedious tasks like responsive resizing, style clean-up, and annotation generation so you can focus on crafting better experiences.",
+        },
+        {
+          id: 4,
+          logo: "/ai-assistants/seo/4.svg",
+          title: "Track & Improve Performance",
+          content:
+            "Quickly turn wireframes into test-ready prototypes with interactive logic and user flow validation—getting you from concept to delivery in record time.",
+        },
+      ],
+    }
+    
   };
 
   const currentSection = sectionData[slugToKeyMap[slug]];

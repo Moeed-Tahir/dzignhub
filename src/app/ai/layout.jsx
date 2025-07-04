@@ -8,6 +8,10 @@ import Card from "@/components/common/ai/Card";
 import Footer from "@/components/common/Footer";
 import FAQ from "@/components/landing/FAQ";
 import Users from "@/components/common/landing/Users";
+import Workflow from "@/components/common/ai/Workflow";
+import ContentCreation from "@/components/common/ai/ContentCreation";
+import AiResults from "@/components/common/ai/AiResults";
+import SmartSupport from "@/components/common/ai/SmartSupport";
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
@@ -33,20 +37,30 @@ export default function RootLayout({ children }) {
             </div>
           </div>
           <div className="bg-[#1B1F3B]">
-          <div className="max-w-[1440px] mx-auto">
-          <Work/>
+            <div className="max-w-[1440px] mx-auto">
+              <Work />
+            </div>
           </div>
+          <div className="max-w-[1440px] mx-auto">
+            <Card />
+          </div>
+          <div className="bg-[#1B1F3B]">
+            <div className="max-w-[1440px] mx-auto">
+              <ContentCreation />
+            </div>
           </div>
           <div className="max-w-[1440px] mx-auto">
-          <Card/>
-          <Users/>
-          <FAQ/>
+            <Workflow/>
+            <AiResults/>
+            <SmartSupport/>
+            <Users />
+            <FAQ />
           </div>
 
           <div className="bg-[#1B1F3B]">
-          <div className="max-w-[1440px] mx-auto">
-          <Footer/>
-          </div>
+            <div className="max-w-[1440px] mx-auto">
+              <Footer />
+            </div>
           </div>
         </>
       </body>
