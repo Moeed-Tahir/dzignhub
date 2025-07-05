@@ -69,7 +69,7 @@ const Page = () => {
       aspectRatio: "aspect-[4/4]", // Square
     },
   ];
-  const [showSuggestion, setShowSuggestion] = useState(true);
+  const [showSuggestion, setShowSuggestion] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
     const [generations, setGenerations] = React.useState([]);

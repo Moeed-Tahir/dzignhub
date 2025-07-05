@@ -13,25 +13,25 @@ function Page() {
 
   const aiAssistants = [
     {
-      image: "/homepage/ai-assistant-ui-ux.png",
+      image: "/homepage/ai-assistant-ui-ux.jpg",
       icon: "/homepage/ux-ui.png",
       title: "UX/UI",
       description: "Produce unique content with AI assistance",
     },
     {
-      image: "/homepage/ai-assistant-seo.png",
+      image: "/homepage/ai-assistant-seo.jpg",
       icon: "/homepage/seo.png",
       title: "SEO Optimizer",
       description: "Produce unique content with AI assistance",
     },
     {
-      image: "/homepage/ai-assistant-marketing.png",
+      image: "/homepage/ai-assistant-marketing.jpg",
       icon: "/homepage/marketing.png",
       title: "Marketing Strategist",
       description: "Produce unique content with AI assistance",
     },
     {
-      image: "/homepage/ai-assistant-marketing.png",
+      image: "/homepage/ai-assistant-marketing.jpg",
       icon: "/homepage/marketing.png",
       title: "Marketing Strategist 2",
       description: "Produce unique content with AI assistance",

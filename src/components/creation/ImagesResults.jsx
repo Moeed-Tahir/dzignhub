@@ -25,7 +25,7 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
         const fallbackDimensions = {
           width: 328,
           height: 400,
-          aspectRatio: 400/328,
+          aspectRatio: 400 / 328,
           gridSpans: getRandomHeight()
         };
         setImageDimensions(prev => ({
@@ -43,14 +43,14 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
         const baseHeight = 200; // Base height in pixels
         const calculatedHeight = Math.max(baseHeight * aspectRatio, 150); // Minimum 150px
         const gridSpans = Math.ceil(calculatedHeight / 10); // Since auto-rows-[10px]
-        
+
         const dimensions = {
           width: img.width,
           height: img.height,
           aspectRatio,
           gridSpans: Math.min(gridSpans, 50) // Maximum 50 spans
         };
-        
+
         setImageDimensions(prev => ({
           ...prev,
           [index]: dimensions
@@ -62,7 +62,7 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
         const fallbackDimensions = {
           width: 328,
           height: 400,
-          aspectRatio: 400/328,
+          aspectRatio: 400 / 328,
           gridSpans: getRandomHeight()
         };
         setImageDimensions(prev => ({
@@ -103,7 +103,7 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
     if (item.type === "video") {
       return getVideoGridSpans(item);
     }
-    
+
     // Return calculated spans or random height for immediate display
     return imageDimensions[index]?.gridSpans || getRandomHeight();
   };
@@ -134,7 +134,7 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
         <div className="mt-[24px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[10px]">
           {generations.map((item, index) => {
             const gridSpans = getGridSpans(item, index);
-            
+
             return (
               <div
                 key={index}
@@ -195,14 +195,13 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
                       }}
                     />
                   )}
-                  
+
                   {/* Hover overlay with prompt */}
-                  <div className="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end p-4">
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end p-4">
                     <p className="text-white text-sm leading-relaxed break-words">
                       {item.prompt || "No prompt available"}
                     </p>
                   </div>
-
                   {/* Debug info - remove in production */}
                   {imageDimensions[index] && (
                     <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
@@ -222,7 +221,7 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
           {displayContent.map((item, index) => {
             // Use random height for store content since we might not have dimensions
             const randomHeight = getRandomHeight();
-            
+
             return (
               <div
                 key={`store-${index}`}
@@ -277,7 +276,7 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   )}
-                  
+
                   {/* Hover overlay with prompt */}
                   <div className="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end p-4">
                     <p className="text-white text-sm leading-relaxed break-words">
@@ -315,7 +314,7 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
         </div>
       )}
 
-<div>
+      <div>
         {isMediaOpen && (
           <div className="relative">
             {/* Back button */}

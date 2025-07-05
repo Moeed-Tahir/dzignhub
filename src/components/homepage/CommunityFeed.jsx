@@ -37,8 +37,8 @@ function CommunityFeed() {
                         setFilter("all")
                     }}
                     className={`rounded-full px-4 gap-2 whitespace-nowrap border py-2 flex items-center font-medium text-sm ${filter === "all"
-                            ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
-                            : "bg-white text-[#68686B] border-[#68686B]"
+                        ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
+                        : "bg-white text-[#68686B] border-[#68686B]"
                         }`}
                 >
                     <Image src="/homepage/community-feed/global.png" alt="Community Feed" width={22} height={22} />
@@ -50,8 +50,8 @@ function CommunityFeed() {
                         setFilter("image")
                     }}
                     className={`rounded-full px-4 py-1 flex items-center gap-2 font-medium border text-sm ${filter === "image"
-                            ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
-                            : "bg-white text-[#68686B] border-[#68686B]"
+                        ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
+                        : "bg-white text-[#68686B] border-[#68686B]"
                         }`}
                 >
                     <Image src="/homepage/community-feed/gallery.png" alt="Image" width={24} height={24} />
@@ -63,8 +63,8 @@ function CommunityFeed() {
                         setFilter("video")
                     }}
                     className={`rounded-full px-4 py-1 flex items-center gap-2 font-medium border text-sm ${filter === "video"
-                            ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
-                            : "bg-white text-[#68686B] border-[#68686B]"
+                        ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
+                        : "bg-white text-[#68686B] border-[#68686B]"
                         }`}
                 >
                     <Image src="/homepage/community-feed/video.png" alt="Video" width={24} height={24} />
@@ -84,10 +84,10 @@ function CommunityFeed() {
                     // Filter logic
                     if (filter === "all" || generation.type === filter) {
                         const randomHeight = getRandomHeight();
-                        
+
                         return (
-                            <div 
-                                key={index} 
+                            <div
+                                key={index}
                                 className="group cursor-pointer"
                                 style={{
                                     gridRowEnd: `span ${randomHeight}`,
@@ -138,11 +138,13 @@ function CommunityFeed() {
                                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                                         />
                                     )}
-                                    
+
+                                  
+
                                     {/* Hover overlay with prompt */}
-                                    <div className="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end p-4">
+                                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end p-4">
                                         <p className="text-white text-sm leading-relaxed break-words">
-                                            {generation.prompt}
+                                            {generation.prompt || "No prompt available"}
                                         </p>
                                     </div>
                                 </div>
@@ -151,7 +153,7 @@ function CommunityFeed() {
                     }
                     return (
                         <div className='flex items-center justify-center h-full w-full' >
-                        <p className="">No generations found.</p>
+                            <p className="">No generations found.</p>
                         </div>
                     )
                 })}
