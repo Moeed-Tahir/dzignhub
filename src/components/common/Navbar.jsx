@@ -16,7 +16,8 @@ import { MoveLeft } from "lucide-react";
 const Navbar = ({ isCreationPage, isSettingPage }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const {IsLogin, SetIsLogin, SetEmail, SetUserId, SetAvatar, Avatar } = useUserStore();
+  const { IsLogin, SetIsLogin, SetEmail, SetUserId, SetAvatar, Avatar } =
+    useUserStore();
   // const IsLogin = true;
   const verifyToken = async () => {
     try {
@@ -143,6 +144,12 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
     },
     {
       name: "Kano",
+      role: "(UX/UI Assistant)",
+      isPro: true,
+      avatar: "/kano.png",
+    },
+    {
+      name: "Ellie",
       role: "(UX/UI Assistant)",
       isPro: true,
       avatar: "/kano.png",
@@ -430,7 +437,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                   {assistants.map((assistant) => (
                     <div key={assistant.name}>
                       <a
-                        href="#"
+                        href={`/dashboard/Ai-Agent/${assistant.name.toLowerCase()}`}
                         className="flex items-center px-4 py-2 text-sm hover:bg-gray-50 cursor-pointer"
                       >
                         <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">

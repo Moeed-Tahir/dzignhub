@@ -2,15 +2,11 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
-export default function MessageInput({ onSend }) {
+export default function MessageInput({ onSend,suggestions }) {
   const [message, setMessage] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(true);
 
-  const suggestions = [
-    "🖌️  Design a logo for a fashion brand",
-    "🎨  Pick brand colors for a tech company",
-    "🎯  Create a mood board for a fashion line",
-  ];
+
 
   const handleSuggestionClick = (suggestion) => {
     setMessage(suggestion);
