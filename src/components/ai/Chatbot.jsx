@@ -136,7 +136,7 @@ export default function ChatPage({
   return (
     <div className=" flex flex-col max-w-[1280px] mx-auto justify-between">
       <div
-        className="flex-1 max-h-[70vh] overflow-y-auto"
+        className="flex-1 max-h-[70vh] scrollbar-hide pb-20 overflow-y-auto"
         ref={chatContainerRef}
       >
         {showIntro && <AIIntro name={aiName} description={description} img={img} tagline={tagline} />}
