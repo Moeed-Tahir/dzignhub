@@ -37,7 +37,7 @@ const page = () => {
   }
 
   return (
-    <div className="bg-[#F7F8F8] min-h-screen">
+    <div className="bg-[#F7F8F8] overflow-hidden min-h-screen">
       <Navbar isSettingPage={true} />
       <Chatbot
         aiName={bot.name}
