@@ -123,36 +123,36 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
   ];
 
   const assistants = [
-    { name: "Zara", role: "(Brand Design)", isPro: false, avatar: "/zara.png" },
+    { name: "Zara", role: "(Brand Design)", isPro: false, avatar: "/Ai/ai-dp.png" },
     {
       name: "Sana",
       role: "(Content Creator)",
       isPro: false,
-      avatar: "/sana.png",
+      avatar: "/Ai/sana.png",
     },
     {
       name: "Mira",
       role: "(Strategy Specialist)",
       isPro: false,
-      avatar: "/mira.png",
+      avatar: "/Ai/mira.png",
     },
     {
       name: "Novi",
       role: "(SEO Specialist)",
       isPro: true,
-      avatar: "/novi.png",
+      avatar: "/Ai/novi.png",
     },
     {
       name: "Kano",
       role: "(UX/UI Assistant)",
       isPro: true,
-      avatar: "/kano.png",
+      avatar: "/Ai/kano.png",
     },
     {
       name: "Ellie",
-      role: "(UX/UI Assistant)",
+      role: "(Pitch Deck)",
       isPro: true,
-      avatar: "/kano.png",
+      avatar: "/Ai/ellie.png",
     },
   ];
 
@@ -442,7 +442,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                       >
                         <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">
                           <Image
-                            src={`/homepage/ai-assistants-dropdown${assistant.avatar}`}
+                            src={`${assistant.avatar}`}
                             width={32}
                             height={32}
                             alt={assistant.name}

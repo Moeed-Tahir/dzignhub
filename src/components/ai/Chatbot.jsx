@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import MessageInput from "./MessageInput";
 import MessageBubble from "./MessageBubble";
 import AIIntro from "./AiIntro";
+import Image from "next/image";
 
 export default function ChatPage({
   aiName,
@@ -134,12 +135,20 @@ export default function ChatPage({
     : messages;
 
   return (
-    <div className=" flex flex-col max-w-[1280px] mx-auto justify-between">
+    <div className=" flex flex-col  max-w-[1280px] mx-auto justify-between">
       <div
         className="flex-1 max-h-[70vh] scrollbar-hide pb-20 overflow-y-auto"
         ref={chatContainerRef}
       >
-        {showIntro && <AIIntro name={aiName} description={description} img={img} tagline={tagline} />}
+       
+        {showIntro && (
+          <AIIntro
+            name={aiName}
+            description={description}
+            img={img}
+            tagline={tagline}
+          />
+        )}
         {allMessages.map((msg, index) => (
           <MessageBubble
             key={index}

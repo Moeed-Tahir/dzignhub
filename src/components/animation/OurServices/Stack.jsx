@@ -18,7 +18,7 @@ const StackingImages = () => {
 
     gsap.set(cards, {
       yPercent: isMobile ? 100 : 50,
-      opacity: (i) => (i === 0 ? 1 : 0),
+      opacity: 0,
       scale: 1,
       zIndex: (i) => i + 1,
     });
@@ -27,7 +27,7 @@ const StackingImages = () => {
       trigger: ".animation_cards",
       pin: true,
       start: isMobile ? "top 20%" : "top top",
-      end: "+=5000",
+      end: "+=4500",
       scrub: 2,
       // markers: true,
     };
@@ -48,7 +48,7 @@ const StackingImages = () => {
         index * 2
       );
 
-      if (index > 0) {
+      if (index < cards.length - 1) {
         for (let i = 0; i < index; i++) {
           timeline.to(
             cards[i],
@@ -66,7 +66,7 @@ const StackingImages = () => {
   }, []);
 
   return (
-    <div className="container  mx-auto  mb-[5000px] sm:mt-[-500px] flex flex-col gap-10">
+    <div className="container mb-[4300px]  mx-auto mt-[-200px]   flex flex-col gap-10">
       <div className="animation_cards h-[100vh] sm:min-h-[400px] container mx-auto">
         <div className="animation_card animation_card-4">
           <StackCard

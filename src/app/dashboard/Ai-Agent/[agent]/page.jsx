@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Chatbot from "@/components/ai/Chatbot";
 import { notFound } from "next/navigation";
 import aiBots from "@/data/index";
+import Image from "next/image";
 
 const page = () => {
   const { agent } = useParams();
@@ -37,8 +38,24 @@ const page = () => {
   }
 
   return (
-    <div className="bg-[#F7F8F8] overflow-hidden min-h-screen">
+    <div className="bg-[#F7F8F8]  max-w-[1440px] mx-auto overflow-hidden min-h-screen">
       <Navbar isSettingPage={true} />
+      <div className="relative flex gap-2">
+        <Image
+          src={"/Ai/chat.svg"}
+          alt=""
+          width={44}
+          height={44}
+          className="aboslute top-0 cursor-pointer right-0 "
+        />
+        <Image
+          src={"/Ai/edit.svg"}
+          alt=""
+          width={44}
+          height={44}
+          className="aboslute top-0 cursor-pointer right-0 "
+        />
+      </div>
       <Chatbot
         aiName={bot.name}
         tagline={bot.tagline}
