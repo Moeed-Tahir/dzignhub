@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import LetsStart from "@/components/onboarding/LetsStart";
 import DesignYouDirection from "@/components/onboarding/DesignYouDirection";
 import SideComponent from "@/components/auth/SideComponent";
+import { useUserStore } from "@/store/store";
 
 const page = () => {
   const router = useRouter();
@@ -13,6 +14,39 @@ const page = () => {
   const [tab2Data, setTab2Data] = useState(null);
   const letsStartRef = useRef();
   const designDirectionRef = useRef();
+
+  const { SetIsLogin, SetEmail, SetUserId } = useUserStore()
+
+  const verifyToken = async (token) => {
+    console.log("Verifying token:", token);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      console.log("Token verification response:", data);
+
+      if (data.type === "success") {
+
+        SetIsLogin(true);
+        SetEmail(data.user.email);
+        SetUserId(data.user._id);
+
+        router.push("/dashboard");
+
+      } else {
+        console.error("Token verification failed:", data.message);
+
+      }
+    } catch (error) {
+      console.error("Token verification failed", error);
+
+    }
+  };
 
 
   const handleNext = async () => {
@@ -31,7 +65,8 @@ const page = () => {
       if (designDirectionRef.current) {
         const success = await designDirectionRef.current.saveData();
         if (success) {
-          router.push("/dashboard");
+          let token = localStorage.getItem("token")
+          await verifyToken(token);
         } else {
           alert('Error saving data. Please try again.');
         }
@@ -42,7 +77,7 @@ const page = () => {
   const handleTab1DataChange = (data) => {
     setTab1Data(data);
   };
-  
+
   const handleTab2DataChange = (data) => {
     setTab2Data(data);
   };
@@ -65,16 +100,16 @@ const page = () => {
         </div>
 
         {currentTab === 0 ? (
-          <LetsStart 
+          <LetsStart
             ref={letsStartRef}
             onDataChange={handleTab1DataChange}
           />
         ) : (
-          <DesignYouDirection  ref={designDirectionRef}
-          onDataChange={handleTab2DataChange}
-        />
+          <DesignYouDirection ref={designDirectionRef}
+            onDataChange={handleTab2DataChange}
+          />
         )}
-        
+
         <div className="relative flex justify-between items-center">
           <div className="absolute top-0 -right-16 border-t-[2px] border-[#F8F8F8] w-[120%]"></div>
 
@@ -82,9 +117,8 @@ const page = () => {
             {[1, 2].map((tab) => (
               <div
                 key={tab}
-                className={`w-[30vw] lg:w-[240px] h-[8px] rounded-full transition-all ease-in-out duration-300 ${
-                  currentTab >= tab ? "bg-[#C209C1]" : "bg-[#F8F8F8]"
-                }`}
+                className={`w-[30vw] lg:w-[240px] h-[8px] rounded-full transition-all ease-in-out duration-300 ${currentTab >= tab ? "bg-[#C209C1]" : "bg-[#F8F8F8]"
+                  }`}
               ></div>
             ))}
           </div>

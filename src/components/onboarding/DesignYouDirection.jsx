@@ -87,6 +87,7 @@ const DesignYouDirection = forwardRef(({ onDataChange }, ref) => {
     return staticTones; // Don't combine with customBrandTones to avoid duplicates
   };
 
+
   const saveTab2Data = async () => {
     const designStyles = getSelectedDesignStyles();
     const selectedTones = getSelectedBrandTones();

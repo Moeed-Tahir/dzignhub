@@ -44,8 +44,10 @@ const PassReset = ({ isPassReset }) => {
         router.push(`/auth/new-password?token=${data.resetSessionToken}&email=${encodeURIComponent(email)}`)
       }
       else {
-        console.log(data)
+        console.log(data);
         localStorage.setItem("token", data.token);
+        console.log("Token: ", data.token)
+        console.log("User ID:", data.user._id);
         SetIsLogin(true);
         SetEmail(data.user.email);
         SetUserId(data.user._id);
