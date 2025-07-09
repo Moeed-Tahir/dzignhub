@@ -50,7 +50,7 @@ export default function MessageInput({ onSend,suggestions }) {
           </div>
         )}
 
-        <Image src="/ai/Star.svg" width={20} height={20} alt="Send" />
+        <Image src="/Ai/Star.svg" width={20} height={20} alt="Send" />
 
         <input
           type="text"
@@ -64,7 +64,7 @@ export default function MessageInput({ onSend,suggestions }) {
           type="submit"
           className="text-white bg-[#BDFF00] w-[40px] h-[40px] rounded-full p-2"
         >
-          <Image src="/ai/direct-right.svg" width={40} height={40} alt="Send" />
+          <Image src="/Ai/direct-right.svg" width={40} height={40} alt="Send" />
         </button>
       </form>
 
