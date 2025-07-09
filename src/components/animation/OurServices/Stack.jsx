@@ -29,7 +29,7 @@ const StackingImages = () => {
       start: isMobile ? "top 20%" : "top top",
       end: "+=4500",
       scrub: 2,
-      markers: true,
+      // markers: true,
     };
 
     const timeline = gsap.timeline({

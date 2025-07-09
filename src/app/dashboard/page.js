@@ -5,9 +5,11 @@ import ToolCard from "@/components/homepage/ToolCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { use, useState } from "react";
+import { useRouter } from "next/navigation";
 import ModalPopup from "@/components/homepage/ModalPopup";
 import { useEffect } from "react";
 function Page() {
+  const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -17,23 +19,27 @@ function Page() {
       icon: "/homepage/ux-ui.png",
       title: "UX/UI",
       description: "Produce unique content with AI assistance",
+      href: "/dashboard/Ai-Agent/kano",
     },
     {
       image: "/homepage/ai-assistant-seo.jpg",
       icon: "/homepage/seo.png",
       title: "SEO Optimizer",
       description: "Produce unique content with AI assistance",
+      href: "/dashboard/Ai-Agent/novi",
     },
     {
       image: "/homepage/ai-assistant-marketing.jpg",
       icon: "/homepage/marketing.png",
       title: "Marketing Strategist",
       description: "Produce unique content with AI assistance",
+      href: "/dashboard/Ai-Agent/mira",
     },
     {
       image: "/homepage/ai-assistant-marketing.jpg",
       icon: "/homepage/marketing.png",
-      title: "Marketing Strategist 2",
+      title: "Pitch Deck",
+      href: "/dashboard/Ai-Agent/ellie",
       description: "Produce unique content with AI assistance",
     },
   ];
@@ -149,6 +155,7 @@ function Page() {
                   {aiAssistants.map((assistant, index) => (
                     <div
                       key={index}
+                      onClick={() => router.push(assistant.href)}
                       className="flex-shrink-0"
                       style={{
                         width: `calc(${100 / cardsPerView}% - ${
