@@ -55,7 +55,74 @@ export default function ChatPage({
   const [pendingAiMsg, setPendingAiMsg] = useState(null);
   const chatContainerRef = useRef(null);
 
-  const handleSend = (msg) => {
+  const generateLogo = async(prompt) => {
+    try {
+      console.log('🎨 Generating logo with prompt:', prompt);
+      
+      // Add loading message for logo generation
+      setMessages(prevMessages => [
+        ...prevMessages,
+        {
+          sender: "ai",
+          text: "✨ Generating your logo now... This might take a moment!",
+          isLoading: true
+        }
+      ]);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/logo-designer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          prompt: prompt
+        })
+      });
+  
+      const data = await response.json();
+  
+      if (data.type === 'success' && data.data.imageUrl) {
+        // Remove loading message and add logo
+        setMessages(prevMessages => 
+          prevMessages.filter(msg => !msg.isLoading).concat([
+            {
+              sender: "ai",
+              text: "🎉 Here's your custom logo! What do you think?",
+              imageUrl: data.data.imageUrl,
+              isLogo: true
+            }
+          ])
+        );
+      } else {
+        // Remove loading message and show error
+        setMessages(prevMessages => 
+          prevMessages.filter(msg => !msg.isLoading).concat([
+            {
+              sender: "ai",
+              text: "Sorry, I couldn't generate the logo right now. Please try again.",
+              isError: true
+            }
+          ])
+        );
+      }
+  
+    } catch (error) {
+      console.error('❌ Error generating logo:', error);
+      // Remove loading message and show error
+      setMessages(prevMessages => 
+        prevMessages.filter(msg => !msg.isLoading).concat([
+          {
+            sender: "ai",
+            text: "There was an error generating your logo. Please try again.",
+            isError: true
+          }
+        ])
+      );
+    }
+
+  }
+
+  const handleSend = async (msg) => {
     const newMessages = [...messages, { sender: "user", text: msg }];
     setMessages(newMessages);
     setShowIntro(false);
@@ -63,24 +130,85 @@ export default function ChatPage({
     setSelectedOptions([]);
     setAiLoading(true);
     setAiTyping(false);
-    setTimeout(() => {
-      setAiLoading(false);
-      setAiTyping(true);
-      const firstStep = Math.random() < 0.7 ? 0 : 4;
-      const answer = aiAnswers[firstStep];
-      let aiText;
-      if (typeof answer.text === "function") {
-        aiText = answer.text.length > 0 ? answer.text(msg) : answer.text();
-      } else {
-        aiText = answer.text;
-      }
-      setPendingAiMsg({
-        sender: "ai",
-        text: aiText,
-        options: answer.options,
+  
+    try {
+      // Prepare previous messages for API call
+      const previousMessages = messages.map(message => ({
+        role: message.sender === "user" ? "user" : "assistant",
+        content: message.text
+      }));
+  
+      console.log('🚀 Calling Zara Brand Designer API...');
+  
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/zara-brand-designer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          message: msg,
+          context: `Brand design chat for ${aiName}`,
+          previousMessages: previousMessages
+        })
       });
-      setStep(firstStep);
-    }, 700);
+  
+      const data = await response.json();
+  
+      if (data.type === 'success') {
+        const aiResponse = data.data.response;
+
+        let userMessages = newMessages.filter(msg => msg.sender === "user").length;
+        console.log("Total User Messages: ", userMessages);
+        if (userMessages === 4) {
+          const logoPrompt = `Generate a logo for a fashion brand with the following details:
+          ${aiResponse}
+          `;
+          await generateLogo(logoPrompt);
+          return;
+        }
+        
+        setAiLoading(false);
+        setAiTyping(true);
+        
+        // Add AI response to messages after a short delay for typing effect
+        setTimeout(() => {
+          setMessages(prevMessages => [
+            ...prevMessages,
+            {
+              sender: "ai",
+              text: aiResponse,
+              typing: true
+            }
+          ]);
+          setAiTyping(false);
+        }, 700);
+  
+      } else {
+        // Handle API error
+        setAiLoading(false);
+        setMessages(prevMessages => [
+          ...prevMessages,
+          {
+            sender: "ai",
+            text: "Sorry, I'm having trouble processing your request right now. Please try again.",
+            isError: true
+          }
+        ]);
+      }
+  
+    } catch (error) {
+      console.error('❌ Error calling Zara API:', error);
+      setAiLoading(false);
+      setMessages(prevMessages => [
+        ...prevMessages,
+        {
+          sender: "ai",
+          text: "I'm experiencing some technical difficulties. Please try again in a moment.",
+          isError: true
+        }
+      ]);
+    }
   };
 
   React.useEffect(() => {
@@ -92,32 +220,82 @@ export default function ChatPage({
     // eslint-disable-next-line
   }, [aiTyping, pendingAiMsg]);
 
-  const handleOptionSelect = (option) => {
+  const handleOptionSelect = async (option) => {
     if (selectedOptions.includes(option)) return;
-    const nextStep = step + 1;
+    
     setSelectedOptions((prev) => [...prev, option]);
     setMessages((prev) => [...prev, { sender: "user", text: option }]);
     setAiLoading(true);
     setAiTyping(false);
-    setTimeout(() => {
-      setAiLoading(false);
-      setAiTyping(true);
-      if (aiAnswers[nextStep]) {
-        const answer = aiAnswers[nextStep];
-        let aiText;
-        if (typeof answer.text === "function") {
-          aiText = answer.text.length > 0 ? answer.text(option) : answer.text();
-        } else {
-          aiText = answer.text;
-        }
-        setPendingAiMsg({
-          sender: "ai",
-          text: aiText,
-          options: answer.options,
-        });
+  
+    try {
+      // Prepare previous messages for API call
+      const previousMessages = messages.map(message => ({
+        role: message.sender === "user" ? "user" : "assistant",
+        content: message.text
+      }));
+  
+      console.log('🚀 Calling Zara Brand Designer API with option...');
+  
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/zara-brand-designer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          message: option,
+          context: `Brand design chat for ${aiName}`,
+          previousMessages: previousMessages
+        })
+      });
+  
+      const data = await response.json();
+  
+      if (data.type === 'success') {
+        const aiResponse = data.data.response;
+        
+        setAiLoading(false);
+        setAiTyping(true);
+
+        
+        // Add AI response to messages after a short delay for typing effect
+        setTimeout(() => {
+          setMessages(prevMessages => [
+            ...prevMessages,
+            {
+              sender: "ai",
+              text: aiResponse,
+              typing: true
+            }
+          ]);
+          setAiTyping(false);
+        }, 1000);
+  
+      } else {
+        setAiLoading(false);
+        setMessages(prevMessages => [
+          ...prevMessages,
+          {
+            sender: "ai",
+            text: "Sorry, I'm having trouble processing your selection. Please try again.",
+            isError: true
+          }
+        ]);
       }
-    }, 1000);
-    setStep(nextStep);
+  
+    } catch (error) {
+      console.error('❌ Error calling Zara API:', error);
+      setAiLoading(false);
+      setMessages(prevMessages => [
+        ...prevMessages,
+        {
+          sender: "ai",
+          text: "I'm experiencing some technical difficulties. Please try again in a moment.",
+          isError: true
+        }
+      ]);
+    }
   };
 
   // Auto-scroll to bottom with smooth animation when messages change
@@ -159,6 +337,7 @@ export default function ChatPage({
             selectedOptions={selectedOptions}
             isLoading={msg.isLoading}
             typing={msg.typing}
+            imageUrl={msg.imageUrl}
           />
         ))}
       </div>
