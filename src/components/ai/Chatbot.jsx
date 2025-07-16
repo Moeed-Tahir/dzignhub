@@ -157,13 +157,20 @@ export default function ChatPage({
   
       if (data.type === 'success') {
         const aiResponse = data.data.response;
-
+        console.log('✅ Zara API response:', aiResponse);
+  
         let userMessages = newMessages.filter(msg => msg.sender === "user").length;
         console.log("Total User Messages: ", userMessages);
+
+        
+        
         if (userMessages === 4) {
+          let aiResponseJSON = JSON.parse(aiResponse);
           const logoPrompt = `Generate a logo for a fashion brand with the following details:
-          ${aiResponse}
+          ${aiResponseJSON.prompt}
           `;
+
+          setAiLoading(false);
           await generateLogo(logoPrompt);
           return;
         }
@@ -210,16 +217,7 @@ export default function ChatPage({
       ]);
     }
   };
-
-  React.useEffect(() => {
-    if (aiTyping && pendingAiMsg) {
-      setMessages((prev) => [...prev, { ...pendingAiMsg, typing: true }]);
-      setAiTyping(false);
-      setPendingAiMsg(null);
-    }
-    // eslint-disable-next-line
-  }, [aiTyping, pendingAiMsg]);
-
+  
   const handleOptionSelect = async (option) => {
     if (selectedOptions.includes(option)) return;
     
@@ -257,7 +255,6 @@ export default function ChatPage({
         
         setAiLoading(false);
         setAiTyping(true);
-
         
         // Add AI response to messages after a short delay for typing effect
         setTimeout(() => {
@@ -297,6 +294,17 @@ export default function ChatPage({
       ]);
     }
   };
+
+  React.useEffect(() => {
+    if (aiTyping && pendingAiMsg) {
+      setMessages((prev) => [...prev, { ...pendingAiMsg, typing: true }]);
+      setAiTyping(false);
+      setPendingAiMsg(null);
+    }
+    // eslint-disable-next-line
+  }, [aiTyping, pendingAiMsg]);
+
+  
 
   // Auto-scroll to bottom with smooth animation when messages change
   useEffect(() => {
