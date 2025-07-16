@@ -55,10 +55,10 @@ export default function ChatPage({
   const [pendingAiMsg, setPendingAiMsg] = useState(null);
   const chatContainerRef = useRef(null);
 
-  const generateLogo = async(prompt) => {
+  const generateLogo = async (prompt) => {
     try {
       console.log('🎨 Generating logo with prompt:', prompt);
-      
+
       // Add loading message for logo generation
       setMessages(prevMessages => [
         ...prevMessages,
@@ -78,12 +78,12 @@ export default function ChatPage({
           prompt: prompt
         })
       });
-  
+
       const data = await response.json();
-  
+
       if (data.type === 'success' && data.data.imageUrl) {
         // Remove loading message and add logo
-        setMessages(prevMessages => 
+        setMessages(prevMessages =>
           prevMessages.filter(msg => !msg.isLoading).concat([
             {
               sender: "ai",
@@ -95,7 +95,7 @@ export default function ChatPage({
         );
       } else {
         // Remove loading message and show error
-        setMessages(prevMessages => 
+        setMessages(prevMessages =>
           prevMessages.filter(msg => !msg.isLoading).concat([
             {
               sender: "ai",
@@ -105,11 +105,11 @@ export default function ChatPage({
           ])
         );
       }
-  
+
     } catch (error) {
       console.error('❌ Error generating logo:', error);
       // Remove loading message and show error
-      setMessages(prevMessages => 
+      setMessages(prevMessages =>
         prevMessages.filter(msg => !msg.isLoading).concat([
           {
             sender: "ai",
@@ -130,16 +130,17 @@ export default function ChatPage({
     setSelectedOptions([]);
     setAiLoading(true);
     setAiTyping(false);
-  
+
     try {
       // Prepare previous messages for API call
       const previousMessages = messages.map(message => ({
-        role: message.sender === "user" ? "user" : "assistant",
+        role: message.sender === "user" ? "user" : "system",
         content: message.text
       }));
-  
+
       console.log('🚀 Calling Zara Brand Designer API...');
-  
+      console.log(previousMessages);
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/zara-brand-designer`, {
         method: 'POST',
         headers: {
@@ -152,45 +153,58 @@ export default function ChatPage({
           previousMessages: previousMessages
         })
       });
-  
+
       const data = await response.json();
-  
+
       if (data.type === 'success') {
+
         const aiResponse = data.data.response;
         console.log('✅ Zara API response:', aiResponse);
-  
-        let userMessages = newMessages.filter(msg => msg.sender === "user").length;
-        console.log("Total User Messages: ", userMessages);
-
         
+        let jsonResponse;
+        let isValidJson = false;
         
-        if (userMessages === 4) {
-          let aiResponseJSON = JSON.parse(aiResponse);
-          const logoPrompt = `Generate a logo for a fashion brand with the following details:
-          ${aiResponseJSON.prompt}
-          `;
-
+        try {
+          // Try to parse the string
+          jsonResponse = JSON.parse(aiResponse);
+          isValidJson = true;
+          console.log('✅ Parsed JSON response:', jsonResponse);
+        } catch (err) {
+          // It's just a plain string, not valid JSON
+          console.error('❌ Not valid JSON, using as plain string.');
+          jsonResponse = aiResponse;
+          isValidJson = false;
+        }
+        
+        // Check if the response is final JSON object
+        if (isValidJson && jsonResponse.isFinal) {
+          console.log('Final response received, generating branding visuals...');
+          const finalPrompt = jsonResponse.prompt;
+          console.log('Final prompt:', finalPrompt);
+        
           setAiLoading(false);
-          await generateLogo(logoPrompt);
+          await generateLogo(finalPrompt);
           return;
         }
         
+       
+
         setAiLoading(false);
         setAiTyping(true);
-        
+
         // Add AI response to messages after a short delay for typing effect
         setTimeout(() => {
           setMessages(prevMessages => [
             ...prevMessages,
             {
               sender: "ai",
-              text: aiResponse,
+              text: isValidJson?jsonResponse.answer + " " + (jsonResponse.prompt || ""): aiResponse,
               typing: true
             }
           ]);
           setAiTyping(false);
         }, 700);
-  
+
       } else {
         // Handle API error
         setAiLoading(false);
@@ -203,7 +217,7 @@ export default function ChatPage({
           }
         ]);
       }
-  
+
     } catch (error) {
       console.error('❌ Error calling Zara API:', error);
       setAiLoading(false);
@@ -217,24 +231,24 @@ export default function ChatPage({
       ]);
     }
   };
-  
+
   const handleOptionSelect = async (option) => {
     if (selectedOptions.includes(option)) return;
-    
+
     setSelectedOptions((prev) => [...prev, option]);
     setMessages((prev) => [...prev, { sender: "user", text: option }]);
     setAiLoading(true);
     setAiTyping(false);
-  
+
     try {
       // Prepare previous messages for API call
       const previousMessages = messages.map(message => ({
         role: message.sender === "user" ? "user" : "assistant",
         content: message.text
       }));
-  
+
       console.log('🚀 Calling Zara Brand Designer API with option...');
-  
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/zara-brand-designer`, {
         method: 'POST',
         headers: {
@@ -247,15 +261,15 @@ export default function ChatPage({
           previousMessages: previousMessages
         })
       });
-  
+
       const data = await response.json();
-  
+
       if (data.type === 'success') {
         const aiResponse = data.data.response;
-        
+
         setAiLoading(false);
         setAiTyping(true);
-        
+
         // Add AI response to messages after a short delay for typing effect
         setTimeout(() => {
           setMessages(prevMessages => [
@@ -268,7 +282,7 @@ export default function ChatPage({
           ]);
           setAiTyping(false);
         }, 1000);
-  
+
       } else {
         setAiLoading(false);
         setMessages(prevMessages => [
@@ -280,7 +294,7 @@ export default function ChatPage({
           }
         ]);
       }
-  
+
     } catch (error) {
       console.error('❌ Error calling Zara API:', error);
       setAiLoading(false);
@@ -304,7 +318,7 @@ export default function ChatPage({
     // eslint-disable-next-line
   }, [aiTyping, pendingAiMsg]);
 
-  
+
 
   // Auto-scroll to bottom with smooth animation when messages change
   useEffect(() => {
@@ -326,7 +340,7 @@ export default function ChatPage({
         className="flex-1 max-h-[70vh] scrollbar-hide pb-20 overflow-y-auto"
         ref={chatContainerRef}
       >
-       
+
         {showIntro && (
           <AIIntro
             name={aiName}
