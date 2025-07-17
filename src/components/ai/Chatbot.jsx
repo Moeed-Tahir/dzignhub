@@ -198,7 +198,8 @@ export default function ChatPage({
             ...prevMessages,
             {
               sender: "ai",
-              text: isValidJson?jsonResponse.answer + " " + (jsonResponse.prompt || ""): aiResponse,
+              text: isValidJson ? jsonResponse.answer || jsonResponse.message || "" : aiResponse,
+              options: isValidJson && jsonResponse.options ? jsonResponse.options : [], // Extract options from JSON
               typing: true
             }
           ]);
@@ -234,21 +235,21 @@ export default function ChatPage({
 
   const handleOptionSelect = async (option) => {
     if (selectedOptions.includes(option)) return;
-
+  
     setSelectedOptions((prev) => [...prev, option]);
     setMessages((prev) => [...prev, { sender: "user", text: option }]);
     setAiLoading(true);
     setAiTyping(false);
-
+  
     try {
       // Prepare previous messages for API call
       const previousMessages = messages.map(message => ({
         role: message.sender === "user" ? "user" : "assistant",
         content: message.text
       }));
-
+  
       console.log('🚀 Calling Zara Brand Designer API with option...');
-
+  
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/zara-brand-designer`, {
         method: 'POST',
         headers: {
@@ -261,28 +262,118 @@ export default function ChatPage({
           previousMessages: previousMessages
         })
       });
-
+  
       const data = await response.json();
-
+  
       if (data.type === 'success') {
         const aiResponse = data.data.response;
+        console.log('✅ Zara API response (option):', aiResponse);
+        
+        let jsonResponse;
+        let isValidJson = false;
+        
+        try {
+          // Try to parse the string
+          jsonResponse = JSON.parse(aiResponse);
+          isValidJson = true;
+          console.log('✅ Parsed JSON response (option):', jsonResponse);
+        } catch (err) {
+          // It's just a plain string, not valid JSON
+          console.error('❌ Not valid JSON, using as plain string.');
+          jsonResponse = aiResponse;
+          isValidJson = false;
 
+        }
+        
+        // Check if the response is final JSON object
+        if (isValidJson && jsonResponse.isFinal) {
+          console.log('Final response received, generating branding visuals...');
+          const finalPrompt = jsonResponse.prompt;
+          console.log('Final prompt:', finalPrompt);
+        
+          setAiLoading(false);
+          await generateLogo(finalPrompt);
+          return;
+        }
+
+        if (isValidJson == false && aiResponse.includes('"isFinal": true')) {
+          console.log('Final response received, generating branding visuals...');
+          let finalPrompt;
+          const promptMatch = aiResponse.match(/"prompt":\s*"([^"]*)"/)
+            if (promptMatch && promptMatch[1]) {
+              finalPrompt = promptMatch[1];
+            } else {
+              finalPrompt = aiResponse;
+            }
+          console.log('Final prompt:', finalPrompt);
+        
+          setAiLoading(false);
+          await generateLogo(finalPrompt);
+          return;
+        }
+  
         setAiLoading(false);
         setAiTyping(true);
 
+        let messageToShow;
+        let optionsToShow = [];
+        
+        if (isValidJson) {
+          // Valid JSON - extract normally
+          messageToShow = jsonResponse.answer || jsonResponse.message || "";
+          optionsToShow = jsonResponse.options || [];
+        } else {
+          // Invalid JSON - check if it contains isFinal structure
+          if (aiResponse.includes('"isFinal"')) {
+            // Try to extract prompt from invalid JSON
+            const promptMatch = aiResponse.match(/"prompt":\s*"([^"]*)"/)
+            if (promptMatch && promptMatch[1]) {
+              messageToShow = promptMatch[1];
+            } else {
+              messageToShow = aiResponse;
+            }
+          } else {
+            // Check if it has answer field in invalid JSON
+            const answerMatch = aiResponse.match(/"answer":\s*"([^"]*)"/)
+            if (answerMatch && answerMatch[1]) {
+              messageToShow = answerMatch[1];
+            } else {
+              // Fallback to the entire response
+              messageToShow = aiResponse;
+            }
+            
+            // Try to extract options from invalid JSON
+            const optionsMatch = aiResponse.match(/"options":\s*\[([^\]]*)\]/);
+            if (optionsMatch && optionsMatch[1]) {
+              try {
+                // Extract individual options
+                const optionsString = optionsMatch[1];
+                const optionMatches = optionsString.match(/"([^"]*)"/g);
+                if (optionMatches) {
+                  optionsToShow = optionMatches.map(option => option.replace(/"/g, ''));
+                }
+              } catch (err) {
+                console.error('Error parsing options from invalid JSON:', err);
+                optionsToShow = [];
+              }
+            }
+          }
+        }
+        
         // Add AI response to messages after a short delay for typing effect
         setTimeout(() => {
           setMessages(prevMessages => [
             ...prevMessages,
             {
               sender: "ai",
-              text: aiResponse,
+              text: messageToShow,
+              options: optionsToShow,
               typing: true
             }
           ]);
           setAiTyping(false);
         }, 1000);
-
+  
       } else {
         setAiLoading(false);
         setMessages(prevMessages => [
@@ -294,7 +385,7 @@ export default function ChatPage({
           }
         ]);
       }
-
+  
     } catch (error) {
       console.error('❌ Error calling Zara API:', error);
       setAiLoading(false);
@@ -349,19 +440,20 @@ export default function ChatPage({
             tagline={tagline}
           />
         )}
-        {allMessages.map((msg, index) => (
-          <MessageBubble
-            key={index}
-            sender={msg.sender}
-            text={msg.text}
-            options={msg.options || []}
-            onOptionSelect={handleOptionSelect}
-            selectedOptions={selectedOptions}
-            isLoading={msg.isLoading}
-            typing={msg.typing}
-            imageUrl={msg.imageUrl}
-          />
-        ))}
+       {allMessages.map((msg, index) => (
+  <MessageBubble
+    key={index}
+    sender={msg.sender}
+    text={msg.text}
+    options={msg.options || []}
+    onOptionSelect={handleOptionSelect}
+    selectedOptions={selectedOptions}
+    isLoading={msg.isLoading}
+    typing={msg.typing}
+    imageUrl={msg.imageUrl}
+    isLogo={msg.isLogo || false} // Add this line
+  />
+))}
       </div>
       <MessageInput suggestions={suggestions} onSend={handleSend} />
     </div>
