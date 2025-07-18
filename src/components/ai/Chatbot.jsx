@@ -72,8 +72,7 @@ export default function ChatPage({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
+          },
         body: JSON.stringify({
           prompt: prompt
         })
@@ -178,8 +177,16 @@ export default function ChatPage({
         
         // Check if the response is final JSON object
         if (isValidJson && jsonResponse.isFinal) {
+          const formattedString = Object.entries(jsonResponse.userSelection)
+  .map(([key, value]) => `${key}: ${value}`)
+  .join(", ");
+
           console.log('Final response received, generating branding visuals...');
-          const finalPrompt = jsonResponse.prompt;
+          const finalPrompt = `Generate a logo for a brand with the following details:
+          \n\n
+          ${formattedString}
+          \n\nPrompt: ${jsonResponse.prompt}\n\n
+      `;
           console.log('Final prompt:', finalPrompt);
         
           setAiLoading(false);
@@ -297,7 +304,7 @@ export default function ChatPage({
         }
 
         if (isValidJson == false && aiResponse.includes('"isFinal": true')) {
-          console.log('Final response received, generating branding visuals...');
+          console.log('Response recdevied in invalid json');
           let finalPrompt;
           const promptMatch = aiResponse.match(/"prompt":\s*"([^"]*)"/)
             if (promptMatch && promptMatch[1]) {
