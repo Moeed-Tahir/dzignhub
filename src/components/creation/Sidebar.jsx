@@ -19,7 +19,12 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const [selectedQuality, setSelectedQuality] = useState(null);
   const [selectedDuration, setSelectedDuration] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [selectedColors, setSelectedColors] = useState({ id: 0, c1: "#F2E8DF", c2: "#D9C3B0", c3: "#BFA293" });
+  const [selectedColors, setSelectedColors] = useState({
+    id: 0,
+    c1: "#F2E8DF",
+    c2: "#D9C3B0",
+    c3: "#BFA293",
+  });
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const { SetGenerateImages, SetGenerateVideo } = useUserStore();
   const [isLoading, setIsLoading] = useState(false);
@@ -29,43 +34,45 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const [endImage, setEndImage] = useState(null);
 
   const [isError, setIsError] = useState("");
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
 
-  const saveGeneration = async(type, url, prompt, isMultiple) => {
+  const saveGeneration = async (type, url, prompt, isMultiple) => {
     try {
       let data = {
         type: type,
         url: url,
         prompt: prompt,
-        isMultiple: isMultiple
-      }
-      const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/save-generation`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(data),
-      });
+        isMultiple: isMultiple,
+      };
+      const req = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/save-generation`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const res = await req.json();
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error saving generation:", error);
     }
-  }
+  };
 
   const isValid = textValue.trim().split(/\s+/).length >= 6;
   const handleGenerate = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     console.log("Selected Style:", selectedStyle);
-    console.log("Selected Size:", selectedSize); ``
+    console.log("Selected Size:", selectedSize);
+    ``;
     console.log("Selected Colors:", selectedColors);
     console.log("Selected Quality:", selectedQuality);
     console.log("Selected Duration:", selectedDuration);
     console.log("Selected Quantity:", selectedQuantity);
     console.log("Text Value:", textValue);
-
 
     const data = {
       prompt: textValue,
@@ -77,17 +84,20 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       Duration: selectedDuration,
       startImage: null,
       endImage: null,
-    }
+    };
     console.log("Data to be sent:", data);
 
     if (isImagePage) {
-      const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/generate-image`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const req = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/generate-image`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const res = await req.json();
       if (res.type == "success" || res.type == "partial_success") {
@@ -97,77 +107,77 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         // Save the generation to the database
         if (selectedQuality > 1) {
           saveGeneration("image", res.images, textValue, true);
-        }
-        else {
+        } else {
           saveGeneration("image", res.images[0], textValue, false);
         }
-
       }
-      setIsLoading(false)
-    }
-    else {
-       // Video generation - use FormData for file uploads
-       const formData = new FormData();
-       formData.append('prompt', textValue);
- 
-       // Make sure we're sending the correct style value
-       const styleValue = selectedStyle?.name || selectedStyle;
-    formData.append('style', styleValue);
- 
-       // Send duration as-is (it's already in "4 sec" format from Duration component)
-       formData.append('duration', selectedDuration);
-       formData.append('size', selectedSize);
- 
-       // Add image files if selected
-       if (startImage) {
-         formData.append('startImage', startImage);
-       }
-       else {
-        setError("Start image is required")
+      setIsLoading(false);
+    } else {
+      // Video generation - use FormData for file uploads
+      const formData = new FormData();
+      formData.append("prompt", textValue);
+
+      // Make sure we're sending the correct style value
+      const styleValue = selectedStyle?.name || selectedStyle;
+      formData.append("style", styleValue);
+
+      // Send duration as-is (it's already in "4 sec" format from Duration component)
+      formData.append("duration", selectedDuration);
+      formData.append("size", selectedSize);
+
+      // Add image files if selected
+      if (startImage) {
+        formData.append("startImage", startImage);
+      } else {
+        setError("Start image is required");
         setIsError(true);
         setIsLoading(false);
         return;
       }
-       if (endImage) {
-         formData.append('endImage', endImage);
-       }
- 
-       console.log("FormData contents:");
-       for (let [key, value] of formData.entries()) {
-         console.log(key, value);
-       }
- 
-       try {
-         const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/generate-video`, {
-           method: "POST",
-           body: formData, // Don't set Content-Type header for FormData
-         });
- 
-         const res = await req.json();
-         console.log("Video generation response:", res);
- 
-         if (res.type == "success") {
-           if (onGenerate) onGenerate();
-           // Store the complete video object as an array for consistency with ImagesResults
-           SetGenerateVideo([res.video]);
+      if (endImage) {
+        formData.append("endImage", endImage);
+      }
 
-           // Save the generation to the database
-           saveGeneration("video", res.video, textValue);
-         } else {
-          setError(`${res.message}`)
+      console.log("FormData contents:");
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+
+      try {
+        const req = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/generate-video`,
+          {
+            method: "POST",
+            body: formData, // Don't set Content-Type header for FormData
+          }
+        );
+
+        const res = await req.json();
+        console.log("Video generation response:", res);
+
+        if (res.type == "success") {
+          if (onGenerate) onGenerate();
+          // Store the complete video object as an array for consistency with ImagesResults
+          SetGenerateVideo([res.video]);
+
+          // Save the generation to the database
+          saveGeneration("video", res.video, textValue);
+        } else {
+          setError(`${res.message}`);
           setIsError(true);
-           console.error("Video generation failed:", res);
-           alert(`Video generation failed: ${res.error || 'Unknown error'}`);
-         }
-       } catch (error) {
-        setError(`${error}`)
+          console.error("Video generation failed:", res);
+          alert(`Video generation failed: ${res.error || "Unknown error"}`);
+        }
+      } catch (error) {
+        setError(`${error}`);
         setIsError(true);
-         console.error("Error during video generation:", error);
-         alert("An error occurred while generating the video. Please try again.");
-       }
-       finally{
+        console.error("Error during video generation:", error);
+        alert(
+          "An error occurred while generating the video. Please try again."
+        );
+      } finally {
         setIsLoading(false);
-       }
+      }
     }
   };
 
@@ -292,25 +302,24 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       )}
 
       {isError && (
-        <p className="text-red-500 text-sm mt-2 ml-3 text-start">
-          {error}
-        </p>
+        <p className="text-red-500 text-sm mt-2 ml-3 text-start">{error}</p>
       )}
 
       {/* Generate Button */}
 
       <button
         type="submit"
-        className={`w-full ${isValid ? "bg-[#BDFF00]" : "bg-[#BDFF005C] cursor-not-allowed"
-          } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
+        className={`w-full ${
+          isValid ? "bg-[#BDFF00]" : "bg-[#BDFF005C] cursor-not-allowed"
+        } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
         disabled={!isValid}
         onClick={handleGenerate}
       >
         {isLoading ? (
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
-          ) : (
-            "Generate"
-          )}
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+        ) : (
+          "Generate"
+        )}
       </button>
 
       <ProCard />

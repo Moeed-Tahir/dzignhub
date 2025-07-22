@@ -1,15 +1,9 @@
-import ScrollStackCards from "@/components/animation/OurServices/Stack";
+import GSAPScrollSection from "@/components/gsap-scroll-section"
 
 export default function Page() {
   return (
-    <div className="">
-      <div className="h-[100vh]">a</div>
-      {/* <div className="h-[300vh]">a</div> */}
-      <ScrollStackCards />
-      <div className="h-[100vh]">a</div>
-    </div>
-  );
+    <main className="min-h-screen">
+      <GSAPScrollSection />
+    </main>
+  )
 }
-
-
-
