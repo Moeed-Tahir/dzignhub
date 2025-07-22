@@ -55,6 +55,44 @@ export default function ChatPage({
   const [pendingAiMsg, setPendingAiMsg] = useState(null);
   const chatContainerRef = useRef(null);
 
+  const [brandDesignData, setBrandDesignData] = useState({})
+
+  const getBrandDesignData = async() => {
+
+    
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/get-brand-designer-data`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+
+    const res = await response.json();
+
+    console.log(res)
+
+    if (res.type == "success") {
+      setBrandDesignData(res.data);
+    }
+  }
+
+  const updateBrandDesignData = async(data) => {
+    console.log("Updating brand design data");
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/update-brand-design-data`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({brandDesign: data})
+    });
+
+    const res = await response.json();
+    console.log(res);
+
+  }
+
   const generateLogo = async (prompt) => {
     try {
       console.log('🎨 Generating logo with prompt:', prompt);
@@ -137,10 +175,12 @@ export default function ChatPage({
         content: message.text
       }));
 
-      console.log('🚀 Calling Zara Brand Designer API...');
+      console.log(`🚀 Calling ${aiName} API...`);
       console.log(previousMessages);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/zara-brand-designer`, {
+      let endpoint = aiName.toLowerCase() == "zara"?"zara-brand-designer":"content-creation";
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -148,7 +188,7 @@ export default function ChatPage({
         },
         body: JSON.stringify({
           message: msg,
-          context: `Brand design chat for ${aiName}`,
+          context: `${aiName.toLowerCase() == "zara"? "Zara Brand Designer": `User brand data for content creation: ${brandDesignData}`}`,
           previousMessages: previousMessages
         })
       });
@@ -171,18 +211,37 @@ export default function ChatPage({
         } catch (err) {
           // It's just a plain string, not valid JSON
           console.error('❌ Not valid JSON, using as plain string.');
-          jsonResponse = aiResponse;
+          if (aiName.toLowerCase() == "sana") {
+            if (aiResponse.includes('"isFinal": true')) {
+              console.log("isFinal found in invalid Json")
+              const promptMatch = aiResponse.match(/"prompt"\s*:\s*"([\s\S]*?)",\s*"isFinal"/);
+              console.log(promptMatch)
+              if (promptMatch && promptMatch[1]) {
+                jsonResponse = promptMatch[1];
+              }
+              else {
+                jsonResponse = aiResponse;
+              }
+            }
+            else {
+              console.log("isFinal not found in invalid Json")
+
+            }
+          }
+          else{
+            jsonResponse = aiResponse;
+          }
           isValidJson = false;
         }
         
         // Check if the response is final JSON object
-        if (isValidJson && jsonResponse.isFinal) {
+        if (isValidJson && jsonResponse.isFinal && aiName.toLowerCase() == "zara") {
           const formattedString = Object.entries(jsonResponse.userSelection)
   .map(([key, value]) => `${key}: ${value}`)
   .join(", ");
 
           console.log('Final response received, generating branding visuals...');
-          const finalPrompt = `Generate a logo for a brand with the following details:
+          const finalPrompt = `Generate a ${aiName.toLowerCase()?"logo":"poster"} for a brand with the following details:
           \n\n
           ${formattedString}
           \n\nPrompt: ${jsonResponse.prompt}\n\n
@@ -191,6 +250,7 @@ export default function ChatPage({
         
           setAiLoading(false);
           await generateLogo(finalPrompt);
+          updateBrandDesignData(jsonResponse.userSelection);
           return;
         }
         
@@ -205,7 +265,11 @@ export default function ChatPage({
             ...prevMessages,
             {
               sender: "ai",
-              text: isValidJson ? jsonResponse.answer || jsonResponse.message || "" : aiResponse,
+              text: isValidJson ? [
+                jsonResponse.answer && `${jsonResponse.answer}`,
+                jsonResponse.message && `${jsonResponse.message}`,
+                jsonResponse.prompt && `${jsonResponse.prompt}`
+              ].filter(Boolean).join('\n\n') || "" : aiResponse,
               options: isValidJson && jsonResponse.options ? jsonResponse.options : [], // Extract options from JSON
               typing: true
             }
@@ -415,6 +479,11 @@ export default function ChatPage({
     }
     // eslint-disable-next-line
   }, [aiTyping, pendingAiMsg]);
+
+  useEffect(() => {
+    // Fetch initial brand design data
+    getBrandDesignData();
+  }, []);
 
 
 

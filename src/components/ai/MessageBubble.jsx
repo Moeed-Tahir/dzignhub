@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import ReactMarkdown from 'react-markdown';
 
 export default function MessageBubble({
   sender,
@@ -38,11 +39,39 @@ export default function MessageBubble({
     if (onOptionSelect) onOptionSelect(opt);
   };
 
+  // Custom markdown components for styling
+  const markdownComponents = {
+    h1: ({ children }) => <h1 className="text-xl font-bold mb-2">{children}</h1>,
+    h2: ({ children }) => <h2 className="text-lg font-semibold mb-2">{children}</h2>,
+    h3: ({ children }) => <h3 className="text-md font-medium mb-1">{children}</h3>,
+    p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+    ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
+    ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
+    li: ({ children }) => <li className="ml-2">{children}</li>,
+    strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+    em: ({ children }) => <em className="italic">{children}</em>,
+    code: ({ children, inline }) => 
+      inline ? (
+        <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">{children}</code>
+      ) : (
+        <pre className="bg-gray-100 p-3 rounded-lg overflow-x-auto">
+          <code className="text-sm font-mono">{children}</code>
+        </pre>
+      ),
+    blockquote: ({ children }) => (
+      <blockquote className="border-l-4 border-gray-300 pl-4 italic mb-2">{children}</blockquote>
+    ),
+    a: ({ href, children }) => (
+      <a href={href} className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    ),
+  };
+
   return (
     <div
-      className={`flex max-w-[1280px] items-start ${
-        isAI ? "justify-start " : "justify-end "
-      } px-4 py-2`}
+      className={`flex max-w-[1280px] items-start ${isAI ? "justify-start " : "justify-end "
+        } px-4 py-2`}
     >
       {isAI && (
         <div className="flex items-end mr-2">
@@ -57,11 +86,10 @@ export default function MessageBubble({
       )}
 
       <div
-        className={`p-3 text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] max-w-[70%] font-normal bg-white ${
-          isAI
+        className={`p-3 text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] max-w-[70%] font-normal bg-white ${isAI
             ? "text-left rounded-tl-[4px] rounded-tr-[12px]"
             : "text-right rounded-tl-[12px] rounded-tr-[4px]"
-        } ${isError ? "border border-red-200 bg-red-50" : ""}`}
+          } ${isError ? "border border-red-200 bg-red-50" : ""}`}
       >
         {isLoading ? (
           <div className="flex items-center gap-2">
@@ -70,9 +98,13 @@ export default function MessageBubble({
           </div>
         ) : (
           <>
-            {/* Text content */}
+            {/* Text content with markdown support */}
             {displayedText && (
-              <p className={isError ? "text-red-600" : ""}>{displayedText}</p>
+              <div className={`prose prose-sm max-w-none ${isError ? "text-red-600" : ""}`}>
+                <ReactMarkdown components={markdownComponents}>
+                  {displayedText}
+                </ReactMarkdown>
+              </div>
             )}
 
             {/* Logo/Image display */}
@@ -96,7 +128,7 @@ export default function MessageBubble({
                     </div>
                   )}
                 </div>
-                
+
                 {/* Download button for logos */}
                 {isLogo && (
                   <div className="mt-2 flex gap-2">
@@ -108,9 +140,9 @@ export default function MessageBubble({
                       className="inline-flex items-center gap-2 px-3 py-2 bg-[#BDFF00] text-black rounded-lg text-sm font-medium hover:bg-[#a8e600] transition-colors"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                       Download
                     </a>
@@ -122,8 +154,8 @@ export default function MessageBubble({
                       className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M15 2H9C8.44772 2 8 2.44772 8 3V5C8 5.55228 8.44772 6 9 6H15C15.5523 6 16 5.55228 16 5V3C16 2.44772 15.5523 2 15 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M15 2H9C8.44772 2 8 2.44772 8 3V5C8 5.55228 8.44772 6 9 6H15C15.5523 6 16 5.55228 16 5V3C16 2.44772 15.5523 2 15 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                       Copy Link
                     </button>
@@ -142,15 +174,13 @@ export default function MessageBubble({
                 key={i}
                 onClick={() => handleClick(opt)}
                 disabled={selectedOptions.includes(opt)}
-                className={`py-[12px] cursor-pointer text-[14px] font-normal px-[16px] bg-white border rounded-full hover:bg-gray-50 transition-colors ${
-                  selected === opt
+                className={`py-[12px] cursor-pointer text-[14px] font-normal px-[16px] bg-white border rounded-full hover:bg-gray-50 transition-colors ${selected === opt
                     ? "border-[#C209C1] bg-purple-50"
                     : "border-[#E8ECEF]"
-                } ${
-                  selectedOptions.includes(opt) 
-                    ? "opacity-50 cursor-not-allowed" 
+                  } ${selectedOptions.includes(opt)
+                    ? "opacity-50 cursor-not-allowed"
                     : ""
-                }`}
+                  }`}
               >
                 {opt}
               </button>
