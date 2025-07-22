@@ -4,6 +4,8 @@ import React from "react";
 import Navbar from "@/components/landing/Navbar";
 import Sidebar from "@/components/landing/Sidebar";
 import GSAPScrollSection from "@/components/gsap-scroll-section";
+import FAQ from "@/components/landing/FAQ";
+import Footer from "@/components/common/Footer";
 
 const page = () => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
@@ -33,8 +35,12 @@ const page = () => {
         </p>
       </div>
       <div className="mt-[-200px] ">
-          <GSAPScrollSection />
-        </div>
+        <GSAPScrollSection />
+      </div>
+      <div className="mx-auto mt-[-4500px]">
+        <FAQ />
+        <Footer />
+      </div>
     </div>
   );
 };

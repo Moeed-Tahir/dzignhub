@@ -89,7 +89,6 @@ export default function GSAPScrollSection() {
       }
     });
 
-    // Create timeline
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
@@ -115,7 +114,6 @@ export default function GSAPScrollSection() {
       scale: 0.9,
     });
 
-    // Animate title in first
     tl.to(title, {
       opacity: 1,
       scale: 1,
@@ -123,27 +121,24 @@ export default function GSAPScrollSection() {
       ease: "power2.out",
     });
 
-    // Animate each card one by one - continuous movement from bottom to top
     allCards.forEach((card, index) => {
-      const startTime = 0.5 + index * 0.4; // Reduced stagger - next card starts when previous is halfway through
+      const startTime = 0.5 + index * 0.4;
 
-      // Card moves continuously from bottom to top
       tl.fromTo(
         card,
         {
-          y: window.innerHeight + 600, 
+          y: window.innerHeight + 600,
           opacity: 1,
         },
         {
-          y: -window.innerHeight -500, // End at top of screen
+          y: -window.innerHeight - 500,
           opacity: 1,
-          duration: 1.2, // Duration for full journey
-          ease: "none", // Linear movement for smooth continuous motion
+          duration: 1.2,
+          ease: "none",
         },
         startTime
       );
     });
-      // Animate title in first
     tl.to(title, {
       opacity: 0,
       scale: 1,
@@ -151,7 +146,6 @@ export default function GSAPScrollSection() {
       ease: "power2.out",
     });
 
-    // Cleanup
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
@@ -159,15 +153,11 @@ export default function GSAPScrollSection() {
 
   return (
     <div>
-   
-
-
       <div
         ref={containerRef}
         className="relative max-w-[1440px] w-full mx-auto h-[500vh] "
       >
         <div className="sticky top-0 h-screen flex items-center justify-center">
-          {/* Central title */}
           <h1
             ref={titleRef}
             className="text-6xl md:text-[68px] font-bold text-black text-center z-0 relative"
@@ -246,4 +236,3 @@ export default function GSAPScrollSection() {
     </div>
   );
 }
-
