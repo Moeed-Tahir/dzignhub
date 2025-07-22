@@ -60,14 +60,14 @@ function Pricing() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="max-w-[1280px] flex-col xl:flex-row gap-[28px] justify-center items-center flex">
+        <div className=" flex-col xl:flex-row gap-[28px] justify-center items-center flex">
           {pricing.map((plan, index) => {
             const isPro = plan.plan === "Pro Plan";
 
             return (
               <div
                 key={index}
-                className={`xl:w-[32%] w-[100%] px-5 h-auto py-10 xl:py-5 rounded-[16px] flex flex-col gap-[8px] justify-center ${
+                className={`xl:w-[32%] w-[100%] px-5  py-10 xl:py-5 rounded-[16px]  flex flex-col ${
                   isPro ? "" : "bg-[#1B1F3B]"
                 }`}
                 style={
@@ -79,9 +79,9 @@ function Pricing() {
                     : undefined
                 }
               >
-                <div className="max-w-[368px]  xl:h-[460px] gap-[24px] mx-auto flex flex-col">
+                <div className="max-w-[368px] xl:h-[460px] gap-[24px] flex flex-col">
                   {/* Plan title and price */}
-                  <div className="xl:h-[98px] gap-[16px] flex flex-col">
+                  <div className="xl:h-[98px] gap-[16px] flex flex-col ">
                     <button className="w-fit self-start py-[6px] px-[12px] h-[36px] rounded-[50px] bg-white/10 text-[#EAEDFA] text-[16px]">
                       {plan.plan}
                     </button>
@@ -112,7 +112,7 @@ function Pricing() {
 
                 {/* CTA Button */}
                 <button
-                  className={`px-6 py-3 max-w-[368px] mx-auto text-[16px] font-medium ${
+                  className={`px-6 py-3 xl:max-w-[368px] w-full lg:w-[90%] mt-5 mx-auto text-[16px] font-medium ${
                     syne.className
                   } cursor-pointer rounded-[40px] border backdrop-blur-[12px] shadow-[0px_8px_10.9px_#0003121F,0px_1px_1px_#0003124D] ${
                     isPro
