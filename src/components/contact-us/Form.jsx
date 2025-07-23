@@ -35,7 +35,7 @@ function Form() {
   };
 
   return (
-    <div className="lg:py-[64px] lg:px-[80px] py-[40px] px-[20px] flex lg:flex-row flex-col items-center">
+    <div className="lg:py-[64px] lg:px-[80px] py-[40px] px-[20px] flex lg:flex-row flex-col items-center justify-center">
       <div className="relative md:w-[600px] md:h-[616px] w-[98%]">
         <img
           src="/contact/contactForm.jpg"
