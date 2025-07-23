@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Hero from "@/components/common/Hero";
 import Sidebar from "@/components/landing/Sidebar";
 import Card from "@/components/blog/Card";
+import Footer from "@/components/common/Footer";
 
 const blogData = [
   {
@@ -61,6 +62,7 @@ function Page() {
           ))}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }
