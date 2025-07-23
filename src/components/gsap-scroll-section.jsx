@@ -5,66 +5,65 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 
-// Register ScrollTrigger plugin
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const cardData = [
-  {
-    id: "01",
-    side: "left",
-    title: "Video Creation",
-    subtitle:
-      "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
-    color: "bg-[#EBEBEB]",
-    image: "/video-creation/1.png",
-    button: "Create",
-  },
-  {
-    id: "02",
-    side: "right",
-    title: "Share your Video",
-    subtitle:
-      "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
-    color: "bg-[#EBEBEB]",
-    button: "Community",
-    image: "/video-creation/2.png",
-  },
-  {
-    id: "03",
-    side: "left",
-    title: "Edit all vidoes",
-    subtitle:
-      "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
-    color: "bg-[#EBEBEB]",
-    button: "Customization",
-    image: "/video-creation/3.png",
-  },
-  {
-    id: "04",
-    side: "right",
-    title: "Save into your Folders",
-    subtitle:
-      "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
-    color: "bg-[#EBEBEB]",
-    button: "Storage",
-    image: "/video-creation/4.png",
-  },
-  {
-    id: "05",
-    side: "left",
-    title: "Download the Video",
-    subtitle:
-      "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
-    color: "bg-[#EBEBEB]",
-    button: "Storage",
 
-    image: "/video-creation/5.png",
-  },
-];
-
-export default function GSAPScrollSection() {
+export default function GSAPScrollSection({isImage}) {
+  const cardData = [
+    {
+      id: "01",
+      side: "left",
+      title: `${isImage ? "Image" : "Video"} Creation`,
+      subtitle:
+        "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+      color: "bg-[#EBEBEB]",
+      image: `/${isImage ? "image" : "video"}-creation/1.png`,
+      button: "Create",
+    },
+    {
+      id: "02",
+      side: "right",
+      title: "Share your Video",
+      subtitle:
+        "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+      color: "bg-[#EBEBEB]",
+      button: "Community",
+      image: `/${isImage ? "image" : "video"}-creation/2.png`,
+    },
+    {
+      id: "03",
+      side: "left",
+      title: "Edit all vidoes",
+      subtitle:
+        "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+      color: "bg-[#EBEBEB]",
+      button: "Customization",
+      image: `/${isImage ? "image" : "video"}-creation/3.png`,
+    },
+    {
+      id: "04",
+      side: "right",
+      title: "Save into your Folders",
+      subtitle:
+        "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+      color: "bg-[#EBEBEB]",
+      button: "Storage",
+      image: `/${isImage ? "image" : "video"}-creation/4.png`,
+    },
+    {
+      id: "05",
+      side: "left",
+      title: "Download the Video",
+      subtitle:
+        "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+      color: "bg-[#EBEBEB]",
+      button: "Storage",
+  
+      image: `/${isImage ? "image" : "video"}-creation/5.png`,
+    },
+  ];
   const containerRef = useRef(null);
   const titleRef = useRef(null);
   const leftCardsRef = useRef([]);
@@ -77,6 +76,11 @@ export default function GSAPScrollSection() {
     const rightCards = rightCardsRef.current;
 
     if (!container || !title) return;
+
+    if (window.innerWidth < 1024) {
+      gsap.set(title, { opacity: 1, scale: 1 });
+      return;
+    }
 
     const allCards = [];
     cardData.forEach((card, index) => {
@@ -93,8 +97,8 @@ export default function GSAPScrollSection() {
       scrollTrigger: {
         trigger: container,
         start: "top top",
-        end: "bottom bottom",
-        markers: true,
+        end: "+=4000",
+        // markers: true,
         onStart: () => {
           console.log("Animation started");
         },
@@ -139,12 +143,12 @@ export default function GSAPScrollSection() {
         startTime
       );
     });
-    tl.to(title, {
-      opacity: 0,
-      scale: 1,
-      duration: 0.3,
-      ease: "power2.out",
-    });
+    // tl.to(title, {
+    //   opacity: 0,
+    //   scale: 1,
+    //   duration: 0.3,
+    //   ease: "power2.out",
+    // });
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
@@ -155,9 +159,9 @@ export default function GSAPScrollSection() {
     <div>
       <div
         ref={containerRef}
-        className="relative max-w-[1440px] w-full mx-auto h-[500vh] "
+        className="relative max-w-[1440px] w-full mx-auto lg:h-screen"
       >
-        <div className="sticky top-0 h-screen flex items-center justify-center">
+        <div className="hidden lg:flex sticky top-0 h-screen items-center justify-center">
           <h1
             ref={titleRef}
             className="text-6xl md:text-[68px] font-bold text-black text-center z-0 relative"
@@ -174,7 +178,7 @@ export default function GSAPScrollSection() {
                   ref={(el) => {
                     if (el) leftCardsRef.current[index] = el;
                   }}
-                  className={`w-[514px] h-[714px] flex flex-col justify-between p-6 z-10 rounded-2xl ${card.color} shadow-lg`}
+                  className={`w-[514px] h-[714px] flex flex-col opacity-0 justify-between p-6 z-10 rounded-2xl ${card.color} shadow-lg`}
                 >
                   <div className="text-[22px]  font-normal mb-4">{card.id}</div>
                   <Image
@@ -206,7 +210,7 @@ export default function GSAPScrollSection() {
                   ref={(el) => {
                     if (el) rightCardsRef.current[index] = el;
                   }}
-                  className={`w-[514px] h-[714px] flex flex-col justify-between z-10 p-6 rounded-2xl ${card.color} shadow-lg`}
+                  className={`w-[514px] h-[714px] flex flex-col opacity-0 justify-between z-10 p-6 rounded-2xl ${card.color} shadow-lg`}
                 >
                   <div className="text-[22px]  font-normal mb-4">{card.id}</div>
                   <Image
@@ -223,13 +227,44 @@ export default function GSAPScrollSection() {
                     type="submit"
                     className={`w-full bg-[#BDFF00]
          text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
-                    // disabled={!isValid}
-                    // onClick={handleGenerate}
                   >
                     {card.button}
                   </button>
                 </div>
               ))}
+          </div>
+        </div>
+
+        <div className="lg:hidden flex justify-center flex-col my-[55px] mx-auto items-center w-[90%]">
+          <h1 className="text-4xl md:text-5xl font-bold text-black text-center mb-8">
+            You Need Us If
+          </h1>
+
+          <div className="space-y-6">
+            {cardData.map((card) => (
+              <div
+                key={card.id}
+                className={`w-full mx-auto flex flex-col justify-between p-4 rounded-2xl ${card.color} shadow-lg`}
+              >
+                <div className="text-lg font-normal mb-4">{card.id}</div>
+                <Image
+                  src={card.image}
+                  alt=""
+                  width={1000}
+                  height={1000}
+                  className="w-full h-[200px] rounded-[20px] object-cover mb-4"
+                />
+
+                <p className="text-2xl font-semibold mb-2">{card.title}</p>
+                <p className="text-base font-normal mb-4">{card.subtitle}</p>
+                <button
+                  type="submit"
+                  className="w-full bg-[#BDFF00] text-[#1B1F3B] text-sm font-medium p-3 rounded-full flex justify-center items-center"
+                >
+                  {card.button}
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </div>

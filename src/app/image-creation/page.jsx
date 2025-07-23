@@ -23,7 +23,7 @@ const page = () => {
           />
         </div>
         <div className="max-w-[1440px] mx-auto">
-          <Hero />
+          <Hero isImage={true} />
         </div>
       </div>
       <div className="mt-[55px] md:w-full w-[90%] mx-auto  ">
@@ -37,11 +37,11 @@ const page = () => {
         </p>
       </div>
       <div className=" md:mt-[-200px] ">
-        <GSAPScrollSection />
+        <GSAPScrollSection isImage={true} />
       </div>
 
       <div className="mx-auto ">
-        <CreationWork />
+        <CreationWork isImage={true} />
         <ToolKit />
         <FAQ />
         <DownloadSection />
