@@ -3,13 +3,23 @@ import { useEffect } from "react";
 import "./Stack.css";
 import gsap from "gsap";
 import StackCard from "./StackCard";
+import { useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const StackingImages = () => {
+
+
+  const [isLowHeight, setIsLowHeight] = useState()
+
   const isMobile = typeof window !== "undefined" && window.innerWidth <= 640;
+  // const isLowHeight =
+   
+  // const isVeryLow = typeof window !== "undefined" && window.innerHeight <= 700;
 
   useEffect(() => {
+
+    setIsLowHeight(typeof window !== "undefined" && window.innerHeight <= 900);
     const cardCount = 5;
     const cards = Array.from(
       { length: cardCount },
@@ -28,7 +38,7 @@ const StackingImages = () => {
       pin: true,
       start: isMobile ? "top 20%" : "top top",
       end: "+=4500",
-      scrub: 2,
+      scrub: 1,
       // markers: true,
     };
 
@@ -66,7 +76,11 @@ const StackingImages = () => {
   }, []);
 
   return (
-    <div className="container mb-[4300px]  mx-auto mt-[-200px]   flex flex-col gap-10">
+    <div
+      className={`container ${
+        isLowHeight ? "mb-[4500px]" : "mb-[4300px]"
+      } mx-auto mt-[-200px] flex flex-col gap-10`}
+    >
       <div className="animation_cards h-[100vh] sm:min-h-[400px] container mx-auto">
         <div className="animation_card animation_card-4">
           <StackCard
