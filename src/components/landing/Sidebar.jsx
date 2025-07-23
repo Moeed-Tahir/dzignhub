@@ -6,21 +6,21 @@ import gsap from "gsap";
 import DownloadApp from "./DownloadApp";
 
 const links = [
-  { href: "#", title: "Video Creation" },
-  { href: "#", title: "Image Creation" },
+  { href: "/video-creation", title: "Video Creation" },
+  { href: "/image-creation", title: "Image Creation" },
   {
     href: "#",
     title: "AI Assistants",
     subheadings: [
-      { href: "#", title: "Zara-brand designer" },
-      { href: "#", title: "Sana-Content writer" },
-      { href: "#", title: "Kano- UI/UX Design companion" },
-      { href: "#", title: "Novi-SEO companion" },
+      { href: "/ai/brand-designer", title: "Zara-brand designer" },
+      { href: "/ai/content-writer", title: "Sana-Content writer" },
+      { href: "/ai/ui-ux", title: "Kano- UI/UX Design companion" },
+      { href: "/ai/seo", title: "Novi-SEO companion" },
     ],
   },
-  { href: "#", title: "Pricing" },
-  { href: "#", title: "Contact us" },
-  { href: "#", title: "Latest blog" },
+  { href: "/pricing", title: "Pricing" },
+  { href: "/contact-us", title: "Contact us" },
+  { href: "/blog", title: "Latest blog" },
 ];
 const socialLinks = [
   { alt: "Facebook", icon: "/landing/sidebar/facebook.svg", href: "#" },
