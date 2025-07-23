@@ -179,7 +179,7 @@ export default function GSAPScrollSection() {
                   <div className="text-[22px]  font-normal mb-4">{card.id}</div>
                   <Image
                     src={card.image}
-                    alt
+                    alt=""
                     width={1000}
                     height={1000}
                     className="w-full h-[314px] rounded-[20px]"
@@ -211,7 +211,7 @@ export default function GSAPScrollSection() {
                   <div className="text-[22px]  font-normal mb-4">{card.id}</div>
                   <Image
                     src={card.image}
-                    alt
+                    alt=""
                     width={1000}
                     height={1000}
                     className="w-full h-[314px] rounded-[20px]"
