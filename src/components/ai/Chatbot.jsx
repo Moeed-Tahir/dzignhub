@@ -189,6 +189,9 @@ export default function ChatPage({
       else if (aiName.toLowerCase() === "novi") {
         endpoint = "novi-seo-agent";
       }
+      else if (aiName.toLowerCase() === "mira") {
+        endpoint = "strategist-mira";
+      } 
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/${endpoint}`, {
         method: 'POST',
@@ -230,16 +233,16 @@ export default function ChatPage({
                 console.log("Matched and parsed prompt from invalid JSON");
                 jsonResponse = {
                   prompt: promptMatch[1],
-                  isFinal: true  // Add this flag
+                  isFinal: true
                 };
-                isValidJson = true;  // Set this to true so it gets processed correctly
+                isValidJson = true;
               }
               else {
                 jsonResponse = {
                   prompt: aiResponse,
-                  isFinal: true  // Add this flag
+                  isFinal: true
                 };
-                isValidJson = true;  // Set this to true so it gets processed correctly
+                isValidJson = true;
               }
             }
             else {
@@ -264,12 +267,12 @@ export default function ChatPage({
                     console.error('Error parsing options from invalid JSON:', err);
                   }
                 }
-                isValidJson = true;  // Set this to true so it gets processed correctly
+                isValidJson = true;
               } else {
                 jsonResponse = {
                   answer: aiResponse
                 };
-                isValidJson = true;  // Set this to true so it gets processed correctly
+                isValidJson = true;
               }
             }
           }
@@ -277,11 +280,12 @@ export default function ChatPage({
             jsonResponse = {
               answer: aiResponse
             };
-            isValidJson = true;  // Set this to true so it gets processed correctly
+            isValidJson = true; 
           }
         }
         
         // Check if the response is final JSON object
+        // this is mainly for generating logo by brand designer agent
         if (isValidJson && jsonResponse.isFinal && aiName.toLowerCase() == "zara") {
           const formattedString = Object.entries(jsonResponse.userSelection)
   .map(([key, value]) => `${key}: ${value}`)
