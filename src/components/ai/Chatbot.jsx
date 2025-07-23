@@ -206,8 +206,8 @@ export default function ChatPage({
       const data = await response.json();
 
       if (data.type === 'success') {
-
-        const aiResponse = data.data.response;
+        let aiResponse;
+        aiResponse = data.data.response;
         console.log('✅ Zara API response:', aiResponse);
         
         let jsonResponse;
@@ -221,27 +221,64 @@ export default function ChatPage({
         } catch (err) {
           // It's just a plain string, not valid JSON
           console.error('❌ Not valid JSON, using as plain string.');
-          if (aiName.toLowerCase() == "sana") {
+          if (aiName.toLowerCase() == "sana" || aiName.toLowerCase() == "novi") {
             if (aiResponse.includes('"isFinal": true')) {
               console.log("isFinal found in invalid Json")
               const promptMatch = aiResponse.match(/"prompt"\s*:\s*"([\s\S]*?)",\s*"isFinal"/);
               console.log(promptMatch)
               if (promptMatch && promptMatch[1]) {
-                jsonResponse = promptMatch[1];
+                console.log("Matched and parsed prompt from invalid JSON");
+                jsonResponse = {
+                  prompt: promptMatch[1],
+                  isFinal: true  // Add this flag
+                };
+                isValidJson = true;  // Set this to true so it gets processed correctly
               }
               else {
-                jsonResponse = aiResponse;
+                jsonResponse = {
+                  prompt: aiResponse,
+                  isFinal: true  // Add this flag
+                };
+                isValidJson = true;  // Set this to true so it gets processed correctly
               }
             }
             else {
               console.log("isFinal not found in invalid Json")
-
+              // Try to extract answer and options from invalid JSON
+              const answerMatch = aiResponse.match(/"answer"\s*:\s*"([^"]*)"/);
+              const optionsMatch = aiResponse.match(/"options"\s*:\s*\[([^\]]*)\]/);
+              
+              if (answerMatch || optionsMatch) {
+                jsonResponse = {};
+                if (answerMatch && answerMatch[1]) {
+                  jsonResponse.answer = answerMatch[1];
+                }
+                if (optionsMatch && optionsMatch[1]) {
+                  try {
+                    const optionsString = optionsMatch[1];
+                    const optionMatches = optionsString.match(/"([^"]*)"/g);
+                    if (optionMatches) {
+                      jsonResponse.options = optionMatches.map(option => option.replace(/"/g, ''));
+                    }
+                  } catch (err) {
+                    console.error('Error parsing options from invalid JSON:', err);
+                  }
+                }
+                isValidJson = true;  // Set this to true so it gets processed correctly
+              } else {
+                jsonResponse = {
+                  answer: aiResponse
+                };
+                isValidJson = true;  // Set this to true so it gets processed correctly
+              }
             }
           }
           else{
-            jsonResponse = aiResponse;
+            jsonResponse = {
+              answer: aiResponse
+            };
+            isValidJson = true;  // Set this to true so it gets processed correctly
           }
-          isValidJson = false;
         }
         
         // Check if the response is final JSON object
