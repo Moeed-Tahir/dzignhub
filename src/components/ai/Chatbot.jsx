@@ -178,7 +178,17 @@ export default function ChatPage({
       console.log(`🚀 Calling ${aiName} API...`);
       console.log(previousMessages);
 
-      let endpoint = aiName.toLowerCase() == "zara"?"zara-brand-designer":"content-creation";
+      let endpoint;
+
+      if (aiName.toLowerCase() === "zara") {
+        endpoint = "zara-brand-designer";
+      }
+      else if (aiName.toLowerCase() === "sana") {
+        endpoint = "content-creation";
+      }
+      else if (aiName.toLowerCase() === "novi") {
+        endpoint = "novi-seo-agent";
+      }
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/${endpoint}`, {
         method: 'POST',
