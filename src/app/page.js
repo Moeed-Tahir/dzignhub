@@ -24,7 +24,7 @@ export default function Landing() {
   return (
     <>
       <div
-        className={`overflow-hidden w-full relative lg:h-[1095px] h-[1146px]  ${
+        className={`overflow-hidden w-full lg:h-[1095px] h-[1146px]  ${
           sidebarOpen ? "" : ""
         }`}
         style={{

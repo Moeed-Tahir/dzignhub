@@ -63,7 +63,7 @@ useEffect(() => {
   return (
     <div
       ref={sidebarRef}
-      className={` ${open?"flex":"hidden"}  md:max-w-[62%] max-w-[94%] w-full absolute md:top-[24px] md:right-[24px] right-[3%] top-[10px] bg-[#FFFFFF] rounded-[40px] md:max-h-[754px] max-h-[860px] h-full z-50 overflow-auto`}
+      className={` ${open?"flex":"hidden"}  md:max-w-[62%] max-w-[94%] w-full absolute md:top-[24px] md:right-[24px] right-[3%] top-[10px] bg-[#FFFFFF] rounded-[40px] md:h-[754px] h-[860px]  z-50 overflow-auto`}
       onClick={(e) => e.stopPropagation()}
       >
       <div className="relative h-full">

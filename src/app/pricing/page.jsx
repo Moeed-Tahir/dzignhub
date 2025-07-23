@@ -1,30 +1,18 @@
 "use client";
-import React from "react";
-import Navbar from "@/components/landing/Navbar";
+import React,{useState} from "react";
+import Sidebar from "@/components/landing/Sidebar";
 import Pricing from "@/components/landing/Pricing";
 import Testimonials from "@/components/landing/Testimonials";
 import FAQ from "@/components/landing/FAQ";
 import Footer from "@/components/common/Footer";
 import Plans from "@/components/pricing/Plans";
-
+import Hero from "@/components/common/Hero";
 function page() {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div>
-      <div className=" bg-[#1B1F3B] bg-[radial-gradient(ellipse_135%_120%_at_bottom,rgba(194,9,193,0.6)_0%,rgba(27,31,59,1)_50%)]">
-        <div className="max-w-[1440px] mx-auto">
-          <Navbar />
-          <div className="flex lg:py-[64px] lg:px-[80px] py-[40px] px-[20px]">
-            <div className="flex flex-col gap-[16px]">
-              <button className="py-[8px] px-[16px] w-[145px] bg-white/10 border border-[#C209C1] rounded-[100px] text-white text-[18px] text-center">
-                Subscriptions
-              </button>
-              <h1 className="font-bold lg:text-[68px] text-[46px] text-white">
-                Pricing
-              </h1>
-            </div>
-          </div>
-        </div>
-      </div>
+       <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
+      <Hero title={"Pricing"} subtitle={"Subscriptions"} setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen}/>
       <div className="max-w-[1440px] py-[64px] justify-center flex items-center mx-auto">
         <div className="flex flex-col gap-[33px] justify-center items-center ">
           <img
