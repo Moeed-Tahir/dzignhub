@@ -157,7 +157,7 @@ function Work() {
             className=" xl:text-[48px] text-center xl:text-start text-[28px] font-semibold text-white"
             variants={headerVariants}
           >
-            How Dzignhub works
+            How AllMyAI works
           </motion.h2>
 
           <motion.div 

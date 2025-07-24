@@ -14,7 +14,7 @@ function Users() {
             <span>using AllmyAI</span>
           </div>
           <p className="text-[18px]">
-            Our users love using Dzignhub to build their marketing assets. We
+            Our users love using AllMyAI to build their marketing assets. We
             empower them to create assets at scale, faster than ever, with
             cutting-edge technology.
           </p>
