@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 function Carousel() {
   const images = [
@@ -22,36 +23,94 @@ function Carousel() {
     "/landing/carousel-2/8.webp",
   ];
 
+
+  const carouselContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        staggerChildren: 0.3,
+        // delayChildren: 1.2 
+      }
+    }
+  };
+
+  const carouselRowVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 50,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const imageVariants = {
+    hidden: { 
+      opacity: 0, 
+      scale: 0.8 
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
-    <div className="lg:h-[420px] h-[280px] flex flex-col gap-[20px] lg:mt-[40px]  absolute top-[867px] lg:top-[635px]  w-full overflow-hidden">
-      {/* First Carousel */}
-      <div className="lg:h-[200px] h-[130px] relative overflow-hidden">
+    <motion.div 
+      className="lg:h-[420px] h-[280px] flex flex-col gap-[20px] lg:mt-[40px]  absolute top-[867px] lg:top-[635px]  w-full overflow-hidden"
+      variants={carouselContainerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div 
+        className="lg:h-[200px] h-[130px] relative overflow-hidden"
+        variants={carouselRowVariants}
+      >
         <div className="flex w-max animate-scroll-left gap-[20px]">
           {[...images, ...images].map((url, index) => (
-            <img
+            <motion.img
               key={index}
               src={url}
               alt={`Slide ${index + 1}`}
               className="lg:w-[200px] lg:h-[200px] h-[130px] w-[130px] object-cover rounded-[16px]  flex-shrink-0"
+              variants={imageVariants}
+              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
             />
           ))}
         </div>
-      </div>
+      </motion.div>
 
-      {/* Second Carousel (opposite direction) */}
-      <div className="lg:h-[200px] h-[130px]  relative overflow-hidden">
+      <motion.div 
+        className="lg:h-[200px] h-[130px]  relative overflow-hidden"
+        variants={carouselRowVariants}
+      >
         <div className="flex w-max animate-scroll-right gap-[20px]">
           {[...images2, ...images2].map((url, index) => (
-            <img
+            <motion.img
               key={index}
               src={url}
               alt={`Slide ${index + 1}`}
               className="lg:w-[200px] lg:h-[200px] h-[130px] w-[120px] rounded-[16px] object-cover rounded-box flex-shrink-0"
+              variants={imageVariants}
+              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
             />
           ))}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
