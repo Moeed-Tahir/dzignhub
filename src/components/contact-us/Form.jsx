@@ -57,7 +57,7 @@ function Form() {
       </div>
 
       <div className="bg-[#272c51] lg:rounded-tr-[40px] lg:rounded-br-[40px] rounded-br-[20px] rounded-bl-[20px] lg:rounded-bl-[0px] md:max-h-[616px] md:max-w-[600px] w-[98%] md:w-full">
-        <form className="flex flex-col md:gap-[40px] gap-[16px] md:p-[40px] p-[10px] text-white ">
+        <form onSubmit={handleSubmit} className="flex flex-col md:gap-[40px] gap-[16px] md:p-[40px] p-[10px] text-white ">
           <h2 className="md:font-semibold font-medium md:text-[34px] text-[30px] text-center">
             Need to contact us?
           </h2>
