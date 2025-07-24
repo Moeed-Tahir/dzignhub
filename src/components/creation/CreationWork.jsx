@@ -221,7 +221,7 @@ const CreationWork = ({ isImage }) => {
             className="text-[18px] font-normal text-center mt-3"
             variants={statsVariants}
           >
-            Our users love using Dzignhub to build their marketing assets. We
+            Our users love using Allmyai to build their marketing assets. We
             empower them to <br />
             create assets at scale, faster than ever, with cutting-edge
             technology.

@@ -55,7 +55,7 @@ const ModalPopup = ({ isOpen, onClose }) => {
         {/* Welcome text and description - slightly smaller text, adjusted margins */}
         <div className="mb-5 text-center mt-3">
           <h2 className="text-xl font-semibold text-gray-900 mb-1.5">
-            Welcome to DzignHub
+            Welcome to Allmyai
           </h2>
           <p className="text-gray-500 text-sm">
             Before we begin, let's choose the subscription mode to better assist you.

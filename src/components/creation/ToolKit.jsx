@@ -148,7 +148,7 @@ export default function DzignhubToolkit() {
             className="text-[30px] md:text-[48px] font-medium md:font-semibold mb-8"
             variants={headingVariants}
           >
-            <span className="text-[#C209C1]">Dzignhub</span>
+            <span className="text-[#C209C1]">Allmyai</span>
             <span className="text-white"> Toolkit</span>
           </motion.h1>
 
