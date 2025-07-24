@@ -57,9 +57,9 @@ export default function ChatPage({
 
   const [brandDesignData, setBrandDesignData] = useState({})
 
-  const getBrandDesignData = async() => {
+  const getBrandDesignData = async () => {
 
-    
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/get-brand-designer-data`, {
       method: 'POST',
       headers: {
@@ -77,7 +77,7 @@ export default function ChatPage({
     }
   }
 
-  const updateBrandDesignData = async(data) => {
+  const updateBrandDesignData = async (data) => {
     console.log("Updating brand design data");
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/update-brand-design-data`, {
       method: 'POST',
@@ -85,7 +85,7 @@ export default function ChatPage({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify({brandDesign: data})
+      body: JSON.stringify({ brandDesign: data })
     });
 
     const res = await response.json();
@@ -93,7 +93,7 @@ export default function ChatPage({
 
   }
 
-  const generateLogo = async (prompt) => {
+  const generateLogo = async (prompt, size = "1024x1024") => {
     try {
       console.log('🎨 Generating logo with prompt:', prompt);
 
@@ -110,9 +110,10 @@ export default function ChatPage({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          },
+        },
         body: JSON.stringify({
-          prompt: prompt
+          prompt: prompt,
+          size: size
         })
       });
 
@@ -124,7 +125,7 @@ export default function ChatPage({
           prevMessages.filter(msg => !msg.isLoading).concat([
             {
               sender: "ai",
-              text: "🎉 Here's your custom logo! What do you think?",
+              text: `🎉 Here's your custom ${aiName.toLowerCase() == "zara"?"logo":"element"}! What do you think?`,
               imageUrl: data.data.imageUrl,
               isLogo: true
             }
@@ -191,7 +192,10 @@ export default function ChatPage({
       }
       else if (aiName.toLowerCase() === "mira") {
         endpoint = "strategist-mira";
-      } 
+      }
+      else if (aiName.toLowerCase() === "ellie") {
+        endpoint = "ellie-ui-ux";
+      }
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/${endpoint}`, {
         method: 'POST',
@@ -201,7 +205,7 @@ export default function ChatPage({
         },
         body: JSON.stringify({
           message: msg,
-          context: `${aiName.toLowerCase() == "zara"? "Zara Brand Designer": `User brand data for content creation: ${brandDesignData}`}`,
+          context: `${aiName.toLowerCase() == "zara" ? "Zara Brand Designer" : `User brand data for content creation: ${brandDesignData}`}`,
           previousMessages: previousMessages
         })
       });
@@ -212,10 +216,10 @@ export default function ChatPage({
         let aiResponse;
         aiResponse = data.data.response;
         console.log('✅ Zara API response:', aiResponse);
-        
+
         let jsonResponse;
         let isValidJson = false;
-        
+
         try {
           // Try to parse the string
           jsonResponse = JSON.parse(aiResponse);
@@ -224,7 +228,7 @@ export default function ChatPage({
         } catch (err) {
           // It's just a plain string, not valid JSON
           console.error('❌ Not valid JSON, using as plain string.');
-          if (aiName.toLowerCase() == "sana" || aiName.toLowerCase() == "novi") {
+          if (aiName.toLowerCase() == "sana" || aiName.toLowerCase() == "novi" || aiName.toLowerCase() == "ellie") {
             if (aiResponse.includes('"isFinal": true')) {
               console.log("isFinal found in invalid Json")
               const promptMatch = aiResponse.match(/"prompt"\s*:\s*"([\s\S]*?)",\s*"isFinal"/);
@@ -243,14 +247,16 @@ export default function ChatPage({
                   isFinal: true
                 };
                 isValidJson = true;
+
               }
+              
             }
             else {
               console.log("isFinal not found in invalid Json")
               // Try to extract answer and options from invalid JSON
               const answerMatch = aiResponse.match(/"answer"\s*:\s*"([^"]*)"/);
               const optionsMatch = aiResponse.match(/"options"\s*:\s*\[([^\]]*)\]/);
-              
+
               if (answerMatch || optionsMatch) {
                 jsonResponse = {};
                 if (answerMatch && answerMatch[1]) {
@@ -276,36 +282,81 @@ export default function ChatPage({
               }
             }
           }
-          else{
+          else {
             jsonResponse = {
               answer: aiResponse
             };
-            isValidJson = true; 
+            isValidJson = true;
           }
         }
-        
+
+
+        if (aiName.toLowerCase() == "ellie" && jsonResponse.isFinal) {
+          let userSelectionObj = {};
+
+          // Match the userSelection object
+          const userSelectionMatch = aiResponse.match(/"userSelection"\s*:\s*\{([^}]*)\}/);
+
+          if (userSelectionMatch && userSelectionMatch[1]) {
+            // Parse the object content
+            const objectContent = userSelectionMatch[1];
+
+            // Extract key-value pairs from the object
+            const keyValueMatches = objectContent.match(/"([^"]+)"\s*:\s*"([^"]*)"/g);
+
+            if (keyValueMatches) {
+              keyValueMatches.forEach(match => {
+                const [, key, value] = match.match(/"([^"]+)"\s*:\s*"([^"]*)"/);
+                userSelectionObj[key] = value;
+              });
+            }
+
+            // Handle array values like components
+            const arrayMatches = objectContent.match(/"([^"]+)"\s*:\s*\[([^\]]*)\]/g);
+            if (arrayMatches) {
+              arrayMatches.forEach(match => {
+                const [, key, arrayContent] = match.match(/"([^"]+)"\s*:\s*\[([^\]]*)\]/);
+                const items = arrayContent.match(/"([^"]*)"/g);
+                if (items) {
+                  userSelectionObj[key] = items.map(item => item.replace(/"/g, ''));
+                }
+              });
+            }
+          }
+
+          let prompt = `${jsonResponse.prompt}
+          User Selection: ${JSON.stringify(userSelectionObj, null, 2)}
+          `;
+          console.log(`Prompt for ellie: `, prompt);
+
+          setAiLoading(false);
+          await generateLogo(prompt, "1792x1024");
+          return;
+        }
+
         // Check if the response is final JSON object
         // this is mainly for generating logo by brand designer agent
+        
         if (isValidJson && jsonResponse.isFinal && aiName.toLowerCase() == "zara") {
           const formattedString = Object.entries(jsonResponse.userSelection)
-  .map(([key, value]) => `${key}: ${value}`)
-  .join(", ");
+            .map(([key, value]) => `${key}: ${value}`)
+            .join(", ");
 
           console.log('Final response received, generating branding visuals...');
-          const finalPrompt = `Generate a ${aiName.toLowerCase()?"logo":"poster"} for a brand with the following details:
+          const finalPrompt = `Generate a ${aiName.toLowerCase() ? "logo" : "poster"} for a brand with the following details:
           \n\n
           ${formattedString}
           \n\nPrompt: ${jsonResponse.prompt}\n\n
       `;
           console.log('Final prompt:', finalPrompt);
-        
+
           setAiLoading(false);
           await generateLogo(finalPrompt);
           updateBrandDesignData(jsonResponse.userSelection);
           return;
         }
-        
-       
+
+
 
         setAiLoading(false);
         setAiTyping(true);
@@ -357,22 +408,40 @@ export default function ChatPage({
 
   const handleOptionSelect = async (option) => {
     if (selectedOptions.includes(option)) return;
-  
+
     setSelectedOptions((prev) => [...prev, option]);
     setMessages((prev) => [...prev, { sender: "user", text: option }]);
     setAiLoading(true);
     setAiTyping(false);
-  
+
     try {
       // Prepare previous messages for API call
       const previousMessages = messages.map(message => ({
         role: message.sender === "user" ? "user" : "assistant",
         content: message.text
       }));
-  
-      console.log('🚀 Calling Zara Brand Designer API with option...');
-  
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/zara-brand-designer`, {
+
+      console.log(`🚀 Calling ${aiName} API with option...`);
+
+      let endpoint;
+
+      if (aiName.toLowerCase() === "zara") {
+        endpoint = "zara-brand-designer";
+      }
+      else if (aiName.toLowerCase() === "sana") {
+        endpoint = "content-creation";
+      }
+      else if (aiName.toLowerCase() === "novi") {
+        endpoint = "novi-seo-agent";
+      }
+      else if (aiName.toLowerCase() === "mira") {
+        endpoint = "strategist-mira";
+      }
+      else if (aiName.toLowerCase() === "ellie") {
+        endpoint = "ellie-ui-ux";
+      }
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -380,20 +449,21 @@ export default function ChatPage({
         },
         body: JSON.stringify({
           message: option,
-          context: `Brand design chat for ${aiName}`,
+          context: `${aiName.toLowerCase() == "zara" ? "Zara Brand Designer" : `User brand data for content creation: ${brandDesignData}`}`,
           previousMessages: previousMessages
         })
       });
-  
+
       const data = await response.json();
-  
+
       if (data.type === 'success') {
-        const aiResponse = data.data.response;
-        console.log('✅ Zara API response (option):', aiResponse);
-        
+        let aiResponse;
+        aiResponse = data.data.response;
+        console.log('✅ API response (option):', aiResponse);
+
         let jsonResponse;
         let isValidJson = false;
-        
+
         try {
           // Try to parse the string
           jsonResponse = JSON.parse(aiResponse);
@@ -402,100 +472,128 @@ export default function ChatPage({
         } catch (err) {
           // It's just a plain string, not valid JSON
           console.error('❌ Not valid JSON, using as plain string.');
-          jsonResponse = aiResponse;
-          isValidJson = false;
+          if (aiName.toLowerCase() == "sana" || aiName.toLowerCase() == "novi" || aiName.toLowerCase() == "ellie") {
+            if (aiResponse.includes('"isFinal": true')) {
+              console.log("isFinal found in invalid Json")
+              const promptMatch = aiResponse.match(/"prompt"\s*:\s*"([\s\S]*?)",\s*"isFinal"/);
+              console.log(promptMatch)
+              if (promptMatch && promptMatch[1]) {
+                console.log("Matched and parsed prompt from invalid JSON");
+                jsonResponse = {
+                  prompt: promptMatch[1],
+                  isFinal: true
+                };
+                isValidJson = true;
+              }
+              else {
+                jsonResponse = {
+                  prompt: aiResponse,
+                  isFinal: true
+                };
+                isValidJson = true;
+              }
 
-        }
-        
-        // Check if the response is final JSON object
-        if (isValidJson && jsonResponse.isFinal) {
-          console.log('Final response received, generating branding visuals...');
-          const finalPrompt = jsonResponse.prompt;
-          console.log('Final prompt:', finalPrompt);
-        
-          setAiLoading(false);
-          await generateLogo(finalPrompt);
-          return;
-        }
-
-        if (isValidJson == false && aiResponse.includes('"isFinal": true')) {
-          console.log('Response recdevied in invalid json');
-          let finalPrompt;
-          const promptMatch = aiResponse.match(/"prompt":\s*"([^"]*)"/)
-            if (promptMatch && promptMatch[1]) {
-              finalPrompt = promptMatch[1];
-            } else {
-              finalPrompt = aiResponse;
-            }
-          console.log('Final prompt:', finalPrompt);
-        
-          setAiLoading(false);
-          await generateLogo(finalPrompt);
-          return;
-        }
-  
-        setAiLoading(false);
-        setAiTyping(true);
-
-        let messageToShow;
-        let optionsToShow = [];
-        
-        if (isValidJson) {
-          // Valid JSON - extract normally
-          messageToShow = jsonResponse.answer || jsonResponse.message || "";
-          optionsToShow = jsonResponse.options || [];
-        } else {
-          // Invalid JSON - check if it contains isFinal structure
-          if (aiResponse.includes('"isFinal"')) {
-            // Try to extract prompt from invalid JSON
-            const promptMatch = aiResponse.match(/"prompt":\s*"([^"]*)"/)
-            if (promptMatch && promptMatch[1]) {
-              messageToShow = promptMatch[1];
-            } else {
-              messageToShow = aiResponse;
-            }
-          } else {
-            // Check if it has answer field in invalid JSON
-            const answerMatch = aiResponse.match(/"answer":\s*"([^"]*)"/)
-            if (answerMatch && answerMatch[1]) {
-              messageToShow = answerMatch[1];
-            } else {
-              // Fallback to the entire response
-              messageToShow = aiResponse;
-            }
-            
-            // Try to extract options from invalid JSON
-            const optionsMatch = aiResponse.match(/"options":\s*\[([^\]]*)\]/);
-            if (optionsMatch && optionsMatch[1]) {
-              try {
-                // Extract individual options
-                const optionsString = optionsMatch[1];
-                const optionMatches = optionsString.match(/"([^"]*)"/g);
-                if (optionMatches) {
-                  optionsToShow = optionMatches.map(option => option.replace(/"/g, ''));
+              // Handle Ellie UI/UX generation
+              if (aiName.toLowerCase() == "ellie") {
+                let userSelectionObj;
+                const userSelection = aiResponse.match(/"userSelection"\s*:\s*\[([^\]]*)\]/);
+                if (userSelection && userSelection[1]) {
+                  userSelectionObj = userSelection[1].split(',').reduce((acc, item) => {
+                    const [key, value] = item.split(':').map(str => str.trim());
+                    acc[key.replace(/"/g, '')] = value.replace(/"/g, '');
+                    return acc;
+                  }, {});
                 }
-              } catch (err) {
-                console.error('Error parsing options from invalid JSON:', err);
-                optionsToShow = [];
+                let prompt = `${jsonResponse.prompt}
+                User Selection: ${JSON.stringify(userSelectionObj, null, 2)}
+                `;
+                console.log(`Prompt for ellie: `, prompt);
+
+                setAiLoading(false);
+                await generateLogo(prompt, "1792x1024");
+                return;
+              }
+            }
+            else {
+              console.log("isFinal not found in invalid Json")
+              // Try to extract answer and options from invalid JSON
+              const answerMatch = aiResponse.match(/"answer"\s*:\s*"([^"]*)"/);
+              const optionsMatch = aiResponse.match(/"options"\s*:\s*\[([^\]]*)\]/);
+
+              if (answerMatch || optionsMatch) {
+                jsonResponse = {};
+                if (answerMatch && answerMatch[1]) {
+                  jsonResponse.answer = answerMatch[1];
+                }
+                if (optionsMatch && optionsMatch[1]) {
+                  try {
+                    const optionsString = optionsMatch[1];
+                    const optionMatches = optionsString.match(/"([^"]*)"/g);
+                    if (optionMatches) {
+                      jsonResponse.options = optionMatches.map(option => option.replace(/"/g, ''));
+                    }
+                  } catch (err) {
+                    console.error('Error parsing options from invalid JSON:', err);
+                  }
+                }
+                isValidJson = true;
+              } else {
+                jsonResponse = {
+                  answer: aiResponse
+                };
+                isValidJson = true;
               }
             }
           }
+          else {
+            jsonResponse = {
+              answer: aiResponse
+            };
+            isValidJson = true;
+          }
         }
-        
+
+        // Check if the response is final JSON object for Zara (brand designer)
+        if (isValidJson && jsonResponse.isFinal && aiName.toLowerCase() == "zara") {
+          const formattedString = Object.entries(jsonResponse.userSelection)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join(", ");
+
+          console.log('Final response received, generating branding visuals...');
+          const finalPrompt = `Generate a ${aiName.toLowerCase() ? "logo" : "poster"} for a brand with the following details:
+          \n\n
+          ${formattedString}
+          \n\nPrompt: ${jsonResponse.prompt}\n\n
+          `;
+          console.log('Final prompt:', finalPrompt);
+
+          setAiLoading(false);
+          await generateLogo(finalPrompt);
+          updateBrandDesignData(jsonResponse.userSelection);
+          return;
+        }
+
+        setAiLoading(false);
+        setAiTyping(true);
+
         // Add AI response to messages after a short delay for typing effect
         setTimeout(() => {
           setMessages(prevMessages => [
             ...prevMessages,
             {
               sender: "ai",
-              text: messageToShow,
-              options: optionsToShow,
+              text: isValidJson ? [
+                jsonResponse.answer && `${jsonResponse.answer}`,
+                jsonResponse.message && `${jsonResponse.message}`,
+                jsonResponse.prompt && `${jsonResponse.prompt}`
+              ].filter(Boolean).join('\n\n') || "" : aiResponse,
+              options: isValidJson && jsonResponse.options ? jsonResponse.options : [], // Extract options from JSON
               typing: true
             }
           ]);
           setAiTyping(false);
         }, 1000);
-  
+
       } else {
         setAiLoading(false);
         setMessages(prevMessages => [
@@ -507,9 +605,9 @@ export default function ChatPage({
           }
         ]);
       }
-  
+
     } catch (error) {
-      console.error('❌ Error calling Zara API:', error);
+      console.error('❌ Error calling API:', error);
       setAiLoading(false);
       setMessages(prevMessages => [
         ...prevMessages,
@@ -567,20 +665,20 @@ export default function ChatPage({
             tagline={tagline}
           />
         )}
-       {allMessages.map((msg, index) => (
-  <MessageBubble
-    key={index}
-    sender={msg.sender}
-    text={msg.text}
-    options={msg.options || []}
-    onOptionSelect={handleOptionSelect}
-    selectedOptions={selectedOptions}
-    isLoading={msg.isLoading}
-    typing={msg.typing}
-    imageUrl={msg.imageUrl}
-    isLogo={msg.isLogo || false} // Add this line
-  />
-))}
+        {allMessages.map((msg, index) => (
+          <MessageBubble
+            key={index}
+            sender={msg.sender}
+            text={msg.text}
+            options={msg.options || []}
+            onOptionSelect={handleOptionSelect}
+            selectedOptions={selectedOptions}
+            isLoading={msg.isLoading}
+            typing={msg.typing}
+            imageUrl={msg.imageUrl}
+            isLogo={msg.isLogo || false} // Add this line
+          />
+        ))}
       </div>
       <MessageInput suggestions={suggestions} onSend={handleSend} />
     </div>
