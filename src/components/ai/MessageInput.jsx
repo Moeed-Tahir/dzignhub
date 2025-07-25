@@ -69,7 +69,7 @@ export default function MessageInput({ onSend,suggestions }) {
       </form>
 
       <p className="text-[12px] text-[#68686B] text-normal text-center mt-2">
-        Dzignhub may display inaccurate info, including about people, so
+        Allmyai may display inaccurate info, including about people, so
         double-check its responses. Your privacy & Gemini Apps
       </p>
     </div>

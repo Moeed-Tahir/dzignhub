@@ -28,7 +28,7 @@ const ProCard = () => {
       </p>
       <p className="text-[14px] text-center font-normal text-white opacity-70 ">
         {" "}
-        Get your AI Project to another level with Dzignhub AI assistants!{" "}
+        Get your AI Project to another level with Allmyai AI assistants!{" "}
       </p>
       <div className="px-[12px] h-[26px] rounded-full bg-[#bf88c6] bg-opacity-100 flex justify-center items-center">
         <p className="text-white text-center text-[12px] font-semibold ">

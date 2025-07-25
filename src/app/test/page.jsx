@@ -1,9 +1,7 @@
-import GSAPScrollSection from "@/components/gsap-scroll-section"
+import React from "react";
+import CardsAnimation from "@/components/landing/CardsAnimation/CardsAnimation";
+const page = () => {
+  return <CardsAnimation />;
+};
 
-export default function Page() {
-  return (
-    <main className="min-h-screen">
-      <GSAPScrollSection />
-    </main>
-  )
-}
+export default page;
