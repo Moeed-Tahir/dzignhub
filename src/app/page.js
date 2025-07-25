@@ -59,7 +59,7 @@ export default function Landing() {
       </div>
       {/* <StickyCardStack /> */}
 
-      <StackingImages />
+      {/* <StackingImages /> */}
       <Work />
       <Templates />
       <Download />
