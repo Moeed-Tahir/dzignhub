@@ -161,7 +161,7 @@ function Work() {
       <div className="flex flex-col max-w-[90%] text-[#FFFFFF] text-center mx-auto gap-[16px]">
         <div className="font-semibold md:text-[34px] text-[24px]">
           <span>{currentSection.heading[0]}</span>
-          <span className="text-[#C209C1]">{currentSection.heading[1]}</span>
+          <span className="text-[#C209C1] uppercase">{currentSection.heading[1]}</span>
           <span>{currentSection.heading[2]}</span>
         </div>
         <p className="text-[18px]">{currentSection.description}</p>

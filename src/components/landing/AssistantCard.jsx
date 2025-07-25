@@ -17,12 +17,10 @@ function AssistantCard({ src, name="",style = {}, positionClass = "" }) {
         `,
       }}
     >
-      <div className="overflow-hidden  rounded-[20px] ">
-        <img src={src} className="w-full h-full object-cover " />
+      <div className="overflow-hidden  ">
+        <img src={src} className=" " />
       </div>
-      <div className=" bottom-1 xl:bottom-5 absolute left-1 xl:left-5   md:text-[20px] text-[6.95px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] font-semibold text-[#bababc]">
-        {name}
-      </div>
+     
     </div>
   );
 }

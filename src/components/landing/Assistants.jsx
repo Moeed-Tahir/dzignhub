@@ -9,17 +9,17 @@ const syne = Syne({
 });
 
 const assistants = [
-  { src: "/landing/assistants/1.png", name: "Kano (UI/UX)" },
-  { src: "/landing/assistants/2.png", name: "Mira (Business Strategy)" },
-  { src: "/landing/assistants/3.png", name: "Novi (SEO specialist)" },
-  { src: "/landing/assistants/4.png", name: "Sana (Content Creation)" },
+  { src: "/landing/assistants/1.jpg", name: "Kano (UI/UX)" },
+  { src: "/landing/assistants/2.jpg", name: "Mira (Business Strategy)" },
+  { src: "/landing/assistants/3.jpg", name: "Novi (SEO specialist)" },
+  { src: "/landing/assistants/4.jpg", name: "Sana (Content Creation)" },
 ];
 
 const assistants2 = [
-  { src: "/landing/assistants/3.png", name: "Novi (SEO specialist)" },
-  { src: "/landing/assistants/4.png", name: "Sana (Content Creation)" },
-  { src: "/landing/assistants/7.png", name: "Kana (Data Analysis)" },
-  { src: "/landing/assistants/1.png", name: "Kano (UI/UX)" },
+  { src: "/landing/assistants/5.jpg", name: "Novi (SEO specialist)" },
+  { src: "/landing/assistants/3.jpg", name: "Sana (Content Creation)" },
+  { src: "/landing/assistants/1.jpg", name: "Kana (Data Analysis)" },
+  { src: "/landing/assistants/2.jpg", name: "Kano (UI/UX)" },
 ];
 
 function Assistants() {
@@ -173,7 +173,7 @@ function Assistants() {
             }}
           >
             <AssistantCard
-              src="/landing/assistants/5.png"
+              src="/landing/assistants/4.jpg"
               name={"Mira (Growth Strategist)"}
               // positionClass="left-[-111px]"
             />
@@ -206,7 +206,7 @@ function Assistants() {
             }}
           >
             <AssistantCard
-              src="/landing/assistants/6.png"
+              src="/landing/assistants/5.jpg"
               // style={{ right: `-50px` }}
               name={"Zara(Brand Designer)"}
             />
