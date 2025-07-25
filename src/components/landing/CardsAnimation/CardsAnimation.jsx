@@ -60,20 +60,16 @@ const CardsAnimation = () => {
 
     gsap.set(images, {
       opacity: 1,
-
-      rotate: -90,
+      rotate: -45,
       skewX: 10,
-      y: "55%",
-      // x: "5%",
+      y: "35vh",
+      x: "30vw",
       transformOrigin: "center center",
       transformStyle: "preserve-3d",
     });
 
-    // Set initial state for content items - all content starts below viewport
-    gsap.set(contents, {
-      opacity: 1,
-      y: (index) => index * 120 + 500, // Stack them vertically + offset from bottom
-    });
+
+    gsap.set(images[0], { opacity: 1 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -95,9 +91,8 @@ const CardsAnimation = () => {
           opacity: 1,
           skewX: 0,
           rotate: 0,
-
+          x: "0%",
           y: "0%",
-          // x: "0%",
           scale: 1,
           transformOrigin: "center center",
           transformStyle: "preserve-3d",
@@ -105,15 +100,13 @@ const CardsAnimation = () => {
           ease: "none",
         },
         progress * 2
-      )
-      .to(
+      ).to(
         images[index],
         {
           opacity: 1,
           skewX: 10,
           rotate: 90,
-          y: "-55%",
-          // x: "5%",
+          y: "-35vh",
           scale: 1,
           transformOrigin: "center center",
           transformStyle: "preserve-3d",
@@ -122,58 +115,6 @@ const CardsAnimation = () => {
         },
         progress * 2 + 1
       );
-    });
-
-    // Animate the entire content column as one unit
-    // Enter from bottom
-    tl.to(
-      contents,
-      {
-        y: (index) => index * 120, // Move to normal positions
-        duration: 1,
-        ease: "none",
-      },
-      0.5
-    )
-    // Exit to top
-    .to(
-      contents,
-      {
-        y: (index) => index * 120 - 500, // Move above viewport
-        duration: 1,
-        ease: "none",
-      },
-      (cardsData.length - 1) * 2 + 1.5
-    );
-
-    // Add content animations with color changes
-    cardsData.forEach((_, index) => {
-      const progress = index / (cardsData.length - 1);
-      const contentElement = contents[index];
-
-      // Animate content color to green when image is at center
-      tl.to(
-        contentElement.querySelector(".content-title"),
-        {
-          color: "#BDFF00",
-          duration: 0.3,
-          ease: "none",
-        },
-        progress * 2 + 0.5
-      );
-
-      // Animate back to white when card exits (except for the last card)
-      if (index < cardsData.length - 1) {
-        tl.to(
-          contentElement.querySelector(".content-title"),
-          {
-            color: "#FFFFFF",
-            duration: 0.3,
-            ease: "none",
-          },
-          progress * 2 + 1.5
-        );
-      }
     });
 
     return () => {
@@ -217,13 +158,12 @@ const CardsAnimation = () => {
               ))}
             </div>
 
-            <div className="relative h-[500px] ">
+            <div className="relative h-screen">
               {cardsData.map((card, index) => (
                 <div
                   key={card.id}
                   ref={(el) => (contentRef.current[index] = el)}
-                  className="absolute w-full"
-                  style={{ top: `${index * 120}px` }}
+                  className="absolute top-1/2 translate-y-1/2 w-full"
                 >
                   <div className="p-8 flex flex-col justify-start">
                     <h3 className="text-3xl content-title font-bold text-white mb-4">
