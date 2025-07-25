@@ -3,6 +3,12 @@ import { GoArrowUpRight } from "react-icons/go";
 function FeatureSection() {
   const features = [
     {
+      title: "Brand Design",
+      description:
+        "Easily generate and personalize unique logos using advanced AI algorithms. Perfect for startups, entrepreneurs, and creatives looking to build a brand identity in minutes — no design skills required.",
+      image: "/landing/feature/1.png",
+    },
+    {
       title: "Content creation",
       description:
         "Create compelling and original written content with AI assistance. Whether you need social media posts, blog articles, or ad copy, our AI helps you brainstorm, write, and refine with speed and creativity.",
@@ -26,23 +32,6 @@ function FeatureSection() {
   return (
     <div className="w-full bg-[#1B1F3B]">
       <div className="max-w-[1440px] mx-auto xl:h-[2656px] py-[88px] px-[20px]  xl:px-[80px] flex flex-col gap-[40px] xl:gap-[80px]">
-        <div className="max-w-[1280px] xl:h-[544px] flex-col xl:flex-row flex gap-[56px] mx-auto items-center">
-          <div className="max-w-[612px] rounded-[32px] border border-[#C209C1] overflow-hidden">
-            <img src="/landing/feature/1.png" />
-          </div>
-          <div className="flex flex-col xl:h-[179px] max-w-[612px] gap-[20px] xl:gap-[40px] relative">
-            <h2 className="text-[#BDFF00] font-semibold text-[28px] xl:text-[48px]">
-              Brand Design
-            </h2>
-
-            <p className="text-[18px] text-[#FFFFFF]">
-              Easily generate and personalize unique logos using advanced AI
-              algorithms. Perfect for startups, entrepreneurs, and creatives
-              looking to build a brand identity in minutes — no design skills
-              required.
-            </p>
-          </div>
-        </div>
         {features.map((item, index) => (
           <div
             key={index}
@@ -52,7 +41,9 @@ function FeatureSection() {
               <img src={item.image} />
             </div>
             <div className="max-w-[555px] xl:h-[173px] flex flex-col gap-[24px] text-[#FFFFFF]">
-              <h2 className="text-[28px] xl:text-[48px] font-semibold">{item.title}</h2>
+              <h2 className="text-[28px] xl:text-[48px] font-semibold">
+                {item.title}
+              </h2>
               <p className="text-[18px] font-normal">{item.description}</p>
             </div>
           </div>
