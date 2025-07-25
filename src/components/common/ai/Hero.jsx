@@ -2,17 +2,7 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 
-function Hero() {
-  const pathname = usePathname();
-  const slug = pathname?.split("/").pop();
-
-  const slugToKeyMap = {
-    "brand-designer": "brandDesigner",
-    "content-writer": "contentWriter",
-    "ui-ux":"ui_ux",
-    "seo":"seo"
-    // add more as needed
-  };
+function Hero({currentKey}) {
 
   const heroContentData = {
     brandDesigner: {
@@ -47,7 +37,7 @@ function Hero() {
     }
   };
 
-  const currentKey = slugToKeyMap[slug];
+
   const content = heroContentData[currentKey];
 
   if (!content) return null;

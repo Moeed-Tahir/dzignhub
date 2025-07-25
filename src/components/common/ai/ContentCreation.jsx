@@ -1,18 +1,8 @@
 import { usePathname } from "next/navigation";
 import React from "react";
 
-function ContentCreation() {
-   const pathname = usePathname();
-    const slug = pathname?.split("/").pop();
-  
-    const slugToKeyMap = {
-      "brand-designer": "brandDesigner",
-      "content-writer": "contentWriter",
-      "ui-ux":"ui_ux",
-      "seo":"seo"
-      // 
-    }
-    const currentKey = slugToKeyMap[slug];
+function ContentCreation({currentKey}) {
+   
   const flexData = {
     brandDesigner:[
     {

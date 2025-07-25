@@ -2,16 +2,7 @@
 import { usePathname } from "next/navigation";
 import React from "react";
 
-function Work() {
-  const pathname = usePathname();
-  const slug = pathname.split("/").pop();
-  const slugToKeyMap = {
-    "brand-designer": "brandDesigner",
-    "content-writer": "contentWriter",
-    "ui-ux":"ui_ux",
-    "seo":"seo"
-    // Add more slugs as needed
-  };
+function Work({currentKey}) {
   const sectionData = {
     brandDesigner: {
       heading: ["How ", "Zara", " Empowers do Brand design"],
@@ -154,7 +145,7 @@ function Work() {
     
   };
 
-  const currentSection = sectionData[slugToKeyMap[slug]];
+  const currentSection = sectionData[currentKey];
 
   return (
     <div className="flex flex-col md:max-w-[1140px] mx-auto gap-[32px] md:gap-[56px] py-10 items-center px-2">
