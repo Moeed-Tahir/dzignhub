@@ -57,23 +57,23 @@ function Hero({currentKey}) {
         />
       </div>
 
-      <div className="absolute left-[-8%] md:left-[0%] xl:max-w-[306px] xl:max-h-[326px]  max-h-[170px] max-w-[170px] h-full w-full sm:top-[20%] top-[15%] z-0">
+      <div className="absolute left-[-8%] md:left-[0%] xl:max-w-[306px] xl:max-h-[326px]  max-h-[170px] max-w-[170px] h-full w-full sm:top-[20%] xl:top-[30%] top-[15%] z-0">
         <img
           src={content.leftImage}
           className="xl:w-[306px] xl:h-[326px] mx-auto object-cover"
         />
       </div>
 
-      <div className="absolute xl:h-[326px] xl:w-[250px] h-[156px] right-[0%] md:rounded-[40px] rounded-[18.54px] sm:top-[20%] top-[15%]">
+      <div className="absolute xl:h-[326px] xl:w-[260px] h-[156px] right-[0%] md:rounded-[40px] rounded-[18.54px] sm:top-[20%] top-[15%]">
         <img
           src={content.rightImage}
           className="w-full h-full object-contain"
         />
       </div>
 
-      <div className="absolute max-w-[1300px] w-full left-1/2 -translate-x-1/2 lg:top-[28%] xl:top-[15%] top-[40%]">
+      <div className="absolute max-w-[1300px] w-full left-1/2 -translate-x-1/2 lg:top-[28%] xl:top-[15%] top-[35%]">
         <div className="flex flex-col gap-[19px] text-center text-[#FFFFFF]">
-          <h2 className="font-bold lg:text-[40px] xl:text-[68px] mx-auto  md:text-[28px] text-[24px]">
+          <h2 className="font-bold lg:text-[40px] xl:text-[68px] mx-auto  text-[36px]  ">
             {content.title}
           </h2>
           <p className="md:text-[20px] text-[18px] md:max-w-[70%] max-w-[90%] mx-auto">

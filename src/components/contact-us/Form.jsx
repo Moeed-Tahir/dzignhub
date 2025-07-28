@@ -35,7 +35,14 @@ function Form() {
   };
 
   return (
-    <div className="lg:py-[64px] lg:px-[80px] py-[40px] px-[20px] flex lg:flex-row flex-col items-center justify-center">
+    <div className="lg:py-[64px] lg:px-[80px] py-[40px] px-[20px]  "
+
+    >
+      <div className="flex lg:flex-row  flex-col items-center justify-center  "
+       
+      >
+
+      
       <div className="relative md:w-[600px] md:h-[616px] w-[98%]">
         <img
           src="/contact/contactForm.jpg"
@@ -69,6 +76,7 @@ function Form() {
                     First name
                   </h3>
                   <input
+                  style={{ boxShadow: "0px 0px 0px 1px #FFFFFF1A inset" }}
                     type="text"
                     name="firstName"
                     value={formData.firstName}
@@ -79,6 +87,7 @@ function Form() {
                 <div className="md:w-[48%]">
                   <h3 className={`${syne.className} font-medium`}>Last name</h3>
                   <input
+                  style={{ boxShadow: "0px 0px 0px 1px #FFFFFF1A inset" }}
                     type="text"
                     name="lastName"
                     value={formData.lastName}
@@ -90,6 +99,7 @@ function Form() {
               <div>
                 <h3 className={`${syne.className} font-medium`}>Email</h3>
                 <input
+                style={{ boxShadow: "0px 0px 0px 1px #FFFFFF1A inset" }}
                   type="email"
                   name="email"
                   value={formData.email}
@@ -100,6 +110,7 @@ function Form() {
               <div>
                 <h3 className={`${syne.className} font-medium`}>Message</h3>
                 <textarea
+                style={{ boxShadow: "0px 0px 0px 1px #FFFFFF1A inset" }}
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
@@ -116,6 +127,7 @@ function Form() {
             </div>
           </div>
         </form>
+      </div>
       </div>
     </div>
   );

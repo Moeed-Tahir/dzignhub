@@ -9,7 +9,8 @@ function page() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div>
-      <div className="w-full  bg-[#1B1F3B]">
+      <div className="w-full  lg:bg-[url('/contact/bg2.png')]  h-fit bg-[url('/contact/bg-mobile2.png')] object-cover "
+      >
        
           <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
           <div className="max-w-[1440px] mx-auto">

@@ -82,7 +82,7 @@ function FAQ() {
                 onClick={() => toggle(index)}
               >
                 <div className="xl:w-[629px] w-full flex flex-col gap-[16px]">
-                  <h2 className="xl:text-[24px] text-[18px] text-[#000000] font-medium">
+                  <h2 className="xl:text-[24px] text-[18px] text-[#000000] font-semibold">
                     {item.question}
                   </h2>
 

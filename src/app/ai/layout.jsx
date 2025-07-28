@@ -64,7 +64,7 @@ export default function RootLayout({ children }) {
           <div className="max-w-[1440px] mx-auto">
             <Workflow currentKey={currentKey}/>
             <AiResults/>
-            <SmartSupport/>
+            <SmartSupport currentKey={currentKey}/>
             <Users />
             <FAQ />
           </div>

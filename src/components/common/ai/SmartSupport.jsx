@@ -1,91 +1,235 @@
 import React from "react";
 
-function SmartSupport() {
+function SmartSupport({ currentKey }) {
+  const content = {
+    brandDesigner: {
+      heading: ["Brand Designer AI:", "Build Brands", "That Stand Out"],
+      description:
+        "From first sketches to final assets, your AI assistant helps you craft powerful, consistent brand visuals. Create everything from logos to full identity systems—faster, smarter, and beautifully on-brand.",
+    },
+    contentWriter: {
+      heading: ["Smart Support for Every", "Creative Role"],
+      description:
+        "Our AI companions are designed to elevate how you work—no matter your craft. From branding and content creation to UX design and SEO, get tailored assistance that boosts productivity, enhances creativity, and simplifies your day-to-day tasks—all in one seamless experience.",
+    },
+    ui_ux:{
+      heading:[
+        "UI/UX Designer AI:","Design","Flows with Ease"
+      ],
+      description:"Streamline your product design process from wireframe to prototype. Generate clean layouts, build user flows, and refine UX with intelligent feedback—your design partner at every step."
+    },
+     seo:{
+      heading:[
+        "SEO Assistant AI: Rank","Higher","Work Less"
+      ],
+      description:"Let your AI assistant handle the SEO hustle. From keyword research to metadata and technical audits, get smart recommendations that keep your content discoverable and your rankings strong."
+    }
+  };
+
+  const features = {
+    brandDesigner: [
+      {
+        image: "/ai-assistants/smart-support/brand-designer/1.png",
+        classname:
+          "rounded-[9px] h-[66px] w-[66px] bg-[#edd1e0] rotate-[-12deg]",
+        text: "Generate moodboards, palettes, and style tiles.",
+      },
+      {
+        text: "Create logos, social kits, and print-ready files.",
+        image: "/ai-assistants/smart-support/2.png",
+      },
+      {
+        text: " Apply brand rules automatically across visuals.",
+        image: "/ai-assistants/smart-support/3.png",
+      },
+      {
+        image: "/ai-assistants/smart-support/brand-designer/4.png",
+        classname:
+          "rounded-[999px] h-[66px] w-[66px] bg-[#edd1e0] rotate-[-12deg]",
+        text: "Collaborate with teams or clients in real-time.",
+      },
+      {
+        image: "/ai-assistants/smart-support/brand-designer/5.svg",
+        text: "Export in all major formats, instantly.",
+      },
+      {
+        image: "/ai-assistants/smart-support/6.png",
+        text: "Stay inspired with design trend insights.",
+      },
+    ],
+
+    contentWriter: [
+      {
+        image: "/ai-assistants/smart-support/content-writer/1.png",
+        classname:
+          "rounded-[9px] h-[66px] w-[66px] bg-[#edd1e0] rotate-[-12deg]",
+        text: "	Generate on-brand visuals, wireframes, and layouts instantly.",
+      },
+      {
+        text: "Optimize SEO content with smart keyword and meta tips.",
+        image: "/ai-assistants/smart-support/content-writer/2.png",
+      },
+      {
+        text: " Create logos, color palettes, and brand assets fast.",
+        image: "/ai-assistants/smart-support/3.png",
+      },
+      {
+        image: "/ai-assistants/smart-support/content-writer/4.png",
+        classname: "rounded-[999px] h-[66px] w-[66px] bg-white ",
+        text: "Connect and grow in a creative AI community.",
+      },
+      {
+        image: "/ai-assistants/smart-support/content-writer/5.svg",
+        text: "Get AI-powered strategy, targeting, and campaign ideas.",
+      },
+      {
+        image: "/ai-assistants/smart-support/6.png",
+        text: "Write content in your tone across all formats.",
+      },
+    ],
+    ui_ux: [
+      {
+        image: "/ai-assistants/smart-support/ui-ux/1.png",
+        classname:
+          "rounded-[9px] h-[66px] w-[66px] bg-[#edd1e0] rotate-[-12deg]",
+        text: "Generate wireframes, flows, and mockups.",
+      },
+      {
+        text: "Instantly design for mobile, web, or tablet.",
+        image: "/ai-assistants/smart-support/ui-ux/2.png",
+      },
+      {
+        text: " Get accessibility and usability suggestions.",
+        image: "/ai-assistants/smart-support/ui-ux/3.svg",
+      },
+      {
+        image: "/ai-assistants/smart-support/ui-ux/4.png",
+        classname: "rounded-[999px] h-[66px] w-[66px] bg-white ",
+        text: "Connect with devs via code-ready handoffs.",
+      },
+      {
+        image: "/ai-assistants/smart-support/ui-ux/5.svg",
+        text: "Create component libraries effortlessly.",
+      },
+      {
+        image: "/ai-assistants/smart-support/6.png",
+        text: "Test and iterate designs with AI feedback.",
+      },
+    ],
+    seo: [
+      {
+        image: "/ai-assistants/smart-support/seo/1.png",
+        classname: "rounded-[9px] h-[66px] w-[66px] rotate-[-12deg]",
+        text: "Optimize SEO content with smart keyword tips.",
+      },
+      {
+        text: "Track rankings and spot opportunities instantly.",
+        image: "/ai-assistants/smart-support/seo/2.png",
+      },
+      {
+        text: "Generate SEO-friendly titles and meta descriptions.",
+        image: "/ai-assistants/smart-support/3.png",
+      },
+      {
+        image: "/ai-assistants/smart-support/seo/4.png",
+        classname: "rounded-[999px] h-[66px] w-[66px] bg-white ",
+        text: "Audit your site and fix issues with AI help.",
+      },
+      {
+        image: "/ai-assistants/smart-support/seo/5.svg",
+        text: "Build structured data with ease.",
+      },
+      {
+        image: "/ai-assistants/smart-support/6.png",
+        text: "Stay ahead with algorithm update alerts.",
+      },
+    ],
+  };
   return (
     <div className="xl:py-20 py-10">
-
-    <div className="max-w-[90%] mx-auto bg-[#1B1F3B] rounded-[39px] text-[#FFFFFF] px-10 py-20">
-      <div className="flex md:gap-[67px] gap-[40px] xl:flex-row flex-col">
-        <div className="flex flex-col gap-[35px] xl:max-w-[40%]">
-          <div className="md:text-[48px] text-[24px] font-semibold">
-            <span>Smart Support for Every </span>
-            <span className="text-[#C209C1]">Creative Role</span>
-          </div>
-          <p className="md:text-[18px] text-[20px]">
-            Our AI companions are designed to elevate how you work—no matter
-            your craft. From branding and content creation to UX design and SEO,
-            get tailored assistance that boosts productivity, enhances
-            creativity, and simplifies your day-to-day tasks—all in one seamless
-            experience.
-          </p>
-          <button className="w-[183px] h-[54px] rounded-[743px] bg-[#BDFF00] py-[13px] px-[23px] text-center text-black text-[18px] font-semibold">
-            Get started
-          </button>
-        </div>
-        <div className="grid grid-cols-2 h-[450px] md:grid-cols-3 gap-x-4 gap-y-10 xl:gap-y-0 xl:pt-15 xl:w-[50%]">
-          <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
-            <img
-              src="/ai-assistants/smart-support/1.png"
-              className="absolute top-[-20%] h-[66px] w-[66px] lg:h-[75px] lg:w-[75px] left-1/2 -translate-x-1/2"
-              />
-            <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-              Generate on-brand visuals, wireframes, and layouts instantly.
+      <div className="max-w-[90%] mx-auto bg-[#1B1F3B] rounded-[39px] text-[#FFFFFF] px-10 py-20">
+        <div className="flex md:gap-[67px] gap-[40px] xl:flex-row flex-col">
+          <div className="flex flex-col gap-[35px] xl:max-w-[40%]">
+            <div className="md:text-[48px] text-[24px] font-semibold">
+              <span>{content[currentKey].heading[0]}</span>{" "}
+              <span className="text-[#C209C1]">{content[currentKey].heading[1]}</span>{" "}
+              <span>{content[currentKey].heading[2]??""}</span>
+            </div>
+            <p className="md:text-[18px] text-[20px]">
+           {content[currentKey].description}
             </p>
+            <button className="w-[183px] h-[54px] rounded-[743px] bg-[#BDFF00] py-[13px] px-[23px] text-center text-black text-[18px] font-semibold">
+              Get started
+            </button>
           </div>
-
-          <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
-            <img
-              src="/ai-assistants/smart-support/2.png"
-              className="absolute top-[-20%] h-[65px] left-1/2 -translate-x-1/2"
+          <div className="grid grid-cols-2 h-[450px] md:grid-cols-3 gap-x-4 gap-y-10 xl:gap-y-0 xl:pt-15 xl:w-[50%]">
+            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+              <img
+                src={features[currentKey]?.[0]?.image}
+                className={`absolute top-[-20%]   left-1/2 -translate-x-1/2 object-contain ${
+                  features[currentKey]?.[0]?.classname ?? ""
+                }`}
               />
-            <p className="bottom-0 absolute  text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-              Optimize SEO content with smart keyword and meta tips.
-            </p>
-          </div>
+              <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
+                {features[currentKey]?.[0]?.text}
+              </p>
+            </div>
 
-          <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
-            <img
-              src="/ai-assistants/smart-support/3.png"
-              className="absolute top-[-20%] h-[65px] left-1/2 -translate-x-1/2"
+            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+              <img
+                src={features[currentKey]?.[1].image}
+                className="absolute top-[-20%] h-[65px]   left-1/2 -translate-x-1/2"
               />
-            <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-              Create logos, color palettes, and brand assets fast.
-            </p>
-          </div>
+              <p className="bottom-0 absolute  text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
+                {features[currentKey]?.[1].text}
+              </p>
+            </div>
 
-          <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
-            <img
-              src="/ai-assistants/smart-support/4.png"
-              className="absolute top-[-20%] left-1/2 -translate-x-1/2"
+            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+              <img
+                src={features[currentKey]?.[2].image}
+                className="absolute top-[-20%] h-[65px] left-1/2 -translate-x-1/2"
               />
-            <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-              Connect and grow in a creative AI community.
-            </p>
-          </div>
+              <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
+                {features[currentKey]?.[2].text}
+              </p>
+            </div>
 
-          <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
-            <img
-              src="/ai-assistants/smart-support/5.png"
-              className="absolute top-[-20%] left-1/2 -translate-x-1/2"
+            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+              <img
+                src={features[currentKey]?.[3].image}
+                className={`absolute top-[-20%]  object-contain left-1/2 -translate-x-1/2  ${
+                  features[currentKey]?.[3]?.classname ?? ""
+                } `}
               />
-            <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-              Get AI-powered strategy, targeting, and campaign ideas.
-            </p>
-          </div>
+              <p className="bottom-0 absolute text-[12px]  sm:text-[16px] xl:text-[14px] px-2 py-1">
+                {features[currentKey]?.[3].text}
+              </p>
+            </div>
 
-          <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
-            <img
-              src="/ai-assistants/smart-support/6.png"
-              className="absolute top-[-20%] left-1/2 -translate-x-1/2"
+            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+              <img
+                src={features[currentKey]?.[4].image}
+                className="absolute top-[-20%] left-1/2 -translate-x-1/2"
               />
-            <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-              Write content in your tone across all formats.
-            </p>
+              <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
+                {features[currentKey]?.[4].text}
+              </p>
+            </div>
+
+            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+              <img
+                src={features[currentKey]?.[5].image}
+                className="absolute top-[-20%] left-1/2 -translate-x-1/2"
+              />
+              <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
+                {features[currentKey]?.[5].text}
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-              </div>
   );
 }
 
