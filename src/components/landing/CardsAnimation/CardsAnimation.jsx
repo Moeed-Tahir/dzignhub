@@ -11,7 +11,6 @@ const CardsAnimation = () => {
   const imagesRef = useRef([]);
   const contentRef = useRef([]);
 
-  // Sample data for 5 cards
   const cardsData = [
     {
       id: 1,
@@ -68,7 +67,6 @@ const CardsAnimation = () => {
       transformStyle: "preserve-3d",
     });
 
-
     gsap.set(images[0], { opacity: 1 });
 
     const tl = gsap.timeline({
@@ -77,45 +75,86 @@ const CardsAnimation = () => {
         start: "top top",
         end: "+=4500",
         scrub: 1,
+        markers: true,
         pin: true,
         anticipatePin: 1,
       },
     });
 
-    cardsData.forEach((_, index) => {
-      const progress = index / (cardsData.length - 1);
-
-      tl.to(
-        images[index],
-        {
-          opacity: 1,
-          skewX: 0,
-          rotate: 0,
-          x: "0%",
-          y: "0%",
-          scale: 1,
-          transformOrigin: "center center",
-          transformStyle: "preserve-3d",
-          duration: 1,
-          ease: "none",
-        },
-        progress * 2
-      ).to(
-        images[index],
-        {
-          opacity: 1,
-          skewX: 10,
-          rotate: 90,
-          y: "-35vh",
-          scale: 1,
-          transformOrigin: "center center",
-          transformStyle: "preserve-3d",
-          duration: 1,
-          ease: "none",
-        },
-        progress * 2 + 1
-      );
+    gsap.set(contents, {
+      opacity: 1,
+      y: "50vh",
     });
+cardsData.forEach((_, index) => {
+  const progress = index / (cardsData.length - 1);
+
+  // Animate image to center
+  tl.to(
+    images[index],
+    {
+      opacity: 1,
+      skewX: 0,
+      rotate: 0,
+      x: "0%",
+      y: "0%",
+      scale: 1,
+      duration: 1,
+      ease: "none",
+    },
+    progress * 2
+  );
+
+  // Animate content in sync with image
+  tl.to(
+    contents[index],
+    {
+      opacity: 1,
+      y: -20,
+      duration: 1,
+      ease: "none",
+    },
+    progress * 2 // same time as image enter
+  );
+
+  // Animate image to top
+  tl.to(
+    images[index],
+    {
+      opacity: 1,
+      skewX: 10,
+      rotate: 90,
+      y: "-35vh",
+      scale: 1,
+      duration: 1,
+      ease: "none",
+    },
+    progress * 2 + 1
+  );
+
+  // Animate content fade out
+  tl.to(
+    contents[index],
+    {
+      opacity: 0,
+      y: "-50vh",
+      duration: 1,
+      ease: "none",
+    },
+    progress * 2 + 1
+  );
+});
+
+
+    // cardsData.forEach((_, index) => {
+    //   const progress = index / (cardsData.length - 1);
+
+    //   tl2.to(`.content-${index}`, {
+    //     opacity: 1,
+    //     y: -20,
+    //     // duration: 1,
+    //     ease: "none",
+    //   }, );
+    // });
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
@@ -158,18 +197,18 @@ const CardsAnimation = () => {
               ))}
             </div>
 
-            <div className="relative h-screen">
+            <div className="relative h-screen flex  items-center">
               {cardsData.map((card, index) => (
                 <div
                   key={card.id}
                   ref={(el) => (contentRef.current[index] = el)}
-                  className="absolute top-1/2 translate-y-1/2 w-full"
+                  className={` content-${index} right-0   absolute inset-0 flex items-center justify-start w-full`}
                 >
-                  <div className="p-8 flex flex-col justify-start">
-                    <h3 className="text-3xl content-title font-bold text-white mb-4">
+                  <div className="p-8 flex flex-col justify-center">
+                    <h3 className="text-3xl content-title text-right font-bold text-white mb-4">
                       {card.title}
                     </h3>
-                    <p className="text-gray-300 text-lg mb-6 leading-relaxed">
+                    <p className="text-gray-300 text-lg mb-6 text-right leading-relaxed">
                       {card.description}
                     </p>
                   </div>
