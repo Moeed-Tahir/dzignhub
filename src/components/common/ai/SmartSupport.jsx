@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
 function SmartSupport({ currentKey }) {
   const content = {
@@ -12,18 +13,16 @@ function SmartSupport({ currentKey }) {
       description:
         "Our AI companions are designed to elevate how you work—no matter your craft. From branding and content creation to UX design and SEO, get tailored assistance that boosts productivity, enhances creativity, and simplifies your day-to-day tasks—all in one seamless experience.",
     },
-    ui_ux:{
-      heading:[
-        "UI/UX Designer AI:","Design","Flows with Ease"
-      ],
-      description:"Streamline your product design process from wireframe to prototype. Generate clean layouts, build user flows, and refine UX with intelligent feedback—your design partner at every step."
+    ui_ux: {
+      heading: ["UI/UX Designer AI:", "Design", "Flows with Ease"],
+      description:
+        "Streamline your product design process from wireframe to prototype. Generate clean layouts, build user flows, and refine UX with intelligent feedback—your design partner at every step.",
     },
-     seo:{
-      heading:[
-        "SEO Assistant AI: Rank","Higher","Work Less"
-      ],
-      description:"Let your AI assistant handle the SEO hustle. From keyword research to metadata and technical audits, get smart recommendations that keep your content discoverable and your rankings strong."
-    }
+    seo: {
+      heading: ["SEO Assistant AI: Rank", "Higher", "Work Less"],
+      description:
+        "Let your AI assistant handle the SEO hustle. From keyword research to metadata and technical audits, get smart recommendations that keep your content discoverable and your rankings strong.",
+    },
   };
 
   const features = {
@@ -145,25 +144,146 @@ function SmartSupport({ currentKey }) {
       },
     ],
   };
+
+  const ref = useRef(null);
+  const isInView = useInView(ref, {
+    threshold: 0.1,
+    once: true,
+  });
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.2,
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const leftContentVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const descriptionVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        delay: 0.2,
+      },
+    },
+  };
+
+  const buttonVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+        delay: 0.4,
+      },
+    },
+  };
+
+  const gridVariants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
-    <div className="xl:py-20 py-10">
+    <motion.div
+      ref={ref}
+      variants={containerVariants}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      className="xl:py-20 py-10"
+    >
       <div className="max-w-[90%] mx-auto bg-[#1B1F3B] rounded-[39px] text-[#FFFFFF] px-10 py-20">
         <div className="flex md:gap-[67px] gap-[40px] xl:flex-row flex-col">
-          <div className="flex flex-col gap-[35px] xl:max-w-[40%]">
-            <div className="md:text-[48px] text-[24px] font-semibold">
+          <motion.div
+            variants={leftContentVariants}
+            className="flex flex-col gap-[35px] xl:max-w-[40%]"
+          >
+            <motion.div
+              variants={titleVariants}
+              className="md:text-[48px] text-[24px] font-semibold"
+            >
               <span>{content[currentKey].heading[0]}</span>{" "}
-              <span className="text-[#C209C1]">{content[currentKey].heading[1]}</span>{" "}
-              <span>{content[currentKey].heading[2]??""}</span>
-            </div>
-            <p className="md:text-[18px] text-[20px]">
-           {content[currentKey].description}
-            </p>
-            <button className="w-[183px] h-[54px] rounded-[743px] bg-[#BDFF00] py-[13px] px-[23px] text-center text-black text-[18px] font-semibold">
+              <span className="text-[#C209C1]">
+                {content[currentKey].heading[1]}
+              </span>{" "}
+              <span>{content[currentKey].heading[2] ?? ""}</span>
+            </motion.div>
+            <motion.p
+              variants={descriptionVariants}
+              className="md:text-[18px] text-[20px]"
+            >
+              {content[currentKey].description}
+            </motion.p>
+            <motion.button
+              variants={buttonVariants}
+              className="w-[183px] h-[54px] rounded-[743px] bg-[#BDFF00] py-[13px] px-[23px] text-center text-black text-[18px] font-semibold"
+            >
               Get started
-            </button>
-          </div>
-          <div className="grid grid-cols-2 h-[450px] md:grid-cols-3 gap-x-4 gap-y-10 xl:gap-y-0 xl:pt-15 xl:w-[50%]">
-            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+            </motion.button>
+          </motion.div>
+          <motion.div
+            variants={gridVariants}
+            className="grid grid-cols-2 h-[450px] md:grid-cols-3 gap-x-4 gap-y-10 xl:gap-y-0 xl:pt-15 xl:w-[50%]"
+          >
+            <motion.div
+              variants={cardVariants}
+              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
+            >
               <img
                 src={features[currentKey]?.[0]?.image}
                 className={`absolute top-[-20%]   left-1/2 -translate-x-1/2 object-contain ${
@@ -173,9 +293,12 @@ function SmartSupport({ currentKey }) {
               <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
                 {features[currentKey]?.[0]?.text}
               </p>
-            </div>
+            </motion.div>
 
-            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+            <motion.div
+              variants={cardVariants}
+              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
+            >
               <img
                 src={features[currentKey]?.[1].image}
                 className="absolute top-[-20%] h-[65px]   left-1/2 -translate-x-1/2"
@@ -183,9 +306,12 @@ function SmartSupport({ currentKey }) {
               <p className="bottom-0 absolute  text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
                 {features[currentKey]?.[1].text}
               </p>
-            </div>
+            </motion.div>
 
-            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+            <motion.div
+              variants={cardVariants}
+              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
+            >
               <img
                 src={features[currentKey]?.[2].image}
                 className="absolute top-[-20%] h-[65px] left-1/2 -translate-x-1/2"
@@ -193,9 +319,12 @@ function SmartSupport({ currentKey }) {
               <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
                 {features[currentKey]?.[2].text}
               </p>
-            </div>
+            </motion.div>
 
-            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+            <motion.div
+              variants={cardVariants}
+              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
+            >
               <img
                 src={features[currentKey]?.[3].image}
                 className={`absolute top-[-20%]  object-contain left-1/2 -translate-x-1/2  ${
@@ -205,9 +334,12 @@ function SmartSupport({ currentKey }) {
               <p className="bottom-0 absolute text-[12px]  sm:text-[16px] xl:text-[14px] px-2 py-1">
                 {features[currentKey]?.[3].text}
               </p>
-            </div>
+            </motion.div>
 
-            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+            <motion.div
+              variants={cardVariants}
+              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
+            >
               <img
                 src={features[currentKey]?.[4].image}
                 className="absolute top-[-20%] left-1/2 -translate-x-1/2"
@@ -215,9 +347,12 @@ function SmartSupport({ currentKey }) {
               <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
                 {features[currentKey]?.[4].text}
               </p>
-            </div>
+            </motion.div>
 
-            <div className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative">
+            <motion.div
+              variants={cardVariants}
+              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
+            >
               <img
                 src={features[currentKey]?.[5].image}
                 className="absolute top-[-20%] left-1/2 -translate-x-1/2"
@@ -225,11 +360,11 @@ function SmartSupport({ currentKey }) {
               <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
                 {features[currentKey]?.[5].text}
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

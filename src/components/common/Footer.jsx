@@ -1,8 +1,9 @@
 import Link from "next/link";
-import React from "react";
+import React, { useRef } from "react";
 import { Roboto } from "next/font/google";
 import LanguageDropdown from "./LanguageDropdown";
 import { Syne } from "next/font/google";
+import { motion, useInView } from "framer-motion";
 const footerLinks = [
   {
     title: "Explore",
@@ -78,12 +79,75 @@ const syne = Syne({
   weight: ["400", "500", "600", "700"],
   variable: "--font-syne",
 });
-function Footer() {
+    function Footer() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { 
+    threshold: 0.1,
+    once: true
+  });
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.2,
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const logoSectionVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const linksSectionVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const bottomSectionVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
-    <div className=" w-full bg-[#1B1F3B] text-[#EDEDED]">
+    <motion.div 
+      ref={ref}
+      variants={containerVariants}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      className=" w-full bg-[#1B1F3B] text-[#EDEDED]"
+    >
       <div className="max-w-[1440px] mx-auto gap-[42px]  md:py-[64px] md:px-[80px] py-[32px] px-[24px] md:gap-[64px]   flex flex-col ">
         <div className="max-w-[1280px] w-full mx-auto  gap-[42px] md:gap-[64px]  flex md:flex-row flex-wrap flex-col justify-between">
-          <div className="max-w-[320px] w-full border-black  flex flex-col  gap-[32px]">
+          <motion.div 
+            variants={logoSectionVariants}
+            className="max-w-[320px] w-full border-black  flex flex-col  gap-[32px]"
+          >
             <img
               src="/common/footer/logo-with-name.svg"
               className="max-w-[185.07px]  max-h-[35.26px]"
@@ -95,11 +159,15 @@ function Footer() {
                 </Link>
               ))}
             </div>
-          </div>
-          <div className="flex  flex-wrap gap-[120px]">
+          </motion.div>
+          <motion.div 
+            variants={linksSectionVariants}
+            className="flex  flex-wrap gap-[120px]"
+          >
             {footerLinks.map((section, i) => (
-              <div
+              <motion.div
                 key={i}
+                variants={linksSectionVariants}
                 className={`flex flex-col gap-[13px] ${roboto.className}  text-[#FFFFFF]`}
               >
                 <h2 className="text-[20px] font-semibold">{section.title}</h2>
@@ -108,11 +176,14 @@ function Footer() {
                     {link.label}
                   </Link>
                 ))}
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-        <div className="max-w-[1280px] w-full mx-auto  flex flex-col gap-[16px] border-t border-[#E0E0E0]">
+        <motion.div 
+          variants={bottomSectionVariants}
+          className="max-w-[1280px] w-full mx-auto  flex flex-col gap-[16px] border-t border-[#E0E0E0]"
+        >
           <div className=" flex flex-col gap-[24px] py-[16px]  items-center">
             <div className="flex gap-[24px] flex-wrap   mx-auto items-center text-[11.63px]">
               {policyLinks.map(({ label, href }, index) => (
@@ -124,8 +195,9 @@ function Footer() {
             <LanguageDropdown />
             <p className="text-[11.63px]">© 2025 PicsArt, Inc.</p>
           </div>
-        </div>
-        <div
+        </motion.div>
+        <motion.div
+          variants={bottomSectionVariants}
           className={`max-w-[1280px] w-full mx-auto gap-[24px]  flex flex-col md:flex-row justify-between  flex-wrap text-[16px] text-[#FFFFFF] ${syne.className} `}
           style={{}}
         >
@@ -140,9 +212,9 @@ function Footer() {
             <span>© 2025 Copyright by </span>{" "}
             <span className="font-bold">Aiyaiya</span>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

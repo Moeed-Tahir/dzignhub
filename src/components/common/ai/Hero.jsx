@@ -1,6 +1,7 @@
 'use client';
 import React from "react";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 
 function Hero({currentKey}) {
 
@@ -42,9 +43,113 @@ function Hero({currentKey}) {
 
   if (!content) return null;
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.2,
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const imageVariants = {
+    hidden: { 
+      opacity: 0,
+      scale: 0.8,
+      y: 20
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const textVariants = {
+    hidden: { 
+      opacity: 0,
+      y: 30
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const sideImageVariants = {
+    hidden: { 
+      opacity: 0,
+      x: -50,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        duration: 0.7,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const rightImageVariants = {
+    hidden: { 
+      opacity: 0,
+      x: 50,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        duration: 0.7,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const floatingVariants = {
+    animate: {
+      y: [-10, 10, -10],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  const floatingVariantsReverse = {
+    animate: {
+      y: [10, -10, 10],
+      transition: {
+        duration: 3.5,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
-    <>
-      <div
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div
+        variants={imageVariants}
         style={{
           background:
             "linear-gradient(180deg, rgba(255, 255, 255, 0.1) 3.25%, rgba(255, 255, 255, 0.04) 96.75%)",
@@ -55,33 +160,56 @@ function Hero({currentKey}) {
           src={content.mainImage}
           className="md:rounded-[70px] rounded-[32px] xl:h-[471px] lg:h-[380px] md:h-[330px] h-[219px] w-[96%] mx-auto object-cover"
         />
-      </div>
+      </motion.div>
 
-      <div className="absolute left-[-8%] md:left-[0%] xl:max-w-[306px] xl:max-h-[326px]  max-h-[170px] max-w-[170px] h-full w-full sm:top-[20%] xl:top-[30%] top-[15%] z-0">
-        <img
+      <motion.div 
+        variants={sideImageVariants}
+        initial="hidden"
+        animate="visible"
+        className="absolute left-[-8%] md:left-[0%] xl:max-w-[306px] xl:max-h-[326px]  max-h-[170px] max-w-[170px] h-full w-full sm:top-[20%] xl:top-[30%] top-[15%] z-0"
+      >
+        <motion.img
+          variants={floatingVariants}
+          animate="animate"
           src={content.leftImage}
           className="xl:w-[306px] xl:h-[326px] mx-auto object-cover"
         />
-      </div>
+      </motion.div>
 
-      <div className="absolute xl:h-[326px] xl:w-[260px] h-[156px] right-[0%] md:rounded-[40px] rounded-[18.54px] sm:top-[20%] top-[15%]">
-        <img
+      <motion.div 
+        variants={rightImageVariants}
+        initial="hidden"
+        animate="visible"
+        className="absolute xl:h-[326px] xl:w-[260px] h-[156px] right-[0%] md:rounded-[40px] rounded-[18.54px] sm:top-[20%] top-[15%]"
+      >
+        <motion.img
+          variants={floatingVariantsReverse}
+          animate="animate"
           src={content.rightImage}
           className="w-full h-full object-contain"
         />
-      </div>
+      </motion.div>
 
-      <div className="absolute max-w-[1300px] w-full left-1/2 -translate-x-1/2 lg:top-[28%] xl:top-[15%] top-[35%]">
+      <motion.div 
+        variants={textVariants}
+        className="absolute max-w-[1300px] w-full left-1/2 -translate-x-1/2 lg:top-[28%] xl:top-[15%] top-[35%]"
+      >
         <div className="flex flex-col gap-[19px] text-center text-[#FFFFFF]">
-          <h2 className="font-bold lg:text-[40px] xl:text-[68px] mx-auto  text-[36px]  ">
+          <motion.h2 
+            variants={textVariants}
+            className="font-bold lg:text-[40px] xl:text-[68px] mx-auto  text-[36px]  "
+          >
             {content.title}
-          </h2>
-          <p className="md:text-[20px] text-[18px] md:max-w-[70%] max-w-[90%] mx-auto">
+          </motion.h2>
+          <motion.p 
+            variants={textVariants}
+            className="md:text-[20px] text-[18px] md:max-w-[70%] max-w-[90%] mx-auto"
+          >
             {content.description}
-          </p>
+          </motion.p>
         </div>
-      </div>
-    </>
+      </motion.div>
+    </motion.div>
   );
 }
 
