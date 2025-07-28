@@ -17,7 +17,6 @@ const syne = Syne({
   variable: "--font-syne",
 });
 
-// Animation variants that trigger when in view
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0 },

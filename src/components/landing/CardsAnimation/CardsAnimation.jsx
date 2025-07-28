@@ -75,7 +75,6 @@ const CardsAnimation = () => {
         start: "top top",
         end: "+=4500",
         scrub: 1,
-        markers: true,
         pin: true,
         anticipatePin: 1,
       },
@@ -85,76 +84,79 @@ const CardsAnimation = () => {
       opacity: 1,
       y: "50vh",
     });
-cardsData.forEach((_, index) => {
-  const progress = index / (cardsData.length - 1);
+    cardsData.forEach((_, index) => {
+      const progress = index / (cardsData.length - 1);
 
-  // Animate image to center
-  tl.to(
-    images[index],
-    {
-      opacity: 1,
-      skewX: 0,
-      rotate: 0,
-      x: "0%",
-      y: "0%",
-      scale: 1,
-      duration: 1,
-      ease: "none",
-    },
-    progress * 2
-  );
+      tl.to(
+        images[index],
+        {
+          opacity: 1,
+          skewX: 0,
+          rotate: 0,
+          x: "0%",
+          y: "0%",
+          scale: 1,
+          duration: 1,
+          ease: "none",
+        },
+        progress * 2
+      );
 
-  // Animate content in sync with image
-  tl.to(
-    contents[index],
-    {
-      opacity: 1,
-      y: -20,
-      duration: 1,
-      ease: "none",
-    },
-    progress * 2 // same time as image enter
-  );
+      tl.to(
+        contents[index].querySelector('.content-title'),
+        {
+          color: "#BDFF00",
+          duration: 1,
+          ease: "none",
+        },
+        progress * 2
+      );
 
-  // Animate image to top
-  tl.to(
-    images[index],
-    {
-      opacity: 1,
-      skewX: 10,
-      rotate: 90,
-      y: "-35vh",
-      scale: 1,
-      duration: 1,
-      ease: "none",
-    },
-    progress * 2 + 1
-  );
+      tl.to(
+        contents[index],
+        {
+          opacity: 1,
+          y: -20,
+          duration: 1,
+          ease: "none",
+        },
+        progress * 2
+      );
 
-  // Animate content fade out
-  tl.to(
-    contents[index],
-    {
-      opacity: 0,
-      y: "-50vh",
-      duration: 1,
-      ease: "none",
-    },
-    progress * 2 + 1
-  );
-});
+      tl.to(
+        images[index],
+        {
+          opacity: 1,
+          skewX: 10,
+          rotate: 90,
+          y: "-35vh",
+          scale: 1,
+          duration: 1,
+          ease: "none",
+        },
+        progress * 2 + 1
+      );
 
-
-    // cardsData.forEach((_, index) => {
-    //   const progress = index / (cardsData.length - 1);
-
-    //   tl2.to(`.content-${index}`, {
-    //     opacity: 1,
-    //     y: -20,
-    //     // duration: 1,
-    //     ease: "none",
-    //   }, );
-    // });
+      tl.to(
+        contents[index].querySelector('.content-title'),
+        {
+          color: "#FFFFFF",
+          duration: 0.2,
+          ease: "none",
+        },
+        progress * 2 +1
+      );
+      tl.to(
+        contents[index],
+        {
+          opacity: 1,
+          y: "-70vh",
+          duration: 1,
+          ease: "none",
+        },
+        progress * 2 + 1
+      );
+    });
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
@@ -163,9 +165,9 @@ cardsData.forEach((_, index) => {
 
   return (
     <>
-      <div className="h-20"></div>
+      {/* <div className="h-20"></div> */}
 
-      <div ref={containerRef} className="h-screen bg-[#1B1F3B] overflow-hidden">
+      <div ref={containerRef} className="h-screen  bg-[#1B1F3B] overflow-hidden">
         <div className="max-w-[1440px] w-full mx-auto px-6 py-20 h-full flex flex-col justify-center">
           <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[600px]">
             <div
@@ -202,13 +204,15 @@ cardsData.forEach((_, index) => {
                 <div
                   key={card.id}
                   ref={(el) => (contentRef.current[index] = el)}
-                  className={` content-${index} right-0   absolute inset-0 flex items-center justify-start w-full`}
+                  className={` content-${index} right-0   absolute inset-0 flex items-center justify-end w-full`}
                 >
                   <div className="p-8 flex flex-col justify-center">
-                    <h3 className="text-3xl content-title text-right font-bold text-white mb-4">
+                    <h3
+                      className={`text-3xl title-${index} content-title text-right font-bold text-white mb-4`}
+                    >
                       {card.title}
                     </h3>
-                    <p className="text-gray-300 text-lg mb-6 text-right leading-relaxed">
+                    <p className="text-gray-300 w-[400px] text-lg mb-6 text-right leading-relaxed">
                       {card.description}
                     </p>
                   </div>
@@ -219,7 +223,7 @@ cardsData.forEach((_, index) => {
         </div>
       </div>
 
-      <div className="h-screen"></div>
+      {/* <div className="h-screen"></div> */}
     </>
   );
 };
