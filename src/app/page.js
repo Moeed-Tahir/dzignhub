@@ -140,6 +140,7 @@ export default function Landing() {
       <Pricing />
       <Testimonials />
       <FAQ />
+      
       <Assistants />
       <Footer />
     </>

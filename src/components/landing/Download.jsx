@@ -108,7 +108,7 @@ function Download() {
 
   return (
     <motion.div
-      className="w-full h-auto"
+      className="w-full h-auto overflow-hidden"
       style={{
         background: "#1B1F3B",
       }}

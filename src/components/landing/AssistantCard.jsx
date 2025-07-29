@@ -1,7 +1,7 @@
 function AssistantCard({ src, name="",style = {}, positionClass = "" }) {
   return (
     <div
-      className={`md:w-[380px] relative  md:max-h-[315px] w-[132px] max-h-[110px]  h-full overflow-hidden  flex flex-col justify-center items-center    border border-[#FFFFFF]/15 rounded-[10px] xl:rounded-[40px] `}
+      className={`md:w-[380px] relative  md:max-h-[315px] w-[132px] max-h-[110px]  h-full overflow-hidden  flex flex-col justify-center items-center lg:rounded-[40px] rounded-[14px]   border border-[#FFFFFF]/15 xl:rounded-[40px] `}
       style={{
         background: `
           linear-gradient(180deg, rgba(46, 51, 90, 0) 0%, rgba(28, 27, 51, 0.1) 100%),

@@ -5,6 +5,8 @@ import {
   IoIosArrowDroprightCircle,
 } from "react-icons/io";
 import { GoDotFill, GoDot } from "react-icons/go";
+import { AnimatePresence } from "framer-motion";
+
 function Templates() {
   const slides = [
     "/landing/templates/5/1.jpg",
@@ -14,13 +16,16 @@ function Templates() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  };
+ const prevSlide = () => {
+  console.log("Prev clicked");
+  setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+};
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  };
+const nextSlide = () => {
+  console.log("Next clicked");
+  setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+};
+
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -29,31 +34,31 @@ function Templates() {
       transition: {
         duration: 0.6,
         staggerChildren: 0.2,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   };
 
   const headerVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 50 
+    hidden: {
+      opacity: 0,
+      y: 50,
     },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const sectionVariants = {
-    hidden: { 
-      opacity: 0, 
+    hidden: {
+      opacity: 0,
       y: 60,
-      scale: 0.95
+      scale: 0.95,
     },
     visible: {
       opacity: 1,
@@ -61,35 +66,35 @@ function Templates() {
       scale: 1,
       transition: {
         duration: 0.7,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const imageVariants = {
-    hidden: { 
-      opacity: 0, 
+    hidden: {
+      opacity: 0,
       scale: 0.8,
-      rotate: 0
+      rotate: 0,
     },
     visible: {
       opacity: 1,
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const slideImageVariants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0.9 }
+    exit: { opacity: 0, scale: 0.9 },
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="w-full"
       initial="hidden"
       whileInView="visible"
@@ -97,27 +102,30 @@ function Templates() {
       variants={containerVariants}
     >
       <div className="max-w-[1280px] gap-[64px] p-[30px] flex flex-col mx-auto">
-        <motion.div 
+        <motion.div
           className="max-w-[1280px] h-[218px] flex flex-col"
           variants={headerVariants}
         >
-          <motion.div style={{
-            fontFamily: 'General Sans',
-            fontWeight: 600
-          }} className=" font-semibold text-[25px] lg:text-[48px] lg:w-[80%] text-black">
-            Over <motion.span 
+          <motion.div
+            style={{
+              fontFamily: "General Sans",
+              fontWeight: 600,
+            }}
+            className=" font-semibold text-[25px] lg:text-[48px] lg:w-[80%] text-black"
+          >
+            Over{" "}
+            <motion.span
               className="text-[#C209C1]"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
               viewport={{ once: true }}
-            >150,000</motion.span> ready-made
-            templates to choose from
+            >
+              150,000
+            </motion.span>{" "}
+            ready-made templates to choose from
           </motion.div>
-          <motion.div 
-            className="p-2"
-            variants={headerVariants}
-          >
+          <motion.div className="p-2" variants={headerVariants}>
             <p className="leading-[22px] font-[400] text-[20px] align-middle text-[#3D4050] font-[general-sans]">
               Discover our curated website design catalog featuring a range of
               categories <br /> to match your preferences and projects.
@@ -125,33 +133,37 @@ function Templates() {
           </motion.div>
         </motion.div>
 
-        <motion.div 
-          id="templates" 
+        <motion.div
+          id="templates"
           className="max-w-[1280px] mx-auto w-full flex flex-col gap-[32px]"
           variants={containerVariants}
         >
-         {/* Row 1 - Website Section */}
-         <motion.div 
-           className="max-w-[1280px] h-[366px] md:h-[362px] bg-[#E4E7FA] rounded-[20px] overflow-hidden relative"
-           variants={sectionVariants}
-           whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
-         >
+          {/* Row 1 - Website Section */}
+          <motion.div
+            className="max-w-[1280px] h-[366px] md:h-[362px] bg-[#E4E7FA] rounded-[20px] overflow-hidden relative"
+            variants={sectionVariants}
+            whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
+          >
             <div className="absolute top-[20.04px] left-[20.5px] flex flex-col gap-[8.64px]">
-              <p className="text-[30px] text-[#C209C1]  font-medium">Website</p>
+              <p className="text-[30px] text-[#C209C1]  font-semibold md:font-medium">Website</p>
               <p className="text-[18px] text-[#3D4050] break-words whitespace-normal ">
                 Create gorgeous landing pages with a simple prompt.
               </p>
             </div>
-            
-                      {/* Mobile Layout - Show only first 3 images */}
-                      <motion.div 
-                        className="md:hidden w-full h-[309px] absolute top-[180px] left-[20px] right-[20px]"
-                        variants={containerVariants}
-                      >
-              <motion.div 
+
+            {/* Mobile Layout - Show only first 3 images */}
+            <motion.div
+              className="md:hidden w-full h-[309px] absolute top-[180px] left-[20px] right-[20px]"
+              variants={containerVariants}
+            >
+              <motion.div
                 className="w-[100px] h-[140px] absolute left-[10px] top-[60px] z-2 overflow-hidden rounded-[10.64px] rotate-[-2deg]"
                 variants={imageVariants}
-                whileHover={{ scale: 1.1, rotate: 0, transition: { duration: 0.3 } }}
+                whileHover={{
+                  scale: 1.1,
+                  rotate: 0,
+                  transition: { duration: 0.3 },
+                }}
               >
                 <img
                   src="/landing/templates/1/1.jpg"
@@ -159,10 +171,14 @@ function Templates() {
                   className="w-full h-full object-cover"
                 />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="w-[100px] h-[140px] absolute left-[90px] top-[40px] z-1 overflow-hidden rounded-[8.87px] rotate-[-2deg]"
                 variants={imageVariants}
-                whileHover={{ scale: 1.1, rotate: 0, transition: { duration: 0.3 } }}
+                whileHover={{
+                  scale: 1.1,
+                  rotate: 0,
+                  transition: { duration: 0.3 },
+                }}
               >
                 <img
                   src="/landing/templates/1/2.jpg"
@@ -170,10 +186,14 @@ function Templates() {
                   className="w-full h-full object-cover"
                 />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="w-[100px] h-[140px] absolute left-[170px] top-[20px] overflow-hidden rounded-[8.87px] rotate-[-2deg]"
                 variants={imageVariants}
-                whileHover={{ scale: 1.1, rotate: 0, transition: { duration: 0.3 } }}
+                whileHover={{
+                  scale: 1.1,
+                  rotate: 0,
+                  transition: { duration: 0.3 },
+                }}
               >
                 <img
                   src="/landing/templates/1/3.jpg"
@@ -184,68 +204,116 @@ function Templates() {
             </motion.div>
 
             {/* Desktop Layout - Show all 6 images */}
-            <motion.div 
+            <motion.div
               className="hidden md:block w-[1258px] h-[309px] absolute top-[57px] left-[22px]"
               variants={containerVariants}
             >
-              <motion.div 
+              <motion.div
                 className="w-[255.38px] absolute left-[0.48px] top-[118.42px] z-2 overflow-hidden rounded-[10.64px] rotate-[-2deg] inline-block"
                 variants={imageVariants}
-                whileHover={{ scale: 1.05, rotate: 0, transition: { duration: 0.3 } }}
+                whileHover={{
+                  scale: 1.05,
+                  rotate: 0,
+                  transition: { duration: 0.3 },
+                }}
               >
-                <img src="/landing/templates/1/1.jpg" alt="Image" className="w-full h-full object-cover" />
+                <img
+                  src="/landing/templates/1/1.jpg"
+                  alt="Image"
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="w-[255.38px] absolute left-[183.12px] top-[92.75px] z-1 overflow-hidden rounded-[8.87px] rotate-[-2deg]"
                 variants={imageVariants}
-                whileHover={{ scale: 1.05, rotate: 0, transition: { duration: 0.3 } }}
+                whileHover={{
+                  scale: 1.05,
+                  rotate: 0,
+                  transition: { duration: 0.3 },
+                }}
               >
-                <img src="/landing/templates/1/2.jpg" alt="Image" className="w-full h-full object-cover" />
+                <img
+                  src="/landing/templates/1/2.jpg"
+                  alt="Image"
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="w-[255.38px] absolute left-[365.76px] top-[67.08px] overflow-hidden rounded-[8.87px] rotate-[-2deg]"
                 variants={imageVariants}
-                whileHover={{ scale: 1.05, rotate: 0, transition: { duration: 0.3 } }}
+                whileHover={{
+                  scale: 1.05,
+                  rotate: 0,
+                  transition: { duration: 0.3 },
+                }}
               >
-                <img src="/landing/templates/1/3.jpg" alt="Image" className="w-full h-full object-cover" />
+                <img
+                  src="/landing/templates/1/3.jpg"
+                  alt="Image"
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="w-[255.38px] absolute left-[548.76px] top-[118.58px] z-1 overflow-hidden rounded-[8.87px] rotate-[-2deg]"
                 variants={imageVariants}
-                whileHover={{ scale: 1.05, rotate: 0, transition: { duration: 0.3 } }}
+                whileHover={{
+                  scale: 1.05,
+                  rotate: 0,
+                  transition: { duration: 0.3 },
+                }}
               >
-                <img src="/landing/templates/1/4.jpg" alt="Image" className="w-full h-full object-cover" />
+                <img
+                  src="/landing/templates/1/4.jpg"
+                  alt="Image"
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="w-[255.38px] absolute left-[730.64px] top-[92.91px] overflow-hidden rounded-[8.87px] rotate-[-2deg]"
                 variants={imageVariants}
-                whileHover={{ scale: 1.05, rotate: 0, transition: { duration: 0.3 } }}
+                whileHover={{
+                  scale: 1.05,
+                  rotate: 0,
+                  transition: { duration: 0.3 },
+                }}
               >
-                <img src="/landing/templates/1/5.jpg" alt="Image" className="w-full h-full object-cover" />
+                <img
+                  src="/landing/templates/1/5.jpg"
+                  alt="Image"
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="w-[505.17px] absolute left-[964px] top-[149.63px] overflow-hidden rounded-[8.87px] rotate-[-2deg]"
                 variants={imageVariants}
-                whileHover={{ scale: 1.05, rotate: 0, transition: { duration: 0.3 } }}
+                whileHover={{
+                  scale: 1.05,
+                  rotate: 0,
+                  transition: { duration: 0.3 },
+                }}
               >
-                <img src="/landing/templates/1/6.jpg" alt="Image" className="w-full h-full object-cover" />
+                <img
+                  src="/landing/templates/1/6.jpg"
+                  alt="Image"
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
             </motion.div>
           </motion.div>
 
           {/* Row 2 */}
           {/* Row 2 */}
-          <motion.div 
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-3 w-full h-auto md:h-[362px] gap-[32px] md:overflow-hidden"
             variants={containerVariants}
           >
-            <motion.div 
+            <motion.div
               className="col-span-1 bg-[#E4E7FA] rounded-[20px] h-[362px] relative overflow-hidden"
               variants={sectionVariants}
               whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
             >
               <div className="absolute top-[20.04px] left-[20.5px] flex flex-col gap-[8.64px]">
-                <p className="text-[30px] text-[#C209C1]  font-medium  ">
+                <p className="text-[30px] text-[#C209C1]  font-semibold md:font-medium ">
                   Lummi
                 </p>
                 <p className="text-[18px] text-[#3D4050]  ">
@@ -274,13 +342,13 @@ function Templates() {
                 />
               </div>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="col-span-1 md:col-span-2 bg-[#E4E7FA] rounded-[20px] h-auto md:h-[362px] relative"
               variants={sectionVariants}
               whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
             >
               <div className="top-[20px] left-[20px] flex flex-col gap-[8px] absolute">
-                <p className="text-[30px] text-[#C209C1]  font-medium ">
+                <p className="text-[30px] text-[#C209C1]  font-semibold md:font-medium ">
                   Brands
                 </p>
                 <p className="text-[18px] text-[#3D4050] ">
@@ -333,7 +401,7 @@ function Templates() {
                     />
                   </div>
                 </div>
-                <div className="w-[380.43px] h-[318.56px] top-[97.57px] left-[433.64px] rounded-[10.88px] absolute">
+                <div className="w-[335.43px] h-[318.56px] top-[97.57px] left-[433.64px] rounded-[10.88px] absolute">
                   <img
                     src="/landing/templates/3/3.jpg"
                     alt="Image"
@@ -345,17 +413,17 @@ function Templates() {
           </motion.div>
 
           {/* Row 3 */}
-          <motion.div 
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-3 w-full h-auto md:h-[362px] gap-[32px]"
             variants={containerVariants}
           >
-            <motion.div 
+            <motion.div
               className="col-span-1 md:col-span-2 bg-[#E4E7FA] rounded-[20px] h-[362px] relative overflow-hidden"
               variants={sectionVariants}
               whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
             >
               <div className="top-[20px] left-[20px] flex flex-col gap-[8px] absolute">
-                <p className="text-[30px] text-[#C209C1] font-medium ">
+                <p className="text-[30px] text-[#C209C1] font-semibold md:font-medium">
                   Social
                 </p>
                 <p className="text-[18px] w-[285px] text-[#3D4050] ">
@@ -378,14 +446,14 @@ function Templates() {
                 />
               </div>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="col-span-1 relative bg-[#E4E7FA] rounded-[20px] h-[362px] overflow-hidden"
               variants={sectionVariants}
               whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
             >
               {/* Text */}
               <div className="absolute top-[20px] left-[20px] flex flex-col gap-[8px]">
-                <p className="text-[30px] text-[#C209C1]  font-medium">
+                <p className="text-[30px] text-[#C209C1]  font-semibold md:font-medium">
                   Slides
                 </p>
                 <p className="text-[18px] w-[322px] text-[#3D4050] ">
@@ -394,37 +462,33 @@ function Templates() {
               </div>
 
               {/* Image */}
-              <div className="w-[270px] h-[151.88px] top-[153.34px] left-[66.08px] rounded-[10.13px] overflow-hidden absolute">
-                <motion.img
-                  src={slides[currentIndex]}
-                  alt="Slide"
-                  className="w-full h-full object-cover"
-                  key={currentIndex}
-                  variants={slideImageVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  transition={{ duration: 0.3 }}
-                />
+              <div className="w-[270px] h-[151.88px] top-[153.34px] left-[57.5px] rounded-[10.13px] overflow-hidden absolute">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={currentIndex} // IMPORTANT: forces re-mount on index change
+                    src={slides[currentIndex]}
+                    alt="Slide"
+                    className="w-full h-full object-cover"
+                    variants={slideImageVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    transition={{ duration: 0.3 }}
+                  />
+                </AnimatePresence>
               </div>
 
               {/* Arrows */}
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
+              <motion.div>
                 <IoIosArrowDropleftCircle
                   onClick={prevSlide}
                   className="w-[32px] h-[32px] top-[215px] left-[22px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
                 />
               </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
+              <motion.div >
                 <IoIosArrowDroprightCircle
                   onClick={nextSlide}
-                  className="w-[32px] h-[32px] top-[215px] left-[352px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
+                  className="w-[32px] h-[32px] top-[215px] right-[22px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
                 />
               </motion.div>
 
@@ -438,10 +502,11 @@ function Templates() {
                   >
                     <GoDot
                       onClick={() => setCurrentIndex(index)}
-                      className={`w-[7.25px] h-[7.25px] rounded-full cursor-pointer ${currentIndex === index
+                      className={`w-[7.25px] h-[7.25px] rounded-full cursor-pointer ${
+                        currentIndex === index
                           ? "bg-black "
                           : "bg-[#c2c4d5] text-[#c2c4d5]"
-                        }`}
+                      }`}
                     />
                   </motion.div>
                 ))}

@@ -137,7 +137,7 @@ function FAQ() {
       variants={containerVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className="w-full"
+      className="w-full overflow-hidden"
     >
       <div className="max-w-[1440px] h-auto flex mx-auto px-[20px] py-[40px] xl:p-[80px] gap-[56px] ">
         <div className="max-w-[1280px] rounded-[24px] gap-[56px] flex flex-col xl:flex-row">
@@ -162,12 +162,12 @@ function FAQ() {
                 your question, feel free to reach out!
               </motion.p>
             </div>
-            <motion.button 
+            {/* <motion.button 
               variants={buttonVariants}
               className="w-[194px] h-[56px] rounded-[999px] bg-[#BDFF00] font-medium text-[18px]"
             >
               View all questions
-            </motion.button>
+            </motion.button> */}
           </motion.div>
 
           <motion.div 
