@@ -15,7 +15,7 @@ const page = () => {
   return (
     <div className={`overflow-hidden w-full relative ${sidebarOpen ? "" : ""}`}>
       <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
-      <div className="bg-[url('/landing/image-creation/hero-bg.jpg')] bg-cover bg-center md:h-[885px] h-[883px] sm:h-[813px] relative overflow-hidden">
+      <div className="bg-[url('/landing/image-creation/hero-bg.jpg')] bg-cover bg-center md:h-[885px] h-[955px]  relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto">
           <Navbar
             showSidebarBtn={!sidebarOpen}
@@ -23,7 +23,7 @@ const page = () => {
           />
         </div>
         <div className="max-w-[1440px] mx-auto">
-          <Hero />
+          <Hero isVideoPage={true} />
         </div>
       </div>
       <div className="mt-[55px] md:w-full w-[90%] mx-auto  ">
