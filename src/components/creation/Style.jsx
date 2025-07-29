@@ -90,7 +90,7 @@ const Style = ({ selected, onChange,isImagePage }) => {
         {styles.map((style) => (
           <div
             key={style.id}
-            className={`flex items-center relative rounded-[10px] bg-[#F7F8F8] justify-between flex-col w-[100px] h-[98px]  cursor-pointer border-2 ${
+            className={`flex items-center relative rounded-[10px] bg-[#F7F8F8] justify-between flex-col w-[32%] h-[98px]  cursor-pointer border-2 ${
               selected && selected.id === style.id
                 ? "border-[#C209C1]"
                 : "border-transparent"

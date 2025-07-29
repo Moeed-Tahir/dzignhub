@@ -101,7 +101,7 @@ function Navbar({ onOpenSidebar }) {
   }, []);
   return (
     <motion.div
-      className=" h-[48px] py-10 md:px-10 px-5 xl:px-0 justify-between max-w-[1280px] mx-auto flex"
+      className=" h-[48px] py-10 md:px-10 w-full px-5 xl:px-0 justify-between max-w-[1280px] mx-auto flex"
       variants={navbarVariants}
       initial="hidden"
       animate="visible"
