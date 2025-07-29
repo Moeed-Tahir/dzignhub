@@ -198,7 +198,7 @@ function Testimonials() {
         viewport={{ once: true }}
       >
         <motion.div
-          className="flex gap-[16px] w-full  overflow-x-auto overflow-y-hidden items-center scrollbar-hide relative z-10"
+          className="flex w-max animate-scroll-left gap-[16px] relative z-10"
           variants={containerVariants}
         >
           {boxes.map((_, index) => {

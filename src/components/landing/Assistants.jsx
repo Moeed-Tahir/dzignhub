@@ -13,10 +13,19 @@ const assistants = [
   { src: "/landing/assistants/2.jpg", name: "Mira (Business Strategy)" },
   { src: "/landing/assistants/3.jpg", name: "Novi (SEO specialist)" },
   { src: "/landing/assistants/4.jpg", name: "Sana (Content Creation)" },
+    { src: "/landing/assistants/1.jpg", name: "Kano (UI/UX)" },
+  { src: "/landing/assistants/2.jpg", name: "Mira (Business Strategy)" },
+  { src: "/landing/assistants/3.jpg", name: "Novi (SEO specialist)" },
+  { src: "/landing/assistants/4.jpg", name: "Sana (Content Creation)" },
+   
 ];
 
 const assistants2 = [
   { src: "/landing/assistants/5.jpg", name: "Novi (SEO specialist)" },
+  { src: "/landing/assistants/3.jpg", name: "Sana (Content Creation)" },
+  { src: "/landing/assistants/1.jpg", name: "Kana (Data Analysis)" },
+  { src: "/landing/assistants/2.jpg", name: "Kano (UI/UX)" },
+    { src: "/landing/assistants/5.jpg", name: "Novi (SEO specialist)" },
   { src: "/landing/assistants/3.jpg", name: "Sana (Content Creation)" },
   { src: "/landing/assistants/1.jpg", name: "Kana (Data Analysis)" },
   { src: "/landing/assistants/2.jpg", name: "Kano (UI/UX)" },
@@ -130,15 +139,15 @@ function Assistants() {
 
   return (
     <motion.div 
-      className="w-full bg-[#1B1F3B] py-[80px] relative flex justify-center items-center overflow-hidden"
+      className="w-full bg-[#1B1F3B] py-[80px] relative"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={containerVariants}
     >
-      <div className="!w-[1600px] flex flex-col justify-center items-center gap-[20px]  xl:gap-[40px]     mx-auto   ">
+      <div className=" flex flex-col justify-center items-center gap-[20px]  xl:gap-[40px]      mx-auto  overflow-hidden  ">
         <motion.div 
-          className="flex gap-2 xl:gap-5"
+          className="flex gap-5  md:w-[1580px] w-[1000px] animate-scroll-left "
           variants={rowVariants}
         >
           {assistants.map((item, index) => (
@@ -150,7 +159,9 @@ function Assistants() {
                 y: -10,
                 transition: { duration: 0.3 } 
               }}
+              
             >
+              
               <AssistantCard
                 src={item.src}
                 name={item.name}
@@ -158,10 +169,11 @@ function Assistants() {
               />
             </motion.div>
           ))}
+          
         </motion.div>
 
         <motion.div 
-          className="flex gap-[24px] w-[90%] items-center justify-center"
+          className="flex gap-[24px] items-center justify-center w-full"
           variants={containerVariants}
         >
           <motion.div
@@ -214,7 +226,7 @@ function Assistants() {
         </motion.div>
 
         <motion.div 
-          className="flex gap-2 xl:gap-5"
+          className="flex gap-5  md:w-[1580px] w-[1000px] animate-scroll-right"
           variants={rowVariants}
         >
           {assistants2.map((item, index) => (
@@ -234,6 +246,7 @@ function Assistants() {
               />
             </motion.div>
           ))}
+          
         </motion.div>
       </div>
     </motion.div>

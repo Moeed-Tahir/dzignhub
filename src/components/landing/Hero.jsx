@@ -99,7 +99,7 @@ export default function Hero() {
                 <MdTranslate className="w-[13px] h-[13px] text-white" />
               </div>
             </div>
-            <p className="text-[#A7ADBE] text-[18px]">
+            <p className="text-[#FFFFFF] text-[18px] font-medium">
               Speech to speech release!
             </p>
 
@@ -107,7 +107,7 @@ export default function Hero() {
               src="/landing/Announcement-separator.png"
               className="w-[4px] h-[4px] lg:block hidden"
             />
-            <p className="text-[#BDFF00] text-[18px] lg:block hidden">
+            <p className="text-[#BDFF00] text-[18px] lg:block hidden font-medium">
               Get early access
             </p>
             <motion.button 
@@ -123,7 +123,7 @@ export default function Hero() {
             className="lg:hidden flex mx-auto gap-[10px] h-[28px] w-[191px]"
             variants={itemVariants}
           >
-            <p className="text-[#BDFF00] lg:text-[18px] text-[16px] ">
+            <p className="text-[#BDFF00] lg:text-[18px] text-[16px] font-medium ">
               Get early access
             </p>
             <motion.button 
@@ -141,7 +141,7 @@ export default function Hero() {
             variants={itemVariants}
           >
             <motion.h1
-              className={`lg:text-[68px] max-w-[929px] w-full text-[46px] text-white  text-center leading-tight  font-semibold`}
+              className={`lg:text-[68px] max-w-[929px] w-full text-[46px] text-white  text-center leading-tight  font-bold`}
               variants={itemVariants}
             >
               Turn Your Words Into Stunning Visuals

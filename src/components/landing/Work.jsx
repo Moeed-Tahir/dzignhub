@@ -8,7 +8,7 @@ const cardData = [
       "Start your project by uploading assets or choosing a template. You control the direction from the very beginning, shaping your vision exactly the way you want.",
     mobileManualImage: "/landing/work/mobile/manual-1.png",
     desktopManualImage: "/landing/work/desktop/manual-1.jpg",
-    mobileProImage: "/landing/work/mobile/pro-1.png",
+    mobileProImage: "/landing/work/mobile/pro-1.jpg",
     desktopProImage: "/landing/work/desktop/pro-1.jpg",
   },
   {
@@ -16,18 +16,18 @@ const cardData = [
     description:
       "Access powerful manual tools for image editing, video creation, or content design. You guide the process — the platform provides the flexibility and tools you need.",
     mobileManualImage: "/landing/work/mobile/manual-2.jpg",
-    desktopManualImage: "/landing/work/desktop/manual-2.svg",
+    desktopManualImage: "/landing/work/desktop/manual-2.jpg",
     mobileProImage: "/landing/work/mobile/pro-2.jpg",
-    desktopProImage: "/landing/work/desktop/pro-1.svg",
+    desktopProImage: "/landing/work/desktop/pro-2.jpg",
   },
   {
     title: "Customize & download",
     description:
       "Make final adjustments to suit your preferences. Once you’re done, download your finished files and bring your project to life with confidence.",
     mobileManualImage: "/landing/work/mobile/manual-3.jpg",
-    desktopManualImage: "/landing/work/desktop/manual-3.svg",
+    desktopManualImage: "/landing/work/desktop/manual-3.jpg",
     mobileProImage: "/landing/work/mobile/pro-3.jpg",
-    desktopProImage: "/landing/work/desktop/pro-1.svg",
+    desktopProImage: "/landing/work/desktop/pro-3.jpg",
   },
 ];
 
@@ -139,7 +139,7 @@ function Work() {
 
   return (
     <motion.div 
-      className="max-w-[1280px] pt-[64px] xl:px-[40px] px-[20px]  pb-[64px]  mx-auto"
+      className="max-w-[1280px] py-[64px] xl:px-[40px] px-[20px]  mx-auto"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
@@ -261,7 +261,7 @@ function Work() {
                   : cardData[selectedIndex].mobileManualImage
               }
               alt={cardData[selectedIndex].title}
-              className="object-contain rounded-[20px] max-h-[724px] md:hidden"
+              className="object-cover w-full rounded-[20px] max-h-[724px] md:hidden"
               key={`mobile-${selectedIndex}-${selected}`}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -280,7 +280,7 @@ function Work() {
                   : cardData[selectedIndex].desktopManualImage
               }
               alt={cardData[selectedIndex].title}
-              className="object-contain rounded-[20px] md:max-h-[1030px] hidden md:block"
+              className="object-cover w-[1280px] rounded-[20px] md:max-h-[853px] hidden md:block"
               key={`desktop-${selectedIndex}-${selected}`}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}

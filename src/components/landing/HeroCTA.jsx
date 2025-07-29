@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 function HeroCTA() {
   return (
     <div>
@@ -9,7 +10,7 @@ function HeroCTA() {
           initial={{ x: -20 }}
           animate={{ x: 0 }}
           transition={{ duration: 0.5, delay: 0.7 }}
-          className="text-[18px] text-[#9997A0]"
+          className="text-[18px] text-[#ffffff]"
         >
           A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape
         </motion.p>
@@ -28,12 +29,12 @@ function HeroCTA() {
             alt="star"
             className="w-[24px] h-[24px] object-contain"
           />
-          <span
-         
+          <a
+            href="/dashboard/image-creation"
             className="text-[#1B1F3B]"
           >
             Create image
-          </span>
+          </a>
         </motion.button>
       </div>
 
