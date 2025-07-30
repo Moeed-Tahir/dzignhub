@@ -4,6 +4,23 @@ import { motion, useInView } from "framer-motion";
 
 function ContentCreation({ currentKey }) {
   const flexData = {
+    strategyAssistant: [
+      {
+        id: 1,
+        content:
+          "Access instant insights on competitors, customer behavior, and emerging trends. Let your AI assistant surface what matters—so you can plan with clarity.",
+      },
+      {
+        id: 2,
+        content:
+          "From business models to go-to-market plans, create structured strategies tailored to your goals, timelines, and target markets.",
+      },
+      {
+        id: 3,
+        content:
+          "Monitor progress, adjust your plans in real time, and stay aligned with your key metrics—your AI assistant keeps you focused and future-ready.",
+      },
+    ],
     brandDesigner: [
       {
         id: 1,
@@ -75,6 +92,17 @@ function ContentCreation({ currentKey }) {
   };
 
   const assistants = {
+     strategyAssistant: {
+      id: 1,
+      title: "Strategy Assistant",
+      image: "/ai-assistants/strategy-assistant.png",
+
+      steps: [
+        "Analyze trends and opportunities",
+        "Build smart business roadmaps",
+        "Forecast growth and track KPIs",
+      ],
+    },
     brandDesigner: {
       id: 1,
       title: "Brand Designer",

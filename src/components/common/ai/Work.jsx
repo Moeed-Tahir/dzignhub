@@ -1,10 +1,44 @@
 "use client";
-import { usePathname } from "next/navigation";
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 function Work({ currentKey }) {
   const sectionData = {
+    strategyAssistant: {
+      heading: ["How ", "Mira", " Empowers Strategy Assistant"],
+      description:
+        "With Mira, you can enhance your strategic workflows using powerful AI support. From turning insights into actionable roadmaps to aligning teams around clear priorities, Mira helps you plan smarter, adapt faster, and make confident, data-driven decisions that move your business forward.",
+      data: [
+        {
+          id: 1,
+          logo: "/ai-assistants/strategy-assistant/1.svg",
+          title: "Refine Strategic Thinking",
+          content:
+            "Generate market insights, SWOT analyses, and competitive positioning in seconds. Mira helps you focus on making bold, data-backed strategic moves.",
+        },
+        {
+          id: 2,
+          logo: "/ai-assistants/strategy-assistant/2.svg",
+          title: "Visualize Actionable Roadmaps",
+          content:
+            "Transform goals into interactive strategic roadmaps, complete with timelines, milestones, and dependencies—perfectly aligned with business objectives.",
+        },
+        {
+          id: 3,
+          logo: "/ai-assistants/strategy-assistant/3.svg",
+          title: "Built for Strategic Planners",
+          content:
+            "Automate research summaries, stakeholder alignment decks, and framework creation like OKRs or 7Ps—so you spend less time structuring and more time thinking.",
+        },
+        {
+          id: 4,
+          logo: "/ai-assistants/strategy-assistant/4.svg",
+          title: "Plan & Execute with Confidence",
+          content:
+            "From idea to execution, Mira supports you in building clear strategies, measuring KPIs, and adapting plans in real-time—ensuring strategy turns into results.",
+        },
+      ],
+    },
     brandDesigner: {
       heading: ["How ", "Zara", " Empowers do Brand design"],
       description:
