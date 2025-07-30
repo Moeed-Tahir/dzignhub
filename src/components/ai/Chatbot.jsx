@@ -160,6 +160,16 @@ export default function ChatPage({
 
   }
 
+  function cleanAIResponse(aiResponse) {
+    return aiResponse
+      .trim()
+      .replace(/^```json\s*/i, '') // removes ```json
+      .replace(/^json\s*/i, '')    // removes json
+      .replace(/^```/, '')         // removes starting ```
+      .replace(/```$/, '')         // removes ending ```
+      .trim();
+  }
+
   const handleSend = async (msg) => {
     const newMessages = [...messages, { sender: "user", text: msg }];
     setMessages(newMessages);
@@ -222,13 +232,14 @@ export default function ChatPage({
 
         try {
           // Try to parse the string
-          jsonResponse = JSON.parse(aiResponse);
+          const cleaned = cleanAIResponse(aiResponse);
+          jsonResponse = JSON.parse(cleaned);
           isValidJson = true;
           console.log('✅ Parsed JSON response:', jsonResponse);
         } catch (err) {
           // It's just a plain string, not valid JSON
           console.error('❌ Not valid JSON, using as plain string.');
-          if (aiName.toLowerCase() == "sana" || aiName.toLowerCase() == "novi" || aiName.toLowerCase() == "ellie") {
+          if (aiName.toLowerCase() == "sana" || aiName.toLowerCase() == "novi" || aiName.toLowerCase() == "ellie" || aiName.toLowerCase() == "zara") {
             if (aiResponse.includes('"isFinal": true')) {
               console.log("isFinal found in invalid Json")
               const promptMatch = aiResponse.match(/"prompt"\s*:\s*"([\s\S]*?)",\s*"isFinal"/);
