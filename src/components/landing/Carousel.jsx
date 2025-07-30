@@ -79,7 +79,7 @@ function Carousel() {
         className="lg:h-[200px] h-[130px] relative overflow-hidden"
         variants={carouselRowVariants}
       >
-        <div className="flex w-max animate-scroll-left gap-[20px]">
+        <div className="flex max-w-[3000px] animate-scroll-left gap-[20px]">
           {[...images, ...images].map((url, index) => (
             <motion.img
               key={index}
@@ -97,7 +97,7 @@ function Carousel() {
         className="lg:h-[200px] h-[130px]  relative overflow-hidden"
         variants={carouselRowVariants}
       >
-        <div className="flex w-max animate-scroll-right gap-[20px]">
+        <div className="flex max-w-[3400px] animate-scroll-right gap-[20px]">
           {[...images2, ...images2].map((url, index) => (
             <motion.img
               key={index}

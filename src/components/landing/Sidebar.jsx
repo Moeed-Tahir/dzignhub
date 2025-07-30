@@ -12,10 +12,11 @@ const links = [
     href: "#",
     title: "AI Assistants",
     subheadings: [
-      { href: "/ai/brand-designer", title: "Zara-brand designer" },
+      { href: "/ai/brand-designer", title: "Zara-Brand designer" },
       { href: "/ai/content-writer", title: "Sana-Content writer" },
       { href: "/ai/ui-ux", title: "Kano- UI/UX Design companion" },
       { href: "/ai/seo", title: "Novi-SEO companion" },
+        { href: "/ai/strategy-assistant", title: "Mira-Strategy assistant" },
       
     ],
   },
