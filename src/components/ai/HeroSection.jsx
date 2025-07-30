@@ -27,26 +27,26 @@ function Hero({ isImage }) {
 
       <motion.div
         initial={{ opacity: 0, x: -100, rotate: -10 }}
-        animate={{ 
-          opacity: 1, 
-          x: 0, 
+        animate={{
+          opacity: 1,
+          x: 0,
           rotate: 0,
-          y: [0, -10, 0]
+          y: [0, -10, 0],
         }}
-        transition={{ 
-          duration: 0.8, 
+        transition={{
+          duration: 0.8,
           delay: 0.6,
           y: {
             duration: 3,
             repeat: Infinity,
-            ease: "easeInOut"
-          }
+            ease: "easeInOut",
+          },
         }}
-         style={{
+        style={{
           background:
             "linear-gradient(180deg, rgba(255, 255, 255, 0.1) 3.25%, rgba(255, 255, 255, 0.04) 96.75%)",
         }}
-           className="absolute xl:h-[326px] xl:w-[355px] flex justify-end items-center rotate-[-15deg] h-[156px] p-5  left-[-60px] lg:left-[-90px] md:rounded-[40px] rounded-[18.54px] sm:top-[20%] top-[15%]"
+        className="absolute xl:h-[326px] xl:w-[355px] flex justify-end items-center rotate-[-15deg] h-[156px] p-5  left-[-60px] lg:left-[-90px] md:rounded-[40px] rounded-[18.54px] sm:top-[20%] top-[15%]"
       >
         <motion.img
           initial={{ scale: 0.8 }}
@@ -59,22 +59,22 @@ function Hero({ isImage }) {
 
       <motion.div
         initial={{ opacity: 0, x: 100, rotate: 30 }}
-        animate={{ 
-          opacity: 1, 
-          x: 0, 
+        animate={{
+          opacity: 1,
+          x: 0,
           rotate: 15,
-          y: [0, 10, 0]
+          y: [0, 10, 0],
         }}
-        transition={{ 
-          duration: 0.8, 
+        transition={{
+          duration: 0.8,
           delay: 0.7,
           y: {
             duration: 3.5,
             repeat: Infinity,
-            ease: "easeInOut"
-          }
+            ease: "easeInOut",
+          },
         }}
-         style={{
+        style={{
           background:
             "linear-gradient(180deg, rgba(255, 255, 255, 0.1) 3.25%, rgba(255, 255, 255, 0.04) 96.75%)",
         }}
@@ -89,19 +89,19 @@ function Hero({ isImage }) {
         />
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
         className=" max-w-[1300px] w-full  gap-5 lg:gap-10 px-4 lg:px-0 flex flex-col items-center justify-center mx-auto pt-[200px] lg:pt-[50px]"
       >
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
           className="flex flex-col gap-[19px] text-center text-[#FFFFFF]"
         >
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.7 }}
@@ -109,7 +109,7 @@ function Hero({ isImage }) {
           >
             {isImage ? "Image Creation" : "Video Creation"}
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.9 }}
@@ -124,20 +124,20 @@ function Hero({ isImage }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.1 }}
         >
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 1.3 }}
             className=" hidden lg:flex lg:w-[740px] lg:h-[78px] rounded-[999px] mx-auto  items-center bg-[#4d2887] justify-center gap-[10px]"
           >
-            <motion.p 
+            <motion.input
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: 1.5 }}
-              className="text-[18px] text-white"
-            >
-              A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape
-            </motion.p>
+              className="text-[18px] text-white w-[70%] focus:outline-none bg-transparent placeholder:text-white"
+              placeholder="A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+              // readOnly
+            />
             <motion.button
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -155,7 +155,9 @@ function Hero({ isImage }) {
                 alt="star"
                 className="w-[24px] h-[24px] object-contain"
               />
-              <span className="text-[#1B1F3B]">Create {isImage ? "image" : "video"}</span>
+              <span className="text-[#1B1F3B]">
+                Create {isImage ? "image" : "video"}
+              </span>
             </motion.button>
           </motion.div>
 
@@ -165,31 +167,33 @@ function Hero({ isImage }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.1 }}
+          className="w-full"
         >
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 1.3 }}
-            className=" max-w-[382px] mx-auto h-[144px] flex flex-col gap-[12px] lg:hidden"
+            className=" max-w-[382px] w-full mx-auto h-[144px] flex flex-col gap-[12px] lg:hidden"
           >
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 1.5 }}
               className="bg-[#212e62] flex flex-col border-t-[0.49px] border-[#1B1F3B] py-[12px] px-[24px] rounded-[490.57px]"
             >
-              <p className="lg:text-[18px] text-[16px] text-white">
-                A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape
-              </p>
+              <input
+                className="lg:text-[18px] focus: text-[16px] text-white focus:outline-none bg-transparent placeholder:text-white"
+                placeholder="A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+              />
             </motion.div>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 1.7 }}
               whileTap={{ scale: 0.95 }}
               className=" h-[60px] bg-[#BDFF00] py-[16px] px-[20px] xl:px-[12px] gap-[12px] rounded-[49.11px] flex justify-center"
             >
-              <motion.button 
+              <motion.button
                 initial={{ rotate: -180 }}
                 animate={{ rotate: 0 }}
                 transition={{ duration: 0.6, delay: 1.9 }}
@@ -201,7 +205,7 @@ function Hero({ isImage }) {
                   className="lg:w-[24px] w-[20px] h-[20px] lg:h-[24px] object-contain"
                 />
               </motion.button>
-              <motion.p 
+              <motion.p
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4, delay: 1.9 }}

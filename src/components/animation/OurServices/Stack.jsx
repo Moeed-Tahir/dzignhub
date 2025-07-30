@@ -77,9 +77,9 @@ const StackingImages = () => {
 
   return (
     <div
-      className={`container bg-[#FAFAFA] ${
-        isLowHeight ? "mb-[4500px]" : "mb-[4300px]"
-      } mx-auto mt-[-200px] flex flex-col gap-10`}
+      className={`container  ${
+        isLowHeight ? "mb-[4600px]" : "mb-[4300px]"
+      } mx-auto mt-[-400px] flex flex-col gap-10`}
     >
       <div className="animation_cards h-[100vh] sm:min-h-[400px] container mx-auto">
         <div className="animation_card animation_card-4">

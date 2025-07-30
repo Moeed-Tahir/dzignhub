@@ -95,7 +95,7 @@ export default function Landing() {
       <Carousel />
 
       <motion.div 
-        className="  bg-[#FAFAFA] max-w-[1440px]  mx-auto flex flex-col p-[24px]   lg:pt-[80px] lg:px-[80px] "
+        className="   max-w-[1440px]  mx-auto flex flex-col p-[24px]   lg:pt-[80px] lg:px-[80px] "
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
