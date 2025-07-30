@@ -10,8 +10,8 @@ import { AnimatePresence } from "framer-motion";
 function Templates() {
   const slides = [
     "/landing/templates/5/1.jpg",
-    "/landing/templates/5/2.jpg",
-    "/landing/templates/5/3.jpg",
+    "/landing/templates/5/1.jpg",
+    "/landing/templates/5/1.jpg",
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);

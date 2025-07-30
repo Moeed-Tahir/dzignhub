@@ -6,12 +6,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
-import ModalPopup from "@/components/homepage/ModalPopup";
+import Chatbot from "@/components/ChatBot/ChatBot";
 import { useEffect } from "react";
 function Page() {
   const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const aiAssistants = [
     {
@@ -204,36 +203,8 @@ function Page() {
 
         <CommunityFeed className="mt-16" />
 
-        {/* Let's talk button - Fixed position bottom right */}
-        <button
-          className="fixed bottom-8 right-8 bg-[#C209C1] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50"
-          onClick={() => setIsModalOpen(true)}
-          style={{
-            width: "auto",
-            height: 48,
-            gap: "10px",
-            borderRadius: "100px",
-            paddingTop: "12px",
-            paddingRight: "24px",
-            paddingBottom: "12px",
-            paddingLeft: "24px",
-          }}
-        >
-          <Image
-            src="/white-logo.png"
-            alt="Logo"
-            width={20}
-            height={20}
-            className="w-5 h-5 mr-2"
-          />
-          <span className="font-medium">{"Let's talk"}</span>
-        </button>
-
-        {/* Modal Popup */}
-        <ModalPopup
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
+        {/* Chatbot */}
+        <Chatbot />
       </div>
     </>
   );
