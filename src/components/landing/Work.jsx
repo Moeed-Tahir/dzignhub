@@ -9,7 +9,7 @@ const cardData = [
     mobileManualImage: "/landing/work/mobile/manual-1.png",
     desktopManualImage: "/landing/work/desktop/manual-1.jpg",
     mobileProImage: "/landing/work/mobile/pro-1.png",
-    desktopProImage: "/landing/work/desktop/pro-1.svg",
+    desktopProImage: "/landing/work/desktop/pro-1.jpg",
   },
   {
     title: "Let the System do your work",

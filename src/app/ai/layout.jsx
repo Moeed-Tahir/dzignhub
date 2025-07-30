@@ -3,8 +3,8 @@ import Hero from "@/components/common/ai/Hero";
 import { useState } from "react";
 import Navbar from "@/components/landing/Navbar";
 import Sidebar from "@/components/landing/Sidebar";
-import Work from "@/components/common/ai/Work";
 import Card from "@/components/common/ai/Card";
+import Work from "@/components/common/ai/Work";
 import Footer from "@/components/common/Footer";
 import FAQ from "@/components/landing/FAQ";
 import Users from "@/components/common/landing/Users";
@@ -12,8 +12,20 @@ import Workflow from "@/components/common/ai/Workflow";
 import ContentCreation from "@/components/common/ai/ContentCreation";
 import AiResults from "@/components/common/ai/AiResults";
 import SmartSupport from "@/components/common/ai/SmartSupport";
+import { usePathname } from "next/navigation";
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+    const slug = pathname?.split("/").pop();
+  
+    const slugToKeyMap = {
+      "brand-designer": "brandDesigner",
+      "content-writer": "contentWriter",
+      "ui-ux":"ui_ux",
+      "seo":"seo"
+      // add more as needed
+    };
+      const currentKey = slugToKeyMap[slug];
   return (
     <html lang="en">
       <body>
@@ -32,13 +44,13 @@ export default function RootLayout({ children }) {
                 />
               </div>
               <div className="max-w-[1440px] mx-auto">
-                <Hero />
+                <Hero currentKey={currentKey}/>
               </div>
             </div>
           </div>
           <div className="bg-[#1B1F3B]">
             <div className="max-w-[1440px] mx-auto">
-              <Work />
+              <Work currentKey={currentKey}/>
             </div>
           </div>
           <div className="max-w-[1440px] mx-auto">
@@ -46,11 +58,11 @@ export default function RootLayout({ children }) {
           </div>
           <div className="bg-[#1B1F3B]">
             <div className="max-w-[1440px] mx-auto">
-              <ContentCreation />
+              <ContentCreation currentKey={currentKey} />
             </div>
           </div>
           <div className="max-w-[1440px] mx-auto">
-            <Workflow/>
+            <Workflow currentKey={currentKey}/>
             <AiResults/>
             <SmartSupport/>
             <Users />

@@ -429,7 +429,7 @@ function Templates() {
               </motion.div>
 
               {/* Dots */}
-              <div className="absolute top-[333.5px] left-[135px] flex gap-[8px]">
+              <div className="absolute top-[333.5px] flex  justify-center w-full  gap-[8px]">
                 {slides.map((_, index) => (
                   <motion.div
                     key={index}

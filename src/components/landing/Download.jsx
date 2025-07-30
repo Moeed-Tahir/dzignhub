@@ -142,7 +142,7 @@ function Download() {
                 </span>
               </motion.div>
               <motion.p
-                className="max-w-[525px] text-[20px] !font-normal xl:text-[24px] "
+                className="max-w-[525px] text-[20px]  xl:text-[24px] font-semibold"
                 variants={textVariants}
               >
                 Our AI-powered creative app gives you access to your personal
