@@ -82,20 +82,3 @@ export function Maximize2Icon({ className = "", size = 24 }: IconProps) {
   )
 }
 
-export function SendIcon({ className = "", size = 24 }: IconProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M2 12L22 2L13 21L11 13L2 12Z" />
-    </svg>
-  )
-}
