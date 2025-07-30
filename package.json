@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.1",
+    "@nanostores/react": "github:ai/react",
     "@studio-freight/lenis": "^1.0.42",
     "axios": "^1.10.0",
     "color-namer": "^1.4.0",
