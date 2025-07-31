@@ -330,7 +330,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
           ) : (
             <div
               className="flex justify-center cursor-pointer items-center gap-2"
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/dashboard")}
             >
               <Image
                 src="/logo-icon.png"
@@ -412,7 +412,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
               {item.key === "workspace" && isWorkspaceDropdownOpen && (
                 <div
                   ref={profileDropdownRef}
-                  className="absolute top-full left-0 mt-8 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                  className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
                 >
                   <a
                     href="/dashboard/image-creation"
@@ -432,7 +432,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
               {item.key === "assistants" && isAssistantsDropdownOpen && (
                 <div
                   ref={profileDropdownRef}
-                  className="absolute top-full -left-15 mt-8 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                  className="absolute top-full -left-15 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
                 >
                   {assistants.map((assistant) => (
                     <div key={assistant.name}>

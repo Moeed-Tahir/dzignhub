@@ -76,17 +76,15 @@ function Page() {
       <Navbar />
 
       <div className="px-8 mx-auto max-w-[1440px] py-6">
-        {/* Main container for both sections side by side */}
+
         <div
           id="mainContainer"
           className="flex flex-col xl:flex-row h-auto  xl:h-[400px]"
           style={{
-            // width: '1280px',
-            // height: '401px',
             gap: "32px",
           }}
         >
-          {/* Manual tools section */}
+
           <div
             className="flex flex-col xl:w-[544px] xl:h-[401px]"
             style={{
@@ -185,7 +183,7 @@ function Page() {
             </div>
 
             {/* Dots indicator */}
-            {maxSlide > 0 && (
+            {/* {maxSlide > 0 && (
               <div className="flex justify-center space-x-2 mt-6">
                 {Array.from({ length: maxSlide + 1 }).map((_, index) => (
                   <button
@@ -197,7 +195,7 @@ function Page() {
                   />
                 ))}
               </div>
-            )}
+            )} */}
           </div>
         </div>
 

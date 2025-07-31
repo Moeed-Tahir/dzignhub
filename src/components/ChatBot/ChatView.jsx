@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import Message from "./Message";
 import LoadingIndicator from "./LoadingIndicator";
 import MessageInput from "./MessageInput";
@@ -12,13 +13,23 @@ export default function ChatView({
   setInput, 
   onSubmit 
 }) {
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="flex-1 flex p-3 !max-h-[520px] overflow-y-scroll flex-col"
+      className="flex-1 flex p-3 !max-h-[48vh] mt-10  overflow-y-scroll flex-col"
     >
       <motion.div
         initial={{ opacity: 0 }}
@@ -30,6 +41,7 @@ export default function ChatView({
           <Message key={message.id} message={message} index={index} />
         ))}
         {isLoading && <LoadingIndicator />}
+        <div ref={messagesEndRef} />
       </motion.div>
 
       <motion.div

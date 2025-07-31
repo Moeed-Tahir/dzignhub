@@ -7,6 +7,7 @@ import IntroView from "./IntroView";
 import ChatView from "./ChatView";
 import ChatToggleButton from "./ChatToggleButton";
 import { useChatLogic } from "./useChatLogic";
+import Image from "next/image";
 
 export default function DesignChatbot() {
   const {
@@ -43,13 +44,35 @@ export default function DesignChatbot() {
               ease: "easeOut",
               type: "spring",
               stiffness: 300,
-              damping: 30
+              damping: 30,
             }}
-            className="w-[520px]  h-[756px] bg-white rounded-[20px] shadow-2xl border border-gray-100 overflow-hidden"
+            className="w-[520px] max-h-[70vh]  h-[756px] bg-white rounded-[20px] shadow-2xl border border-gray-100 overflow-hidden"
           >
-            <ChatHeader chatState={chatState} onBackToIntro={handleBackToIntro} />
+            {chatState === "intro" && (
+              <div
+                className="flex justify-start p-4 items-center gap-1"
+                onClick={() => router.push("/")}
+              >
+                <Image
+                  src="/Logo.svg"
+                  alt="Logo"
+                  width={100}
+                  height={100}
+                  className="w-[44px] h-[44px] object-contain"
+                />
+                <span className="font-medium text-[#1B1F3B] text-[22px] leading-none">
+                  allmyai
+                </span>
+              </div>
+            )}
+            {chatState === "chat" && (
+              <ChatHeader
+                chatState={chatState}
+                onBackToIntro={handleBackToIntro}
+              />
+            )}
 
-            <div className="h-full flex flex-col bg-gradient-to-b from-gray-50/30 to-white">
+            <div className="h-full   flex flex-col bg-gradient-to-b from-gray-50/30 to-white">
               <AnimatePresence mode="wait">
                 {chatState === "intro" && (
                   <IntroView
