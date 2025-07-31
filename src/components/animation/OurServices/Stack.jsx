@@ -66,7 +66,7 @@ const StackingImages = () => {
               scale: 1 - (index - i) * 0.05,
               opacity: 1 - (index - i) * 0.1,
               duration: 0.5,
-              yPercent: -(index - i) * 8,
+              yPercent: -(index - i) * 6,
             },
             index * 2
           );

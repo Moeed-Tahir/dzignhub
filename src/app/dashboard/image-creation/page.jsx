@@ -77,7 +77,7 @@ const Page = () => {
   const [generations, setGenerations] = React.useState([]);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const user = useUserStore((state) => state.user);
-
+  const { IsLogin } = useUserStore();
   const getUserGenerations = async () => {
     const req = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/get-user-generations`,
@@ -103,13 +103,9 @@ const Page = () => {
     getUserGenerations();
   }, []);
   useEffect(() => {
-    console.log("Checking user sign-in status...");
-    if (user === undefined || user === null) {
-      console.log("User not signed in, showing auth modal");
-
+    console.log("User:", IsLogin);
+    if (!IsLogin) {
       setShowLoginModal(true);
-    } else {
-      setShowLoginModal(false);
     }
   }, [user]);
 
@@ -167,7 +163,7 @@ const Page = () => {
           <ImagesResults generations={generations} />
         )}
 
-        <button
+        {/* <button
           className="fixed bottom-8 right-8 bg-[#C209C1] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50"
           onClick={() => alert("Chat modal coming soon")}
         >
@@ -179,7 +175,7 @@ const Page = () => {
             className="w-5 h-5 mr-2"
           />
           <span className="font-medium">Let's talk</span>
-        </button>
+        </button> */}
       </div>
       <LoginModal
         isOpen={showLoginModal}
