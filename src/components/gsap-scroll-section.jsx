@@ -193,7 +193,7 @@ export default function GSAPScrollSection({isImage}) {
                   <p className="text-lg font-normal">{card.subtitle}</p>
                   <button
                     type="submit"
-                    className={`w-full bg-[#BDFF00] text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
+                    className={`w-full bg-[#BDFF00] text-[#1B1F3B] text-[18px] font-semibold p-3 rounded-full mb-4 flex justify-center items-center`}
                   >
                     {card.button}
                   </button>

@@ -23,7 +23,7 @@ export default function IntroView({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="flex-1 h-[520px] p-6 flex flex-col"
+      className="flex-1 max-h-[50vh] mt-5 overflow-y-scroll  h-[520px] p-6 flex flex-col"
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -90,7 +90,7 @@ export default function IntroView({
             whileHover={{ 
               scale: 1.02,
               backgroundColor: "rgba(139, 69, 19, 0.05)",
-              transition: { duration: 0.2 }
+              // transition: { duration: 0.2 }
             }}
             whileTap={{ scale: 0.98 }}
             onClick={() => onSuggestionClick(question)}

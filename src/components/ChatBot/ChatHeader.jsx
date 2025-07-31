@@ -13,7 +13,7 @@ export default function ChatHeader({
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="border-b border-[#E7E7E7] p-4"
+      className="border-b fixed w-[520px] bg-white rounded-t-[20px] border-[#E7E7E7] p-4"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">

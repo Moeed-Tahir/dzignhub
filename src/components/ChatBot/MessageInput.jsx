@@ -15,7 +15,7 @@ export default function MessageInput({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="p-4 absolute bottom-2 left-1/2 translate-x-[-50%] w-full"
+      className="p-4 absolute bottom-2 bg-white rounded-full left-1/2 translate-x-[-50%] w-full"
     >
       <form onSubmit={onSubmit} className="relative">
         <motion.input

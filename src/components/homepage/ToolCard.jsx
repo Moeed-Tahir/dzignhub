@@ -13,17 +13,12 @@ const ToolCard = ({
   const router = useRouter();
   return (
     <div
-      className={` rounded-xl  cursor-pointer overflow-hidden ${className}`}
+      className={` rounded-xl group   cursor-pointer overflow-hidden ${className}`}
       onClick={onClick || (() => router.push(href))}
     >
       {/* Image */}
-      <div className="bg-[#eff1f3] w-full md:h-[300px] h-[220px]  xl:h-[220px] relative">
-        <Image
-          src={image}
-          alt={title}
-          fill
-          //   className="object-cover"
-        />
+      <div className="bg-[#eff1f3] w-full max-w-[259px] md:h-[254px] h-[220px] overflow-hidden   relative">
+        <Image src={image} alt={title} fill className="object-cover group-hover:scale-110 duration-300 ease-in-out" />
       </div>
 
       {/* Content */}
@@ -36,7 +31,6 @@ const ToolCard = ({
               alt={title}
               width={24}
               height={24}
-              className="xl:w-6 w-5 h-5 xl:h-6"
             />
           </div>
           <h3 className="xl:text-lg text-sm font-semibold text-[#000000] font-general-sans">
@@ -45,7 +39,7 @@ const ToolCard = ({
         </div>
 
         {/* Description */}
-        <p className="text-[#000000] text-xs xl:text-sm font-general-sans">
+        <p className="text-[#000000] text-xs group-hover:text-[#C209C1] duration-300 ease-in-out transition-all xl:text-sm font-general-sans">
           {description}
         </p>
       </div>
