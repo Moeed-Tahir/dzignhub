@@ -143,7 +143,11 @@ function Hero({ isImage }) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: 1.5 }}
               whileHover={{ scale: 1.05 }}
-              // onClick={()=>router.push}
+              onClick={() =>
+                  router.push(
+                    `/dashboard/${isImage ? "image-creation" : "video-creation"}`
+                  )
+                }
               whileTap={{ scale: 0.95 }}
               className={`w-[179px] h-[54px] cursor-pointer bg-[#BDFF00] text-[18px]  rounded-full flex items-center justify-center gap-[8px]`}
             >
@@ -197,6 +201,11 @@ function Hero({ isImage }) {
                 initial={{ rotate: -180 }}
                 animate={{ rotate: 0 }}
                 transition={{ duration: 0.6, delay: 1.9 }}
+                onClick={() =>
+                  router.push(
+                    `/dashboard/${isImage ? "image-creation" : "video-creation"}`
+                  )
+                }
                 className={` text-[20px] `}
               >
                 <img

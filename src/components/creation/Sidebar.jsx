@@ -193,7 +193,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
     <div className="flex flex-col gap-4 p-4 bg-white rounded-[24px]">
       <div className="flex items-center justify-between gap-2 ">
         <div
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/dashboard")}
           className="flex items-center gap-2 cursor-pointer"
         >
           <Image

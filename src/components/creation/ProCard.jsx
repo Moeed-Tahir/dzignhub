@@ -3,14 +3,22 @@ import React from "react";
 
 const ProCard = () => {
   return (
-    <div className=" bg-[#1B1F3B]   px-[35px] gap-1 py-[40px] flex justify-between items-center flex-col  mt-5 relative rounded-[12px] h-[200px] ">
-      <Image
+    <div
+    
+  style={{
+    backgroundImage: "url('/Credits.svg')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat'
+  }}
+  className=" bg-[#1B1F3B]   px-[35px] gap-1 py-[40px] flex justify-between items-center flex-col  mt-5 relative rounded-[12px] h-[200px] ">
+      {/* <Image
         src={"/creation/REAL BLUR.png"}
         alt=""
         width={100}
         height={100}
         className="w-[400px] object-contain rounded-[11px]  absolute bottom-[0.5px] left-0"
-      />
+      /> */}
 
       <div className="w-[56px] flex justify-center left-1/2 -translate-x-1/2 items-center absolute -top-[30px] h-[56px] rounded-full bg-[#BDFF00]  border-[3px] border-white ">
         <Image
