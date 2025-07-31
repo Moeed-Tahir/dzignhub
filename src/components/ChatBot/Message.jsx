@@ -2,8 +2,58 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
 
 export default function Message({ message, index }) {
+  // Custom markdown components for styling
+  const markdownComponents = {
+    h1: ({ children }) => (
+      <h1 className="text-xl font-bold mb-2">{children}</h1>
+    ),
+    h2: ({ children }) => (
+      <h2 className="text-lg font-semibold mb-2">{children}</h2>
+    ),
+    h3: ({ children }) => (
+      <h3 className="text-md font-medium mb-1">{children}</h3>
+    ),
+    p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+    ul: ({ children }) => (
+      <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>
+    ),
+    ol: ({ children }) => (
+      <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>
+    ),
+    li: ({ children }) => <li className="ml-2">{children}</li>,
+    strong: ({ children }) => (
+      <strong className="font-semibold">{children}</strong>
+    ),
+    em: ({ children }) => <em className="italic">{children}</em>,
+    code: ({ children, inline }) =>
+      inline ? (
+        <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">
+          {children}
+        </code>
+      ) : (
+        <pre className="bg-gray-100 p-3 rounded-lg overflow-x-auto">
+          <code className="text-sm font-mono">{children}</code>
+        </pre>
+      ),
+    blockquote: ({ children }) => (
+      <blockquote className="border-l-4 border-gray-300 pl-4 italic mb-2">
+        {children}
+      </blockquote>
+    ),
+    a: ({ href, children }) => (
+      <a
+        href={href}
+        className="text-blue-500 hover:underline"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {children}
+      </a>
+    ),
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -20,7 +70,8 @@ export default function Message({ message, index }) {
         message.role === "user" ? "justify-end" : "justify-start"
       }`}
     >
-      {message.role === "assistant" && (
+      {/* Change this condition to check for system OR assistant */}
+      {(message.role === "assistant" || message.role === "system") && (
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -41,7 +92,7 @@ export default function Message({ message, index }) {
         whileHover={{ scale: 1.02 }}
         className={`max-w-[80%] p-3 rounded-[12px] ${
           message.role === "user"
-            ? "bg-[#F7F8F8] !rounded-tr-[4px] text-black"
+            ? "bg-[#BDFF00] !rounded-tr-[4px] text-black"
             : "bg-[#F7F8F8] !rounded-tl-[4px] text-gray-900 border border-gray-100"
         }`}
       >
@@ -51,7 +102,12 @@ export default function Message({ message, index }) {
           transition={{ delay: index * 0.1 + 0.3, duration: 0.2 }}
           className="text-[16px] leading-relaxed"
         >
+                <ReactMarkdown components={markdownComponents}>
+
           {message.content}
+          </ReactMarkdown>
+
+
         </motion.p>
       </motion.div>
       {message.role === "user" && (
@@ -64,7 +120,7 @@ export default function Message({ message, index }) {
             src={"/avatar.png"}
             alt="User Avatar"
             width={32}
-            height={20}
+            height={32}
           />
         </motion.div>
       )}

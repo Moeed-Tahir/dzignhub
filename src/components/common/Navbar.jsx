@@ -20,50 +20,71 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
   const { IsLogin, SetIsLogin, SetEmail, SetUserId, SetAvatar, Avatar } =
     useUserStore();
   // const IsLogin = true;
-  const verifyToken = async () => {
-    try {
-      console.log("Token verification started")
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await res.json();
-      console.log("Token verification response:", data);
+   
+  
+   const [isAuthChecking, setIsAuthChecking] = useState(true);
 
-      if (data.type === "success") {
-        SetIsLogin(true);
-        SetEmail(data.user.email);
-        SetUserId(data.user.userId);
-        SetAvatar(data.user.avatar);
-      } else {
-        SetIsLogin(false);
-      }
-    } catch (error) {
-      SetIsLogin(false);
-      console.error("Token verification failed", error);
-    }
-  };
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      await verifyToken();
-
-      const isProtected = protectedRoutes.some((route) =>
-        pathname.startsWith(route),
-      );
-
-      const token = localStorage.getItem("token");
-
-      if (isProtected && (!token || !IsLogin)) {
-        router.push("/auth/login");
-      }
-    };
-
-    checkAuth();
-  }, [pathname]);
+   const verifyToken = async () => {
+     try {
+       console.log("Token verification started")
+       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+           Authorization: `Bearer ${localStorage.getItem("token")}`,
+         },
+       });
+       const data = await res.json();
+       console.log("Token verification response:", data);
+ 
+       if (data.type === "success") {
+         SetIsLogin(true);
+         SetEmail(data.user.email);
+         SetUserId(data.user.userId);
+         SetAvatar(data.user.avatar);
+       } else {
+         SetIsLogin(false);
+       }
+     } catch (error) {
+       SetIsLogin(false);
+       console.error("Token verification failed", error);
+     } finally {
+       // Set auth checking to false after verification completes
+       setIsAuthChecking(false);
+     }
+   };
+ 
+   useEffect(() => {
+     const checkAuth = async () => {
+       // Only verify token if we have one
+       const token = localStorage.getItem("token");
+       if (token) {
+         await verifyToken();
+       } else {
+         setIsAuthChecking(false);
+       }
+     };
+ 
+     checkAuth();
+   }, [pathname]);
+ 
+   // Separate useEffect for handling redirects after auth check completes
+   useEffect(() => {
+     // Don't redirect while still checking auth
+     if (isAuthChecking) return;
+ 
+     const isProtected = protectedRoutes.some((route) =>
+       pathname.startsWith(route),
+     );
+ 
+     const token = localStorage.getItem("token");
+ 
+     // Only redirect if we're on a protected route and not logged in
+     if (isProtected && (!token || !IsLogin)) {
+       router.push("/auth/login");
+     }
+   }, [IsLogin, isAuthChecking, pathname]);
+ 
 
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isWorkspaceDropdownOpen, setIsWorkspaceDropdownOpen] = useState(false);
