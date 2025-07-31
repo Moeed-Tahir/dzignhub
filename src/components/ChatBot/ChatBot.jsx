@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, AnimatePresence } from "framer-motion";
 import WelcomeMessage from "./WelcomeMessage";
 import ChatHeader from "./ChatHeader";
 import IntroView from "./IntroView";
@@ -30,33 +31,52 @@ export default function DesignChatbot() {
     >
       <WelcomeMessage isVisible={showWelcome && chatState === "closed"} />
 
-      {chatState !== "closed" && (
-        <div className="w-[520px]  h-[756px] bg-white rounded-[20px] shadow-2xl border border-gray-100 overflow-hidden transform transition-all duration-300 ease-out animate-in slide-in-from-bottom-5 fade-in">
-          <ChatHeader chatState={chatState} onBackToIntro={handleBackToIntro} />
+      <AnimatePresence mode="wait">
+        {chatState !== "closed" && (
+          <motion.div
+            key="chatbot-container"
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            transition={{
+              duration: 0.3,
+              ease: "easeOut",
+              type: "spring",
+              stiffness: 300,
+              damping: 30
+            }}
+            className="w-[520px]  h-[756px] bg-white rounded-[20px] shadow-2xl border border-gray-100 overflow-hidden"
+          >
+            <ChatHeader chatState={chatState} onBackToIntro={handleBackToIntro} />
 
-          <div className="h-full flex flex-col bg-gradient-to-b from-gray-50/30 to-white">
-            {chatState === "intro" && (
-              <IntroView
-                input={input}
-                setInput={setInput}
-                onSubmit={handleSubmit}
-                onSuggestionClick={handleSuggestionClick}
-                isLoading={isLoading}
-              />
-            )}
+            <div className="h-full flex flex-col bg-gradient-to-b from-gray-50/30 to-white">
+              <AnimatePresence mode="wait">
+                {chatState === "intro" && (
+                  <IntroView
+                    key="intro-view"
+                    input={input}
+                    setInput={setInput}
+                    onSubmit={handleSubmit}
+                    onSuggestionClick={handleSuggestionClick}
+                    isLoading={isLoading}
+                  />
+                )}
 
-            {chatState === "chat" && (
-              <ChatView
-                messages={messages}
-                isLoading={isLoading}
-                input={input}
-                setInput={setInput}
-                onSubmit={handleSubmit}
-              />
-            )}
-          </div>
-        </div>
-      )}
+                {chatState === "chat" && (
+                  <ChatView
+                    key="chat-view"
+                    messages={messages}
+                    isLoading={isLoading}
+                    input={input}
+                    setInput={setInput}
+                    onSubmit={handleSubmit}
+                  />
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <ChatToggleButton
         isOpen={chatState !== "closed"}

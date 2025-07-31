@@ -14,24 +14,24 @@ function HeroCTA() {
           placeholder="A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
           // readOnly
         />
-        <motion.button
-          initial={{ x: 30 }}
-          animate={{ x: 0 }}
-          transition={{ duration: 0.5, delay: 0.7 }}
-          className={`w-[179px] h-[54px] bg-[#BDFF00] text-[18px]  rounded-full flex items-center justify-center gap-[8px]`}
-        >
-          <motion.img
-            initial={{ rotate: -180 }}
-            animate={{ rotate: 0 }}
-            transition={{ duration: 1, delay: 0.7 }}
-            src="/landing/starVector.svg"
-            alt="star"
-            className="w-[24px] h-[24px] object-contain"
-          />
-          <a href="/dashboard/image-creation" className="text-[#1B1F3B]">
+        <a href="/dashboard/image-creation" className="text-[#1B1F3B]">
+          <motion.button
+            initial={{ x: 30 }}
+            animate={{ x: 0 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+            className={`w-[179px] h-[54px] bg-[#BDFF00] text-[18px]  rounded-full flex items-center justify-center gap-[8px]`}
+          >
+            <motion.img
+              initial={{ rotate: -180 }}
+              animate={{ rotate: 0 }}
+              transition={{ duration: 1, delay: 0.7 }}
+              src="/landing/starVector.svg"
+              alt="star"
+              className="w-[24px] h-[24px] object-contain"
+            />
             Create image
-          </a>
-        </motion.button>
+          </motion.button>
+        </a>
       </div>
 
       {/* CTA Section Mobile*/}
