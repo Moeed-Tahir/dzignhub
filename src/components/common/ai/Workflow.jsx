@@ -3,6 +3,36 @@ import { motion, useInView } from "framer-motion";
 
 function Workflow({ currentKey }) {
   const workflowFeatures = {
+    strategyAssistant: {
+      text: "Meet your intelligent business advisor—built to support strategists and entrepreneurs in mapping growth. Whether you're launching, scaling, or pivoting, this AI helps you build plans with confidence.",
+      workflow: [
+        {
+          id: 1,
+          icon: "/ai-assistants/workflow/strategy-assistant/1.svg",
+          text: "Market-aware strategy models",
+        },
+        {
+          id: 2,
+          icon: "/ai-assistants/workflow/strategy-assistant/2.svg",
+          text: "Evolves with performance",
+        },
+        {
+          id: 3,
+          icon: "/ai-assistants/workflow/strategy-assistant/3.svg",
+          text: "Real-time KPI tracking",
+        },
+        {
+          id: 4,
+          icon: "/ai-assistants/workflow/strategy-assistant/4.svg",
+          text: "Integrates with CRM tools",
+        },
+        {
+          id: 5,
+          icon: "/ai-assistants/workflow/strategy-assistant/5.svg",
+          text: "Dynamic goal customization",
+        },
+      ],
+    },
     brandDesigner: {
       text: "Meet your intelligent brand companion—built to support designers in creating logos, color palettes, and full brand systems. Whether you’re launching a startup or refreshing a legacy, this AI brings clarity and creativity to every design.",
       workflow: [

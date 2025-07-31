@@ -1,6 +1,5 @@
 'use client';
 import React from "react";
-import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
 function Hero({currentKey}) {
@@ -13,6 +12,14 @@ function Hero({currentKey}) {
       mainImage: "/ai-assistants/brand-designer/zara.jpg",
       leftImage: "/ai-assistants/brand-designer/hero-1.png",
       rightImage: "/ai-assistants/brand-designer/hero-3.png",
+    },
+     strategyAssistant: {
+      title: "Meet Mira - Strategy assistant",
+      description:
+        "Streamline your workflow with smart layout suggestions, auto wireframes, and consistent UI support. Mano lets you spend less time on repetitive tasks and more time designing great user experiences.",
+      mainImage: "/ai-assistants/strategy-assistant/mira.jpg",
+      leftImage: "/ai-assistants/strategy-assistant/hero-1.png",
+      rightImage: "/ai-assistants/strategy-assistant/hero-3.png",
     },
     contentWriter: {
       title: "Meet Sana – Content Writer",

@@ -5,12 +5,18 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import StartingSuggestion from "@/components/creation/StartingSuggestion";
 import ImagesResults from "@/components/creation/ImagesResults";
+import { useUserStore } from "@/store/store";
+import LoginModal from "@/components/auth/LoginModal";
 
 const Page = () => {
   const [showSuggestion, setShowSuggestion] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [generations, setGenerations] = React.useState([]);
+
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const user = useUserStore((state) => state.user);
+  // console.log("User:", user);
   const img = [
     {
       url: "/creation/imges/1.jpg",
@@ -73,31 +79,43 @@ const Page = () => {
       aspectRatio: "aspect-[4/4]", // Square
     },
   ];
-  
-    const getUserGenerations = async() => {
-      
-      const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-user-generations`, {
+
+  const getUserGenerations = async () => {
+    const req = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/get-user-generations`,
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-      body: JSON.stringify({type: "video"})
-
+          body: JSON.stringify({ type: "video" }),
         },
-      });
-  
-      const res = await req.json();
-  
-      if (res.type === "success") {
-        console.log(res.generations);
-        setGenerations(res.generations);
       }
+    );
+
+    const res = await req.json();
+
+    if (res.type === "success") {
+      console.log(res.generations);
+      setGenerations(res.generations);
     }
-  
-    useEffect(() => {
-  
-      getUserGenerations();
+  };
+
+  useEffect(() => {
+    getUserGenerations();
   }, []);
+
+  // Check if user is signed in and show modal if not
+  useEffect(() => {
+    console.log("Checking user sign-in status...");
+    if (user === undefined || user === null) {
+      console.log("User not signed in, showing auth modal");
+
+      setShowLoginModal(true);
+    } else {
+      setShowLoginModal(false);
+    }
+  }, [user]);
 
   // Detect mobile screen
   useEffect(() => {
@@ -147,7 +165,11 @@ const Page = () => {
 
       <div className="w-full ">
         <Navbar isCreationPage={true} />
-        {showSuggestion ? <StartingSuggestion /> : <ImagesResults generations={generations} isVideoPage={true}/>}
+        {showSuggestion ? (
+          <StartingSuggestion />
+        ) : (
+          <ImagesResults generations={generations} isVideoPage={true} />
+        )}
 
         <button
           className="fixed bottom-8 right-8 bg-[#C209C1] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50"
@@ -163,6 +185,11 @@ const Page = () => {
           <span className="font-medium">Let's talk</span>
         </button>
       </div>
+
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+      />
     </div>
   );
 };

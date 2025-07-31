@@ -13,6 +13,7 @@ import ContentCreation from "@/components/common/ai/ContentCreation";
 import AiResults from "@/components/common/ai/AiResults";
 import SmartSupport from "@/components/common/ai/SmartSupport";
 import { usePathname } from "next/navigation";
+import { notFound } from "next/navigation";
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
@@ -22,10 +23,14 @@ export default function RootLayout({ children }) {
     "brand-designer": "brandDesigner",
     "content-writer": "contentWriter",
     "ui-ux": "ui_ux",
-    seo: "seo",
+    "seo": "seo",
+    "strategy-assistant":"strategyAssistant"
     // add more as needed
   };
   const currentKey = slugToKeyMap[slug];
+   if (!currentKey) {
+    notFound(); // navigate to 404
+  }
   return (
     <>
       <div

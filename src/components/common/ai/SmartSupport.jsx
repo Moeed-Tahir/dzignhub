@@ -3,6 +3,11 @@ import { motion, useInView } from "framer-motion";
 
 function SmartSupport({ currentKey }) {
   const content = {
+    strategyAssistant: {
+      heading: ["Strategy AI:", "Insight", "into Action"],
+      description:
+        "Big goals need smart planning. Your AI assistant helps analyze data, map strategies, and align execution—so you can focus on outcomes, not guesswork.",
+    },
     brandDesigner: {
       heading: ["Brand Designer AI:", "Build Brands", "That Stand Out"],
       description:
@@ -26,6 +31,36 @@ function SmartSupport({ currentKey }) {
   };
 
   const features = {
+    strategyAssistant: [
+      {
+        image: "/ai-assistants/smart-support/strategy-assistant/1.png",
+        classname:
+          "rounded-[9px] h-[66px] w-[66px] bg-[#edd1e0] rotate-[-12deg]",
+        text: "Generate moodboards, palettes, and style tiles.",
+      },
+      {
+        text: "Create logos, social kits, and print-ready files.",
+        image: "/ai-assistants/smart-support/strategy-assistant/2.png",
+      },
+      {
+        text: " Apply brand rules automatically across visuals.",
+        image: "/ai-assistants/smart-support/strategy-assistant/3.png",
+      },
+      {
+        image: "/ai-assistants/smart-support/strategy-assistant/4.png",
+        classname:
+          "rounded-[999px] h-[66px] w-[66px] bg-[#edd1e0] rotate-[-12deg]",
+        text: "Collaborate with teams or clients in real-time.",
+      },
+      {
+        image: "/ai-assistants/smart-support/strategy-assistant/5.svg",
+        text: "Export in all major formats, instantly.",
+      },
+      {
+        image: "/ai-assistants/smart-support/6.png",
+        text: "Stay inspired with design trend insights.",
+      },
+    ],
     brandDesigner: [
       {
         image: "/ai-assistants/smart-support/brand-designer/1.png",
@@ -247,8 +282,8 @@ function SmartSupport({ currentKey }) {
       animate={isInView ? "visible" : "hidden"}
       className="xl:py-20 py-10"
     >
-      <div className="max-w-[90%] mx-auto bg-[#1B1F3B] rounded-[39px] text-[#FFFFFF] px-10 py-20">
-        <div className="flex md:gap-[67px] gap-[40px] xl:flex-row flex-col">
+      <div className="max-w-[90%] mx-auto bg-[#1B1F3B] rounded-[39px] text-[#FFFFFF] px-10 py-10">
+        <div className="flex md:gap-[67px] gap-[40px] xl:flex-row flex-col items-center">
           <motion.div
             variants={leftContentVariants}
             className="flex flex-col gap-[35px] xl:max-w-[40%]"

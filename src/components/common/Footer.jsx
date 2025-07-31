@@ -192,7 +192,7 @@ const syne = Syne({
                 </Link>
               ))}
             </div>
-            <LanguageDropdown />
+            {/* <LanguageDropdown /> */}
             <p className="text-[11.63px]">© 2025 PicsArt, Inc.</p>
           </div>
         </motion.div>

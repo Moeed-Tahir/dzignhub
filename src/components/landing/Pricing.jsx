@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Syne } from "next/font/google";
+import Link from "next/link";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -20,6 +21,7 @@ function Pricing() {
         "24/7 support for onboarding",
       ],
       button: "Get started for free",
+      link:"/auth/sign-up"
     },
     {
       plan: "Pro Plan",
@@ -33,6 +35,7 @@ function Pricing() {
         "24/7 support for onboarding",
       ],
       button: "Upgrade to Pro",
+      link:"/pricing"
     },
 
     {
@@ -48,6 +51,7 @@ function Pricing() {
         "Priority customer support",
       ],
       button: "Contact us",
+      link:"/contact-us"
     },
 
   ];
@@ -255,7 +259,9 @@ function Pricing() {
                 </motion.div>
 
                 {/* CTA Button */}
+                <Link href={plan.link} >
                 <motion.button
+                 
                   className={`px-6 py-3 xl:max-w-[368px] w-full lg:w-[90%] mt-5 mx-auto text-[16px] font-medium ${
                     syne.className
                   } cursor-pointer rounded-[40px] border backdrop-blur-[12px] shadow-[0px_8px_10.9px_#0003121F,0px_1px_1px_#0003124D] ${
@@ -269,6 +275,7 @@ function Pricing() {
                 >
                   {plan.button}
                 </motion.button>
+                  </Link>
               </motion.div>
             );
           })}

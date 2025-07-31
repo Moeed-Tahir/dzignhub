@@ -13,7 +13,7 @@ function Testimonials() {
     { pt: "", pb: "pb-[60px]", height: "md:max-h-[337px]" },
   ];
 
-  const boxes = new Array(5).fill(null);
+  const boxes = new Array(9).fill(null);
 
   // Animation variants
   const containerVariants = {
@@ -191,14 +191,14 @@ function Testimonials() {
       </motion.div>
 
       <motion.div
-        className="absolute left-0 md:top-[65%] top-[55%] -translate-y-1/2 w-full flex justify-center px-[20px]"
+        className="absolute max-w-[1440px] left-0 md:top-[65%] top-[55%] -translate-y-1/2 w-full flex justify-center px-[20px]"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
         viewport={{ once: true }}
       >
         <motion.div
-          className="flex w-max animate-scroll-left gap-[16px] relative z-10"
+          className="flex  animate-scroll-left gap-[16px] relative z-10"
           variants={containerVariants}
         >
           {boxes.map((_, index) => {
