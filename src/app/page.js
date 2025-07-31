@@ -16,6 +16,7 @@ import Testimonials from "@/components/landing/Testimonials";
 import Sidebar from "@/components/landing/Sidebar";
 import { useState } from "react";
 import StackingImages from "@/components/animation/OurServices/Stack";
+import CardsAnimation from "@/components/landing/CardsAnimation/CardsAnimation";
 
 export default function Landing() {
   const router = useRouter();
@@ -134,10 +135,12 @@ export default function Landing() {
       <Work />
       <Templates />
       <Download />
-      <FeatureSection />
+      {/* <FeatureSection /> */}
+      {/* <CardsAnimation /> */}
       <Pricing />
       <Testimonials />
       <FAQ />
+      
       <Assistants />
       <Footer />
     </>

@@ -1,5 +1,5 @@
 "use client";
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import Sidebar from "@/components/landing/Sidebar";
 import Pricing from "@/components/landing/Pricing";
 import Testimonials from "@/components/landing/Testimonials";
@@ -9,21 +9,32 @@ import Plans from "@/components/pricing/Plans";
 import Hero from "@/components/common/Hero";
 function page() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isContentVisible, setIsContentVisible] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsContentVisible(true);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, []);
   return (
     <div>
        <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
       <Hero title={"Pricing"} subtitle={"Subscriptions"} setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen}/>
-      <div className="max-w-[1440px] py-[64px] justify-center flex items-center mx-auto">
-        <div className="flex flex-col gap-[33px] justify-center items-center ">
+      <div className="max-w-[1440px] py-[64px] justify-center flex items-center mx-auto overflow-hidden">
+        <div className="flex flex-col gap-[33px] justify-center items-center">
           <img
             src="/landing/image-creation/avatars.svg"
-            className="max-w-[90%] max-h-[90px] mx-auto"
+            className={`max-w-[90%] max-h-[90px] mx-auto transition-all duration-800 ease-out transform ${isContentVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-95'}`}
+            style={{ transitionDelay: '200ms' }}
           />
           <div className="flex flex-col gap-[9px] max-w-[715px] justify-center items-center">
-            <div className="text-[34px]  text-[#C209C1] text-center font-semibold">
+            <div className={`text-[34px] text-[#C209C1] text-center font-semibold transition-all duration-900 ease-out transform ${isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}
+                 style={{ transitionDelay: '400ms' }}>
               Ready to scale your video production?
             </div>
-            <p className="text-[18px] sm:max-w-[70%] text-center">
+            <p className={`text-[18px] sm:max-w-[70%] text-center transition-all duration-1000 ease-out transform ${isContentVisible ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'}`}
+               style={{ transitionDelay: '600ms' }}>
               Synthesia is the world's #1 rated AI video software. It's used by
               50,000+ teams to create videos at scale, saving up to 80% of their
               time and budget.

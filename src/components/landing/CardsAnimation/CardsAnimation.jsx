@@ -11,7 +11,6 @@ const CardsAnimation = () => {
   const imagesRef = useRef([]);
   const contentRef = useRef([]);
 
-  // Sample data for 5 cards
   const cardsData = [
     {
       id: 1,
@@ -68,7 +67,6 @@ const CardsAnimation = () => {
       transformStyle: "preserve-3d",
     });
 
-
     gsap.set(images[0], { opacity: 1 });
 
     const tl = gsap.timeline({
@@ -82,6 +80,10 @@ const CardsAnimation = () => {
       },
     });
 
+    gsap.set(contents, {
+      opacity: 1,
+      y: "50vh",
+    });
     cardsData.forEach((_, index) => {
       const progress = index / (cardsData.length - 1);
 
@@ -94,13 +96,34 @@ const CardsAnimation = () => {
           x: "0%",
           y: "0%",
           scale: 1,
-          transformOrigin: "center center",
-          transformStyle: "preserve-3d",
           duration: 1,
           ease: "none",
         },
         progress * 2
-      ).to(
+      );
+
+      tl.to(
+        contents[index].querySelector('.content-title'),
+        {
+          color: "#BDFF00",
+          duration: 1,
+          ease: "none",
+        },
+        progress * 2
+      );
+
+      tl.to(
+        contents[index],
+        {
+          opacity: 1,
+          y: -20,
+          duration: 1,
+          ease: "none",
+        },
+        progress * 2
+      );
+
+      tl.to(
         images[index],
         {
           opacity: 1,
@@ -108,8 +131,26 @@ const CardsAnimation = () => {
           rotate: 90,
           y: "-35vh",
           scale: 1,
-          transformOrigin: "center center",
-          transformStyle: "preserve-3d",
+          duration: 1,
+          ease: "none",
+        },
+        progress * 2 + 1
+      );
+
+      tl.to(
+        contents[index].querySelector('.content-title'),
+        {
+          color: "#FFFFFF",
+          duration: 0.2,
+          ease: "none",
+        },
+        progress * 2 +1
+      );
+      tl.to(
+        contents[index],
+        {
+          opacity: 1,
+          y: "-70vh",
           duration: 1,
           ease: "none",
         },
@@ -124,9 +165,9 @@ const CardsAnimation = () => {
 
   return (
     <>
-      <div className="h-20"></div>
+      {/* <div className="h-20"></div> */}
 
-      <div ref={containerRef} className="h-screen bg-[#1B1F3B] overflow-hidden">
+      <div ref={containerRef} className="h-screen  bg-[#1B1F3B] overflow-hidden">
         <div className="max-w-[1440px] w-full mx-auto px-6 py-20 h-full flex flex-col justify-center">
           <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[600px]">
             <div
@@ -158,18 +199,20 @@ const CardsAnimation = () => {
               ))}
             </div>
 
-            <div className="relative h-screen">
+            <div className="relative h-screen flex  items-center">
               {cardsData.map((card, index) => (
                 <div
                   key={card.id}
                   ref={(el) => (contentRef.current[index] = el)}
-                  className="absolute top-1/2 translate-y-1/2 w-full"
+                  className={` content-${index} right-0   absolute inset-0 flex items-center justify-end w-full`}
                 >
-                  <div className="p-8 flex flex-col justify-start">
-                    <h3 className="text-3xl content-title font-bold text-white mb-4">
+                  <div className="p-8 flex flex-col justify-center">
+                    <h3
+                      className={`text-3xl title-${index} content-title text-right font-bold text-white mb-4`}
+                    >
                       {card.title}
                     </h3>
-                    <p className="text-gray-300 text-lg mb-6 leading-relaxed">
+                    <p className="text-gray-300 w-[400px] text-lg mb-6 text-right leading-relaxed">
                       {card.description}
                     </p>
                   </div>
@@ -180,7 +223,7 @@ const CardsAnimation = () => {
         </div>
       </div>
 
-      <div className="h-screen"></div>
+      {/* <div className="h-screen"></div> */}
     </>
   );
 };

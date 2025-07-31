@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import Hero from "@/components/common/Hero";
 import Sidebar from "@/components/landing/Sidebar";
 import Card from "@/components/blog/Card";
@@ -41,6 +42,35 @@ const blogData = [
 function Page() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 50,
+      scale: 0.9
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
     <div>
       <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
@@ -51,16 +81,30 @@ function Page() {
         sidebarOpen={sidebarOpen}
       />
       <div className="max-w-[1440px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-[32px] gap-y-[43px] py-[64px] px-[80px]">
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-[32px] gap-y-[43px] py-[64px] px-[80px]"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+        >
           {blogData.map((item, index) => (
-            <Card
+            <motion.div
               key={index}
-              title={item.title}
-              date={item.date}
-              image={item.image}
-            />
+              variants={cardVariants}
+              whileHover={{ 
+                y: -8,
+                transition: { duration: 0.3, ease: "easeOut" }
+              }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Card
+                title={item.title}
+                date={item.date}
+                image={item.image}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
       <Footer/>
     </div>

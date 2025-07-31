@@ -10,13 +10,11 @@ const DownloadSection = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-        className=" max-w-[1280px] w-[90%]  md:w-full relative h-auto overflow-hidden  md:h-[432px] rounded-[40px] mx-auto py-5  md:py-16 px-5  md:px-10"
+        className=" max-w-[1280px] w-[90%]  md:w-full relative h-auto overflow-hidden  md:h-[432px] rounded-[40px] mx-auto py-5  md:py-14 px-5  md:px-10"
       >
-        <div className="flex  flex-col w-full md:w-1/2 items-start  i justify-between text-white text-start ">
+        <div className="flex  flex-col w-full md:w-1/2 items-start  justify-between text-white text-start ">
           <p className="text-[18px] md:text-[34px] w-full md:w-[350px] font-medium md:font-semibold mb-4">
-            Download Your One &
-       
-            Only App Now
+            Download Your One & Only App Now
           </p>
 
           <p className="text-[14px] md:text-[16px] font-normal mb-6">
@@ -26,6 +24,14 @@ const DownloadSection = () => {
           <button className="w-[186px] mt-[90px]  md:mt-[30px]  h-[56px]  rounded-[999px] text-black cursor-pointer bg-[#BDFF00] font-medium text-[18px]">
             Download App
           </button>
+          <Image
+            src={"/video-creation/arrow.png"}
+            alt="iPhone"
+            layout="responsive"
+            width={375}
+            height={812}
+            className=" !w-[350px] mt-2"
+          />
         </div>
 
         <Image

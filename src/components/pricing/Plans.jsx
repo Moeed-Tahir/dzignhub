@@ -17,7 +17,7 @@ function Plans() {
   return (
     <div className="max-w-[1440px]  mx-auto xl:p-[80px] xl:pb-[80px] py-[40px] pl-[24px]">
       <div className="flex flex-col gap-[64px]">
-        <h1 className="font-semibold md:text-[48px] text-[28px] text-black">
+        <h1 className="font-semibold md:text-[48px] md:text-center text-[28px] text-black">
           {" "}
           Compare plans
         </h1>

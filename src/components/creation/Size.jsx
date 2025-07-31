@@ -42,7 +42,7 @@ const Size = ({ selected, onChange }) => {
         {sizes.map((size) => (
           <div
             key={size.key}
-            className={`flex items-center rounded-[8px] gap-2 py-[12px] px-[8px] bg-[#F7F8F8] justify-center flex-col w-[100px] h-[98px] cursor-pointer border-2 ${
+            className={`flex items-center rounded-[8px] gap-2 py-[12px] px-[8px] bg-[#F7F8F8] justify-center flex-col w-[32%] h-[98px] cursor-pointer border-2 ${
               selected === size.key
                 ? "border-[#C209C1]"
                 : "border-transparent"

@@ -166,7 +166,7 @@ export default function GSAPScrollSection({isImage}) {
             ref={titleRef}
             className="text-6xl md:text-[68px] font-bold text-black text-center z-0 relative"
           >
-            You Need Us If
+            You need us if
           </h1>
 
           <div className="absolute left-8 md:left-16 top-1/2 -translate-y-1/2 space-y-8">
@@ -226,7 +226,7 @@ export default function GSAPScrollSection({isImage}) {
                   <button
                     type="submit"
                     className={`w-full bg-[#BDFF00]
-         text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
+         text-[#1B1F3B] text-[18px] font-semibold p-3 rounded-full mb-4 flex justify-center items-center`}
                   >
                     {card.button}
                   </button>

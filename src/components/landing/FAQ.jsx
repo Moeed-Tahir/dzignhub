@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import React, { useState, useRef } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
 
 const faqData = [
   {
@@ -48,41 +48,141 @@ const faqData = [
 
 function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { 
+    threshold: 0.1,
+    once: true
+  });
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.2,
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const leftContentVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const buttonVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const faqListVariants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const faqItemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
 
   const toggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <div className="w-full">
+    <motion.div 
+      ref={ref}
+      variants={containerVariants}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      className="w-full overflow-hidden"
+    >
       <div className="max-w-[1440px] h-auto flex mx-auto px-[20px] py-[40px] xl:p-[80px] gap-[56px] ">
         <div className="max-w-[1280px] rounded-[24px] gap-[56px] flex flex-col xl:flex-row">
-          <div className="gap-[40px] xl:w-[483px] flex flex-col">
+          <motion.div 
+            variants={leftContentVariants}
+            className="gap-[40px] xl:w-[483px] flex flex-col"
+          >
             <div className="flex flex-col gap-[24px]">
-              <div className="font-semibold text-[26px] xl:text-[48px] text-black leading-tight">
+              <motion.div 
+                variants={titleVariants}
+                className="font-semibold text-[26px] xl:text-[48px] text-black leading-tight"
+              >
                 <span>Have </span>
                 <span className="text-[#C209C1]">questions?</span>
-              </div>
-              <p className="text-[18px]">
+              </motion.div>
+              <motion.p 
+                variants={titleVariants}
+                className="text-[18px]"
+              >
                 Have questions about how our Text-to-Image AI works? Find the
                 answers to the most common inquiries below. If you don't see
                 your question, feel free to reach out!
-              </p>
+              </motion.p>
             </div>
-            <button className="w-[194px] h-[56px] rounded-[999px] bg-[#BDFF00] font-medium text-[18px]">
+            {/* <motion.button 
+              variants={buttonVariants}
+              className="w-[194px] h-[56px] rounded-[999px] bg-[#BDFF00] font-medium text-[18px]"
+            >
               View all questions
-            </button>
-          </div>
+            </motion.button> */}
+          </motion.div>
 
-          <div className="max-w-[741px] flex flex-col gap-[16px]">
+          <motion.div 
+            variants={faqListVariants}
+            className="max-w-[741px] flex flex-col gap-[16px]"
+          >
             {faqData.map((item, index) => (
-              <div
+              <motion.div
                 key={index}
+                variants={faqItemVariants}
                 className="w-full rounded-[24px] bg-[#E4E7FA] p-[16px] xl:p-[24px] flex gap-[24px] items-start cursor-pointer"
                 onClick={() => toggle(index)}
               >
                 <div className="xl:w-[629px] w-full flex flex-col gap-[16px]">
-                  <h2 className="xl:text-[24px] text-[18px] text-[#000000] font-medium">
+                  <h2 className="xl:text-[24px] text-[18px] text-[#000000] font-semibold">
                     {item.question}
                   </h2>
 
@@ -111,12 +211,12 @@ function FAQ() {
                   }
                   alt="toggle icon"
                 />
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

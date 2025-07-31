@@ -1,8 +1,9 @@
 "use client";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
-function Work({currentKey}) {
+function Work({ currentKey }) {
   const sectionData = {
     brandDesigner: {
       heading: ["How ", "Zara", " Empowers do Brand design"],
@@ -74,9 +75,10 @@ function Work({currentKey}) {
         },
       ],
     },
-    ui_ux:{
+    ui_ux: {
       heading: ["How ", "Kano", " Empowers UI/UX Designers"],
-      description:"With Kano, you can elevate your product design process, creating seamless, intuitive user experiences powered by smart AI assistance. From wireframes and prototypes to final handoff, streamline your workflow, spark creativity, and bring user-centric ideas to life with confidence.",
+      description:
+        "With Kano, you can elevate your product design process, creating seamless, intuitive user experiences powered by smart AI assistance. From wireframes and prototypes to final handoff, streamline your workflow, spark creativity, and bring user-centric ideas to life with confidence.",
       data: [
         {
           id: 1,
@@ -108,9 +110,10 @@ function Work({currentKey}) {
         },
       ],
     },
-    seo:{
+    seo: {
       heading: ["How ", "Novi", " Empowers SEO Specialist"],
-      description:"Novi enhances your SEO strategy with AI-driven tools that help you write, refine, and optimize web content efficiently. From keyword planning to metadata creation and performance insights, Novi supports your workflow—so you can achieve better search rankings faster and smarter.",
+      description:
+        "Novi enhances your SEO strategy with AI-driven tools that help you write, refine, and optimize web content efficiently. From keyword planning to metadata creation and performance insights, Novi supports your workflow—so you can achieve better search rankings faster and smarter.",
       data: [
         {
           id: 1,
@@ -141,33 +144,99 @@ function Work({currentKey}) {
             "Quickly turn wireframes into test-ready prototypes with interactive logic and user flow validation—getting you from concept to delivery in record time.",
         },
       ],
-    }
-    
+    },
   };
 
   const currentSection = sectionData[currentKey];
 
+  // Create ref and inView hook for scroll trigger
+  const ref = useRef(null);
+  const isInView = useInView(ref, { 
+    threshold: 0.1, // Trigger when 10% visible
+    once: true // Only trigger once
+  });
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.2,
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const headerVariants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: {
+      opacity: 0,
+      y: 50,
+      scale: 0.9,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
-    <div className="flex flex-col md:max-w-[1140px] mx-auto gap-[32px] md:gap-[56px] py-10 items-center px-2">
-      <div className="flex flex-col max-w-[90%] text-[#FFFFFF] text-center mx-auto gap-[16px]">
+    <motion.div
+      ref={ref}
+      variants={containerVariants}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      className="flex flex-col md:max-w-[1140px] mx-auto gap-[32px] md:gap-[56px] py-10 items-center px-2"
+    >
+      <motion.div
+        variants={headerVariants}
+        className="flex flex-col max-w-[90%] text-[#FFFFFF] text-center mx-auto gap-[16px]"
+      >
         <div className="font-semibold md:text-[34px] text-[24px]">
           <span>{currentSection.heading[0]}</span>
-          <span className="text-[#C209C1] uppercase">{currentSection.heading[1]}</span>
+          <span className="text-[#C209C1] uppercase">
+            {currentSection.heading[1]}
+          </span>
           <span>{currentSection.heading[2]}</span>
         </div>
         <p className="text-[18px]">{currentSection.description}</p>
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-[#FFFFFF]">
-        {currentSection.data.map((item) => (
-          <div key={item.id} className="bg-[#212e62] rounded-[20px] p-4">
+        {currentSection.data.map((item, index) => (
+          <motion.div
+            key={item.id}
+            variants={cardVariants}
+            custom={index}
+            className="bg-[#212e62] rounded-[20px] p-4"
+          >
             <img src={item.logo} className="w-[38px] h-[38px]" />
             <h2 className="font-semibold text-[20px] py-3">{item.title}</h2>
             <p className="text-[16px]">{item.content}</p>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

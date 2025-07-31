@@ -28,13 +28,21 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const { SetGenerateImages, SetGenerateVideo } = useUserStore();
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState(isImagePage ? "text-to-image" : "image-to-image");
 
   // Add states for uploaded images
   const [startImage, setStartImage] = useState(null);
   const [endImage, setEndImage] = useState(null);
+  const [uploadedImageFromTextArea, setUploadedImageFromTextArea] = useState(null);
 
   const [isError, setIsError] = useState("");
   const [error, setError] = useState("");
+
+  const handleImageUploadFromTextArea = (file) => {
+    setUploadedImageFromTextArea(file);
+
+    setStartImage(file);
+  };
 
   const saveGeneration = async (type, url, prompt, isMultiple) => {
     try {
@@ -210,6 +218,30 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         )}
       </div>
 
+      {/* Tabs */}
+      <div className="flex bg-[#F8F8F8] p-1 h-[40px] w-[310px] rounded-[8px] mt-4 ">
+        <button
+          className={`flex-1 px-4  text-sm font-medium rounded-[8px] transition-colors ${
+            activeTab === "text-to-image"
+              ? "bg-white text-[#28282C] "
+              : "text-[#68686B] hover:text-gray-800"
+          }`}
+          onClick={() => setActiveTab("text-to-image")}
+        >
+          Text to {isImagePage ? "Image" : "Video"}
+        </button>
+        <button
+          className={`flex-1 px-4  text-sm font-medium rounded-[8px] transition-colors ${
+            activeTab === "image-to-image"
+              ? "bg-white text-[#28282C] "
+              : "text-[#68686B] hover:text-gray-800"
+          }`}
+          onClick={() => setActiveTab("image-to-image")}
+        >
+          Image to {isImagePage ? "Image" : "Video"}
+        </button>
+      </div>
+
       <TextArea
         placeholder={
           isImagePage
@@ -218,6 +250,8 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         }
         value={textValue}
         onChange={(e) => setTextValue(e.target.value)}
+        showUploadIcon={activeTab === "image-to-image"}
+        onImageUpload={handleImageUploadFromTextArea}
       />
 
       {!isImagePage && (
@@ -251,10 +285,10 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       {/* Size */}
       <Size selected={selectedSize} onChange={setSelectedSize} />
 
-      {isImagePage && (
+      {/* {isImagePage && (
         <>
           <Colors selected={selectedColors} onChange={setSelectedColors} />
-          {/* Quantity Selector */}
+
           <div>
             <div className="flex justify-start my-2 items-center gap-2">
               <Image
@@ -289,7 +323,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
             </div>
           </div>
         </>
-      )}
+      )} */}
 
       {!isImagePage && (
         <>
