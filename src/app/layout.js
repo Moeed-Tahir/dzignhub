@@ -7,11 +7,13 @@ export const metadata = {
 };
 
 import SessionWrapper from "@/components/SessionWrapper";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body cz-shortcut-listen="true">
+        <Toaster/>
         <NextTopLoader showSpinner={false} color="#C209C1" />
 
         <SessionWrapper>

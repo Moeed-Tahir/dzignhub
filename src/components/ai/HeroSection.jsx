@@ -4,6 +4,52 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 function Hero({ isImage }) {
   const router = useRouter();
+  const [prompt, setPrompt] = React.useState("");
+
+  const saveGeneration = async(type, url, prompt) => {
+    const data = {
+      type: type,
+      url: url,
+      prompt: prompt
+    }
+    let prevGenerations = JSON.parse(localStorage.getItem("generations")) || [];
+    prevGenerations.push(data);
+
+    localStorage.setItem("generations", JSON.stringify(prevGenerations));
+
+    alert("Login to see your generation.");
+  }
+
+  const imageGeneration = async() => {
+    if (!prompt) {
+      alert("Please enter a prompt.");
+      return;
+    }
+      const data = {
+          prompt: prompt,
+          style: "",
+          size: "",
+          colors: [],
+          quantity: 1,
+        };
+    const req = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/generate-image`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    const res = await req.json();
+    if (res.type == "success") {
+        saveGeneration("image", res.images, prompt);
+      }
+    setIsLoading(false);
+  }
+
   return (
     <>
       <motion.div
@@ -136,18 +182,15 @@ function Hero({ isImage }) {
               transition={{ duration: 0.4, delay: 1.5 }}
               className="text-[18px] text-white w-[70%] focus:outline-none bg-transparent placeholder:text-white"
               placeholder="A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
-              // readOnly
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
             />
             <motion.button
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: 1.5 }}
               whileHover={{ scale: 1.05 }}
-              onClick={() =>
-                  router.push(
-                    `/dashboard/${isImage ? "image-creation" : "video-creation"}`
-                  )
-                }
+              onClick={imageGeneration}
               whileTap={{ scale: 0.95 }}
               className={`w-[179px] h-[54px] cursor-pointer bg-[#BDFF00] text-[18px]  rounded-full flex items-center justify-center gap-[8px]`}
             >
@@ -188,6 +231,8 @@ function Hero({ isImage }) {
               <input
                 className="lg:text-[18px] focus: text-[16px] text-white focus:outline-none bg-transparent placeholder:text-white"
                 placeholder="A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
               />
             </motion.div>
             <motion.div
@@ -201,11 +246,7 @@ function Hero({ isImage }) {
                 initial={{ rotate: -180 }}
                 animate={{ rotate: 0 }}
                 transition={{ duration: 0.6, delay: 1.9 }}
-                onClick={() =>
-                  router.push(
-                    `/dashboard/${isImage ? "image-creation" : "video-creation"}`
-                  )
-                }
+                onClick={imageGeneration}
                 className={` text-[20px] `}
               >
                 <img
