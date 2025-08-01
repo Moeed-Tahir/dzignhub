@@ -70,16 +70,19 @@ function page() {
       date: "May 22, 2025",
       title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
       image: "/blog/1.jpg",
+      link:"/blog-detail/1"
     },
     {
       date: "May 22, 2025",
       title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
       image: "/blog/2.jpg",
+      link:"/blog-detail/1"
     },
     {
       date: "May 22, 2025",
       title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
       image: "/blog/3.jpg",
+      link:"/blog-detail/1"
     },
   ];
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -347,6 +350,7 @@ function page() {
           </motion.h1>
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-[32px] gap-y-[43px] ">
             {blogData.map((item, index) => (
+              <Link href={item.link}>
               <motion.div
                 key={index}
                 initial="initial"
@@ -354,13 +358,14 @@ function page() {
                 viewport={{ once: true, rootMargin: "-20vh" }}
                 variants={scaleIn}
                 transition={{ delay: index * 0.2 }}
-              >
+                >
                 <Card
                   title={item.title}
                   date={item.date}
                   image={item.image}
-                />
+                  />
               </motion.div>
+                  </Link>
             ))}
           </div>
         </motion.div>
