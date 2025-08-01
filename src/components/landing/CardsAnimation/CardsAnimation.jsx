@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -50,7 +50,7 @@ const CardsAnimation = () => {
     },
   ];
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const container = containerRef.current;
     const images = imagesRef.current;
     const contents = contentRef.current;
@@ -61,7 +61,7 @@ const CardsAnimation = () => {
       opacity: 1,
       rotate: -45,
       skewX: 10,
-      y: "35vh",
+      y: "55vh",
       x: "30vw",
       transformOrigin: "center center",
       transformStyle: "preserve-3d",
@@ -103,7 +103,7 @@ const CardsAnimation = () => {
       );
 
       tl.to(
-        contents[index].querySelector('.content-title'),
+        contents[index].querySelector(".content-title"),
         {
           color: "#BDFF00",
           duration: 1,
@@ -129,7 +129,7 @@ const CardsAnimation = () => {
           opacity: 1,
           skewX: 10,
           rotate: 90,
-          y: "-35vh",
+          y: "-55vh",
           scale: 1,
           duration: 1,
           ease: "none",
@@ -138,13 +138,13 @@ const CardsAnimation = () => {
       );
 
       tl.to(
-        contents[index].querySelector('.content-title'),
+        contents[index].querySelector(".content-title"),
         {
           color: "#FFFFFF",
           duration: 0.2,
           ease: "none",
         },
-        progress * 2 +1
+        progress * 2 + 1
       );
       tl.to(
         contents[index],
@@ -159,7 +159,11 @@ const CardsAnimation = () => {
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => {
+        trigger.kill(true);
+      });
+
+      gsap.globalTimeline.clear(); // Optional but helps if you’re seeing lingering animations
     };
   }, []);
 
@@ -167,7 +171,10 @@ const CardsAnimation = () => {
     <>
       {/* <div className="h-20"></div> */}
 
-      <div ref={containerRef} className="h-screen  bg-[#1B1F3B] overflow-hidden">
+      <div
+        ref={containerRef}
+        className="h-screen  bg-[#1B1F3B] overflow-hidden"
+      >
         <div className="max-w-[1440px] w-full mx-auto px-6 py-20 h-full flex flex-col justify-center">
           <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[600px]">
             <div
