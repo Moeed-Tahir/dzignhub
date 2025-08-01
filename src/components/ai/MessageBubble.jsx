@@ -10,13 +10,14 @@ export default function MessageBubble({
   selectedOptions = [],
   isLoading = false,
   typing = false,
+  aiIcon ,
   imageUrl = null,
   isLogo = false,
   isError = false,
 }) {
   const isAI = sender === "ai";
   const userIcon = "/avatar.png";
-  const aiIcon = "/Ai/ai-dp.png";
+  // const aiIcon = "/Ai/ai-dp.png";
   const [selected, setSelected] = useState(null);
   const [displayedText, setDisplayedText] = useState(typing ? "" : text || "");
 

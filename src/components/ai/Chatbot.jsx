@@ -10,6 +10,7 @@ export default function ChatPage({
   description,
   img,
   suggestions,
+  placeholder ,
   tagline,
 }) {
   const [messages, setMessages] = useState([]);
@@ -681,6 +682,7 @@ export default function ChatPage({
             key={index}
             sender={msg.sender}
             text={msg.text}
+            aiIcon={img}
             options={msg.options || []}
             onOptionSelect={handleOptionSelect}
             selectedOptions={selectedOptions}
@@ -691,7 +693,7 @@ export default function ChatPage({
           />
         ))}
       </div>
-      <MessageInput suggestions={suggestions} onSend={handleSend} />
+      <MessageInput placeholder={placeholder} suggestions={suggestions} onSend={handleSend} />
     </div>
   );
 }
