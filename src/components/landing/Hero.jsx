@@ -7,6 +7,7 @@ import { Syne } from "next/font/google";
 import { motion } from "framer-motion";
 import HeroCTA from "./HeroCTA";
 import HeroCTAMobile from "./HeroCTAMobile";
+import Link from "next/link";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -110,14 +111,16 @@ export default function Hero() {
             <p className="text-[#BDFF00] text-[18px] lg:block hidden font-medium">
               Get early access
             </p>
+            <Link href="/auth/sign-up">
             <motion.button 
               className="lg:flex hidden w-[38px] h-[26px] rounded-full bg-[#060606] border border-[#BDFF00] items-center justify-center"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-            >
+              >
               <FaArrowRight className="text-white  lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
             </motion.button>
+              </Link>
           </motion.div>
           <motion.div 
             className="lg:hidden flex mx-auto gap-[10px] h-[28px] w-[191px]"
@@ -126,14 +129,16 @@ export default function Hero() {
             <p className="text-[#BDFF00] lg:text-[18px] text-[16px] font-medium ">
               Get early access
             </p>
+            <Link href="/auth/sign-up">
             <motion.button 
               className="flex  w-[38px] h-[26px] rounded-[100px] bg-[#060606] border border-[#BDFF00] items-center justify-center"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-            >
+              >
               <FaArrowRight className="text-white lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
             </motion.button>
+              </Link>
           </motion.div>
           {/* Heading + Paragraph */}
           <motion.div 

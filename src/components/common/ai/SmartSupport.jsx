@@ -313,7 +313,7 @@ function SmartSupport({ currentKey }) {
           </motion.div>
           <motion.div
             variants={gridVariants}
-            className="grid grid-cols-2 h-[450px] md:grid-cols-3 gap-x-4 gap-y-10 xl:gap-y-0 xl:pt-15 xl:w-[50%]"
+            className="grid grid-cols-2 h-[450px] w-full  md:grid-cols-3 gap-x-4 gap-y-10 xl:gap-y-0 xl:pt-15 xl:w-[50%]"
           >
             <motion.div
               variants={cardVariants}

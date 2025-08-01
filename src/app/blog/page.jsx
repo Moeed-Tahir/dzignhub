@@ -5,37 +5,44 @@ import Hero from "@/components/common/Hero";
 import Sidebar from "@/components/landing/Sidebar";
 import Card from "@/components/blog/Card";
 import Footer from "@/components/common/Footer";
+import Link from "next/link";
 
 const blogData = [
   {
     date: "May 22, 2025",
     title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
     image: "/blog/1.jpg",
+    link:"/blog-detail/1"
   },
   {
     date: "May 22, 2025",
     title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
     image: "/blog/2.jpg",
+    link:"/blog-detail/1"
   },
   {
     date: "May 22, 2025",
     title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
     image: "/blog/3.jpg",
+    link:"/blog-detail/1"
   },
   {
     date: "May 22, 2025",
     title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
     image: "/blog/4.jpg",
+    link:"/blog-detail/1"
   },
   {
     date: "May 22, 2025",
     title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
     image: "/blog/5.jpg",
+    link:"/blog-detail/1"
   },
   {
     date: "May 22, 2025",
     title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
     image: "/blog/6.jpg",
+    link:"/blog-detail/1"
   },
 ];
 
@@ -88,6 +95,7 @@ function Page() {
           variants={containerVariants}
         >
           {blogData.map((item, index) => (
+            <Link href={item.link}>
             <motion.div
               key={index}
               variants={cardVariants}
@@ -103,6 +111,7 @@ function Page() {
                 image={item.image}
               />
             </motion.div>
+          </Link>
           ))}
         </motion.div>
       </div>

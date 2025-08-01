@@ -30,13 +30,56 @@ export function useChatLogic() {
     return () => clearTimeout(timer);
   }, []);
 
+  const processMessage = async(message, previousMessages) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chatbot/process-message`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({
+        message: message,
+        previousMessages: previousMessages || []
+      })
+    });
+
+    const res = await response.json();
+
+    if(res.type == "success") {
+      setMessages((prev) => [...prev, {
+        id: Date.now().toString() + Math.random(),
+        role: "system",
+        content: res.data.response
+      }]);
+    }
+  }
   const addMessage = (content, role) => {
     const newMessage = {
       id: Date.now().toString() + Math.random(),
       role,
       content,
     };
-    setMessages((prev) => [...prev, newMessage]);
+    
+    const prevMessages = [...messages, newMessage];
+    setMessages(prevMessages);
+    console.log("Updated Messages:", prevMessages); // This will show correct messages
+    
+    if (role === "user") {
+      setIsLoading(true);
+      processMessage(content, prevMessages)
+        .catch((error) => {
+          console.error('Error processing message:', error);
+          // Add error message to chat
+          setMessages(prev => [...prev, {
+            id: Date.now().toString() + Math.random(),
+            role: "system",
+            content: "Sorry, I'm having trouble processing your request. Please try again."
+          }]);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   const getNextResponse = () => {
@@ -62,32 +105,18 @@ export function useChatLogic() {
   const handleSuggestionClick = async (question) => {
     setChatState("chat");
     addMessage(question, "user");
-
-    setIsLoading(true);
-
-    setTimeout(() => {
-      const response = getNextResponse();
-      addMessage(response, "assistant");
-      setIsLoading(false);
-    }, 1200);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
-
+  
     const userMessage = input.trim();
     setInput("");
     setChatState("chat");
+    
+    // Add user message and process it
     addMessage(userMessage, "user");
-
-    setIsLoading(true);
-
-    setTimeout(() => {
-      const response = getNextResponse();
-      addMessage(response, "assistant");
-      setIsLoading(false);
-    }, 1200);
   };
 
   return {
