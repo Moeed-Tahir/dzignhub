@@ -10,11 +10,14 @@ const aiBots = {
       "🎯 Create a mood board for a fashion line",
     ],
     img: "/Ai/ai-dp.png",
+    placeholder: "Hello, help me create things for a fashion brand",
   },
 
   sana: {
     name: "Sana",
     img: "/Ai/sana.png",
+    placeholder: "Hey, I need help with creating content for social media",
+
     tagline:
       "I specialize in content creation — social media posts, blog ideas, and video scripts.",
     description: "Describe what you need or choose a suggested prompt below",
@@ -28,6 +31,8 @@ const aiBots = {
   mira: {
     name: "Mira",
     img: "/Ai/mira.png",
+    placeholder: "Hi Mira, I want to grow my business, where should I start?",
+
     tagline:
       "I specialize in Strategy — Defend goals,  clarify your audience,  and shape your path to growth.",
     description:
@@ -41,6 +46,8 @@ const aiBots = {
   novi: {
     name: "Novi",
     img: "/Ai/novi.png",
+    placeholder: "Can you help me optimize my website for search engines?",
+
     tagline:
       "I specialize in SEO — keywords, metadata, content structure, and traffic strategies.",
     description:
@@ -54,6 +61,8 @@ const aiBots = {
   kano: {
     name: "Kano",
     img: "/Ai/kano.png",
+    placeholder: "I need help designing a clean interface for my app",
+
     tagline:
       "I’m your UI/UX design companion — here to help you create intuitive flows, wireframes, design systems, and pixel-perfect interfaces.",
     description:

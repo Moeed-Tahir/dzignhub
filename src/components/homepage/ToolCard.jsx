@@ -13,7 +13,7 @@ const ToolCard = ({
   const router = useRouter();
   return (
     <div
-      className={` rounded-xl group   cursor-pointer overflow-hidden ${className}`}
+      className={` rounded-xl group flex justify-center items-center flex-col   cursor-pointer overflow-hidden ${className}`}
       onClick={onClick || (() => router.push(href))}
     >
       {/* Image */}

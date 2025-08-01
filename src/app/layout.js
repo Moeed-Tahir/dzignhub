@@ -14,7 +14,9 @@ export default function RootLayout({ children }) {
       <body cz-shortcut-listen="true">
         <NextTopLoader showSpinner={false} color="#C209C1" />
 
-        <SessionWrapper>{children}</SessionWrapper>
+        <SessionWrapper>
+          {children}
+        </SessionWrapper>
       </body>
     </html>
   );

@@ -76,7 +76,6 @@ function Page() {
       <Navbar />
 
       <div className="px-8 mx-auto max-w-[1440px] py-6">
-
         <div
           id="mainContainer"
           className="flex flex-col xl:flex-row h-auto  xl:h-[400px]"
@@ -84,7 +83,6 @@ function Page() {
             gap: "32px",
           }}
         >
-
           <div
             className="flex flex-col xl:w-[544px] xl:h-[401px]"
             style={{
@@ -94,7 +92,7 @@ function Page() {
             <h1 className="text-2xl font-semibold text-[#000000] ">
               Manual tools
             </h1>
-            <div className="flex gap-4">
+            <div className="flex  gap-4">
               <ToolCard
                 image={"/homepage/manual-tools-image-creation.png"}
                 icon={"/homepage/image-generation.png"}

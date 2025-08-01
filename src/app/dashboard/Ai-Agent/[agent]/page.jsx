@@ -38,9 +38,9 @@ const page = () => {
   }
 
   return (
-    <div className="bg-[#F7F8F8]  max-w-[1440px] mx-auto overflow-hidden min-h-screen">
+    <div className="bg-[#F7F8F8] px-10 xl:px-0  max-w-[1440px] mx-auto overflow-hidden min-h-screen">
       <Navbar isSettingPage={true} />
-      <div className="relative flex gap-2">
+      {/* <div className="relative flex gap-2">
         <Image
           src={"/Ai/chat.svg"}
           alt=""
@@ -55,12 +55,13 @@ const page = () => {
           height={44}
           className="aboslute top-0 cursor-pointer right-0 "
         />
-      </div>
+      </div> */}
       <Chatbot
         aiName={bot.name}
         tagline={bot.tagline}
         description={bot.description}
         suggestions={bot.suggestions}
+        placeholder={bot.placeholder}
         img={bot.img}
       />
     </div>

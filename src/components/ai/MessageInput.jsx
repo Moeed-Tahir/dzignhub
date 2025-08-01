@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
-export default function MessageInput({ onSend,suggestions }) {
+export default function MessageInput({ onSend,suggestions, placeholder }) {
   const [message, setMessage] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(true);
 
@@ -30,7 +30,7 @@ export default function MessageInput({ onSend,suggestions }) {
   };
 
   return (
-    <div className="absolute bottom-[24px] left-1/2 translate-x-[-50%] max-w-[1280px] w-full">
+    <div className="absolute bottom-[24px] px-10 xl:px-0 left-1/2 translate-x-[-50%] max-w-[1280px] w-full">
       <form
         onSubmit={handleSubmit}
         className="w-full flex shadow-xs h-[80px] max-w-[1440px] rounded-[20px] items-center gap-2 p-4 bg-white relative"
@@ -41,7 +41,7 @@ export default function MessageInput({ onSend,suggestions }) {
               <button
                 key={i}
                 type="button"
-                className="bg-white h-[62px]  shadow-xs text-[14px] font-medium rounded-[16px] px-4 py-2 text-[#1B1F3B] hover:bg-[#E0E0E0] cursor-pointer"
+                className="bg-white hidden sm:flex lg:h-[62px]  shadow-xs text-[14px] font-medium rounded-[16px] px-4 py-2 text-[#1B1F3B] hover:bg-[#E0E0E0] cursor-pointer"
                 onClick={() => handleSuggestionClick(s)}
               >
                 {s}
@@ -55,7 +55,7 @@ export default function MessageInput({ onSend,suggestions }) {
         <input
           type="text"
           className="flex-1 rounded-lg p-2 focus:outline-none"
-          placeholder="Hello, help me create branding things for fashion brand"
+          placeholder={placeholder}
           value={message}
           onChange={handleInputChange}
         />

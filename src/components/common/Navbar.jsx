@@ -190,12 +190,12 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
       isPro: true,
       avatar: "/Ai/kano.png",
     },
-    {
-      name: "Ellie",
-      role: "(Pitch Deck)",
-      isPro: true,
-      avatar: "/Ai/ellie.png",
-    },
+    // {
+    //   name: "Ellie",
+    //   role: "(Pitch Deck)",
+    //   isPro: true,
+    //   avatar: "/Ai/ellie.png",
+    // },
   ];
 
   const SettingLinks = [
@@ -321,7 +321,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
 
   return (
     <nav
-      className={`  ${isCreationPage ? "" : isSettingPage ? "m-5" : " m-8"
+      className={`  ${isCreationPage ? "" : isSettingPage ? "lg:m-5 my-5" : " m-8"
         } bg-white px-4 max-w-[1440px]   xl:mx-auto py-4 rounded-full`}
     >
       <div className="flex items-center justify-between">
@@ -709,12 +709,12 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                               {assistants.map((assistant) => (
                                 <div key={assistant.name}>
                                   <a
-                                    href="#"
+                                    href={`/dashboard/Ai-Agent/${assistant.name.toLowerCase()}`}
                                     className="flex items-center px-4 py-2 text-sm hover:bg-gray-50 cursor-pointer"
                                   >
                                     <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">
                                       <Image
-                                        src={`/homepage/ai-assistants-dropdown${assistant.avatar}`}
+                            src={`${assistant.avatar}`}
                                         width={32}
                                         height={32}
                                         alt={assistant.name}
