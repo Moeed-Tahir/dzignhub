@@ -188,7 +188,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
       name: "Kano",
       role: "(UX/UI Assistant)",
       isPro: true,
-      avatar: "/Ai/kano.png",
+      avatar: "/Ai/ellie.png",
     },
     // {
     //   name: "Ellie",
