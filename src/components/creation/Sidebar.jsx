@@ -40,7 +40,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
 
   const handleImageUploadFromTextArea = (file) => {
     setUploadedImageFromTextArea(file);
-
     setStartImage(file);
   };
 
@@ -82,28 +81,41 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
     console.log("Selected Quantity:", selectedQuantity);
     console.log("Text Value:", textValue);
 
-    const data = {
-      prompt: textValue,
-      style: selectedStyle,
-      size: selectedSize,
-      colors: [selectedColors.c1, selectedColors.c2, selectedColors.c3],
-      quality: selectedQuality,
-      quantity: selectedQuantity,
-      Duration: selectedDuration,
-      startImage: null,
-      endImage: null,
-    };
-    console.log("Data to be sent:", data);
-
+    
+    // const data = {
+    //   prompt: textValue,
+    //   style: selectedStyle,
+    //   size: selectedSize,
+    //   colors: [selectedColors.c1, selectedColors.c2, selectedColors.c3],
+    //   quality: selectedQuality,
+    //   quantity: selectedQuantity,
+    //   Duration: selectedDuration,
+    //   startImage: null,
+    //   endImage: null,
+    //   uploadedImageFromTextArea: activeTab === "image-to-image" ? uploadedImageFromTextArea : null,
+    // };
+ 
+   
     if (isImagePage) {
+      const formData = new FormData();
+      formData.append("prompt", textValue);
+      formData.append("style", JSON.stringify(selectedStyle));
+      formData.append("size", selectedSize);
+      formData.append("colors", JSON.stringify([selectedColors.c1, selectedColors.c2, selectedColors.c3]));
+      formData.append("quantity", selectedQuantity.toString());
+
+      
+    // Add image file if it's image-to-image mode
+    if (activeTab === "image-to-image" && uploadedImageFromTextArea) {
+      formData.append("uploadedImageFromTextArea", uploadedImageFromTextArea);
+      console.log("Image file added to FormData:", uploadedImageFromTextArea.name);
+    }
+  
       const req = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/generate-image`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+          body: formData
         }
       );
 
