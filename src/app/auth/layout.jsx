@@ -25,7 +25,7 @@ export default function AuthLayout({ children }) {
             </button>
           ) : (
             <div
-              className="flex justify-center items-center gap-1"
+              className="flex justify-center items-center gap-1 cursor-pointer"
               onClick={() => router.push("/")}
             >
               <Image
@@ -33,7 +33,7 @@ export default function AuthLayout({ children }) {
                 alt="Logo"
                 width={100}
                 height={100}
-                className="w-[44px] h-[44px] object-contain"
+                className="w-[44px] h-[44px] object-contain "
               />
               <span className="font-medium text-[#1B1F3B] text-[22px] leading-none">
                 allmyai

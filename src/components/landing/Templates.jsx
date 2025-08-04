@@ -462,7 +462,7 @@ const nextSlide = () => {
               </div>
 
               {/* Image */}
-              <div className="w-[270px] h-[151.88px] top-[153.34px] left-[57.5px] rounded-[10.13px] overflow-hidden absolute">
+              <div className="w-[270px] h-[151.88px] top-[153.34px] left-1/2 -translate-x-1/2 rounded-[10.13px] overflow-hidden absolute">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={currentIndex} // IMPORTANT: forces re-mount on index change
@@ -482,13 +482,13 @@ const nextSlide = () => {
               <motion.div>
                 <IoIosArrowDropleftCircle
                   onClick={prevSlide}
-                  className="w-[32px] h-[32px] top-[215px] left-[22px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
+                  className="w-[32px] h-[32px] top-[215px] md:left-[22px] left-[15px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
                 />
               </motion.div>
               <motion.div >
                 <IoIosArrowDroprightCircle
                   onClick={nextSlide}
-                  className="w-[32px] h-[32px] top-[215px] right-[22px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
+                  className="w-[32px] h-[32px] top-[215px] md:right-[22px] right-[15px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
                 />
               </motion.div>
 
