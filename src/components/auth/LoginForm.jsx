@@ -61,7 +61,15 @@ const LoginForm = () => {
         SetIsLogin(true);
         SetEmail(data.user.email);
         SetUserId(data.user.userId);
-        router.push(`/dashboard`);
+        let route = localStorage.getItem("route");
+        console.log("Route from localStorage:", route);
+        if (route !== null && route !== undefined) {
+          localStorage.removeItem("route");
+          router.push(route);
+        }
+        else {
+          router.push(`/dashboard`);
+        }
 
       }
       else {

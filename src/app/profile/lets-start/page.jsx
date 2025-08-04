@@ -35,8 +35,15 @@ const page = () => {
         SetIsLogin(true);
         SetEmail(data.user.email);
         SetUserId(data.user._id);
-
-        router.push("/dashboard");
+        let route = localStorage.getItem("route");
+        console.log("Route from localStorage:", route);
+        if (route !== null && route !== undefined) {
+          localStorage.removeItem("route");
+          router.push(route);
+        }
+        else {
+          router.push(`/dashboard`);
+        }
 
       } else {
         console.error("Token verification failed:", data.message);

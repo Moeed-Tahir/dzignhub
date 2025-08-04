@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useUserStore } from "@/store/store";
 import VideoPlayer from "./VideoPlayer";
 
-const ImagesResults = ({ isVideoPage = false, generations }) => {
+const ImagesResults = ({ isVideoPage = false, generations, localGenerations }) => {
   const [isMediaOpen, setIsMediaOpen] = useState(false);
   const { GenerateImages, GenerateVideo } = useUserStore();
   const [selectedMedia, setSelectedMedia] = useState(null);
@@ -130,9 +130,89 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
       )}
 
       {/* Masonry Layout for Generations */}
-      {!isMediaOpen && generations && generations.length > 0 && (
+      {!isMediaOpen && generations && localGenerations && (
         <div className="mt-[24px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[10px]">
           {generations.map((item, index) => {
+            const gridSpans = getGridSpans(item, index);
+
+            return (
+              <div
+                key={index}
+                className="group cursor-pointer"
+                style={{
+                  gridRowEnd: `span ${gridSpans}`,
+                }}
+                onClick={() => handleMediaClick(item.url)}
+              >
+                <div className="relative w-full h-full rounded-[12px] overflow-hidden bg-gray-200">
+                  {item.type === "video" ? (
+                    <>
+                      <video
+                        src={item.url}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        muted
+                        loop
+                        onMouseEnter={(e) => e.target.play()}
+                        onMouseLeave={(e) => {
+                          e.target.pause();
+                          e.target.currentTime = 0;
+                        }}
+                      />
+                      {/* Play button overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 hover:bg-opacity-20 transition-all">
+                        <div className="bg-white bg-opacity-80 rounded-full p-3">
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="text-black"
+                          >
+                            <path
+                              d="M8 5V19L19 12L8 5Z"
+                              fill="currentColor"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      {/* Video info */}
+                      <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+                        {item.duration || '10'}s
+                      </div>
+                    </>
+                  ) : (
+                    <Image
+                      src={item.url}
+                      alt={item.fileName || `Generated image ${index + 1}`}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      onLoad={() => {
+                        // Trigger re-calculation if needed
+                        if (!imageDimensions[index]) {
+                          getImageDimensions(item.url, index);
+                        }
+                      }}
+                    />
+                  )}
+
+                  {/* Hover overlay with prompt */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end p-4">
+                    <p className="text-white text-sm leading-relaxed break-words">
+                      {item.prompt || "No prompt available"}
+                    </p>
+                  </div>
+                  {/* Debug info - remove in production */}
+                  {imageDimensions[index] && (
+                    <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                      {imageDimensions[index].width}×{imageDimensions[index].height}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+          {localGenerations.map((item, index) => {
             const gridSpans = getGridSpans(item, index);
 
             return (
@@ -291,7 +371,7 @@ const ImagesResults = ({ isVideoPage = false, generations }) => {
       )}
 
       {/* No content message */}
-      {!isMediaOpen && !hasContent && (!generations || generations.length === 0) && (
+      {!isMediaOpen && !hasContent && ((!generations || generations.length === 0) && localGenerations.length===0) && (
         <div className="flex flex-col items-center justify-center mt-[50px] text-center">
           <div className="text-gray-400 mb-4">
             {isVideoPage ? (

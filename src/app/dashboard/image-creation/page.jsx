@@ -75,9 +75,48 @@ const Page = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [generations, setGenerations] = React.useState([]);
+  const [localGenerations, setLocalGenerations] = React.useState([]);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const user = useUserStore((state) => state.user);
   const { IsLogin } = useUserStore();
+
+  const getGenerationsFromLocalStorage = () => {
+    const storedGenerations = localStorage.getItem("generations");
+    if (storedGenerations) {
+      let generations = JSON.parse(storedGenerations);
+      console.log("Local Generations:", generations);
+      setLocalGenerations(generations);
+      if (generations.length > 0){
+        saveLocalGenerations(generations);
+      }
+    }
+  }
+
+  const saveLocalGenerations = async(generations) => {
+    try {
+      
+      const req = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/save-local-generations`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({images: generations}),
+        }
+      );
+
+      const res = await req.json();
+      console.log(res);
+
+      if(res.type =="success") {
+        localStorage.removeItem("generations");
+      }
+    } catch (error) {
+      console.error("Error saving generation:", error);
+    }
+  }
   const getUserGenerations = async () => {
     const req = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/get-user-generations`,
@@ -100,6 +139,7 @@ const Page = () => {
   };
 
   useEffect(() => {
+    getGenerationsFromLocalStorage();
     getUserGenerations();
   }, []);
   useEffect(() => {
@@ -160,7 +200,7 @@ const Page = () => {
         {showSuggestion ? (
           <StartingSuggestion />
         ) : (
-          <ImagesResults generations={generations} />
+          <ImagesResults generations={generations} localGenerations={localGenerations} />
         )}
 
         {/* <button

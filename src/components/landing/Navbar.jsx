@@ -86,7 +86,7 @@ function Navbar({ onOpenSidebar }) {
         SetEmail(data.user.email);
         SetUserId(data.user.userId);
         SetAvatar(data.user.avatar);
-        router.push("/dashboard");
+        
       } else {
         SetIsLogin(false);
       }
