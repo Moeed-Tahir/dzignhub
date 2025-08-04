@@ -128,7 +128,7 @@ export default function Landing() {
       <Download />
       {/* <FeatureSection /> */}
       <CardsAnimation />
-      <div className="mt-[-400px] z-1000 relative ">
+      <div className=" mt-[-800px] sm:mt-[-400px] z-1000 relative ">
         <Pricing />
       </div>
 
