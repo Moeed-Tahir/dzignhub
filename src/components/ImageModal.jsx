@@ -18,6 +18,10 @@ const ImageModal = ({
 
   if (!isOpen) return null;
 
+  const openAIAgent = () => {
+    router.push("/dashboard/Ai-Agent/zara")
+  }
+
   return (
     <div className="fixed inset-0 bg-black/80 bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white p-5 flex-row-reverse rounded-2xl gap-5 relative max-w-[1142px] w-[90%] max-h-[734px] h-full  flex">
@@ -89,17 +93,12 @@ const ImageModal = ({
 
           <div className="flex justify-between items-center w-full mt-8">
             <button
-              //   onClick={handleContinueWithEmail}
+                onClick={openAIAgent}
               className="w-[48%] bg-[#BDFF00]  hover:bg-[#a8e600] text-[#344054] text-[14px] font-semibold h-[40px] px-6 rounded-full transition-colors"
             >
               Chat with AI agent
             </button>{" "}
-            <button
-              //   onClick={handleContinueWithEmail}
-              className="w-[48%] bg-white   text-[#000000] border rounded-full text-[14px] font-semibold h-[40px] px-6  transition-colors"
-            >
-              Copy template link
-            </button>{" "}
+            
           </div>
         </div>
 
