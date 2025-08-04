@@ -10,6 +10,7 @@ const CardsAnimation = () => {
   const containerRef = useRef(null);
   const imagesRef = useRef([]);
   const contentRef = useRef([]);
+  const backgroundRef = useRef(null);
 
   const cardsData = [
     {
@@ -54,11 +55,12 @@ const CardsAnimation = () => {
     const container = containerRef.current;
     const images = imagesRef.current;
     const contents = contentRef.current;
+    const background = backgroundRef.current;
 
     if (!container || images.length === 0 || contents.length === 0) return;
 
     gsap.set(images, {
-      opacity: 1,
+      opacity: 0.2,
       rotate: -45,
       skewX: 10,
       y: "55vh",
@@ -126,7 +128,7 @@ const CardsAnimation = () => {
       tl.to(
         images[index],
         {
-          opacity: 1,
+          opacity: 0.2,
           skewX: 10,
           rotate: 90,
           y: "-55vh",
@@ -158,6 +160,26 @@ const CardsAnimation = () => {
       );
     });
 
+    // tl.to(
+    //   background,
+    //   {
+    //     backgroundColor: "#2D1B69",
+    //     duration: 0.5,
+    //     ease: "power2.inOut",
+    //   },
+    //   1.7
+    // );
+
+    tl.to(
+      background,
+      {
+        backgroundColor: "#FAFAFA",
+        duration: 0.5,
+        ease: "power2.out",
+      },
+      3.3
+    );
+
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => {
         trigger.kill(true);
@@ -171,11 +193,12 @@ const CardsAnimation = () => {
     <>
       {/* <div className="h-20"></div> */}
 
-      <div
-        ref={containerRef}
-        className="h-screen  bg-[#1B1F3B] overflow-hidden"
-      >
-        <div className="max-w-[1440px] w-full mx-auto px-6 py-20 h-full flex flex-col justify-center">
+      <div ref={containerRef} className="h-screen overflow-hidden">
+        <div
+          ref={backgroundRef}
+          className="absolute inset-0 bg-[#1B1F3B] transition-colors duration-300"
+        />
+        <div className="max-w-[1440px] w-full mx-auto px-6 py-20 h-full flex flex-col justify-center relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[600px]">
             <div
               className="relative h-[500px] flex items-center justify-center"
@@ -195,7 +218,7 @@ const CardsAnimation = () => {
                     <img
                       src={card.image}
                       alt={card.title}
-                      className="relative w-[612px] h-[50vh] object-cover rounded-[32px] border border-[#C209C1]"
+                      className="relative w-[612px] h-[544px] object-cover rounded-[32px] border border-[#C209C1]"
                       style={{
                         transform: "perspective(1200px)",
                         transformStyle: "preserve-3d",

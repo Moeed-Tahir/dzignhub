@@ -23,9 +23,9 @@ export default function Landing() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const sectionVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 60 
+    hidden: {
+      opacity: 0,
+      y: 60,
     },
     visible: {
       opacity: 1,
@@ -34,39 +34,39 @@ export default function Landing() {
         duration: 0.8,
         ease: "easeOut",
         staggerChildren: 0.2,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   };
 
   const headingVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 30 
+    hidden: {
+      opacity: 0,
+      y: 30,
     },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const wordVariants = {
-    hidden: { 
-      opacity: 0, 
-      x: -20 
+    hidden: {
+      opacity: 0,
+      x: -20,
     },
     visible: {
       opacity: 1,
       x: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   return (
@@ -94,35 +94,26 @@ export default function Landing() {
 
       <Carousel />
 
-      <motion.div 
+      <motion.div
         className="   max-w-[1440px]  mx-auto flex flex-col p-[24px]   lg:pt-[80px] lg:px-[80px] "
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
-        <motion.div 
-          className=""
-          variants={headingVariants}
-        >
-          <motion.div 
+        <motion.div className="" variants={headingVariants}>
+          <motion.div
             className="flex gap-[8px] font-semibold  lg:text-[48px] text-[28px]  text-black "
             variants={headingVariants}
           >
-            <motion.span 
-              className="text-[#C209C1]"
-              variants={wordVariants}
-            >
+            <motion.span className="text-[#C209C1]" variants={wordVariants}>
               Endless
             </motion.span>
-            <motion.span 
-              className=""
-              variants={wordVariants}
-            >
+            <motion.span className="" variants={wordVariants}>
               possibilites
             </motion.span>
           </motion.div>
-          <motion.h1 
+          <motion.h1
             className="font-semibold  lg:text-[48px] text-[28px]  text-black"
             variants={headingVariants}
           >
@@ -137,10 +128,13 @@ export default function Landing() {
       <Download />
       {/* <FeatureSection /> */}
       <CardsAnimation />
-      <Pricing />
+      <div className="mt-[-400px] z-1000 relative ">
+        <Pricing />
+      </div>
+
       <Testimonials />
       <FAQ />
-      
+
       <Assistants />
       <Footer />
     </>

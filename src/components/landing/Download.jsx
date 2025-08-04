@@ -117,7 +117,7 @@ function Download() {
       viewport={{ once: true, amount: 0.2 }}
       variants={containerVariants}
     >
-      <div className="max-w-[1440px] mx-auto xl:h-[867px]  py-[64px] px-[20px] xl:px-[80px]">
+      <div className="max-w-[1440px] z-[1000] mx-auto xl:h-[867px]  py-[64px] px-[20px] xl:px-[80px]">
         <div className="max-w-[1280px] xl:h-[739px] flex-col xl:flex-row flex items-center justify-between">
           <motion.div
             className="max-w-[688px] w-full xl:h-[690px] flex flex-col gap-10 xl:gap-[78px] text-[26px] xl:text-[48px] font-semibold text-[#FFFFFF]"
