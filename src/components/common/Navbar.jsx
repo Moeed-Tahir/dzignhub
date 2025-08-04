@@ -373,11 +373,11 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
               onClick={() => router.push("/dashboard")}
             >
               <Image
-                src="/logo-icon.png"
+                src="/logo-icon.svg"
                 alt="Logo"
                 width={32}
                 height={32}
-                className="w-[26px] h-[26px]"
+                className="w-[26px] h-[26px] "
               />
               <span className="text-lg font-semibold text-gray-900">
                 allmyai
