@@ -130,9 +130,9 @@ const ImagesResults = ({ isVideoPage = false, generations, localGenerations }) =
       )}
 
       {/* Masonry Layout for Generations */}
-      {!isMediaOpen && generations && localGenerations && (
+      {!isMediaOpen && (generations || localGenerations) && (
         <div className="mt-[24px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[10px]">
-          {generations.map((item, index) => {
+          {(generations || []).map((item, index) => {
             const gridSpans = getGridSpans(item, index);
 
             return (
@@ -212,7 +212,7 @@ const ImagesResults = ({ isVideoPage = false, generations, localGenerations }) =
               </div>
             );
           })}
-          {localGenerations.map((item, index) => {
+          {(localGenerations || []).map((item, index) => {
             const gridSpans = getGridSpans(item, index);
 
             return (
@@ -371,7 +371,7 @@ const ImagesResults = ({ isVideoPage = false, generations, localGenerations }) =
       )}
 
       {/* No content message */}
-      {!isMediaOpen && !hasContent && ((!generations || generations.length === 0) && localGenerations.length===0) && (
+      {!isMediaOpen && !hasContent && ((!generations || generations.length === 0) && (!localGenerations || localGenerations.length === 0)) && (
         <div className="flex flex-col items-center justify-center mt-[50px] text-center">
           <div className="text-gray-400 mb-4">
             {isVideoPage ? (
