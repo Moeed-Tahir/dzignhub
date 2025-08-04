@@ -164,11 +164,7 @@ function CommunityFeed() {
               </div>
             );
           }
-          return (
-            <div className="flex items-center justify-center h-full w-full">
-              <p className="">No generations found.</p>
-            </div>
-          );
+          return null;
         })}
       </div>
     </div>

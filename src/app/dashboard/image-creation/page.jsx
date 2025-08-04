@@ -217,10 +217,10 @@ const Page = () => {
           <span className="font-medium">Let's talk</span>
         </button> */}
       </div>
-      <LoginModal
+      {/* <LoginModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
-      />
+      /> */}
     </div>
   );
 };

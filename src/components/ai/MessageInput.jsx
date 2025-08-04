@@ -30,18 +30,18 @@ export default function MessageInput({ onSend,suggestions, placeholder }) {
   };
 
   return (
-    <div className="absolute bottom-[24px] px-10 xl:px-0 left-1/2 translate-x-[-50%] max-w-[1280px] w-full">
+    <div className="absolute bottom-[24px] px-5 xl:px-0 left-1/2 translate-x-[-50%] max-w-[1280px] w-full">
       <form
         onSubmit={handleSubmit}
-        className="w-full flex shadow-xs h-[80px] max-w-[1440px] rounded-[20px] items-center gap-2 p-4 bg-white relative"
+        className="w-full flex shadow-xs h-[40px]  sm:h-[80px] max-w-[1440px] rounded-[20px] items-center gap-2 p-4 bg-white relative"
       >
         {showSuggestions && (
-          <div className="absolute top-[-80px] left-0 w-full flex gap-2 z-10">
+          <div className="absolute lg:top-[-55px] top-[-65px] left-1/2 translate-x-[-50%] justify-center items-center w-full flex gap-2 z-10">
             {suggestions.map((s, i) => (
               <button
                 key={i}
                 type="button"
-                className="bg-white hidden sm:flex lg:h-[62px]  shadow-xs text-[14px] font-medium rounded-[16px] px-4 py-2 text-[#1B1F3B] hover:bg-[#E0E0E0] cursor-pointer"
+                className="bg-white text-[10px]  shadow-xs sm:text-[14px] font-medium rounded-[16px] px-4 py-2 text-[#1B1F3B] hover:bg-[#E0E0E0] cursor-pointer"
                 onClick={() => handleSuggestionClick(s)}
               >
                 {s}
@@ -54,7 +54,7 @@ export default function MessageInput({ onSend,suggestions, placeholder }) {
 
         <input
           type="text"
-          className="flex-1 rounded-lg p-2 focus:outline-none"
+          className="flex-1 rounded-lg p-2 text-[10px] sm:text-[14px] focus:outline-none"
           placeholder={placeholder}
           value={message}
           onChange={handleInputChange}
@@ -62,9 +62,9 @@ export default function MessageInput({ onSend,suggestions, placeholder }) {
 
         <button
           type="submit"
-          className="text-white bg-[#BDFF00] w-[40px] h-[40px] rounded-full p-2"
+          className="text-white bg-[#BDFF00] sm:w-[40px] w-[30px] h-[30px] sm:h-[40px] rounded-full p-2"
         >
-          <Image src="/Ai/direct-right.svg" width={40} height={40} alt="Send" />
+          <Image src="/Ai/direct-right.svg"  width={40} height={40} alt="Send" />
         </button>
       </form>
 

@@ -38,7 +38,7 @@ const page = () => {
   }
 
   return (
-    <div className="bg-[#F7F8F8] px-10 xl:px-0  max-w-[1440px] mx-auto overflow-hidden min-h-screen">
+    <div className="bg-[#F7F8F8] px-5 xl:px-0  max-w-[1440px] mx-auto overflow-hidden min-h-screen">
       <Navbar isSettingPage={true} />
       {/* <div className="relative flex gap-2">
         <Image
