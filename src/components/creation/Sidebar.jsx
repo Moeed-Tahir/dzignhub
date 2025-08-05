@@ -148,12 +148,17 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       // Add image files if selected
       if (startImage) {
         formData.append("startImage", startImage);
-      } else {
-        setError("Start image is required");
-        setIsError(true);
-        setIsLoading(false);
-        return;
       }
+      else if (uploadedImageFromTextArea) {
+        formData.append("startImage", uploadedImageFromTextArea);
+      }
+      
+      // else {
+      //   setError("Start image is required");
+      //   setIsError(true);
+      //   setIsLoading(false);
+      //   return;
+      // }
       if (endImage) {
         formData.append("endImage", endImage);
       }
