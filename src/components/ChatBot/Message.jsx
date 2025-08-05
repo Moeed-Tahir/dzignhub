@@ -3,9 +3,11 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
-
+import { useUserStore } from "@/store/store";
 export default function Message({ message, index }) {
+  const {Avatar} = useUserStore();
   // Custom markdown components for styling
+  const userAvatar = Avatar || "/avatar.png";
   const markdownComponents = {
     h1: ({ children }) => (
       <h1 className="text-xl font-bold mb-2">{children}</h1>
@@ -117,7 +119,7 @@ export default function Message({ message, index }) {
           transition={{ delay: index * 0.1 + 0.2, duration: 0.2 }}
         >
           <Image
-            src={"/avatar.png"}
+            src={userAvatar}
             alt="User Avatar"
             width={32}
             height={32}

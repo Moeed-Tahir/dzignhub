@@ -4,7 +4,9 @@ import Image from "next/image";
 const TextArea = ({ value, onChange, placeholder, showUploadIcon = false, onImageUpload }) => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
+    console.log("User picked image: ", file);
     if (file && onImageUpload) {
+      console.log("Image set")
       onImageUpload(file);
     }
   };

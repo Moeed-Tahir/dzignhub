@@ -4,9 +4,16 @@ import "@/css/communityFeed.css";
 import Globe from "@/app/assets/globe";
 import Gallery from "@/app/assets/gallery";
 import Video from "@/app/assets/video";
+import ImageModal from "@/components/ImageModal";
+
 function CommunityFeed() {
   const [generations, setGenerations] = React.useState([]);
   const [filter, setFilter] = React.useState("all");
+
+  // Add modal state
+  const [selectedGeneration, setSelectedGeneration] = React.useState(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
 
   const getCommunityFeed = async () => {
     const req = await fetch(
@@ -33,6 +40,43 @@ function CommunityFeed() {
     return Math.floor(Math.random() * 20) + 15; // Random between 15-35
   };
 
+  // Handle opening modal
+  const handleImageClick = (generation) => {
+    setSelectedGeneration(generation);
+    setIsModalOpen(true);
+  };
+
+  // Handle closing modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedGeneration(null);
+  };
+
+  // Generate tags for the modal
+  const generateTags = (generation) => {
+    const tags = [];
+
+    if (generation.type === "image") {
+      tags.push("Image", "JPG");
+      // Add dimensions if available
+      if (generation.width && generation.height) {
+        tags.push(`${generation.width}x${generation.height}`);
+        // Calculate aspect ratio
+        const aspectRatio = (generation.width / generation.height).toFixed(1);
+        tags.push(`${aspectRatio}:1`);
+      } else {
+        tags.push("1024x1024", "1:1"); // Default values
+      }
+    } else if (generation.type === "video") {
+      tags.push("Video", "MP4");
+      if (generation.duration) {
+        tags.push(`${generation.duration}s`);
+      }
+    }
+
+    return tags;
+  };
+
   return (
     <div className="w-full max-w-[1360px]">
       <div className="flex my-10 flex-wrap items-center gap-2 mb-4">
@@ -41,11 +85,10 @@ function CommunityFeed() {
             console.log("Changing filter to all");
             setFilter("all");
           }}
-          className={`rounded-full px-4 gap-2 whitespace-nowrap border py-2 flex items-center font-medium text-sm ${
-            filter === "all"
+          className={`rounded-full px-4 gap-2 whitespace-nowrap border py-2 flex items-center font-medium text-sm ${filter === "all"
               ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
               : "bg-white text-[#68686B] border-[#68686B]"
-          }`}
+            }`}
         >
           <Globe
             fill={filter === "all" ? "#fff" : "#68686B"}
@@ -59,11 +102,10 @@ function CommunityFeed() {
             console.log("Changing filter to image");
             setFilter("image");
           }}
-          className={`rounded-full px-4 py-2 flex items-center  whitespace-nowrap gap-2 font-medium border text-sm ${
-            filter === "image"
+          className={`rounded-full px-4 py-2 flex items-center  whitespace-nowrap gap-2 font-medium border text-sm ${filter === "image"
               ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
               : "bg-white text-[#68686B] border-[#68686B]"
-          }`}
+            }`}
         >
           <Gallery
             fill={filter === "image" ? "#fff" : "#68686B"}
@@ -77,11 +119,10 @@ function CommunityFeed() {
             console.log("Changing filter to video");
             setFilter("video");
           }}
-          className={`rounded-full px-4 py-2 flex items-center gap-2 font-medium border text-sm ${
-            filter === "video"
+          className={`rounded-full px-4 py-2 flex items-center gap-2 font-medium border text-sm ${filter === "video"
               ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
               : "bg-white text-[#68686B] border-[#68686B]"
-          }`}
+            }`}
         >
           <Video
             fill={filter === "video" ? "#fff" : "#68686B"}
@@ -110,6 +151,8 @@ function CommunityFeed() {
                 style={{
                   gridRowEnd: `span ${randomHeight}`,
                 }}
+                onClick={() => handleImageClick(generation)} // Add click handler
+
               >
                 <div className="relative w-full h-full rounded-[12px] overflow-hidden bg-gray-200">
                   {generation.type === "video" ? (
@@ -164,13 +207,26 @@ function CommunityFeed() {
               </div>
             );
           }
-          return (
-            <div className="flex items-center justify-center h-full w-full">
-              <p className="">No generations found.</p>
-            </div>
-          );
+          return null;
         })}
       </div>
+      {/* ImageModal */}
+      {selectedGeneration && (
+        <ImageModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          tags={generateTags(selectedGeneration)}
+          mainPic={selectedGeneration.url}
+          suggestions={generations
+            .filter(gen => gen.type === selectedGeneration.type && gen.url !== selectedGeneration.url)
+            .slice(0, 4)
+            .map(gen => gen.url)
+          }
+          title={selectedGeneration.title || `Community ${selectedGeneration.type}`}
+          desc={selectedGeneration.prompt || "No description available"}
+          subtitle={selectedGeneration.type === "image" ? "Image Generation" : "Video Generation"}
+        />
+      )}
     </div>
   );
 }

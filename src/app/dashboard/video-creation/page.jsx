@@ -82,23 +82,33 @@ const Page = () => {
   ];
 
   const getUserGenerations = async () => {
-    const req = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/get-user-generations`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const req = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/get-user-generations`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({ type: "video" }),
-        },
+        }
+      );
+
+      const res = await req.json();
+
+      if (res.type === "success") {
+        console.log(res.generations);
+        setGenerations(res.generations);
       }
-    );
-
-    const res = await req.json();
-
-    if (res.type === "success") {
-      console.log(res.generations);
-      setGenerations(res.generations);
+    } catch (error) {
+      console.error("Error fetching generations:", error);
     }
   };
 
@@ -108,11 +118,11 @@ const Page = () => {
 
   // Check if user is signed in and show modal if not
   useEffect(() => {
-     console.log("User:", IsLogin);
+    console.log("User:", IsLogin);
     if (!IsLogin) {
       setShowLoginModal(true);
     }
-  }, [user]);
+  }, [IsLogin]);
 
   // Detect mobile screen
   useEffect(() => {
@@ -182,11 +192,11 @@ const Page = () => {
           <span className="font-medium">Let's talk</span>
         </button> */}
       </div>
-
+{/* 
       <LoginModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
-      />
+      /> */}
     </div>
   );
 };

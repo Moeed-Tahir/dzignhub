@@ -20,71 +20,69 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
   const { IsLogin, SetIsLogin, SetEmail, SetUserId, SetAvatar, Avatar } =
     useUserStore();
   // const IsLogin = true;
-   
-  
-   const [isAuthChecking, setIsAuthChecking] = useState(true);
 
-   const verifyToken = async () => {
-     try {
-       console.log("Token verification started")
-       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
-         method: "POST",
-         headers: {
-           "Content-Type": "application/json",
-           Authorization: `Bearer ${localStorage.getItem("token")}`,
-         },
-       });
-       const data = await res.json();
-       console.log("Token verification response:", data);
- 
-       if (data.type === "success") {
-         SetIsLogin(true);
-         SetEmail(data.user.email);
-         SetUserId(data.user.userId);
-         SetAvatar(data.user.avatar);
-       } else {
-         SetIsLogin(false);
-       }
-     } catch (error) {
-       SetIsLogin(false);
-       console.error("Token verification failed", error);
-     } finally {
-       // Set auth checking to false after verification completes
-       setIsAuthChecking(false);
-     }
-   };
- 
-   useEffect(() => {
-     const checkAuth = async () => {
-       // Only verify token if we have one
-       const token = localStorage.getItem("token");
-       if (token) {
-         await verifyToken();
-       } else {
-         setIsAuthChecking(false);
-       }
-     };
- 
-     checkAuth();
-   }, [pathname]);
- 
-   // Separate useEffect for handling redirects after auth check completes
-   useEffect(() => {
-     // Don't redirect while still checking auth
-     if (isAuthChecking) return;
- 
-     const isProtected = protectedRoutes.some((route) =>
-       pathname.startsWith(route),
-     );
- 
-     const token = localStorage.getItem("token");
- 
-     // Only redirect if we're on a protected route and not logged in
-     if (isProtected && (!token || !IsLogin)) {
-       router.push("/auth/login");
-     }
-   }, [IsLogin, isAuthChecking, pathname]);
- 
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  const verifyToken = async () => {
+    try {
+      console.log("Token verification started");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await res.json();
+      console.log("Token verification response:", data);
+
+      if (data.type === "success") {
+        SetIsLogin(true);
+        SetEmail(data.user.email);
+        SetUserId(data.user.userId);
+        SetAvatar(data.user.avatar);
+      } else {
+        SetIsLogin(false);
+      }
+    } catch (error) {
+      SetIsLogin(false);
+      console.error("Token verification failed", error);
+    } finally {
+      // Set auth checking to false after verification completes
+      setIsAuthChecking(false);
+    }
+  };
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      // Only verify token if we have one
+      const token = localStorage.getItem("token");
+      if (token) {
+        await verifyToken();
+      } else {
+        setIsAuthChecking(false);
+      }
+    };
+
+    checkAuth();
+  }, [pathname]);
+
+  // Separate useEffect for handling redirects after auth check completes
+  useEffect(() => {
+    // Don't redirect while still checking auth
+    if (isAuthChecking) return;
+
+    const isProtected = protectedRoutes.some((route) =>
+      pathname.startsWith(route)
+    );
+
+    const token = localStorage.getItem("token");
+
+    // Only redirect if we're on a protected route and not logged in
+    if (isProtected && (!token || !IsLogin)) {
+      router.push("/auth/login");
+    }
+  }, [IsLogin, isAuthChecking, pathname]);
 
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isWorkspaceDropdownOpen, setIsWorkspaceDropdownOpen] = useState(false);
@@ -321,8 +319,9 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
 
   return (
     <nav
-      className={`  ${isCreationPage ? "" : isSettingPage ? "lg:m-5 my-5" : " m-8"
-        } bg-white px-4 max-w-[1440px]   xl:mx-auto py-4 rounded-full`}
+      className={`  ${
+        isCreationPage ? "" : isSettingPage ? "lg:m-5 my-5" : " m-8"
+      } bg-white px-4 max-w-[1440px]   xl:mx-auto py-4 rounded-full`}
     >
       <div className="flex items-center justify-between">
         {/* Left - Logo */}
@@ -395,8 +394,9 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                 <Link href={item.href}>
                   <button
                     onClick={() => handleMenuClick(item)}
-                    className={`relative px-4 py-2 rounded-full  cursor-pointer text-sm transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${activeMenu === item.name ? "text-black px-15" : ""
-                      }`}
+                    className={`relative px-4 py-2 rounded-full  cursor-pointer text-sm transition-all duration-200 flex items-center space-x-2 font-semibold text-[#202126] ${
+                      activeMenu === item.name ? "text-black px-15" : ""
+                    }`}
                     style={{
                       backgroundColor:
                         activeMenu === item.name
@@ -421,8 +421,9 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
               ) : (
                 <button
                   onClick={() => handleMenuClick(item)}
-                  className={`relative cursor-pointer px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center  font-semibold text-[#202126] ${activeMenu === item.name ? "text-black px-4" : ""
-                    }`}
+                  className={`relative cursor-pointer px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center  font-semibold text-[#202126] ${
+                    activeMenu === item.name ? "text-black px-4" : ""
+                  }`}
                   style={{
                     backgroundColor:
                       activeMenu === item.name
@@ -661,22 +662,24 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                             </span>
                             {(item.key === "workspace" ||
                               item.key === "assistants") && (
-                                <ChevronDown
-                                  className={`w-4 h-4 ml-2 transition-transform duration-200 ${(item.key === "workspace" &&
-                                      isMobileWorkspaceOpen) ||
-                                      (item.key === "assistants" &&
-                                        isMobileAssistantsOpen)
-                                      ? "rotate-180"
-                                      : ""
-                                    }`}
-                                />
-                              )}
+                              <ChevronDown
+                                className={`w-4 h-4 ml-2 transition-transform duration-200 ${
+                                  (item.key === "workspace" &&
+                                    isMobileWorkspaceOpen) ||
+                                  (item.key === "assistants" &&
+                                    isMobileAssistantsOpen)
+                                    ? "rotate-180"
+                                    : ""
+                                }`}
+                              />
+                            )}
                           </button>
                           {/* Sub-links for Manual workspace */}
                           {item.key === "workspace" && (
                             <div
-                              className={`ml-4 overflow-hidden transition-all duration-500 ease-in-out ${isMobileWorkspaceOpen ? "max-h-40" : "max-h-0"
-                                }`}
+                              className={`ml-4 overflow-hidden transition-all duration-500 ease-in-out ${
+                                isMobileWorkspaceOpen ? "max-h-40" : "max-h-0"
+                              }`}
                             >
                               <Link href="/dashboard/image-creation">
                                 <button
@@ -703,8 +706,9 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                           {/* Sub-links for Assistants */}
                           {item.key === "assistants" && (
                             <div
-                              className={`ml-4 overflow-hidden transition-all duration-500 ease-in-out ${isMobileAssistantsOpen ? "max-h-96" : "max-h-0"
-                                }`}
+                              className={`ml-4 overflow-hidden transition-all duration-500 ease-in-out ${
+                                isMobileAssistantsOpen ? "max-h-96" : "max-h-0"
+                              }`}
                             >
                               {assistants.map((assistant) => (
                                 <div key={assistant.name}>
@@ -714,7 +718,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                                   >
                                     <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0">
                                       <Image
-                            src={`${assistant.avatar}`}
+                                        src={`${assistant.avatar}`}
                                         width={32}
                                         height={32}
                                         alt={assistant.name}
@@ -749,13 +753,15 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                           >
                             <span>Settings</span>
                             <ChevronDown
-                              className={`w-4 h-4 ml-2 transition-transform duration-200 ${isMobileSettingsOpen ? "rotate-180" : ""
-                                }`}
+                              className={`w-4 h-4 ml-2 transition-transform duration-200 ${
+                                isMobileSettingsOpen ? "rotate-180" : ""
+                              }`}
                             />
                           </button>
                           <div
-                            className={`ml-4 overflow-hidden transition-all duration-500 ease-in-out ${isMobileSettingsOpen ? "max-h-96" : "max-h-0"
-                              }`}
+                            className={`ml-4 overflow-hidden transition-all duration-500 ease-in-out ${
+                              isMobileSettingsOpen ? "max-h-96" : "max-h-0"
+                            }`}
                           >
                             {SettingLinks.map((link) => (
                               <Link key={link.name} href={link.href}>

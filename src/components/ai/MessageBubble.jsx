@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
-
+import { useUserStore } from "@/store/store";
 export default function MessageBubble({
   sender,
   text,
@@ -10,13 +10,14 @@ export default function MessageBubble({
   selectedOptions = [],
   isLoading = false,
   typing = false,
-  aiIcon ,
+  aiIcon,
   imageUrl = null,
   isLogo = false,
   isError = false,
 }) {
+  const { Avatar } = useUserStore();
   const isAI = sender === "ai";
-  const userIcon = "/avatar.png";
+  const userIcon = Avatar || "/avatar.png";
   // const aiIcon = "/Ai/ai-dp.png";
   const [selected, setSelected] = useState(null);
   const [displayedText, setDisplayedText] = useState(typing ? "" : text || "");
@@ -125,7 +126,9 @@ export default function MessageBubble({
             {/* Text content with markdown support */}
             {displayedText && (
               <div
-                className={`prose prose-sm max-w-none ${isError ? "text-red-600" : ""}`}
+                className={`prose prose-sm max-w-none ${
+                  isError ? "text-red-600" : ""
+                }`}
               >
                 <ReactMarkdown components={markdownComponents}>
                   {displayedText.replace(/\\n/g, "\n")}
