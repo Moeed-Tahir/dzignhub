@@ -213,14 +213,14 @@ const CreationWork = ({ isImage }) => {
       </motion.div>
 
       <motion.div
-        className="w-full my-[55px] flex flex-col justify-center items-center"
+        className="w-full mt-[50px] mb-[55px] flex flex-col justify-center items-center"
         variants={bottomSectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
         <motion.button
-          className="w-[110px] h-[56px]  rounded-[999px] cursor-pointer bg-[#BDFF00] font-medium text-[18px]"
+          className="w-[110px] h-[56px] mb-[30px]  rounded-[999px] cursor-pointer bg-[#BDFF00] font-medium text-[18px]"
           variants={buttonVariants}
           whileHover={{
             scale: 1.05,
