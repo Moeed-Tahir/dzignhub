@@ -99,8 +99,13 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
     if (isImagePage) {
       const formData = new FormData();
       formData.append("prompt", textValue);
-      formData.append("style", JSON.stringify(selectedStyle));
-      formData.append("size", selectedSize);
+      if (selectedStyle) {
+        formData.append("style", JSON.stringify(selectedStyle));
+      }
+      else {
+        formData.append("style", JSON.stringify({ name: "normal style" }));
+      }
+      formData.append("size", selectedSize || "1024x1024");
       formData.append("colors", JSON.stringify([selectedColors.c1, selectedColors.c2, selectedColors.c3]));
       formData.append("quantity", selectedQuantity.toString());
 
@@ -111,6 +116,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       console.log("Image file added to FormData:", uploadedImageFromTextArea.name);
     }
   
+    try {
       const req = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/generate-image`,
         {
@@ -120,6 +126,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       );
 
       const res = await req.json();
+      console.log(res)
       if (res.type == "success" || res.type == "partial_success") {
         if (onGenerate) onGenerate();
         SetGenerateImages(res.images);
@@ -132,6 +139,15 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         }
       }
       setIsLoading(false);
+    }
+    catch(error) {
+      setError(`${error}`);
+      setIsError(true);
+      console.error("Error during image generation:", error);
+      alert("An error occurred while generating the image. Please try again.");
+      setIsLoading(false);
+
+    }
     } else {
       // Video generation - use FormData for file uploads
       const formData = new FormData();
@@ -139,11 +155,11 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
 
       // Make sure we're sending the correct style value
       const styleValue = selectedStyle?.name || selectedStyle;
-      formData.append("style", styleValue);
+      formData.append("style", styleValue  || "Golden hour");
 
       // Send duration as-is (it's already in "4 sec" format from Duration component)
-      formData.append("duration", selectedDuration);
-      formData.append("size", selectedSize);
+      formData.append("duration", selectedDuration || "5 sec");
+      formData.append("size", selectedSize || "square");
 
       // Add image files if selected
       if (startImage) {
