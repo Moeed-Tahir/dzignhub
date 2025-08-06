@@ -87,6 +87,11 @@ const CardsAnimation = () => {
           x: "-100vw", // Start from left
         });
 
+        // Set border images to opacity 0 initially
+        gsap.set(contents.map(content => content.querySelector(".border-image")), {
+          opacity: 0,
+        });
+
         // Set first card visible
         gsap.set(images[0], { opacity: 0, x: "100vw" });
         gsap.set(contents[0], { opacity: 0, x: "-100vw" });
@@ -107,6 +112,11 @@ const CardsAnimation = () => {
           y: "50vh",
         });
       }
+
+      // Set border images to opacity 0 initially for all cards
+      gsap.set(contents.map(content => content?.querySelector(".border-image")).filter(Boolean), {
+        opacity: 0,
+      });
 
       gsap.set(images[0], { opacity: 1 });
 
@@ -161,6 +171,17 @@ const CardsAnimation = () => {
             index * 2 + 0.5
           );
 
+          // Border image fade in when title turns green
+          tl.to(
+            contents[index].querySelector(".border-image"),
+            {
+              opacity: 1,
+              duration: 0.5,
+              ease: "none",
+            },
+            index * 2 + 0.5
+          );
+
           // Only exit if not the last card
           if (index < cardsData.length ) {
             // Image exits to left
@@ -197,6 +218,17 @@ const CardsAnimation = () => {
               },
               index * 2 + 1.3
             );
+
+            // Border image fade out when title turns white
+            tl.to(
+              contents[index].querySelector(".border-image"),
+              {
+                opacity: 0,
+                duration: 0.2,
+                ease: "none",
+              },
+              index * 2 + 1.3
+            );
             tl.to(
               background,
               {
@@ -204,7 +236,7 @@ const CardsAnimation = () => {
                 duration: 0.5,
                 ease: "power2.out",
               },
-            10
+            9
             );
           }
         } else {
@@ -228,6 +260,17 @@ const CardsAnimation = () => {
             contents[index].querySelector(".content-title"),
             {
               color: "#BDFF00",
+              duration: 1,
+              ease: "none",
+            },
+            progress * 2
+          );
+
+          // Border image fade in when title turns green (desktop)
+          tl.to(
+            contents[index].querySelector(".border-image"),
+            {
+              opacity: 1,
               duration: 1,
               ease: "none",
             },
@@ -263,6 +306,17 @@ const CardsAnimation = () => {
             contents[index].querySelector(".content-title"),
             {
               color: "#FFFFFF",
+              duration: 0.2,
+              ease: "none",
+            },
+            progress * 2 + 1
+          );
+
+          // Border image fade out when title turns white (desktop)
+          tl.to(
+            contents[index].querySelector(".border-image"),
+            {
+              opacity: 0,
               duration: 0.2,
               ease: "none",
             },
@@ -377,15 +431,16 @@ const CardsAnimation = () => {
                   ref={(el) => (contentRef.current[index] = el)}
                   className={`content-${index} absolute inset-0 flex items-center justify-center lg:justify-end w-full`}
                 >
-                  <div className="p-4 lg:p-8 flex flex-col justify-center">
+                  <div className="p-4 lg:p-8 relative flex flex-col justify-center">
                     <h3
-                      className={`text-xl lg:text-3xl title-${index} content-title text-center lg:text-right font-bold text-white mb-2 lg:mb-4`}
+                      className={`text-xl lg:text-3xl title-${index} content-title sm:text-center lg:text-right font-bold text-white mb-2 lg:mb-4`}
                     >
                       {card.title}
                     </h3>
-                    <p className="text-gray-300 w-full lg:w-[400px] text-sm lg:text-lg mb-4 lg:mb-6 text-center lg:text-right leading-relaxed">
+                    <p className="text-gray-300 w-full lg:w-[400px] text-sm lg:text-lg mb-4 lg:mb-6 sm:text-center lg:text-right leading-relaxed">
                       {card.description}
                     </p>
+                    <Image src="/Border.svg" alt="Border" className={`border-image image-${index} absolute right-0 -top-10`}  width={56} height={56} />
                   </div>
                 </div>
               ))}

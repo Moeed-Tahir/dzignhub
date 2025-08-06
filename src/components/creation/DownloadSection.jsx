@@ -35,7 +35,7 @@ const DownloadSection = () => {
         </div>
 
         <Image
-          src={"/video-creation/iphone.png"}
+          src={"/Black-Titanium.svg"}
           alt="iPhone"
           layout="responsive"
           width={375}

@@ -86,12 +86,12 @@ function CommunityFeed() {
             setFilter("all");
           }}
           className={`rounded-full px-4 gap-2 whitespace-nowrap border py-2 flex items-center font-medium text-sm ${filter === "all"
-              ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
-              : "bg-white text-[#68686B] border-[#68686B]"
+              ? "bg-white text-[#68686B] border-[#68686B]"
+              : "bg-[#1B1F3B] border-[#1B1F3B] text-white"
             }`}
         >
           <Globe
-            fill={filter === "all" ? "#fff" : "#68686B"}
+            fill={filter === "all" ? "#68686B"  :  "#fff"}
             width={24}
             height={24}
           />
@@ -103,12 +103,12 @@ function CommunityFeed() {
             setFilter("image");
           }}
           className={`rounded-full px-4 py-2 flex items-center  whitespace-nowrap gap-2 font-medium border text-sm ${filter === "image"
-              ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
-              : "bg-white text-[#68686B] border-[#68686B]"
+              ? "bg-white text-[#68686B] border-[#68686B]"
+              : "bg-[#1B1F3B] border-[#1B1F3B] text-white"
             }`}
         >
           <Gallery
-            fill={filter === "image" ? "#fff" : "#68686B"}
+            fill={filter === "image" ? "#68686B"  :  "#fff"}
             width={24}
             height={24}
           />
@@ -120,12 +120,12 @@ function CommunityFeed() {
             setFilter("video");
           }}
           className={`rounded-full px-4 py-2 flex items-center gap-2 font-medium border text-sm ${filter === "video"
-              ? "bg-[#1B1F3B] border-[#1B1F3B] text-white"
-              : "bg-white text-[#68686B] border-[#68686B]"
+              ? "bg-white text-[#68686B] border-[#68686B]"
+              : "bg-[#1B1F3B] border-[#1B1F3B] text-white"
             }`}
         >
           <Video
-            fill={filter === "video" ? "#fff" : "#68686B"}
+            fill={filter === "video"  ? "#68686B"  :  "#fff"}
             width={24}
             height={24}
           />
