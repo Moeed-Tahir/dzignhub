@@ -94,7 +94,7 @@ export default function ChatPage({
 
   }
 
-  const generateLogo = async (prompt, size = "1024x1024") => {
+  const generateLogo = async (prompt, type, size = "1024x1024") => {
     try {
       console.log('🎨 Generating logo with prompt:', prompt);
 
@@ -103,7 +103,7 @@ export default function ChatPage({
         ...prevMessages,
         {
           sender: "ai",
-          text: "✨ Generating your logo now... This might take a moment!",
+          text: `✨ Generating your ${type} now... This might take a moment!`,
           isLoading: true
         }
       ]);
@@ -126,9 +126,9 @@ export default function ChatPage({
           prevMessages.filter(msg => !msg.isLoading).concat([
             {
               sender: "ai",
-              text: `🎉 Here's your custom ${aiName.toLowerCase() == "zara"?"logo":"element"}! What do you think?`,
+              text: `🎉 Here's your custom ${type}! What do you think?`,
               imageUrl: data.data.imageUrl,
-              isLogo: true
+              isLogo: false
             }
           ])
         );
@@ -355,7 +355,7 @@ export default function ChatPage({
             .join(", ");
 
           console.log('Final response received, generating branding visuals...');
-          const finalPrompt = `Generate a ${aiName.toLowerCase() ? "logo" : "poster"} for a brand with the following details:
+          const finalPrompt = `Generate a ${jsonResponse.task} for a brand with the following details:
           \n\n
           ${formattedString}
           \n\nPrompt: ${jsonResponse.prompt}\n\n
@@ -363,7 +363,7 @@ export default function ChatPage({
           console.log('Final prompt:', finalPrompt);
 
           setAiLoading(false);
-          await generateLogo(finalPrompt);
+          await generateLogo(finalPrompt, jsonResponse.task);
           updateBrandDesignData(jsonResponse.userSelection);
           return;
         }
