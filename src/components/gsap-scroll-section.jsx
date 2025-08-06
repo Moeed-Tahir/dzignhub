@@ -9,8 +9,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-
-export default function GSAPScrollSection({isImage}) {
+export default function GSAPScrollSection({ isImage }) {
   const cardData = [
     {
       id: "01",
@@ -60,7 +59,7 @@ export default function GSAPScrollSection({isImage}) {
         "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
       color: "bg-[#EBEBEB]",
       button: "Storage",
-  
+
       image: `/${isImage ? "image" : "video"}-creation/5.png`,
     },
   ];
@@ -180,7 +179,7 @@ export default function GSAPScrollSection({isImage}) {
                   }}
                   className={`w-[514px] h-[714px] flex flex-col opacity-0 justify-between p-6 z-10 rounded-2xl ${card.color} shadow-lg`}
                 >
-                  <div className="text-[22px]  font-normal mb-4">{card.id}</div>
+                  <div className="text-[22px]  font-normal ">{card.id}</div>
                   <Image
                     src={card.image}
                     alt=""
@@ -212,7 +211,7 @@ export default function GSAPScrollSection({isImage}) {
                   }}
                   className={`w-[514px] h-[714px] flex flex-col opacity-0 justify-between z-10 p-6 rounded-2xl ${card.color} shadow-lg`}
                 >
-                  <div className="text-[22px]  font-normal mb-4">{card.id}</div>
+                  <div className="text-[22px]  font-normal">{card.id}</div>
                   <Image
                     src={card.image}
                     alt=""
@@ -246,7 +245,7 @@ export default function GSAPScrollSection({isImage}) {
                 key={card.id}
                 className={`w-full mx-auto flex flex-col justify-between p-4 rounded-2xl ${card.color} shadow-lg`}
               >
-                <div className="text-lg font-normal mb-4">{card.id}</div>
+                <div className="text-lg font-normal mb-2">{card.id}</div>
                 <Image
                   src={card.image}
                   alt=""
