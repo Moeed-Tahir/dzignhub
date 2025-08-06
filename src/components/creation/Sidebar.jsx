@@ -40,7 +40,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
 
   const handleImageUploadFromTextArea = (file) => {
     setUploadedImageFromTextArea(file);
-
     setStartImage(file);
   };
 
@@ -82,32 +81,52 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
     console.log("Selected Quantity:", selectedQuantity);
     console.log("Text Value:", textValue);
 
-    const data = {
-      prompt: textValue,
-      style: selectedStyle,
-      size: selectedSize,
-      colors: [selectedColors.c1, selectedColors.c2, selectedColors.c3],
-      quality: selectedQuality,
-      quantity: selectedQuantity,
-      Duration: selectedDuration,
-      startImage: null,
-      endImage: null,
-    };
-    console.log("Data to be sent:", data);
-
+    
+    // const data = {
+    //   prompt: textValue,
+    //   style: selectedStyle,
+    //   size: selectedSize,
+    //   colors: [selectedColors.c1, selectedColors.c2, selectedColors.c3],
+    //   quality: selectedQuality,
+    //   quantity: selectedQuantity,
+    //   Duration: selectedDuration,
+    //   startImage: null,
+    //   endImage: null,
+    //   uploadedImageFromTextArea: activeTab === "image-to-image" ? uploadedImageFromTextArea : null,
+    // };
+ 
+   
     if (isImagePage) {
+      const formData = new FormData();
+      formData.append("prompt", textValue);
+      if (selectedStyle) {
+        formData.append("style", JSON.stringify(selectedStyle));
+      }
+      else {
+        formData.append("style", JSON.stringify({ name: "normal style" }));
+      }
+      formData.append("size", selectedSize || "1024x1024");
+      formData.append("colors", JSON.stringify([selectedColors.c1, selectedColors.c2, selectedColors.c3]));
+      formData.append("quantity", selectedQuantity.toString());
+
+      
+    // Add image file if it's image-to-image mode
+    if (activeTab === "image-to-image" && uploadedImageFromTextArea) {
+      formData.append("uploadedImageFromTextArea", uploadedImageFromTextArea);
+      console.log("Image file added to FormData:", uploadedImageFromTextArea.name);
+    }
+  
+    try {
       const req = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/generate-image`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+          body: formData
         }
       );
 
       const res = await req.json();
+      console.log(res)
       if (res.type == "success" || res.type == "partial_success") {
         if (onGenerate) onGenerate();
         SetGenerateImages(res.images);
@@ -120,6 +139,15 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         }
       }
       setIsLoading(false);
+    }
+    catch(error) {
+      setError(`${error}`);
+      setIsError(true);
+      console.error("Error during image generation:", error);
+      alert("An error occurred while generating the image. Please try again.");
+      setIsLoading(false);
+
+    }
     } else {
       // Video generation - use FormData for file uploads
       const formData = new FormData();
@@ -127,21 +155,26 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
 
       // Make sure we're sending the correct style value
       const styleValue = selectedStyle?.name || selectedStyle;
-      formData.append("style", styleValue);
+      formData.append("style", styleValue  || "Golden hour");
 
       // Send duration as-is (it's already in "4 sec" format from Duration component)
-      formData.append("duration", selectedDuration);
-      formData.append("size", selectedSize);
+      formData.append("duration", selectedDuration || "5 sec");
+      formData.append("size", selectedSize || "square");
 
       // Add image files if selected
       if (startImage) {
         formData.append("startImage", startImage);
-      } else {
-        setError("Start image is required");
-        setIsError(true);
-        setIsLoading(false);
-        return;
       }
+      else if (uploadedImageFromTextArea) {
+        formData.append("startImage", uploadedImageFromTextArea);
+      }
+      
+      // else {
+      //   setError("Start image is required");
+      //   setIsError(true);
+      //   setIsLoading(false);
+      //   return;
+      // }
       if (endImage) {
         formData.append("endImage", endImage);
       }

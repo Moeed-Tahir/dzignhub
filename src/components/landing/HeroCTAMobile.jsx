@@ -69,7 +69,7 @@ function HeroCTAMobile() {
   }
   return (
     <div>
-      <div className=" max-w-[382px] mx-auto h-[144px] flex flex-col gap-[12px] lg:hidden">
+      <div className=" max-w-[382px] mx-auto h-[144px] px-5 flex flex-col gap-[12px] lg:hidden">
         <div className="bg-[#212e62] flex flex-col border-t-[0.49px] border-[#1B1F3B] py-[12px] px-[24px] rounded-[490.57px]">
           <input  value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
@@ -78,8 +78,8 @@ function HeroCTAMobile() {
             
         
         </div>
-        <div className=" h-[60px] bg-[#BDFF00] py-[16px] px-[20px] xl:px-[12px] gap-[12px] rounded-[49.11px] flex justify-center">
-          <button onClick={imageGeneration} className={` text-[20px] `}>
+        <div className=" h-[60px] bg-[#BDFF00] items-center px-[20px] xl:px-[12px] gap-[12px] rounded-[49.11px] flex justify-center">
+          <button onClick={imageGeneration} className={`flex gap-2 text-[20px] `}>
             <img
               src="/landing/starVector.svg"
               alt="star"
