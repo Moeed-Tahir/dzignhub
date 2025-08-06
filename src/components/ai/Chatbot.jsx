@@ -128,7 +128,7 @@ export default function ChatPage({
               sender: "ai",
               text: `🎉 Here's your custom ${type}! What do you think?`,
               imageUrl: data.data.imageUrl,
-              isLogo: false
+              isLogo: true
             }
           ])
         );
