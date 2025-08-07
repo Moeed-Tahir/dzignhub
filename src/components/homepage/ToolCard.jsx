@@ -33,13 +33,13 @@ const ToolCard = ({
               height={24}
             />
           </div>
-          <h3 className="xl:text-lg text-sm font-semibold text-[#000000] font-general-sans">
+          <h3 className="xl:text-lg text-sm font-semibold text-[#000000] group-hover:text-[#C209C1] font-general-sans">
             {title}
           </h3>
         </div>
 
         {/* Description */}
-        <p className="text-[#000000] text-xs group-hover:text-[#C209C1] duration-300 ease-in-out transition-all xl:text-sm font-general-sans">
+        <p className="text-[#000000] text-xs  duration-300 ease-in-out transition-all xl:text-sm font-general-sans">
           {description}
         </p>
       </div>

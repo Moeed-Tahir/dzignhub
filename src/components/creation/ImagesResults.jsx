@@ -125,7 +125,7 @@ const ImagesResults = ({ isVideoPage = false, generations, localGenerations }) =
           <p className="text-[20px] mb-5 font-medium text-black">
             {isVideoPage ? "Generated Videos" : "Generated Images"}
           </p>
-          <p className="text-[20px] font-medium text-[#68686B]">Today</p>
+          <p className="text-[16px] font-regular text-[#68686B]">Today</p>
         </div>
       )}
 

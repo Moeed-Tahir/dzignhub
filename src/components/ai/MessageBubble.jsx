@@ -151,11 +151,7 @@ export default function MessageBubble({
                       height: "auto",
                     }}
                   />
-                  {isLogo && (
-                    <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
-                      Logo
-                    </div>
-                  )}
+                 
                 </div>
 
                 {/* Download button for logos */}
