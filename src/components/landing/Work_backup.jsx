@@ -1,52 +1,37 @@
 import React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { getStrapiImageUrl } from "@/utils/strapi";
+const cardData = [
+  {
+    title: "Describe your idea",
+    description:
+      "Start your project by uploading assets or choosing a template. You control the direction from the very beginning, shaping your vision exactly the way you want.",
+    mobileManualImage: "/landing/work/mobile/manual-1.png",
+    desktopManualImage: "/landing/work/desktop/manual-1.jpg",
+    mobileProImage: "/landing/work/mobile/pro-1.jpg",
+    desktopProImage: "/landing/work/desktop/pro-1.jpg",
+  },
+  {
+    title: "Let the System do your work",
+    description:
+      "Access powerful manual tools for image editing, video creation, or content design. You guide the process — the platform provides the flexibility and tools you need.",
+    mobileManualImage: "/landing/work/mobile/manual-2.jpg",
+    desktopManualImage: "/landing/work/desktop/manual-2.jpg",
+    mobileProImage: "/landing/work/mobile/pro-2.jpg",
+    desktopProImage: "/landing/work/desktop/pro-2.jpg",
+  },
+  {
+    title: "Customize & download",
+    description:
+      "Make final adjustments to suit your preferences. Once you’re done, download your finished files and bring your project to life with confidence.",
+    mobileManualImage: "/landing/work/mobile/manual-3.jpg",
+    desktopManualImage: "/landing/work/desktop/manual-3.jpg",
+    mobileProImage: "/landing/work/mobile/pro-3.jpg",
+    desktopProImage: "/landing/work/desktop/pro-3.jpg",
+  },
+];
 
-function Work({ workCards = [] }) {
-  // Default fallback data
-  const defaultCardData = [
-    {
-      title: "Describe your idea",
-      description:
-        "Start your project by uploading assets or choosing a template. You control the direction from the very beginning, shaping your vision exactly the way you want.",
-      mobileManualImage: "/landing/work/mobile/manual-1.png",
-      desktopManualImage: "/landing/work/desktop/manual-1.jpg",
-      mobileProImage: "/landing/work/mobile/pro-1.jpg",
-      desktopProImage: "/landing/work/desktop/pro-1.jpg",
-    },
-    {
-      title: "Let the System do your work",
-      description:
-        "Access powerful manual tools for image editing, video creation, or content design. You guide the process — the platform provides the flexibility and tools you need.",
-      mobileManualImage: "/landing/work/mobile/manual-2.jpg",
-      desktopManualImage: "/landing/work/desktop/manual-2.jpg",
-      mobileProImage: "/landing/work/mobile/pro-2.jpg",
-      desktopProImage: "/landing/work/desktop/pro-2.jpg",
-    },
-    {
-      title: "Customize & download",
-      description:
-        "Make final adjustments to suit your preferences. Once you're done, download your finished files and bring your project to life with confidence.",
-      mobileManualImage: "/landing/work/mobile/manual-3.jpg",
-      desktopManualImage: "/landing/work/desktop/manual-3.jpg",
-      mobileProImage: "/landing/work/mobile/pro-3.jpg",
-      desktopProImage: "/landing/work/desktop/pro-3.jpg",
-    },
-  ];
-
-  // Process Strapi work cards data or use defaults
-  const cardData = workCards.length > 0 
-    ? workCards.map((card, index) => ({
-        title: card.title || defaultCardData[index]?.title || `Step ${index + 1}`,
-        description: card.description || defaultCardData[index]?.description || "Default description",
-        mobileManualImage: getStrapiImageUrl(card.mobileManualImage) || defaultCardData[index]?.mobileManualImage,
-        desktopManualImage: getStrapiImageUrl(card.desktopManualImage) || defaultCardData[index]?.desktopManualImage,
-        mobileProImage: getStrapiImageUrl(card.mobileProImage) || defaultCardData[index]?.mobileProImage,
-        desktopProImage: getStrapiImageUrl(card.desktopProImage) || defaultCardData[index]?.desktopProImage,
-      }))
-    : defaultCardData;
-
+function Work() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selected, setSelected] = useState("right");
 

@@ -14,13 +14,36 @@ import Assistants from "@/components/landing/Assistants";
 import Footer from "@/components/common/Footer";
 import Testimonials from "@/components/landing/Testimonials";
 import Sidebar from "@/components/landing/Sidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StackingImages from "@/components/animation/OurServices/Stack";
 import CardsAnimation from "@/components/landing/CardsAnimation/CardsAnimation";
+import { fetchLandingPageData } from "@/utils/strapi";
 
 export default function Landing() {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [landingData, setLandingData] = useState({
+    mainHeading: "Turn Your Words Into Stunning Visuals",
+    mainDescription: "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+    carouselImages: [],
+    stackSections: [],
+    workCards: [],
+    templates: []
+  });
+
+  useEffect(() => {
+    const loadLandingData = async () => {
+      try {
+        const data = await fetchLandingPageData();
+        setLandingData(data);
+      } catch (error) {
+        console.error('Error loading landing page data:', error);
+        // Keep the default fallback data if there's an error
+      }
+    };
+
+    loadLandingData();
+  }, []);
 
   const sectionVariants = {
     hidden: {
@@ -64,6 +87,7 @@ export default function Landing() {
       x: 0,
       transition: {
         duration: 0.5,
+        
         ease: "easeOut",
       },
     },
@@ -87,44 +111,20 @@ export default function Landing() {
               showSidebarBtn={!sidebarOpen}
               onOpenSidebar={() => setSidebarOpen(true)}
             />
-            <Hero />
+            <Hero 
+              mainHeading={landingData.mainHeading}
+              mainDescription={landingData.mainDescription}
+            />
           </div>
         </div>
       </div>
 
-      <Carousel />
+      <Carousel carouselImages={landingData.carouselImages} />
 
-      <motion.div
-        className="   max-w-[1440px]  mx-auto flex flex-col p-[24px]   lg:pt-[80px] lg:px-[80px] "
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-      >
-        <motion.div className="" variants={headingVariants}>
-          <motion.div
-            className="flex gap-[8px] font-semibold  lg:text-[48px] text-[28px]  text-black "
-            variants={headingVariants}
-          >
-            <motion.span className="text-[#C209C1]" variants={wordVariants}>
-              Endless
-            </motion.span>
-            <motion.span className="" variants={wordVariants}>
-              possibilites
-            </motion.span>
-          </motion.div>
-          <motion.h1
-            className="font-semibold  lg:text-[48px] text-[28px]  text-black"
-            variants={headingVariants}
-          >
-            with AI art
-          </motion.h1>
-        </motion.div>
-      </motion.div>
-
-      <StackingImages />
-      <Work />
-      <Templates />
+      
+      <StackingImages stackSections={landingData.stackSections} />
+      <Work workCards={landingData.workCards} />
+      <Templates templates={landingData.templates} />
       <Download />
       {/* <FeatureSection /> */}
       <CardsAnimation />

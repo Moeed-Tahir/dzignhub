@@ -78,7 +78,7 @@ const buttonVariants = {
   }
 };
 
-export default function Hero() {
+export default function Hero({ mainHeading, mainDescription }) {
   return (
     <>
       {/* Center box with border */}
@@ -149,15 +149,13 @@ export default function Hero() {
               className={`lg:text-[68px] max-w-[929px] w-full text-[46px] text-white  text-center leading-tight  font-bold`}
               variants={itemVariants}
             >
-              Turn Your Words Into Stunning Visuals
+              {mainHeading || "Turn Your Words Into Stunning Visuals"}
             </motion.h1>
             <motion.p
               className={`lg:text-[18px] text-[16px] text-[#F0F0F3] text-center leading-[28px] lg:w-[727px] lg:h-[56px] h-[96px] w-[335px]  mx-auto `}
               variants={itemVariants}
             >
-              Whether you need concept art, marketing materials, or personal
-              projects, our text-to-image generator brings your imagination to
-              life.
+              {mainDescription || "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life."}
             </motion.p>
           </motion.div>
           
