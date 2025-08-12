@@ -28,7 +28,9 @@ export default function Landing() {
     carouselImages: [],
     stackSections: [],
     workCards: [],
-    templates: []
+    templates: [],
+    downloadSection: null,
+    cards: []
   });
 
   useEffect(() => {
@@ -125,9 +127,9 @@ export default function Landing() {
       <StackingImages stackSections={landingData.stackSections} />
       <Work workCards={landingData.workCards} />
       <Templates templates={landingData.templates} />
-      <Download />
+      <Download downloadSection={landingData.downloadSection} />
       {/* <FeatureSection /> */}
-      <CardsAnimation />
+      <CardsAnimation cards={landingData.cards} />
       <div className=" mt-[-800px] sm:mt-[-400px] z-1000 relative ">
         <Pricing />
       </div>

@@ -124,5 +124,16 @@ export const sampleLandingPageData = {
         { url: "/landing/templates/5/1.jpg" }
       ]
     }
-  ]
+  ],
+  
+  download_section: {
+    preTitle: "Download the app",
+    title: "and start creating with AI — anytime, anywhere.",
+    description: "Our AI-powered creative app gives you access to your personal team of assistants — wherever you are.<br/>Design logos, create social media content, generate marketing strategies, and get real-time insights — all in one place. No skills required. Just your ideas.",
+    appStoreImage: { url: "/landing/download/app-store.svg" },
+    appStoreUrl: "https://apps.apple.com/app/your-app",
+    googlePlayImage: { url: "/landing/download/google-play.svg" },
+    googlePlayUrl: "https://play.google.com/store/apps/details?id=your.app",
+    phoneImage: { url: "/landing/download/iphone.svg" }
+  }
 };

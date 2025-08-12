@@ -5,7 +5,7 @@ export const fetchLandingPageData = async () => {
   try {
     // Fetch with populate to get nested components and media
     const response = await fetch(
-      `${STRAPI_URL}/api/landing-pages?populate[carousal_images][populate]=*&populate[stack][populate][card][populate]=*&populate[work_card][populate]=*&populate[templates][populate]=*`
+      `${STRAPI_URL}/api/landing-pages?populate[carousal_images][populate]=*&populate[stack][populate][card][populate]=*&populate[work_card][populate]=*&populate[templates][populate]=*&populate[download_section][populate]=*&populate[cards][populate]=*`
     );
     
     if (!response.ok) {
@@ -24,7 +24,9 @@ export const fetchLandingPageData = async () => {
         carouselImages: landingPage.carousal_images || [],
         stackSections: landingPage.stack || [],
         workCards: landingPage.work_card || [],
-        templates: landingPage.templates || []
+        templates: landingPage.templates || [],
+        downloadSection: landingPage.download_section || null,
+        cards: landingPage.cards || []
       };
     }
     
@@ -35,7 +37,9 @@ export const fetchLandingPageData = async () => {
       carouselImages: [],
       stackSections: [],
       workCards: [],
-      templates: []
+      templates: [],
+      downloadSection: null,
+      cards: []
     };
     
   } catch (error) {
@@ -48,7 +52,9 @@ export const fetchLandingPageData = async () => {
       carouselImages: [],
       stackSections: [],
       workCards: [],
-      templates: []
+      templates: [],
+      downloadSection: null,
+      cards: []
     };
   }
 };
