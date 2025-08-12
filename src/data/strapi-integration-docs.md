@@ -41,6 +41,18 @@ This documentation covers the integration of landing page components with Strapi
 - **Data Structure**: Array of card objects with title, description, image, borderImage, and features (text field)
 - **Status**: Complete
 
+### 7. Pricing Component ✅
+- **Location**: `src/components/landing/Pricing.jsx`
+- **Strapi Field**: `pricing_plans`
+- **Data Structure**: Array of PlanItem objects with plan, price, benefits array, buttonLabel, and link
+- **Status**: Complete
+
+### 8. Testimonials Component ✅
+- **Location**: `src/components/landing/Testimonials.jsx`
+- **Strapi Field**: `testimonial_section`
+- **Data Structure**: Object with headingPre, headingMain, and testimonials array (TestimonialItem components)
+- **Status**: Complete
+
 ## API Integration
 
 ### Strapi API Utility
@@ -56,7 +68,9 @@ const populate = {
   work: { populate: { features: { populate: "*" } } },
   templates: { populate: { templates: { populate: "*" } } },
   download: { populate: "*" },
-  cards: { populate: "*" }
+  cards: { populate: "*" },
+  pricing_plans: { populate: { benefits: { populate: "*" } } },
+  testimonial_section: { populate: { testimonials: { populate: "*" } } }
 };
 ```
 
@@ -106,6 +120,8 @@ Each component includes comprehensive fallback data to ensure the site functions
 - `src/data/templates-sample-data.md`
 - `src/data/download-sample-data.md`
 - `src/data/cards-sample-data.md`
+- `src/data/pricing-sample-data.md`
+- `src/data/testimonials-sample-data.md`
 
 ## Testing Checklist
 
@@ -170,3 +186,53 @@ cards: [
 
 ### Features Field Format:
 The features field is a simple text field where each feature should be on a new line. The component automatically splits this text by newlines to create the bulleted list.
+
+## Pricing Component Data Structure
+
+### Expected Strapi Data Format:
+```javascript
+pricing_plans: [
+  {
+    plan: "Basic",
+    price: "$0 /mo",
+    buttonLabel: "Get started for free",
+    link: "/auth/sign-up",
+    benefits: [
+      { text: "Up to 500 characters per conversion" },
+      { text: "Access to basic voices" },
+      { text: "Limited to 5 conversions per month" }
+    ]
+  }
+  // ... more plans
+]
+```
+
+### Benefits Structure:
+Each benefit is a Benefit component with a single text field. The component automatically processes these into a bulleted list with checkmark icons.
+
+## Testimonials Component Data Structure
+
+### Expected Strapi Data Format:
+```javascript
+testimonial_section: {
+  headingPre: "What",
+  headingMain: "Our Users Are Saying",
+  testimonials: [
+    {
+      name: "Jerry Tang",
+      role: "Recent graduate, Marketing at Sweatpals",
+      quote: "Using Text-to-Voice has saved me countless hours...",
+      avatar: { url: "/uploads/jerry_avatar.png" },
+      layoutVariant: "variant-1"
+    }
+    // ... more testimonials
+  ]
+}
+```
+
+### Layout Variants:
+- **variant-1**: Standard padding with max height 357px
+- **variant-2**: Top padding with max height 337px  
+- **variant-3**: Bottom padding with max height 337px
+
+The component displays 9 boxes in a scrolling animation, cycling through available testimonials.

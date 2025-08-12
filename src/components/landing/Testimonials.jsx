@@ -1,19 +1,86 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Inter } from "next/font/google";
+import { getStrapiImageUrl } from "@/utils/strapi";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   weight: ["400", "500", "600"],
 });
-function Testimonials() {
-  const styleVariants = [
-    { pt: "pt-[20px]", pb: "", height: "md:max-h-[357px]" },
-    { pt: "pt-[60px]", pb: "", height: "md:max-h-[337px]" },
-    { pt: "", pb: "pb-[60px]", height: "md:max-h-[337px]" },
-  ];
 
-  const boxes = new Array(9).fill(null);
+function Testimonials({ testimonialSection = null }) {
+  // Debug: Log the received data
+  console.log('Testimonials component received:', testimonialSection);
+  
+  // Default fallback data
+  const defaultTestimonialSection = {
+    headingPre: "What",
+    headingMain: "Our Users Are Saying",
+    testimonial: [
+      {
+        name: "Jerry Tang",
+        role: "Recent graduate, Marketing at Sweatpals",
+        quote: "Using Text-to-Voice has saved me countless hours. The multilingual support allows me to reach students around the world with high-quality audio narrations.",
+        avatar: "/landing/testimonials/icon.png",
+        layoutVariant: "variant-1"
+      },
+      {
+        name: "Sarah Johnson",
+        role: "Content Creator, Digital Marketing",
+        quote: "The quality of voice generation is incredible. It's revolutionized how I create content for my clients across different industries.",
+        avatar: "/landing/testimonials/icon.png",
+        layoutVariant: "variant-2"
+      },
+      {
+        name: "Mike Chen",
+        role: "Product Manager, Tech Startup",
+        quote: "Our team productivity has increased dramatically since implementing this solution. The API integration was seamless and the results are outstanding.",
+        avatar: "/landing/testimonials/icon.png",
+        layoutVariant: "variant-3"
+      }
+    ]
+  };
+
+  // Process Strapi testimonial section data or use defaults
+  const processedSection = testimonialSection || defaultTestimonialSection;
+  const headingPre = processedSection.headingPre || defaultTestimonialSection.headingPre;
+  const headingMain = processedSection.headingMain || defaultTestimonialSection.headingMain;
+  
+  // If we have testimonial from Strapi, use them; otherwise use default
+  let testimonials = [];
+  if (processedSection.testimonial && processedSection.testimonial.length > 0) {
+    testimonials = processedSection.testimonial.map((testimonial, index) => ({
+      name: testimonial.name || `User ${index + 1}`,
+      role: testimonial.role || "User",
+      quote: testimonial.quote || "Great product!",
+      avatar: getStrapiImageUrl(testimonial.avatar) || "/landing/testimonials/icon.png",
+      layoutVariant: testimonial.layoutVariant || "variant-1"
+    }));
+  } else {
+    // Use default testimonial
+    testimonials = defaultTestimonialSection.testimonial;
+  }
+
+  // Create 9 boxes by repeating testimonials cyclically
+  const boxes = new Array(9).fill(null).map((_, index) => {
+    const testimonialIndex = index % testimonials.length;
+    return testimonials[testimonialIndex];
+  });
+
+  // Map layout variants to styles
+  const getStyleForVariant = (variant) => {
+    switch (variant) {
+      case "variant-1":
+        return { pt: "pt-[20px]", pb: "", height: "md:max-h-[357px]" };
+      case "variant-2":
+        return { pt: "pt-[60px]", pb: "", height: "md:max-h-[337px]" };
+      case "variant-3":
+        return { pt: "", pb: "pb-[60px]", height: "md:max-h-[337px]" };
+      default:
+        return { pt: "pt-[20px]", pb: "", height: "md:max-h-[357px]" };
+    }
+  };
 
   // Animation variants
   const containerVariants = {
@@ -91,7 +158,7 @@ function Testimonials() {
     },
   };
 
-  const Box = ({ pt, pb, height, index }) => (
+  const Box = ({ testimonial, pt, pb, height, index }) => (
     <motion.div
       className={`md:max-w-[416px] md:max-h-[397px] max-w-[336px]  h-full ${pt} ${pb} flex-shrink-0`}
       variants={testimonialVariants}
@@ -106,7 +173,8 @@ function Testimonials() {
         variants={containerVariants}
       >
         <motion.img
-          src="/landing/testimonials/icon.png"
+          src={testimonial.avatar}
+          alt={`${testimonial.name} avatar`}
           className="w-[56px] h-[56px] rounded-[69px] object-cover"
           variants={avatarVariants}
           whileHover={{
@@ -115,17 +183,14 @@ function Testimonials() {
             transition: { duration: 0.2 },
           }}
         />
-        <motion.p
+        <motion.div
           className={`text-[20px] `}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           viewport={{ once: true }}
-        >
-          Using Text-to-Voice has saved me countless hours. The multilingual
-          support allows me to reach students around the world with high-quality
-          audio narrations.
-        </motion.p>
+          dangerouslySetInnerHTML={{ __html: testimonial.quote }}
+        />
         <motion.div
           className="flex flex-col gap-[8px]"
           initial={{ opacity: 0, x: -20 }}
@@ -134,9 +199,9 @@ function Testimonials() {
           viewport={{ once: true }}
         >
           <h2 className="text-[24px] text-[#FFFFFF] font-semibold">
-            Jerry Tang
+            {testimonial.name}
           </h2>
-          <p className="text-[16px]">Recent graduate, Marketing at Sweatpals</p>
+          <p className="text-[16px]">{testimonial.role}</p>
         </motion.div>
       </motion.div>
     </motion.div>
@@ -161,16 +226,9 @@ function Testimonials() {
               variants={wordVariants}
               whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
             >
-              What
+              {headingPre}
             </motion.p>
-            <motion.p variants={wordVariants}>Our Users</motion.p>
-          </motion.div>
-          <motion.div
-            className="flex gap-[10px] pl-[40px]"
-            variants={containerVariants}
-          >
-            <motion.p variants={wordVariants}>Are</motion.p>
-            <motion.p variants={wordVariants}>Saying</motion.p>
+            <motion.p variants={wordVariants}>{headingMain}</motion.p>
           </motion.div>
         </motion.div>
       </div>
@@ -185,9 +243,9 @@ function Testimonials() {
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          What{" "}
+          {headingPre}{" "}
         </motion.span>
-        <span className="text-[#FFFFFF]">our users are saying</span>
+        <span className="text-[#FFFFFF]">{headingMain}</span>
       </motion.div>
 
       <motion.div
@@ -201,9 +259,9 @@ function Testimonials() {
           className="flex  animate-scroll-left gap-[16px] relative z-10"
           variants={containerVariants}
         >
-          {boxes.map((_, index) => {
-            const style = styleVariants[index % 3];
-            return <Box key={index} index={index} {...style} />;
+          {boxes.map((testimonial, index) => {
+            const style = getStyleForVariant(testimonial.layoutVariant);
+            return <Box key={index} testimonial={testimonial} index={index} {...style} />;
           })}
         </motion.div>
       </motion.div>

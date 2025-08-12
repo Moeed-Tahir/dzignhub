@@ -2,14 +2,17 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Syne } from "next/font/google";
 import Link from "next/link";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
 const syne = Syne({
   subsets: ["latin"],
   weight: ["400", "600"],
   variable: "--font-syne",
 });
-function Pricing() {
-  const pricing = [
+
+function Pricing({ pricingPlans = [] }) {
+  // Default fallback data
+  const defaultPricing = [
     {
       plan: "Basic",
       price: "$0 /mo",
@@ -20,8 +23,8 @@ function Pricing() {
         "No API access",
         "24/7 support for onboarding",
       ],
-      button: "Get started for free",
-      link:"/auth/sign-up"
+      buttonLabel: "Get started for free",
+      link: "/auth/sign-up"
     },
     {
       plan: "Pro Plan",
@@ -34,10 +37,9 @@ function Pricing() {
         "API integration",
         "24/7 support for onboarding",
       ],
-      button: "Upgrade to Pro",
-      link:"/pricing"
+      buttonLabel: "Upgrade to Pro",
+      link: "/pricing"
     },
-
     {
       plan: "Enterprise Plan",
       price: "Custom (Contact Us)",
@@ -50,11 +52,21 @@ function Pricing() {
         "24/7 premium support",
         "Priority customer support",
       ],
-      button: "Contact us",
-      link:"/contact-us"
+      buttonLabel: "Contact us",
+      link: "/contact-us"
     },
-
   ];
+
+  // Process Strapi pricing plans data or use defaults
+  const pricing = pricingPlans.length > 0 
+    ? pricingPlans.map((plan, index) => ({
+        plan: plan.plan || defaultPricing[index]?.plan || "Plan",
+        price: plan.price || defaultPricing[index]?.price || "$0 /mo",
+        benefits: plan.benefits?.map(benefit => benefit.text || benefit) || defaultPricing[index]?.benefits || [],
+        buttonLabel: plan.buttonLabel || defaultPricing[index]?.buttonLabel || "Get Started",
+        link: plan.link || defaultPricing[index]?.link || "#"
+      }))
+    : defaultPricing;
 
 
   const containerVariants = {
@@ -273,7 +285,7 @@ function Pricing() {
                   whileHover="hover"
                   whileTap="tap"
                 >
-                  {plan.button}
+                  {plan.buttonLabel}
                 </motion.button>
                   </Link>
               </motion.div>

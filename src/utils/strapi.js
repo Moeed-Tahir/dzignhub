@@ -5,7 +5,7 @@ export const fetchLandingPageData = async () => {
   try {
     // Fetch with populate to get nested components and media
     const response = await fetch(
-      `${STRAPI_URL}/api/landing-pages?populate[carousal_images][populate]=*&populate[stack][populate][card][populate]=*&populate[work_card][populate]=*&populate[templates][populate]=*&populate[download_section][populate]=*&populate[cards][populate]=*`
+      `${STRAPI_URL}/api/landing-pages?populate[carousal_images][populate]=*&populate[stack][populate][card][populate]=*&populate[work_card][populate]=*&populate[templates][populate]=*&populate[download_section][populate]=*&populate[cards][populate]=*&populate[pricing_plans][populate][benefits][populate]=*&populate[testimonial_section][populate][testimonial][populate]=*&populate[assistant_section][populate][assistants][populate]=*`
     );
     
     if (!response.ok) {
@@ -26,7 +26,10 @@ export const fetchLandingPageData = async () => {
         workCards: landingPage.work_card || [],
         templates: landingPage.templates || [],
         downloadSection: landingPage.download_section || null,
-        cards: landingPage.cards || []
+        cards: landingPage.cards || [],
+        pricingPlans: landingPage.pricing_plans || [],
+        testimonialSection: landingPage.testimonial_section && landingPage.testimonial_section[0] ? landingPage.testimonial_section[0] : null,
+        assistantSection: landingPage.assistant_section && landingPage.assistant_section[0] ? landingPage.assistant_section[0] : null
       };
     }
     
@@ -39,7 +42,10 @@ export const fetchLandingPageData = async () => {
       workCards: [],
       templates: [],
       downloadSection: null,
-      cards: []
+      cards: [],
+      pricingPlans: [],
+      testimonialSection: null,
+      assistantSection: null
     };
     
   } catch (error) {
@@ -54,7 +60,10 @@ export const fetchLandingPageData = async () => {
       workCards: [],
       templates: [],
       downloadSection: null,
-      cards: []
+      cards: [],
+      pricingPlans: [],
+      testimonialSection: null,
+      assistantSection: null
     };
   }
 };

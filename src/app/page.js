@@ -30,13 +30,19 @@ export default function Landing() {
     workCards: [],
     templates: [],
     downloadSection: null,
-    cards: []
+    cards: [],
+    pricingPlans: [],
+    testimonialSection: null,
+    assistantSection: null
   });
 
   useEffect(() => {
     const loadLandingData = async () => {
       try {
         const data = await fetchLandingPageData();
+        console.log('Landing page data loaded:', data);
+        console.log('Testimonial section specifically:', data.testimonialSection);
+        console.log('Assistant section specifically:', data.assistantSection);
         setLandingData(data);
       } catch (error) {
         console.error('Error loading landing page data:', error);
@@ -131,13 +137,13 @@ export default function Landing() {
       {/* <FeatureSection /> */}
       <CardsAnimation cards={landingData.cards} />
       <div className=" mt-[-800px] sm:mt-[-400px] z-1000 relative ">
-        <Pricing />
+        <Pricing pricingPlans={landingData.pricingPlans} />
       </div>
 
-      <Testimonials />
+      <Testimonials testimonialSection={landingData.testimonialSection} />
       <FAQ />
 
-      <Assistants />
+      <Assistants assistantSection={landingData.assistantSection} />
       <Footer />
     </>
   );
