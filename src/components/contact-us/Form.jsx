@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Syne, Inter } from "next/font/google";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -13,8 +14,31 @@ const intee = Inter({
   variable: "--font-syne",
 });
 
-function Form() {
-  const [formData, setFormData] = useState({
+// Default form configuration for fallback
+const defaultFormConfig = {
+  formTitle: "Need to contact us?",
+  contactImage: null,
+  firstNameLabel: "First name",
+  lastNameLabel: "Last name", 
+  emailLabel: "Email",
+  messageLabel: "Message",
+  firstNamePlaceholder: "",
+  lastNamePlaceholder: "",
+  emailPlaceholder: "",
+  messagePlaceholder: "",
+  submitButtonLabel: "Submit",
+  successMessage: "Submitted Successfully",
+  failureMessage: "Error Submitting"
+};
+
+function Form({ formData }) {
+  console.log('Form component received data:', formData);
+  
+  // Use Strapi form data if available, otherwise use default
+  const formConfig = formData || defaultFormConfig;
+  
+  // Initialize form state for the four main fields
+  const [formState, setFormState] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -22,7 +46,7 @@ function Form() {
   });
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -30,7 +54,9 @@ function Form() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    console.log("Form submitted:", formState);
+    // Here you can add logic to send data to Strapi or your backend
+    // You can use formConfig.successMessage and formConfig.failureMessage for user feedback
   };
 
   const containerVariants = {
@@ -96,8 +122,9 @@ function Form() {
           variants={imageVariants}
         >
           <img
-            src="/contact/contactForm.jpg"
+            src={formConfig.contactImage ? getStrapiImageUrl(formConfig.contactImage) : "/contact/contactForm.jpg"}
             className="w-full h-full object-cover lg:rounded-tl-[40px] lg:rounded-bl-[40px] rounded-tr-[20px] rounded-tl-[20px] lg:rounded-tr-[0px]"
+            alt="Contact form"
           />
           <div
             className="absolute top-0 right-0 h-full w-[35%] pointer-events-none hidden lg:block"
@@ -123,7 +150,7 @@ function Form() {
               className="md:font-semibold font-medium md:text-[34px] text-[30px] text-center"
               variants={itemVariants}
             >
-              Need to contact us?
+              {formConfig.formTitle || "Need to contact us?"}
             </motion.h2>
             <motion.div 
               className="rounded-[16px] md:p-[32px] p-[15px] bg-[#2b3874]"
@@ -140,14 +167,15 @@ function Form() {
                     whileFocus={{ scale: 1.02 }}
                   >
                     <h3 className={`${syne.className} font-medium`}>
-                      First name
+                      {formConfig.firstNameLabel || "First name"}
                     </h3>
                     <motion.input
                       style={{ boxShadow: "0px 0px 0px 1px #FFFFFF1A inset" }}
                       type="text"
                       name="firstName"
-                      value={formData.firstName}
+                      value={formState.firstName}
                       onChange={handleChange}
+                      placeholder={formConfig.firstNamePlaceholder || ""}
                       className="bg-[#2f4290] rounded-[10px] w-full h-[40px] mt-3 p-3"
                       whileFocus={{ 
                         boxShadow: "0px 0px 0px 2px #BDFF00 inset",
@@ -160,13 +188,16 @@ function Form() {
                     whileHover={{ scale: 1.02 }}
                     whileFocus={{ scale: 1.02 }}
                   >
-                    <h3 className={`${syne.className} font-medium`}>Last name</h3>
+                    <h3 className={`${syne.className} font-medium`}>
+                      {formConfig.lastNameLabel || "Last name"}
+                    </h3>
                     <motion.input
                       style={{ boxShadow: "0px 0px 0px 1px #FFFFFF1A inset" }}
                       type="text"
                       name="lastName"
-                      value={formData.lastName}
+                      value={formState.lastName}
                       onChange={handleChange}
+                      placeholder={formConfig.lastNamePlaceholder || ""}
                       className="bg-[#2f4290] rounded-[10px] w-full h-[40px] mt-3 p-3"
                       whileFocus={{ 
                         boxShadow: "0px 0px 0px 2px #BDFF00 inset",
@@ -176,13 +207,16 @@ function Form() {
                   </motion.div>
                 </motion.div>
                 <motion.div variants={itemVariants}>
-                  <h3 className={`${syne.className} font-medium`}>Email</h3>
+                  <h3 className={`${syne.className} font-medium`}>
+                    {formConfig.emailLabel || "Email"}
+                  </h3>
                   <motion.input
                     style={{ boxShadow: "0px 0px 0px 1px #FFFFFF1A inset" }}
                     type="email"
                     name="email"
-                    value={formData.email}
+                    value={formState.email}
                     onChange={handleChange}
+                    placeholder={formConfig.emailPlaceholder || ""}
                     className="bg-[#2f4290] w-full rounded-[10px] h-[40px] mt-3 p-3"
                     whileFocus={{ 
                       boxShadow: "0px 0px 0px 2px #BDFF00 inset",
@@ -192,12 +226,15 @@ function Form() {
                   />
                 </motion.div>
                 <motion.div variants={itemVariants}>
-                  <h3 className={`${syne.className} font-medium`}>Message</h3>
+                  <h3 className={`${syne.className} font-medium`}>
+                    {formConfig.messageLabel || "Message"}
+                  </h3>
                   <motion.textarea
                     style={{ boxShadow: "0px 0px 0px 1px #FFFFFF1A inset" }}
                     name="message"
-                    value={formData.message}
+                    value={formState.message}
                     onChange={handleChange}
+                    placeholder={formConfig.messagePlaceholder || ""}
                     className="bg-[#2f4290] w-full rounded-[10px] h-[100px] mt-3 p-3 resize-none"
                     whileFocus={{ 
                       boxShadow: "0px 0px 0px 2px #BDFF00 inset",
@@ -217,7 +254,7 @@ function Form() {
                   }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Submit
+                  {formConfig.submitButtonLabel || "Submit"}
                 </motion.button>
               </div>
             </motion.div>

@@ -83,3 +83,116 @@ export const getStrapiImageUrl = (image) => {
   
   return null;
 };
+
+// Fetch blog page data with all posts
+export const fetchBlogPageData = async () => {
+  try {
+    const response = await fetch(
+      `${STRAPI_URL}/api/blog-pages?populate[posts][populate][posts][populate]=*`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Blog page API response:', data);
+    
+    if (data.data && data.data.length > 0) {
+      const blogPage = data.data[0];
+      
+      // Extract the nested posts structure
+      const postsSection = blogPage.posts && blogPage.posts[0];
+      const posts = postsSection?.posts || [];
+      
+      return {
+        heroTitle: postsSection?.heroTitle || "Latest Blog",
+        heroSubtitle: postsSection?.heroSubtitle || "News and articles",
+        posts: posts
+      };
+    }
+    
+    return {
+      heroTitle: "Latest Blog",
+      heroSubtitle: "News and articles", 
+      posts: []
+    };
+    
+  } catch (error) {
+    console.error('Error fetching blog page data from Strapi:', error);
+    return {
+      heroTitle: "Latest Blog",
+      heroSubtitle: "News and articles",
+      posts: []
+    };
+  }
+};
+
+// Fetch individual blog post by slug
+export const fetchBlogPostBySlug = async (slug) => {
+  try {
+    const response = await fetch(
+      `${STRAPI_URL}/api/blog-pages?populate[posts][populate][posts][populate]=*`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Blog post API response:', data);
+    
+    if (data.data && data.data.length > 0) {
+      const blogPage = data.data[0];
+      const postsSection = blogPage.posts && blogPage.posts[0];
+      const posts = postsSection?.posts || [];
+      
+      // Find the post with matching slug
+      const post = posts.find(p => p.slug === slug);
+      
+      if (post) {
+        return post;
+      }
+    }
+    
+    return null;
+    
+  } catch (error) {
+    console.error('Error fetching blog post from Strapi:', error);
+    return null;
+  }
+};
+
+// Fetch contact page data with form
+export const fetchContactPageData = async () => {
+  try {
+    const response = await fetch(
+      `${STRAPI_URL}/api/contact-pages?populate[form][populate]=*`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Contact page API response:', data);
+    
+    if (data.data && data.data.length > 0) {
+      const contactPage = data.data[0];
+      
+      return {
+        form: contactPage.form || null
+      };
+    }
+    
+    return {
+      form: null
+    };
+    
+  } catch (error) {
+    console.error('Error fetching contact page data from Strapi:', error);
+    return {
+      form: null
+    };
+  }
+};
