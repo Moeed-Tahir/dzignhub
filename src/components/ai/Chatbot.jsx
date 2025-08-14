@@ -243,7 +243,7 @@ export default function ChatPage({
         console.log('✅ Python Agent API response:', aiResponse);
 
         // Check if this is a logo generation response
-        if (aiResponse.startsWith('LOGO_GENERATED|')) {
+        if (aiResponse.startsWith('ASSET_GENERATED|')) {
           const parts = aiResponse.split('|');
           const imageUrl = parts[1];
           const message = parts[2];
