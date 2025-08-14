@@ -197,11 +197,12 @@ export const fetchContactPageData = async () => {
   }
 };
 
-// Fetch assistant page data with hero sections, work sections, and image cards
+// Fetch assistant page data with hero sections, work sections, image cards, content sections, and workflow sections
 export const fetchAssistantPageData = async () => {
   try {
+    console.log('Strapi: Starting API call to fetch assistant data...');
     const response = await fetch(
-      `${STRAPI_URL}/api/assistant-pages?populate[hero_section][populate]=*&populate[work_section][populate][cards][populate]=*&populate[image_card][populate]=*`
+      `${STRAPI_URL}/api/assistant-pages?populate[hero_section][populate]=*&populate[work_section][populate][cards][populate]=*&populate[image_card][populate]=*&populate[content_section][populate][steps][populate]=*&populate[content_section][populate][flexCards][populate]=*&populate[workflow_section][populate][workflow][populate]=*&populate[smartsupport_section][populate][features][populate]=*`
     );
     
     if (!response.ok) {
@@ -209,11 +210,14 @@ export const fetchAssistantPageData = async () => {
     }
     
     const data = await response.json();
+    console.log('Strapi: API response received:', data);
     
     if (data.data && data.data.length > 0) {
       // Create a map of key to sections data for easy lookup
       const assistantData = {};
       data.data.forEach(item => {
+        console.log('Strapi: Processing item:', item);
+        
         // Process hero_section array
         if (item.hero_section && item.hero_section.length > 0) {
           item.hero_section.forEach(heroSection => {
@@ -249,14 +253,52 @@ export const fetchAssistantPageData = async () => {
             }
           });
         }
+        
+        // Process content_section array
+        if (item.content_section && item.content_section.length > 0) {
+          item.content_section.forEach(contentSection => {
+            if (contentSection.key) {
+              if (!assistantData[contentSection.key]) {
+                assistantData[contentSection.key] = {};
+              }
+              assistantData[contentSection.key].contentSection = contentSection;
+            }
+          });
+        }
+        
+        // Process workflow_section array
+        if (item.workflow_section && item.workflow_section.length > 0) {
+          item.workflow_section.forEach(workflowSection => {
+            if (workflowSection.key) {
+              if (!assistantData[workflowSection.key]) {
+                assistantData[workflowSection.key] = {};
+              }
+              assistantData[workflowSection.key].workflowSection = workflowSection;
+            }
+          });
+        }
+        
+        // Process smartsupport_section array
+        if (item.smartsupport_section && item.smartsupport_section.length > 0) {
+          item.smartsupport_section.forEach(smartSupportSection => {
+            if (smartSupportSection.key) {
+              if (!assistantData[smartSupportSection.key]) {
+                assistantData[smartSupportSection.key] = {};
+              }
+              assistantData[smartSupportSection.key].smartSupportSection = smartSupportSection;
+            }
+          });
+        }
       });
+      console.log('Strapi: Final assistant data:', assistantData);
       return assistantData;
     }
     
+    console.log('Strapi: No data found, returning empty object');
     return {};
     
   } catch (error) {
-    console.error('Error fetching assistant page data from Strapi:', error);
+    console.error('Strapi: Error fetching assistant page data:', error);
     return {};
   }
 };

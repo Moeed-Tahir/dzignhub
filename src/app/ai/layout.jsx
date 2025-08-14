@@ -17,11 +17,14 @@ import { notFound } from "next/navigation";
 import { fetchAssistantPageData } from "@/utils/strapi";
 
 export default function RootLayout({ children }) {
+  console.log('Layout: Component rendering');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [assistantData, setAssistantData] = useState({});
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const slug = pathname?.split("/").pop();
+
+  console.log('Layout: Current slug:', slug);
 
   const slugToKeyMap = {
     "brand-designer": "brandDesigner",
@@ -36,22 +39,40 @@ export default function RootLayout({ children }) {
     notFound(); // navigate to 404
   }
 
+  console.log('Layout: About to define useEffect');
+  
+  // Simple test effect to check if useEffect works at all
+  useEffect(() => {
+    console.log('*** SIMPLE TEST EFFECT RUNNING ***');
+  }, []);
+  
   // Fetch assistant data on component mount
   useEffect(() => {
+    console.log('**** USEEFFECT CALLBACK EXECUTING ****');
+    console.log('Layout: useEffect starting for slug:', slug);
+    
     const loadAssistantData = async () => {
       try {
         setLoading(true);
+        console.log('Layout: Starting to fetch assistant data...');
         const data = await fetchAssistantPageData();
+        console.log('Layout: Fetched assistant data:', data);
+        console.log('Layout: Data type:', typeof data);
+        console.log('Layout: Data keys:', Object.keys(data));
         setAssistantData(data);
       } catch (error) {
-        console.error('Error loading assistant data:', error);
+        console.error('Layout: Error loading assistant data:', error);
+        console.error('Layout: Error stack:', error.stack);
       } finally {
         setLoading(false);
+        console.log('Layout: Loading complete, final assistantData status');
       }
     };
 
     loadAssistantData();
   }, []);
+  
+  console.log('Layout: useEffect defined, current assistantData:', assistantData);
   return (
     <>
       <div
@@ -81,13 +102,13 @@ export default function RootLayout({ children }) {
       </div>
       <div className="bg-[#1B1F3B]">
         <div className="max-w-[1440px] mx-auto">
-          <ContentCreation currentKey={currentKey} />
+          <ContentCreation currentKey={currentKey} assistantData={assistantData} loading={loading} />
         </div>
       </div>
       <div className="max-w-[1440px] mx-auto">
-        <Workflow currentKey={currentKey} />
+        <Workflow currentKey={currentKey} assistantData={assistantData} loading={loading} />
         <AiResults />
-        <SmartSupport currentKey={currentKey} />
+        <SmartSupport currentKey={currentKey} assistantData={assistantData} loading={loading} />
         <Users />
         <FAQ />
       </div>

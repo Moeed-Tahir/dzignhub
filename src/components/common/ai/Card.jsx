@@ -28,15 +28,6 @@ function Card({ currentKey, assistantData, loading }) {
     subtitle: strapiImageCard?.subtitle || null
   };
 
-  // Show loading state while fetching data
-  if (loading) {
-    return (
-      <div className='sm:h-[744px] h-[260px] flex items-center justify-center'>
-        <div className="text-white text-lg">Loading...</div>
-      </div>
-    );
-  }
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
