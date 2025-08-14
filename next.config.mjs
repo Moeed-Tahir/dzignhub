@@ -8,6 +8,10 @@ const nextConfig = {
              
             },
             {
+                protocol: "https",
+                hostname: "oaidalleapiprodscus.blob.core.windows.net"
+            },
+            {
                 protocol: 'http',
                 hostname: 'localhost',
                 port: '1337',
