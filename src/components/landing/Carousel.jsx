@@ -1,8 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
-function Carousel() {
-  const images = [
+function Carousel({ carouselImages = [] }) {
+  // Fallback images if no Strapi data
+  const defaultImages1 = [
     "/landing/carousel-1/1.webp",
     "/landing/carousel-1/2.webp",
     "/landing/carousel-1/3.jpg",
@@ -12,7 +14,7 @@ function Carousel() {
     "/landing/carousel-1/7.webp",
   ];
 
-  const images2 = [
+  const defaultImages2 = [
     "/landing/carousel-2/1.webp",
     "/landing/carousel-2/2.webp",
     "/landing/carousel-2/3.webp",
@@ -22,6 +24,24 @@ function Carousel() {
     "/landing/carousel-2/7.webp",
     "/landing/carousel-2/8.webp",
   ];
+
+  // Process Strapi carousel data or use defaults
+  let images1 = defaultImages1;
+  let images2 = defaultImages2;
+
+  if (carouselImages.length > 0) {
+    // Get first carousel component for images1
+    if (carouselImages[0]?.images1?.length > 0) {
+      images1 = carouselImages[0].images1.map(img => getStrapiImageUrl(img)).filter(Boolean);
+    }
+    
+    // Get images2 from first carousel component or second component
+    if (carouselImages[0]?.images2?.length > 0) {
+      images2 = carouselImages[0].images2.map(img => getStrapiImageUrl(img)).filter(Boolean);
+    } else if (carouselImages[1]?.images1?.length > 0) {
+      images2 = carouselImages[1].images1.map(img => getStrapiImageUrl(img)).filter(Boolean);
+    }
+  }
 
 
   const carouselContainerVariants = {
@@ -80,7 +100,7 @@ function Carousel() {
         variants={carouselRowVariants}
       >
         <div className="flex max-w-[3000px] animate-scroll-left gap-[20px]">
-          {[...images, ...images].map((url, index) => (
+          {[...images1, ...images1].map((url, index) => (
             <motion.img
               key={index}
               src={url}

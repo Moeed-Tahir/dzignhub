@@ -7,6 +7,12 @@ const nextConfig = {
                 hostname: 'qnlscpmwamswjhhoorwt.supabase.co',
              
             },
+            {
+                protocol: 'http',
+                hostname: 'localhost',
+                port: '1337',
+                pathname: '/uploads/**',
+            },
            
         ],
     },

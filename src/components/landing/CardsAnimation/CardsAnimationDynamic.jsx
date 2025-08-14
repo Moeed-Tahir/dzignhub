@@ -64,9 +64,7 @@ const CardsAnimation = ({ cards = [] }) => {
         image: getStrapiImageUrl(card.image) || defaultCardsData[index]?.image || "/landing/feature/1.png",
         title: card.title || defaultCardsData[index]?.title || `Card ${index + 1}`,
         description: card.description || defaultCardsData[index]?.description || "Default description",
-        // features: card.features 
-        //   ? card.features.split('\n').filter(feature => feature.trim()) // Split by newlines and filter empty
-        //   : defaultCardsData[index]?.features || [],
+        features: card.features?.map(feature => feature.text || feature) || defaultCardsData[index]?.features || [],
         borderImage: getStrapiImageUrl(card.borderImage) || defaultCardsData[index]?.borderImage || "/Border.svg"
       }))
     : defaultCardsData;
