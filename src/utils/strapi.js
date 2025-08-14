@@ -196,3 +196,67 @@ export const fetchContactPageData = async () => {
     };
   }
 };
+
+// Fetch assistant page data with hero sections, work sections, and image cards
+export const fetchAssistantPageData = async () => {
+  try {
+    const response = await fetch(
+      `${STRAPI_URL}/api/assistant-pages?populate[hero_section][populate]=*&populate[work_section][populate][cards][populate]=*&populate[image_card][populate]=*`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.data && data.data.length > 0) {
+      // Create a map of key to sections data for easy lookup
+      const assistantData = {};
+      data.data.forEach(item => {
+        // Process hero_section array
+        if (item.hero_section && item.hero_section.length > 0) {
+          item.hero_section.forEach(heroSection => {
+            if (heroSection.key) {
+              if (!assistantData[heroSection.key]) {
+                assistantData[heroSection.key] = {};
+              }
+              assistantData[heroSection.key].hero = heroSection;
+            }
+          });
+        }
+        
+        // Process work_section array
+        if (item.work_section && item.work_section.length > 0) {
+          item.work_section.forEach(workSection => {
+            if (workSection.key) {
+              if (!assistantData[workSection.key]) {
+                assistantData[workSection.key] = {};
+              }
+              assistantData[workSection.key].work = workSection;
+            }
+          });
+        }
+        
+        // Process image_card array
+        if (item.image_card && item.image_card.length > 0) {
+          item.image_card.forEach(imageCard => {
+            if (imageCard.key) {
+              if (!assistantData[imageCard.key]) {
+                assistantData[imageCard.key] = {};
+              }
+              assistantData[imageCard.key].imageCard = imageCard;
+            }
+          });
+        }
+      });
+      return assistantData;
+    }
+    
+    return {};
+    
+  } catch (error) {
+    console.error('Error fetching assistant page data from Strapi:', error);
+    return {};
+  }
+};

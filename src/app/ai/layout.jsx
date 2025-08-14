@@ -1,6 +1,6 @@
 "use client";
 import Hero from "@/components/common/ai/Hero";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/landing/Navbar";
 import Sidebar from "@/components/landing/Sidebar";
 import Card from "@/components/common/ai/Card";
@@ -14,8 +14,12 @@ import AiResults from "@/components/common/ai/AiResults";
 import SmartSupport from "@/components/common/ai/SmartSupport";
 import { usePathname } from "next/navigation";
 import { notFound } from "next/navigation";
+import { fetchAssistantPageData } from "@/utils/strapi";
+
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [assistantData, setAssistantData] = useState({});
+  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const slug = pathname?.split("/").pop();
 
@@ -31,6 +35,23 @@ export default function RootLayout({ children }) {
    if (!currentKey) {
     notFound(); // navigate to 404
   }
+
+  // Fetch assistant data on component mount
+  useEffect(() => {
+    const loadAssistantData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchAssistantPageData();
+        setAssistantData(data);
+      } catch (error) {
+        console.error('Error loading assistant data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAssistantData();
+  }, []);
   return (
     <>
       <div
@@ -46,17 +67,17 @@ export default function RootLayout({ children }) {
             />
           </div>
           <div className="max-w-[1440px] mx-auto">
-            <Hero currentKey={currentKey} />
+            <Hero currentKey={currentKey} assistantData={assistantData} loading={loading} />
           </div>
         </div>
       </div>
       <div className="bg-[#1B1F3B]">
         <div className="max-w-[1440px] mx-auto">
-          <Work currentKey={currentKey} />
+          <Work currentKey={currentKey} assistantData={assistantData} loading={loading} />
         </div>
       </div>
       <div className="max-w-[1440px] mx-auto">
-        <Card />
+        <Card currentKey={currentKey} assistantData={assistantData} loading={loading} />
       </div>
       <div className="bg-[#1B1F3B]">
         <div className="max-w-[1440px] mx-auto">

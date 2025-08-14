@@ -1,8 +1,9 @@
 "use client";
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
-function Work({ currentKey }) {
+function Work({ currentKey, assistantData, loading }) {
   const sectionData = {
     strategyAssistant: {
       heading: ["How ", "Mira", " Empowers Strategy Assistant"],
@@ -181,7 +182,35 @@ function Work({ currentKey }) {
     },
   };
 
-  const currentSection = sectionData[currentKey];
+  // Get dynamic data from Strapi or fallback to static data
+  const strapiWorkData = assistantData[currentKey]?.work;
+  const fallbackSection = sectionData[currentKey];
+  
+  const currentSection = strapiWorkData ? {
+    heading: [
+      strapiWorkData.headingPre || fallbackSection?.heading[0],
+      strapiWorkData.headingHighlight || fallbackSection?.heading[1],
+      strapiWorkData.headingPost || fallbackSection?.heading[2]
+    ],
+    description: strapiWorkData.description || fallbackSection?.description,
+    data: strapiWorkData.cards?.map((card, index) => ({
+      id: card.id || index + 1,
+      logo: getStrapiImageUrl(card.logo) || fallbackSection?.data[index]?.logo,
+      title: card.title || fallbackSection?.data[index]?.title,
+      content: card.content || fallbackSection?.data[index]?.content
+    })) || fallbackSection?.data
+  } : fallbackSection;
+
+  if (!currentSection) return null;
+
+  // Show loading state while fetching data
+  if (loading) {
+    return (
+      <div className="flex flex-col md:max-w-[1140px] mx-auto gap-[32px] md:gap-[56px] py-10 items-center px-2">
+        <div className="text-white text-lg">Loading work section...</div>
+      </div>
+    );
+  }
 
   // Create ref and inView hook for scroll trigger
   const ref = useRef(null);
