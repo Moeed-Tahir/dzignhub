@@ -4,19 +4,21 @@ import MessageInput from "./MessageInput";
 import MessageBubble from "./MessageBubble";
 import AIIntro from "./AiIntro";
 import Image from "next/image";
+import { useUserStore } from "@/store/store";
 
 export default function ChatPage({
   aiName,
   description,
   img,
   suggestions,
-  placeholder ,
+  placeholder,
   tagline,
 }) {
   const [messages, setMessages] = useState([]);
   const [showIntro, setShowIntro] = useState(true);
   console.log("Rendering ChatPage with name:", description);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [conversationId, setConversationId] = useState("")
   const aiAnswers = [
     {
       text: "Let’s begin by choosing your brand’s personality style.",
@@ -57,6 +59,8 @@ export default function ChatPage({
   const chatContainerRef = useRef(null);
 
   const [brandDesignData, setBrandDesignData] = useState({})
+
+  const { UserId } = useUserStore();
 
   const getBrandDesignData = async () => {
 
@@ -181,231 +185,108 @@ export default function ChatPage({
     setAiTyping(false);
 
     try {
-      // Prepare previous messages for API call
+      console.log(`🚀 Calling ${aiName} Python API...`);
+
+      // Python agents backend URL
+      const pythonApiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || "http://127.0.0.1:8000";
+      const userId = UserId;
+
+      // Prepare previous messages for context
       const previousMessages = messages.map(message => ({
-        role: message.sender === "user" ? "user" : "system",
+        role: message.sender === "user" ? "user" : "assistant",
         content: message.text
       }));
 
-      console.log(`🚀 Calling ${aiName} API...`);
-      console.log(previousMessages);
-
+      // Map AI names to Python endpoints
       let endpoint;
+      switch (aiName.toLowerCase()) {
+        case "zara":
+          endpoint = "brand-designer";
+          break;
+        case "sana":
+          endpoint = "content-creator";
+          break;
+        case "novi":
+          endpoint = "seo-specialist";
+          break;
+        case "mira":
+          endpoint = "strategist";
+          break;
+        case "ellie":
+          endpoint = "ui-ux-designer";
+          break;
+        default:
+          endpoint = "brand-designer";
+      }
+      console.log("Sending Python Agent Req")
+      console.log(userId)
 
-      if (aiName.toLowerCase() === "zara") {
-        endpoint = "zara-brand-designer";
-      }
-      else if (aiName.toLowerCase() === "sana") {
-        endpoint = "content-creation";
-      }
-      else if (aiName.toLowerCase() === "novi") {
-        endpoint = "novi-seo-agent";
-      }
-      else if (aiName.toLowerCase() === "mira") {
-        endpoint = "strategist-mira";
-      }
-      else if (aiName.toLowerCase() === "ellie") {
-        endpoint = "ellie-ui-ux";
-      }
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/${endpoint}`, {
+      // Call Python agent endpoint with previous messages
+      const response = await fetch(`${pythonApiUrl}/agents/${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          message: msg,
-          context: `${aiName.toLowerCase() == "zara" ? "Zara Brand Designer" : `User brand data for content creation: ${brandDesignData}`}`,
-          previousMessages: previousMessages
+          prompt: msg,
+          user_id: userId,
+          conversation_id: conversationId == "" ? null : conversationId,
+          previous_messages: previousMessages, // Add this!
+          context: `${aiName} AI Assistant` // Add context too
         })
       });
 
       const data = await response.json();
 
-      if (data.type === 'success') {
-        let aiResponse;
-        aiResponse = data.data.response;
-        console.log('✅ Zara API response:', aiResponse);
+      if (data.success) {
+        const aiResponse = data.response;
+        console.log('✅ Python Agent API response:', aiResponse);
 
-        let jsonResponse;
-        let isValidJson = false;
-
-        try {
-          // Try to parse the string
-          const cleaned = cleanAIResponse(aiResponse);
-          jsonResponse = JSON.parse(cleaned);
-          isValidJson = true;
-          console.log('✅ Parsed JSON response:', jsonResponse);
-        } catch (err) {
-          // It's just a plain string, not valid JSON
-          console.error('❌ Not valid JSON, using as plain string.');
-          if (aiName.toLowerCase() == "sana" || aiName.toLowerCase() == "novi" || aiName.toLowerCase() == "ellie" || aiName.toLowerCase() == "zara") {
-            if (aiResponse.includes('"isFinal": true')) {
-              console.log("isFinal found in invalid Json")
-              const promptMatch = aiResponse.match(/"prompt"\s*:\s*"([\s\S]*?)",\s*"isFinal"/);
-              console.log(promptMatch)
-              if (promptMatch && promptMatch[1]) {
-                console.log("Matched and parsed prompt from invalid JSON");
-                jsonResponse = {
-                  prompt: promptMatch[1],
-                  isFinal: true
-                };
-                isValidJson = true;
-              }
-              else {
-                jsonResponse = {
-                  prompt: aiResponse,
-                  isFinal: true
-                };
-                isValidJson = true;
-
-              }
-              
-            }
-            else {
-              console.log("isFinal not found in invalid Json")
-              // Try to extract answer and options from invalid JSON
-              const answerMatch = aiResponse.match(/"answer"\s*:\s*"([^"]*)"/);
-              const optionsMatch = aiResponse.match(/"options"\s*:\s*\[([^\]]*)\]/);
-
-              if (answerMatch || optionsMatch) {
-                jsonResponse = {};
-                if (answerMatch && answerMatch[1]) {
-                  jsonResponse.answer = answerMatch[1];
-                }
-                if (optionsMatch && optionsMatch[1]) {
-                  try {
-                    const optionsString = optionsMatch[1];
-                    const optionMatches = optionsString.match(/"([^"]*)"/g);
-                    if (optionMatches) {
-                      jsonResponse.options = optionMatches.map(option => option.replace(/"/g, ''));
-                    }
-                  } catch (err) {
-                    console.error('Error parsing options from invalid JSON:', err);
-                  }
-                }
-                isValidJson = true;
-              } else {
-                jsonResponse = {
-                  answer: aiResponse
-                };
-                isValidJson = true;
-              }
-            }
-          }
-          else {
-            jsonResponse = {
-              answer: aiResponse
-            };
-            isValidJson = true;
-          }
-        }
-
-
-        if (aiName.toLowerCase() == "ellie" && jsonResponse.isFinal) {
-          let userSelectionObj = {};
-
-          // Match the userSelection object
-          const userSelectionMatch = aiResponse.match(/"userSelection"\s*:\s*\{([^}]*)\}/);
-
-          if (userSelectionMatch && userSelectionMatch[1]) {
-            // Parse the object content
-            const objectContent = userSelectionMatch[1];
-
-            // Extract key-value pairs from the object
-            const keyValueMatches = objectContent.match(/"([^"]+)"\s*:\s*"([^"]*)"/g);
-
-            if (keyValueMatches) {
-              keyValueMatches.forEach(match => {
-                const [, key, value] = match.match(/"([^"]+)"\s*:\s*"([^"]*)"/);
-                userSelectionObj[key] = value;
-              });
-            }
-
-            // Handle array values like components
-            const arrayMatches = objectContent.match(/"([^"]+)"\s*:\s*\[([^\]]*)\]/g);
-            if (arrayMatches) {
-              arrayMatches.forEach(match => {
-                const [, key, arrayContent] = match.match(/"([^"]+)"\s*:\s*\[([^\]]*)\]/);
-                const items = arrayContent.match(/"([^"]*)"/g);
-                if (items) {
-                  userSelectionObj[key] = items.map(item => item.replace(/"/g, ''));
-                }
-              });
-            }
-          }
-
-          let prompt = `${jsonResponse.prompt}
-          User Selection: ${JSON.stringify(userSelectionObj, null, 2)}
-          `;
-          console.log(`Prompt for ellie: `, prompt);
+        // Check if this is a logo generation response
+        if (aiResponse.startsWith('LOGO_GENERATED|')) {
+          const parts = aiResponse.split('|');
+          const imageUrl = parts[1];
+          const message = parts[2];
 
           setAiLoading(false);
-          await generateLogo(prompt, "1792x1024");
-          return;
-        }
+          setAiTyping(true);
 
-        // Check if the response is final JSON object
-        // this is mainly for generating logo by brand designer agent
-        
-        if (isValidJson && jsonResponse.isFinal && aiName.toLowerCase() == "zara") {
-          const formattedString = Object.entries(jsonResponse.userSelection)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(", ");
+          setTimeout(() => {
+            setMessages(prevMessages => [
+              ...prevMessages,
+              {
+                sender: "ai",
+                text: message,
+                imageUrl: imageUrl, // Add image URL to message
+                isLogo: true,
+                typing: true
+              }
+            ]);
+            setAiTyping(false);
+          }, 700);
 
-          console.log('Final response received, generating branding visuals...');
-          const finalPrompt = `Generate a ${jsonResponse.task} for a brand with the following details:
-          \n\n
-          ${formattedString}
-          \n\nPrompt: ${jsonResponse.prompt}\n\n
-      `;
-          console.log('Final prompt:', finalPrompt);
-
+        } else {
+          // Regular text response
           setAiLoading(false);
-          await generateLogo(finalPrompt, jsonResponse.task);
-          updateBrandDesignData(jsonResponse.userSelection);
-          return;
+          setAiTyping(true);
+
+          setTimeout(() => {
+            setMessages(prevMessages => [
+              ...prevMessages,
+              {
+                sender: "ai",
+                text: aiResponse,
+                typing: true
+              }
+            ]);
+            setAiTyping(false);
+          }, 700);
         }
-
-
-
-        setAiLoading(false);
-        setAiTyping(true);
-
-        // Add AI response to messages after a short delay for typing effect
-        setTimeout(() => {
-          setMessages(prevMessages => [
-            ...prevMessages,
-            {
-              sender: "ai",
-              text: isValidJson ? [
-                jsonResponse.answer && `${jsonResponse.answer}`,
-                jsonResponse.message && `${jsonResponse.message}`,
-                jsonResponse.prompt && `${jsonResponse.prompt}`
-              ].filter(Boolean).join('\n\n') || "" : aiResponse,
-              options: isValidJson && jsonResponse.options ? jsonResponse.options : [], // Extract options from JSON
-              typing: true
-            }
-          ]);
-          setAiTyping(false);
-        }, 700);
-
-      } else {
-        // Handle API error
-        setAiLoading(false);
-        setMessages(prevMessages => [
-          ...prevMessages,
-          {
-            sender: "ai",
-            text: "Sorry, I'm having trouble processing your request right now. Please try again.",
-            isError: true
-          }
-        ]);
       }
 
+
     } catch (error) {
-      console.error('❌ Error calling Zara API:', error);
+      console.error(`❌ Error calling ${aiName} Python API:`, error);
       setAiLoading(false);
       setMessages(prevMessages => [
         ...prevMessages,
@@ -677,6 +558,11 @@ export default function ChatPage({
             tagline={tagline}
           />
         )}
+        {
+          showIntro == false && conversationId !== "" ? (
+            <p>Conversation ID: {conversationId}</p>
+          ) : null
+        }
         {allMessages.map((msg, index) => (
           <MessageBubble
             key={index}
