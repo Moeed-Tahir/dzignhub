@@ -1,32 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { getStrapiImageUrl } from "@/utils/strapi";
 
-function Download({ downloadSection }) {
-  // Default fallback data
-  const defaultData = {
-    preTitle: "Download the app",
-    title: "and start creating with AI — anytime, anywhere.",
-    description: "Our AI-powered creative app gives you access to your personal team of assistants — wherever you are.\nDesign logos, create social media content, generate marketing strategies, and get real-time insights — all in one place. No skills required. Just your ideas.",
-    appStoreImage: "/landing/download/app-store.svg",
-    appStoreUrl: "#",
-    googlePlayImage: "/landing/download/google-play.svg", 
-    googlePlayUrl: "#",
-    phoneImage: "/landing/download/iphone.svg"
-  };
-
-  // Process Strapi data or use defaults
-  const data = downloadSection ? {
-    preTitle: downloadSection.preTitle || defaultData.preTitle,
-    title: downloadSection.title || defaultData.title,
-    description: downloadSection.description || defaultData.description,
-    appStoreImage: getStrapiImageUrl(downloadSection.appStoreImage) || defaultData.appStoreImage,
-    appStoreUrl: downloadSection.appStoreUrl || defaultData.appStoreUrl,
-    googlePlayImage: getStrapiImageUrl(downloadSection.googlePlayImage) || defaultData.googlePlayImage,
-    googlePlayUrl: downloadSection.googlePlayUrl || defaultData.googlePlayUrl,
-    phoneImage: getStrapiImageUrl(downloadSection.phoneImage) || defaultData.phoneImage
-  } : defaultData;
-
+function Download() {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -160,52 +135,47 @@ function Download({ downloadSection }) {
                   transition={{ duration: 0.6, delay: 0.3 }}
                   viewport={{ once: true }}
                 >
-                  {data.preTitle}{" "}
+                  Download the app{" "}
                 </motion.span>
                 <span className="">
-                  {data.title}
+                  and start creating with AI — anytime, anywhere.
                 </span>
               </motion.div>
-              <motion.div
+              <motion.p
                 className="max-w-[525px] text-[20px]  xl:text-[24px] font-semibold"
                 variants={textVariants}
-                dangerouslySetInnerHTML={{ __html: data.description }}
-              />
+              >
+                Our AI-powered creative app gives you access to your personal
+                team of assistants — wherever you are.
+                <br />
+                Design logos, create social media content, generate marketing
+                strategies, and get real-time insights — all in one place. No
+                skills required. Just your ideas.
+              </motion.p>
             </motion.div>
             <motion.div
               className="flex mb-[40px] xl:mb-0 gap-[11.13px]"
               variants={buttonVariants}
             >
-              <motion.a
-                href={data.appStoreUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-[200px] h-[60px] block"
+              <motion.div
+                className="w-[200px] h-[60px]"
                 variants={hoverButtonVariants}
                 whileHover="hover"
                 whileTap="tap"
               >
-                <img 
-                  src={data.appStoreImage} 
-                  alt="App Store" 
-                  className="w-full h-full object-contain"
-                />
-              </motion.a>
-              <motion.a
-                href={data.googlePlayUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-[200px] h-[60px] block"
+                <img src="/landing/download/app-store.svg" alt="App Store" />
+              </motion.div>
+              <motion.div
+                className="w-[200px] h-[60px]"
                 variants={hoverButtonVariants}
                 whileHover="hover"
                 whileTap="tap"
               >
                 <img
-                  src={data.googlePlayImage}
+                  src="/landing/download/google-play.svg"
                   alt="Google Play"
-                  className="w-full h-full object-contain"
                 />
-              </motion.a>
+              </motion.div>
             </motion.div>
           </motion.div>
 
@@ -222,9 +192,9 @@ function Download({ downloadSection }) {
               variants={glowVariants}
             ></motion.div>
             <motion.img
-              src={data.phoneImage}
+              src="/landing/download/iphone.svg"
               className="relative z-10 w-[355px] h-[739px]"
-              alt="Phone preview"
+              alt="iPhone preview"
               variants={phoneVariants}
               whileHover={{
                 scale: 1.05,

@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
-function Workflow({ currentKey }) {
+function Workflow({ currentKey, assistantData, loading }) {
   const workflowFeatures = {
     strategyAssistant: {
       text: "Meet your intelligent business advisor—built to support strategists and entrepreneurs in mapping growth. Whether you're launching, scaling, or pivoting, this AI helps you build plans with confidence.",
@@ -157,6 +158,32 @@ function Workflow({ currentKey }) {
     },
   };
 
+  // Get dynamic data from Strapi or fallback to static data
+  const strapiWorkflowSection = assistantData[currentKey]?.workflowSection;
+  
+  // Use Strapi data if available, with individual field fallbacks
+  const fallbackData = workflowFeatures[currentKey];
+  
+  const workflowData = strapiWorkflowSection ? {
+    title: strapiWorkflowSection.title || "AI Companions",
+    text: strapiWorkflowSection.text || fallbackData?.text,
+    workflow: (strapiWorkflowSection.workflow && strapiWorkflowSection.workflow.length > 0) ? 
+      strapiWorkflowSection.workflow.map((item, index) => ({
+        id: item.id || index + 1,
+        icon: getStrapiImageUrl(item.icon) || fallbackData?.workflow?.[index]?.icon,
+        text: item.text || fallbackData?.workflow?.[index]?.text
+      })) : fallbackData?.workflow || []
+  } : fallbackData;
+
+  // Show loading state while fetching data
+  if (loading) {
+    return (
+      <div className="py-10 mx-auto flex items-center justify-center">
+        <div className="text-[#1B1F3B] text-lg">Loading workflow section...</div>
+      </div>
+    );
+  }
+
   const ref = useRef(null);
   const isInView = useInView(ref, { 
     threshold: 0.1,
@@ -225,19 +252,18 @@ function Workflow({ currentKey }) {
             variants={titleVariants}
             className="md:font-medium md:text-[30px] text-[24px]  font-semibold text-center"
           >
-            <span className="text-[#C209C1]">AI Companions </span>
-            <span>for Every Creative Workflow</span>
+            <span className="text-[#C209C1]">{workflowData.title}</span>
           </motion.div>
           <motion.p 
             variants={descriptionVariants}
             className="md:text-[18px] text-[20px] text-[#1B1F3B] lg:max-w-[60%] text-center mx-auto"
           >
-            {workflowFeatures[currentKey].text}
+            {workflowData.text}
           </motion.p>
         </div>
         <div className="flex gap-[24px] md:justify-center justify-normal  flex-wrap">
           <div className="flex flex-wrap flex-col w-full lg:flex-row gap-4 justify-center">
-            {workflowFeatures[currentKey].workflow.map((feature) => (
+            {workflowData.workflow.map((feature) => (
               <motion.div
                 key={feature.id}
                 variants={cardVariants}

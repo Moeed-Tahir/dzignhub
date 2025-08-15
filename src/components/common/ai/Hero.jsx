@@ -1,9 +1,13 @@
 'use client';
 import React from "react";
 import { motion } from "framer-motion";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
-function Hero({currentKey}) {
+function Hero({currentKey, assistantData, loading}) {
 
+  // Get data from Strapi or fallback to static data
+  const strapiContent = assistantData[currentKey]?.hero;
+  
   const heroContentData = {
     brandDesigner: {
       title: "Meet Zara - Brand designer",
@@ -45,10 +49,30 @@ function Hero({currentKey}) {
     }
   };
 
-
-  const content = heroContentData[currentKey];
+  // Use Strapi data if available, otherwise fallback to static data
+  const fallbackContent = heroContentData[currentKey];
+  
+  const content = strapiContent ? {
+    title: strapiContent.title || fallbackContent?.title,
+    description: strapiContent.description || fallbackContent?.description,
+    mainImage: getStrapiImageUrl(strapiContent.mainImage) || fallbackContent?.mainImage,
+    leftImage: getStrapiImageUrl(strapiContent.leftImage) || fallbackContent?.leftImage,
+    rightImage: getStrapiImageUrl(strapiContent.rightImage) || fallbackContent?.rightImage,
+    mainImageAlt: strapiContent.mainImageAlt || "",
+    leftImageAlt: strapiContent.leftImageAlt || "",
+    rightImageAlt: strapiContent.rightImageAlt || ""
+  } : fallbackContent;
 
   if (!content) return null;
+
+  // Show loading state while fetching data
+  if (loading) {
+    return (
+      <div className="w-full h-[400px] flex items-center justify-center">
+        <div className="text-white text-lg">Loading...</div>
+      </div>
+    );
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -165,6 +189,7 @@ function Hero({currentKey}) {
       >
         <img
           src={content.mainImage}
+          alt={content.mainImageAlt || content.title}
           className="md:rounded-[70px] rounded-[32px] xl:h-[471px] lg:h-[380px] md:h-[330px] h-[219px] w-[96%] mx-auto object-cover"
         />
       </motion.div>
@@ -179,6 +204,7 @@ function Hero({currentKey}) {
           variants={floatingVariants}
           animate="animate"
           src={content.leftImage}
+          alt={content.leftImageAlt || "Left decoration image"}
           className="xl:w-[306px] xl:h-[326px] mx-auto object-cover"
         />
       </motion.div>
@@ -193,6 +219,7 @@ function Hero({currentKey}) {
           variants={floatingVariantsReverse}
           animate="animate"
           src={content.rightImage}
+          alt={content.rightImageAlt || "Right decoration image"}
           className="w-full h-full object-contain"
         />
       </motion.div>

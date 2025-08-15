@@ -2,36 +2,60 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Syne } from "next/font/google";
 import AssistantCard from "@/components/landing/AssistantCard";
+import { getStrapiImageUrl } from "@/utils/strapi";
+
 const syne = Syne({
   subsets: ["latin"],
   weight: ["400", "600"],
   variable: "--font-syne",
 });
 
-const assistants = [
-  { src: "/landing/assistants/1.jpg", name: "Kano (UI/UX)" },
-  { src: "/landing/assistants/2.jpg", name: "Mira (Business Strategy)" },
-  { src: "/landing/assistants/3.jpg", name: "Novi (SEO specialist)" },
-  { src: "/landing/assistants/4.jpg", name: "Sana (Content Creation)" },
-    { src: "/landing/assistants/1.jpg", name: "Kano (UI/UX)" },
-  { src: "/landing/assistants/2.jpg", name: "Mira (Business Strategy)" },
-  { src: "/landing/assistants/3.jpg", name: "Novi (SEO specialist)" },
-  { src: "/landing/assistants/4.jpg", name: "Sana (Content Creation)" },
-   
+// Fallback data for when Strapi data is not available
+const fallbackAssistants = [
+  { src: "/landing/assistants/1.jpg", name: "Kano (UI/UX)", group: "top" },
+  { src: "/landing/assistants/2.jpg", name: "Mira (Business Strategy)", group: "top" },
+  { src: "/landing/assistants/3.jpg", name: "Novi (SEO specialist)", group: "top" },
+  { src: "/landing/assistants/4.jpg", name: "Sana (Content Creation)", group: "top" },
+  { src: "/landing/assistants/1.jpg", name: "Kano (UI/UX)", group: "top" },
+  { src: "/landing/assistants/2.jpg", name: "Mira (Business Strategy)", group: "top" },
+  { src: "/landing/assistants/3.jpg", name: "Novi (SEO specialist)", group: "top" },
+  { src: "/landing/assistants/4.jpg", name: "Sana (Content Creation)", group: "top" },
 ];
 
-const assistants2 = [
-  { src: "/landing/assistants/5.jpg", name: "Novi (SEO specialist)" },
-  { src: "/landing/assistants/3.jpg", name: "Sana (Content Creation)" },
-  { src: "/landing/assistants/1.jpg", name: "Kana (Data Analysis)" },
-  { src: "/landing/assistants/2.jpg", name: "Kano (UI/UX)" },
-    { src: "/landing/assistants/5.jpg", name: "Novi (SEO specialist)" },
-  { src: "/landing/assistants/3.jpg", name: "Sana (Content Creation)" },
-  { src: "/landing/assistants/1.jpg", name: "Kana (Data Analysis)" },
-  { src: "/landing/assistants/2.jpg", name: "Kano (UI/UX)" },
+const fallbackAssistants2 = [
+  { src: "/landing/assistants/5.jpg", name: "Novi (SEO specialist)", group: "bottom" },
+  { src: "/landing/assistants/3.jpg", name: "Sana (Content Creation)", group: "bottom" },
+  { src: "/landing/assistants/1.jpg", name: "Kana (Data Analysis)", group: "bottom" },
+  { src: "/landing/assistants/2.jpg", name: "Kano (UI/UX)", group: "bottom" },
+  { src: "/landing/assistants/5.jpg", name: "Novi (SEO specialist)", group: "bottom" },
+  { src: "/landing/assistants/3.jpg", name: "Sana (Content Creation)", group: "bottom" },
+  { src: "/landing/assistants/1.jpg", name: "Kana (Data Analysis)", group: "bottom" },
+  { src: "/landing/assistants/2.jpg", name: "Kano (UI/UX)", group: "bottom" },
 ];
 
-function Assistants() {
+function Assistants({ assistantSection }) {
+  console.log('Assistants component received data:', assistantSection);
+
+  // Use Strapi data if available, otherwise use fallback
+  const headingPre = assistantSection?.headingPre || "Your";
+  const headingHighlight = assistantSection?.headingHighlight || "AI";
+  const headingPost = assistantSection?.headingPost || "Assistants";
+  
+  // Process assistants data
+  const assistantsData = assistantSection?.assistants || [];
+  
+  // Group assistants by their group property
+  const topAssistants = assistantsData.filter(assistant => assistant.group === "top");
+  const bottomAssistants = assistantsData.filter(assistant => assistant.group === "bottom");
+  const middleAssistants = assistantsData.filter(assistant => assistant.group === "middle");
+  
+  // Use fallback if no Strapi data
+  const displayTopAssistants = topAssistants.length > 0 ? topAssistants : fallbackAssistants;
+  const displayBottomAssistants = bottomAssistants.length > 0 ? bottomAssistants : fallbackAssistants2;
+  
+  // Get middle assistants for the side cards (or use defaults)
+  const leftAssistant = middleAssistants[0] || { src: "/landing/assistants/4.jpg", name: "Mira (Growth Strategist)" };
+  const rightAssistant = middleAssistants[1] || { src: "/landing/assistants/5.jpg", name: "Zara(Brand Designer)" };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -150,7 +174,7 @@ function Assistants() {
           className="flex gap-5  md:w-[1580px] w-[1000px] animate-scroll-left "
           variants={rowVariants}
         >
-          {assistants.map((item, index) => (
+          {displayTopAssistants.map((item, index) => (
             <motion.div
               key={`top-${index}`}
               variants={cardVariants}
@@ -163,7 +187,7 @@ function Assistants() {
             >
               
               <AssistantCard
-                src={item.src}
+                src={item.avatar ? getStrapiImageUrl(item.avatar) : item.src}
                 name={item.name}
                 // style={{ left: `${-136 + index * 444}px`, top: "64px" }}
               />
@@ -185,8 +209,8 @@ function Assistants() {
             }}
           >
             <AssistantCard
-              src="/landing/assistants/4.jpg"
-              name={"Mira (Growth Strategist)"}
+              src={leftAssistant.avatar ? getStrapiImageUrl(leftAssistant.avatar) : leftAssistant.src}
+              name={leftAssistant.name}
               // positionClass="left-[-111px]"
             />
           </motion.div>
@@ -195,7 +219,7 @@ function Assistants() {
             className={`w-[40%] mx-auto   ${syne.className} font-semibold md:text-[80px] text-[28px] text-[#FFFFFF] text-center uppercase`}
             variants={headingVariants}
           >
-            <motion.span variants={wordVariants}>Your</motion.span>{" "}
+            <motion.span variants={wordVariants}>{headingPre}</motion.span>{" "}
             <motion.span 
               className="text-[#BDFF00]"
               variants={wordVariants}
@@ -204,9 +228,9 @@ function Assistants() {
                 transition: { duration: 0.2 } 
               }}
             >
-              AI
+              {headingHighlight}
             </motion.span>{" "}
-            <motion.span variants={wordVariants}>Assistants</motion.span>
+            <motion.span variants={wordVariants}>{headingPost}</motion.span>
           </motion.div>
 
           <motion.div
@@ -218,9 +242,9 @@ function Assistants() {
             }}
           >
             <AssistantCard
-              src="/landing/assistants/5.jpg"
+              src={rightAssistant.avatar ? getStrapiImageUrl(rightAssistant.avatar) : rightAssistant.src}
               // style={{ right: `-50px` }}
-              name={"Zara(Brand Designer)"}
+              name={rightAssistant.name}
             />
           </motion.div>
         </motion.div>
@@ -229,7 +253,7 @@ function Assistants() {
           className="flex gap-5  md:w-[1580px] w-[1000px] animate-scroll-right"
           variants={rowVariants}
         >
-          {assistants2.map((item, index) => (
+          {displayBottomAssistants.map((item, index) => (
             <motion.div
               key={`bottom-${index}`}
               variants={cardVariants}
@@ -240,7 +264,7 @@ function Assistants() {
               }}
             >
               <AssistantCard
-                src={item.src}
+                src={item.avatar ? getStrapiImageUrl(item.avatar) : item.src}
                 name={item.name}
                 // style={{ left: `${-136 + index * 444}px`, top: "856px" }}
               />

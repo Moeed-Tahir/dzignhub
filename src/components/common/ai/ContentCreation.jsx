@@ -1,8 +1,9 @@
 import { usePathname } from "next/navigation";
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
-function ContentCreation({ currentKey }) {
+function ContentCreation({ currentKey, assistantData, loading }) {
   const flexData = {
     strategyAssistant: [
       {
@@ -147,6 +148,47 @@ function ContentCreation({ currentKey }) {
     },
   };
 
+  // Get dynamic data from Strapi or fallback to static data
+  const strapiContentSection = assistantData[currentKey]?.contentSection;
+  
+  // Debug logging
+  console.log('ContentCreation Debug:', {
+    currentKey,
+    assistantData,
+    strapiContentSection,
+    hasContentSection: !!strapiContentSection
+  });
+  
+  // Use Strapi data if available, with individual field fallbacks
+  const currentAssistant = strapiContentSection ? {
+    id: strapiContentSection.id || assistants[currentKey]?.id,
+    title: strapiContentSection.title || assistants[currentKey]?.title,
+    image: getStrapiImageUrl(strapiContentSection.image) || assistants[currentKey]?.image,
+    steps: (strapiContentSection.steps && strapiContentSection.steps.length > 0) ? 
+      strapiContentSection.steps.map(step => step.text) : 
+      assistants[currentKey]?.steps || []
+  } : assistants[currentKey];
+
+  const currentFlexData = (strapiContentSection && strapiContentSection.flexCards && strapiContentSection.flexCards.length > 0) ? 
+    strapiContentSection.flexCards.map((card, index) => ({
+      id: index + 1,
+      content: card.text
+    })) : flexData[currentKey];
+
+  const sectionTitle = (strapiContentSection && strapiContentSection.sectionTitle) ? 
+    strapiContentSection.sectionTitle : "CREATING CONTENT WITH OUR AI ASSISTANTS IS EASY";
+
+  // Show loading state while fetching data
+  if (loading) {
+    return (
+      <div className="py-10 mx-auto flex items-center justify-center">
+        <div className="text-white text-lg">Loading content section...</div>
+      </div>
+    );
+  }
+
+  if (!currentAssistant) return null;
+
   const ref = useRef(null);
   const isInView = useInView(ref, {
     threshold: 0.1,
@@ -228,13 +270,11 @@ function ContentCreation({ currentKey }) {
           className="flex flex-col gap-[10px] text-center text-[#FFFFFF]"
         >
           <div className="md:text-[48px] text-[24px] font-semibold ">
-            <span>CREATING CONTENT WITH OUR </span>
-            <span className="text-[#C209C1]">AI ASSISTANTS</span>
-            <span> IS EASY</span>
+            <span>{sectionTitle}</span>
           </div>
         </motion.div>
         <div className="flex flex-col lg:flex-row gap-[20px] justify-between">
-          {assistants[currentKey].steps.map((step, index) => (
+          {currentAssistant.steps.map((step, index) => (
             <motion.div
               key={index}
               variants={stepsVariants}
@@ -249,18 +289,19 @@ function ContentCreation({ currentKey }) {
         </div>
         <div className="flex lg:flex-row flex-col-reverse gap-[30px] w-full mx-auto">
           <motion.div
-            key={assistants[currentKey].id}
+            key={currentAssistant.id}
             variants={imageVariants}
             className="flex flex-col gap-[30px]"
           >
             <img
-              src={assistants[currentKey].image}
+              src={currentAssistant.image}
+              alt={currentAssistant.title}
               className="object-cover h-full rounded-[24px]"
             />
           </motion.div>
 
           <div className="flex gap-[16px] lg:flex-col overflow-x-auto flex-nowrap scrollbar-hide lg:overflow-visible lg:flex-wrap">
-            {flexData[currentKey].map((item) => (
+            {currentFlexData.map((item) => (
               <motion.div
                 key={item.id}
                 variants={cardVariants}

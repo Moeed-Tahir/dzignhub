@@ -1,7 +1,12 @@
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
-function SmartSupport({ currentKey }) {
+function SmartSupport({ currentKey, assistantData, loading }) {
+  // Get Strapi data for smart support section
+  const strapiSmartSupportSection = assistantData?.[currentKey]?.smartSupportSection;
+
+  // Static content fallback data
   const content = {
     strategyAssistant: {
       heading: ["Strategy AI:", "Insight", "into Action"],
@@ -180,6 +185,41 @@ function SmartSupport({ currentKey }) {
     ],
   };
 
+  // Prepare heading data from Strapi or fallback to static
+  const getHeadingData = () => {
+    if (strapiSmartSupportSection?.headingPre || strapiSmartSupportSection?.headingHighlight || strapiSmartSupportSection?.headingPost) {
+      return [
+        strapiSmartSupportSection.headingPre || "",
+        strapiSmartSupportSection.headingHighlight || "",
+        strapiSmartSupportSection.headingPost || ""
+      ];
+    }
+    // Fallback to static content
+    return content[currentKey]?.heading || ["", "", ""];
+  };
+
+  // Prepare description from Strapi or fallback to static
+  const getDescription = () => {
+    return strapiSmartSupportSection?.description || content[currentKey]?.description || "";
+  };
+
+  // Prepare features data from Strapi or fallback to static
+  const getFeaturesData = () => {
+    if (strapiSmartSupportSection?.features && strapiSmartSupportSection.features.length > 0) {
+      return strapiSmartSupportSection.features.map(feature => ({
+        image: getStrapiImageUrl(feature.icon),
+        text: feature.text,
+        classname: "" // You can add dynamic classname logic here if needed
+      }));
+    }
+    // Fallback to static features
+    return features[currentKey] || [];
+  };
+
+  const headingData = getHeadingData();
+  const description = getDescription();
+  const featuresData = getFeaturesData();
+
   const ref = useRef(null);
   const isInView = useInView(ref, {
     threshold: 0.1,
@@ -292,17 +332,17 @@ function SmartSupport({ currentKey }) {
               variants={titleVariants}
               className="md:text-[48px] text-[24px] font-semibold"
             >
-              <span>{content[currentKey].heading[0]}</span>{" "}
+              <span>{headingData[0]}</span>{" "}
               <span className="text-[#C209C1]">
-                {content[currentKey].heading[1]}
+                {headingData[1]}
               </span>{" "}
-              <span>{content[currentKey].heading[2] ?? ""}</span>
+              <span>{headingData[2] ?? ""}</span>
             </motion.div>
             <motion.p
               variants={descriptionVariants}
               className="md:text-[18px] text-[20px]"
             >
-              {content[currentKey].description}
+              {description}
             </motion.p>
             <motion.button
               variants={buttonVariants}
@@ -315,87 +355,24 @@ function SmartSupport({ currentKey }) {
             variants={gridVariants}
             className="grid grid-cols-2 h-[450px] w-full  md:grid-cols-3 gap-x-4 gap-y-10 xl:gap-y-0 xl:pt-15 xl:w-[50%]"
           >
-            <motion.div
-              variants={cardVariants}
-              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
-            >
-              <img
-                src={features[currentKey]?.[0]?.image}
-                className={`absolute top-[-20%]   left-1/2 -translate-x-1/2 object-contain ${
-                  features[currentKey]?.[0]?.classname ?? ""
-                }`}
-              />
-              <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-                {features[currentKey]?.[0]?.text}
-              </p>
-            </motion.div>
-
-            <motion.div
-              variants={cardVariants}
-              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
-            >
-              <img
-                src={features[currentKey]?.[1].image}
-                className="absolute top-[-20%] h-[65px]   left-1/2 -translate-x-1/2"
-              />
-              <p className="bottom-0 absolute  text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-                {features[currentKey]?.[1].text}
-              </p>
-            </motion.div>
-
-            <motion.div
-              variants={cardVariants}
-              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
-            >
-              <img
-                src={features[currentKey]?.[2].image}
-                className="absolute top-[-20%] h-[65px] left-1/2 -translate-x-1/2"
-              />
-              <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-                {features[currentKey]?.[2].text}
-              </p>
-            </motion.div>
-
-            <motion.div
-              variants={cardVariants}
-              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
-            >
-              <img
-                src={features[currentKey]?.[3].image}
-                className={`absolute top-[-20%]  object-contain left-1/2 -translate-x-1/2  ${
-                  features[currentKey]?.[3]?.classname ?? ""
-                } `}
-              />
-              <p className="bottom-0 absolute text-[12px]  sm:text-[16px] xl:text-[14px] px-2 py-1">
-                {features[currentKey]?.[3].text}
-              </p>
-            </motion.div>
-
-            <motion.div
-              variants={cardVariants}
-              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
-            >
-              <img
-                src={features[currentKey]?.[4].image}
-                className="absolute top-[-20%] left-1/2 -translate-x-1/2"
-              />
-              <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-                {features[currentKey]?.[4].text}
-              </p>
-            </motion.div>
-
-            <motion.div
-              variants={cardVariants}
-              className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
-            >
-              <img
-                src={features[currentKey]?.[5].image}
-                className="absolute top-[-20%] left-1/2 -translate-x-1/2"
-              />
-              <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
-                {features[currentKey]?.[5].text}
-              </p>
-            </motion.div>
+            {featuresData.slice(0, 6).map((feature, index) => (
+              <motion.div
+                key={index}
+                variants={cardVariants}
+                className="rounded-[13px] bg-[#212d61] border-white/10 max-h-[150px] xl:max-h-[120px] text-center relative"
+              >
+                <img
+                  src={feature.image}
+                  className={`absolute top-[-20%] object-contain left-1/2 -translate-x-1/2 ${
+                    feature.classname || 'h-[65px]'
+                  }`}
+                  alt={feature.text}
+                />
+                <p className="bottom-0 absolute text-[12px] sm:text-[16px] xl:text-[14px] px-2 py-1">
+                  {feature.text}
+                </p>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </div>

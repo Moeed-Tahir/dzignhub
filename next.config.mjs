@@ -7,6 +7,16 @@ const nextConfig = {
                 hostname: 'qnlscpmwamswjhhoorwt.supabase.co',
              
             },
+            {
+                protocol: "https",
+                hostname: "oaidalleapiprodscus.blob.core.windows.net"
+            },
+            {
+                protocol: 'http',
+                hostname: 'localhost',
+                port: '1337',
+                pathname: '/uploads/**',
+            },
            
         ],
     },

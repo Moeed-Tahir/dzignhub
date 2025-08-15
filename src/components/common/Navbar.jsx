@@ -39,7 +39,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
       if (data.type === "success") {
         SetIsLogin(true);
         SetEmail(data.user.email);
-        SetUserId(data.user.userId);
+        SetUserId(data.user.userId || data.user._id);
         SetAvatar(data.user.avatar);
       } else {
         SetIsLogin(false);
