@@ -78,7 +78,7 @@ const ForgetPass = () => {
   };
 
   return (
-    <div className="w-[80%] mx-auto p-6 justify-center items-center ">
+    <div className="lg:w-[80%] mx-auto p-6 justify-center items-center ">
       <h2 className="text-[30px] font-medium text-[#2A0856] text-center">
         Forgot Password?
       </h2>
