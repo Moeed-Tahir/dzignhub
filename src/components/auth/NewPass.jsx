@@ -99,7 +99,7 @@ const NewPass = () => {
   const strengthColors = ["#ff4d4d", "#ff944d", "#33cc33", "#C209C1"];
 
   return (
-    <div className="w-[80%] mx-auto p-6 justify-center items-center ">
+    <div className="lg:w-[80%] mx-auto p-6 justify-center items-center ">
       <h2 className="text-[30px] font-medium text-[#111113] mb-4 text-center">
 Set new password      </h2>
       <p className="text-[#44444A] mb-6 text-center">

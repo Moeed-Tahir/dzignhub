@@ -321,7 +321,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
     <nav
       className={`  ${
         isCreationPage ? "" : isSettingPage ? "lg:m-5 my-5" : " m-8"
-      } bg-white px-4 max-w-[1440px]   xl:mx-auto py-4 rounded-full`}
+      } bg-white px-4 max-w-[1440px] w-full   xl:mx-auto py-4 rounded-full`}
     >
       <div className="flex items-center justify-between">
         {/* Left - Logo */}

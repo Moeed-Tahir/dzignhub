@@ -14,7 +14,7 @@ export default function AuthLayout({ children }) {
 
   return (
     <div className="bg-[#f8f8f8] max-w-[1440px]  mx-auto justify-center items-start  flex gap-2 h-auto min-h-screen">
-      <div className="lg:w-1/2 mx-auto min-h-screen flex flex-col  justify-between p-5">
+      <div className="lg:w-1/2 w-full mx-auto min-h-screen flex flex-col  justify-between p-5">
         <div className="flex items-center gap-2 mb-2">
           {isSignupPage ? (
             <button
@@ -48,7 +48,7 @@ export default function AuthLayout({ children }) {
 
         <AuthFooter />
       </div>
-      <div className="w-[50%] sticky top-0 h-fit">
+      <div className="lg:w-[50%] sticky top-0 h-fit">
         <SideComponent isProfilePage={true} />
       </div>
     </div>
