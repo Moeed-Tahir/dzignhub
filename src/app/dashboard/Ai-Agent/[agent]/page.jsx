@@ -11,7 +11,22 @@ const page = () => {
   const { agent } = useParams();
   const [bot, setBot] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Set sidebar open only on desktop screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) { // md breakpoint
+        setIsSidebarOpen(true);
+      } else {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    handleResize(); // Set initial state
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Simulate loading
   useEffect(() => {
@@ -39,11 +54,25 @@ const page = () => {
   }
 
   return (
-    <div className="bg-[#F7F8F8] px-5 xl:px-0   max-w-[1440px] mx-auto  min-h-screen">
+    <div className="bg-[#F7F8F8] px-5 xl:px-0 max-w-[1440px] mx-auto min-h-screen">
       <Sidebar img={bot.img} aiName={bot.name} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-      <div className={`flex relative transition-all duration-300 min-h-screen flex-col ${
-        isSidebarOpen ? 'ml-[320px] w-[calc(100%-320px)]' : 'ml-[64px] w-[calc(100%-64px)]'
-      }`}>
+      
+      {/* Mobile menu button */}
+      {!isSidebarOpen && (
+        <button
+          onClick={() => setIsSidebarOpen(true)}
+          className="fixed top-32 left-4 z-50 p-2 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow md:hidden"
+        >
+          <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      )}
+      
+      <div className={`flex relative transition-all duration-300 min-h-screen flex-col
+        ${isSidebarOpen ? 'md:ml-[320px] md:w-[calc(100%-320px)]' : 'md:ml-[64px] md:w-[calc(100%-64px)]'}
+        w-full
+      `}>
         <Navbar isSettingPage={true} />
         {/* <div className="relative flex gap-2">
         <Image

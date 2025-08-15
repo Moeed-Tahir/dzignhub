@@ -26,7 +26,7 @@ export default function DesignChatbot() {
 
   return (
     <div
-      className={`fixed ${
+      className={`fixed hidden lg:flex ${
         chatState === "chat" ? "!max-h-[756px]" : ""
       } flex bottom-26 justify-center  items-center right-4 z-50`}
     >
