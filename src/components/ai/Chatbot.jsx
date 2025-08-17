@@ -13,9 +13,11 @@ export default function ChatPage({
   suggestions,
   placeholder,
   tagline,
+  messages,
+  setMessages,
+  showIntro,
+  setShowIntro
 }) {
-  const [messages, setMessages] = useState([]);
-  const [showIntro, setShowIntro] = useState(true);
   console.log("Rendering ChatPage with name:", description);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [conversationId, setConversationId] = useState("")

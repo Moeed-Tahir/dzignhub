@@ -20,7 +20,11 @@ const page = () => {
 
   const [conversations, setConversations] = useState([]);
 
-  const {UserId, isAuthChecking} = useUserStore();
+  const { UserId, isAuthChecking } = useUserStore();
+  const [activeChat, setActiveChat] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [showIntro, setShowIntro] = useState(true);
+
 
   // Set sidebar open only on desktop screens
   useEffect(() => {
@@ -37,10 +41,93 @@ const page = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-   // Fetch conversations function
-   const fetchConversations = async (userId) => {
+  const parseAssetGeneratedMessage = (message) => {
+    if (message.sender !== 'user' && message.text && 
+      (message.text.startsWith('ASSET_GENERATED|') || message.text.startsWith('LOGO_GENERATED|'))) {
+      const parts = message.text.split('|');
+      const imageUrl = parts[1];
+      const messageText = parts[2] || '';
+
+      // Determine asset type from URL or message context
+      const isLogo = messageText.toLowerCase().includes('logo') ||
+        imageUrl.includes('logo') ||
+        messageText.toLowerCase().includes('brand');
+
+      return {
+        ...message,
+        text: messageText,
+        imageUrl: imageUrl,
+        isLogo: isLogo
+      };
+    }
+    return message;
+  };
+
+  const fetchMessages = async (conversationId, userId = null) => {
     try {
-  
+      let verification = await verifyTokenForFetchingMessages();
+      if (verification === null) {
+        console.error("User ID verification failed, cannot fetch messages.");
+        return [];
+      }
+      const userIdToUse = verification;
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/${conversationId}/messages?user_id=${userIdToUse}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        const parsedMessages = data.messages.map(parseAssetGeneratedMessage);
+        setMessages(parsedMessages);
+        console.log(`Loaded ${data.count} messages for conversation ${conversationId}`);
+      } else {
+        console.error('Failed to fetch messages:', data.error);
+        setMessages([]);
+
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      setMessages([]);
+    }
+  };
+
+
+  const verifyTokenForFetchingMessages = async () => {
+    try {
+      console.log("Token verification started");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await res.json();
+      console.log("Token verification response:", data);
+
+      if (data.type === "success") {
+        console.log("Token is valid, user ID:", data.user._id);
+        return data.user._id;
+      }
+    } catch (error) {
+      console.error("Token verification failed", error);
+      return null;
+    }
+  };
+
+
+  // Fetch conversations function
+  const fetchConversations = async (userId) => {
+    try {
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/single-agent/${agents[agent]}/${userId}`, {
         method: 'GET',
         headers: {
@@ -70,10 +157,10 @@ const page = () => {
     const timer = setTimeout(async () => {
       const fetchedBot = aiBots[agent];
       if (!fetchedBot) return notFound();
-      
+
       setBot(fetchedBot);
-      
-     
+
+
       const userId = UserId;
       console.log("User ID:", userId);
 
@@ -83,10 +170,10 @@ const page = () => {
           await verifyToken();
         }
       };
-  
+
       checkAuth();
-      
-      
+
+
       setIsLoading(false);
     }, 800);
 
@@ -109,7 +196,7 @@ const page = () => {
       if (data.type === "success") {
         console.log("Token is valid, user ID:", data.user._id);
         fetchConversations(data.user._id)
-      } 
+      }
     } catch (error) {
       console.error("Token verification failed", error);
     }
@@ -130,8 +217,9 @@ const page = () => {
 
   return (
     <div className="bg-[#F7F8F8] px-5 xl:px-0 max-w-[1440px] mx-auto min-h-screen">
-      <Sidebar img={bot.img} aiName={bot.name} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} conversations={conversations} />
-      
+          setMessages={setMessages}
+      <Sidebar activeChat={activeChat} setActiveChat={setActiveChat} img={bot.img} aiName={bot.name} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} conversations={conversations} onConversationSelect={fetchMessages} setShowIntro={setShowIntro}  setMessages={setMessages} />
+
       {/* Mobile menu button */}
       {!isSidebarOpen && (
         <button
@@ -143,7 +231,7 @@ const page = () => {
           </svg>
         </button>
       )}
-      
+
       <div className={`flex relative transition-all duration-300 min-h-screen flex-col
         ${isSidebarOpen ? 'md:ml-[320px] md:w-[calc(100%-320px)]' : 'md:ml-[64px] md:w-[calc(100%-64px)]'}
         w-full
@@ -172,6 +260,10 @@ const page = () => {
           suggestions={bot.suggestions}
           placeholder={bot.placeholder}
           img={bot.img}
+          messages={messages}
+          setMessages={setMessages}
+          showIntro={showIntro}
+          setShowIntro={setShowIntro}
         />
       </div>
     </div>

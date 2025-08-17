@@ -13,11 +13,12 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { format } from 'timeago.js';
+import { useRouter } from "next/navigation";
 
-const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations }) => {
+const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations,activeChat, setActiveChat, onConversationSelect, setShowIntro, setMessages  }) => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   
-  const [activeChat, setActiveChat] = useState(1);
 
   const filteredConversations = conversations.filter(
     (conv) =>
@@ -32,20 +33,14 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations }) => {
     e.stopPropagation();
     setConversations(conversations.filter((conv) => conv.id !== id));
     if (activeChat === id) {
-      setActiveChat(conversations[0]?.id || null);
+      setActiveChat(conversations[0]?._id || null);
     }
   };
 
   const startNewChat = () => {
-    const newId = Math.max(...conversations.map((c) => c.id)) + 1;
-    const newChat = {
-      id: newId,
-      title: "New conversation",
-      timestamp: "Just now",
-     
-    };
-    setConversations([newChat, ...conversations]);
-    setActiveChat(newId);
+    setMessages([]);
+    setShowIntro(true);
+    router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}`);
   };
 
   return (
@@ -148,7 +143,12 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations }) => {
                   filteredConversations.map((conversation) => (
                     <div
                       key={conversation._id}
-                      onClick={() => setActiveChat(conversation._id)}
+                      onClick={() => {
+                        setActiveChat(conversation._id);
+                        setShowIntro(false);
+                        onConversationSelect && onConversationSelect(conversation._id);
+                        router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${conversation._id}`);
+                      }}
                       className={`group relative p-3 mx-2 my-1 rounded-lg cursor-pointer transition-all ${
                         activeChat === conversation._id
                           ? "bg-blue-50 border border-blue-200"
