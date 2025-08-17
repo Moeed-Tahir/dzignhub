@@ -236,7 +236,7 @@ const page = () => {
   return (
     <div className="bg-[#F7F8F8] px-5 xl:px-0 max-w-[1440px] mx-auto min-h-screen">
           setMessages={setMessages}
-      <Sidebar activeChat={activeChat} setActiveChat={setActiveChat} img={bot.img} aiName={bot.name} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} conversations={conversations} onConversationSelect={fetchMessages} setShowIntro={setShowIntro}  setMessages={setMessages} />
+      <Sidebar activeChat={activeChat} setActiveChat={setActiveChat} img={bot.img} aiName={bot.name} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} conversations={conversations} onConversationSelect={fetchMessages} setShowIntro={setShowIntro}  setMessages={setMessages} setConversations={setConversations} />
 
       {/* Mobile menu button */}
       {!isSidebarOpen && (
