@@ -1,15 +1,18 @@
 "use client";
 import Navbar from "@/components/common/Navbar";
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+
 import Chatbot from "@/components/ai/Chatbot";
 import { notFound } from "next/navigation";
 import aiBots from "@/data/index";
 import Sidebar from "@/components/ai/Sidebar";
 import { useUserStore } from "@/store/store";
+import { useParams, useSearchParams } from "next/navigation"; 
 
 const page = () => {
   const { agent } = useParams();
+  const searchParams = useSearchParams(); 
+  
   const [bot, setBot] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -24,6 +27,21 @@ const page = () => {
   const [activeChat, setActiveChat] = useState("");
   const [messages, setMessages] = useState([]);
   const [showIntro, setShowIntro] = useState(true);
+
+  useEffect(() => {
+    const conversationId = searchParams.get('conversationId');
+    if (conversationId) {
+      console.log("Found conversationId in URL:", conversationId);
+      setActiveChat(conversationId);
+      setShowIntro(false); // Hide intro when loading a specific conversation
+      
+      // Fetch messages for this conversation if we have conversations loaded
+      if (conversations.length > 0) {
+        fetchMessages(conversationId);
+      }
+    }
+  }, [searchParams, conversations]);
+
 
 
   // Set sidebar open only on desktop screens
