@@ -12,53 +12,11 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Image from "next/image";
+import { format } from 'timeago.js';
 
-const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen }) => {
+const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [conversations, setConversations] = useState([
-    {
-      id: 1,
-      title: "Project planning discussion",
-      timestamp: "2 hours ago",
-      preview: "Let's discuss the upcoming project timeline...",
-    },
-    {
-      id: 2,
-      title: "API integration help",
-      timestamp: "Yesterday",
-      preview: "How do I integrate the REST API with...",
-    },
-    {
-      id: 3,
-      title: "React component design",
-      timestamp: "2 days ago",
-      preview: "I need help creating a reusable component...",
-    },
-    {
-      id: 4,
-      title: "Database optimization",
-      timestamp: "3 days ago",
-      preview: "My queries are running slowly, can you...",
-    },
-    {
-      id: 5,
-      title: "UI/UX feedback",
-      timestamp: "1 week ago",
-      preview: "What do you think about this design...",
-    },
-    {
-      id: 6,
-      title: "Code review session",
-      timestamp: "1 week ago",
-      preview: "Can you review this JavaScript function...",
-    },
-    {
-      id: 7,
-      title: "Deployment issues",
-      timestamp: "2 weeks ago",
-      preview: "Having trouble with the production deploy...",
-    },
-  ]);
+  
   const [activeChat, setActiveChat] = useState(1);
 
   const filteredConversations = conversations.filter(
@@ -66,6 +24,9 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen }) => {
       conv.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       conv.preview.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+
+
 
   const deleteConversation = (id, e) => {
     e.stopPropagation();
@@ -81,7 +42,7 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen }) => {
       id: newId,
       title: "New conversation",
       timestamp: "Just now",
-      preview: "",
+     
     };
     setConversations([newChat, ...conversations]);
     setActiveChat(newId);
@@ -186,10 +147,10 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen }) => {
                 ) : (
                   filteredConversations.map((conversation) => (
                     <div
-                      key={conversation.id}
-                      onClick={() => setActiveChat(conversation.id)}
+                      key={conversation._id}
+                      onClick={() => setActiveChat(conversation._id)}
                       className={`group relative p-3 mx-2 my-1 rounded-lg cursor-pointer transition-all ${
-                        activeChat === conversation.id
+                        activeChat === conversation._id
                           ? "bg-blue-50 border border-blue-200"
                           : "hover:bg-gray-50"
                       }`}
@@ -198,18 +159,17 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen }) => {
                         <div className="flex-1 min-w-0">
                           <h3
                             className={`text-sm font-medium truncate ${
-                              activeChat === conversation.id
+                              activeChat === conversation._id
                                 ? "text-blue-900"
                                 : "text-gray-900"
                             }`}
                           >
                             {conversation.title}
                           </h3>
-                          <p className="text-xs text-gray-500 truncate mt-1">
-                            {conversation.preview}
-                          </p>
+                        
+                        
                           <span className="text-xs text-gray-400 mt-2 block">
-                            {conversation.timestamp}
+                            {format(conversation.createdAt)}
                           </span>
                         </div>
                         <div className="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1 ml-2">
@@ -223,7 +183,7 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen }) => {
                           </button>
                           <button
                             onClick={(e) =>
-                              deleteConversation(conversation.id, e)
+                              deleteConversation(conversation._id, e)
                             }
                             className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
                           >
@@ -239,8 +199,8 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen }) => {
               <div className="px-2 space-y-1">
                 {conversations.slice(0, 8).map((conversation) => (
                   <div
-                    key={conversation.id}
-                    onClick={() => setActiveChat(conversation.id)}
+                    key={conversation._id}
+                    onClick={() => setActiveChat(conversation._id)}
                     className={`w-8 h-8 mx-auto rounded-lg cursor-pointer transition-all flex items-center justify-center ${
                       activeChat === conversation.id
                         ? "bg-blue-100 border border-blue-200"
@@ -250,7 +210,7 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen }) => {
                   >
                     <MessageSquare
                       className={`w-4 h-4 ${
-                        activeChat === conversation.id
+                        activeChat === conversation._id
                           ? "text-blue-600"
                           : "text-gray-600"
                       }`}

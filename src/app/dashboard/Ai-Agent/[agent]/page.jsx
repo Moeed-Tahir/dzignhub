@@ -6,12 +6,21 @@ import Chatbot from "@/components/ai/Chatbot";
 import { notFound } from "next/navigation";
 import aiBots from "@/data/index";
 import Sidebar from "@/components/ai/Sidebar";
+import { useUserStore } from "@/store/store";
 
 const page = () => {
   const { agent } = useParams();
   const [bot, setBot] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const agents = {
+    "zara": "brand-designer"
+  }
+
+  const [conversations, setConversations] = useState([]);
+
+  const {UserId, isAuthChecking} = useUserStore();
 
   // Set sidebar open only on desktop screens
   useEffect(() => {
@@ -28,17 +37,83 @@ const page = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Simulate loading
+   // Fetch conversations function
+   const fetchConversations = async (userId) => {
+    try {
+  
+      const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/single-agent/${agents[agent]}/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+
+      const data = await response.json();
+      console.log('Conversations data:', data);
+      if (data.success) {
+        console.log(data.conversations);
+        setConversations(data.conversations);
+        console.log(`Loaded ${data.count} conversations`);
+      } else {
+        console.error('Failed to fetch conversations:', data.error);
+        setConversations([]);
+      }
+    } catch (error) {
+      console.error('Error fetching conversations:', error);
+      setConversations([]);
+    }
+  };
+
+
+  // Load bot and conversations
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       const fetchedBot = aiBots[agent];
       if (!fetchedBot) return notFound();
+      
       setBot(fetchedBot);
+      
+     
+      const userId = UserId;
+      console.log("User ID:", userId);
+
+      const checkAuth = async () => {
+        const token = localStorage.getItem("token");
+        if (token) {
+          await verifyToken();
+        }
+      };
+  
+      checkAuth();
+      
+      
       setIsLoading(false);
-    }, 800); // artificial delay for loading UI
+    }, 800);
 
     return () => clearTimeout(timer);
   }, [agent]);
+
+  const verifyToken = async () => {
+    try {
+      console.log("Token verification started");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await res.json();
+      console.log("Token verification response:", data);
+
+      if (data.type === "success") {
+        console.log("Token is valid, user ID:", data.user._id);
+        fetchConversations(data.user._id)
+      } 
+    } catch (error) {
+      console.error("Token verification failed", error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -55,7 +130,7 @@ const page = () => {
 
   return (
     <div className="bg-[#F7F8F8] px-5 xl:px-0 max-w-[1440px] mx-auto min-h-screen">
-      <Sidebar img={bot.img} aiName={bot.name} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+      <Sidebar img={bot.img} aiName={bot.name} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} conversations={conversations} />
       
       {/* Mobile menu button */}
       {!isSidebarOpen && (
