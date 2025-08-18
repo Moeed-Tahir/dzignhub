@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -107,7 +108,72 @@ const cardsData = [
     text: "Choose your format, download your video, and share it instantly with your audience or team.",
   },
 ];
-const CreationWork = ({ isImage }) => {
+const CreationWork = ({ isImage, mediaData, loading }) => {
+  // Get the creation section data based on the current page type
+  const currentKey = isImage ? 'imageCreation' : 'videoCreation';
+  const strapiCreationSection = mediaData?.[currentKey]?.creation;
+
+  // Static fallback data
+  const staticCardsData = [
+    {
+      id: 1,
+      id_number: "01",
+      title: "Enter Your Prompt",
+      text: "Describe your video idea in detail. The more specific your prompt, the better the results.",
+      image: "/video-creation/work1.svg"
+    },
+    {
+      id: 2,
+      id_number: "02", 
+      title: `Let AI Generate Your ${isImage ? "Image" : "Video"}`,
+      text: `Provide a clear text description of the ${isImage ? "image" : "video"} you want to generate.`,
+      image: "/video-creation/work2.svg"
+    },
+    {
+      id: 3,
+      id_number: "03",
+      title: "Download and Share",
+      text: `Choose your format, download your ${isImage ? "image" : "video"}, and share it instantly with your audience or team.`,
+      image: "/video-creation/work3.svg"
+    },
+  ];
+
+  // Use Strapi data if available, otherwise fallback to static data
+  const getTitle = () => {
+    if (strapiCreationSection?.titlePre || strapiCreationSection?.titleHighlight || strapiCreationSection?.titlePost) {
+      return {
+        pre: strapiCreationSection.titlePre || "",
+        highlight: strapiCreationSection.titleHighlight || (isImage ? "Image" : "Video"),
+        post: strapiCreationSection.titlePost || ""
+      };
+    }
+    return {
+      pre: "How",
+      highlight: isImage ? "Image" : "Video", 
+      post: "Creation works"
+    };
+  };
+
+  const getCards = () => {
+    if (strapiCreationSection?.cards && strapiCreationSection.cards.length > 0) {
+      return strapiCreationSection.cards.map((card, index) => ({
+        id: card.id || index + 1,
+        id_number: card.id_number || `0${index + 1}`,
+        title: card.title || staticCardsData[index]?.title || "",
+        text: card.text || staticCardsData[index]?.text || "",
+        image: getStrapiImageUrl(card.image) || staticCardsData[index]?.image || "/video-creation/work1.svg"
+      }));
+    }
+    return staticCardsData;
+  };
+
+  const titleData = getTitle();
+  const cardsData = getCards();
+  const ctaLabel = strapiCreationSection?.ctaLabel || "Try Now";
+  const ctaSecondaryLabel = strapiCreationSection?.ctaSecondaryLabel || "Join Our Team";
+  const statsImage = getStrapiImageUrl(strapiCreationSection?.statsImage) || "/video-creation/md.png";
+  const statsHeading = strapiCreationSection?.statsHeading || "+18 Million Creators using AllmyAI";
+  const statsParagraph = strapiCreationSection?.statsParagraph || "Our users love using Allmyai to build their marketing assets. We empower them to create assets at scale, faster than ever, with cutting-edge technology.";
   return (
     <>
       <motion.div
@@ -119,11 +185,11 @@ const CreationWork = ({ isImage }) => {
       >
         <motion.div variants={headingVariants}>
           <p className="text-[30px] md:text-[48px] font-semibold text-center text-white">
-            How{" "}
+            {titleData.pre}{" "}
             <span className="text-[#C209C1] font-semibold">
-              {isImage ? "Image" : "Video"}
+              {titleData.highlight}
             </span>{" "}
-            Creation works
+            {titleData.post}
           </p>
         </motion.div>
 
@@ -142,8 +208,8 @@ const CreationWork = ({ isImage }) => {
               <motion.div variants={imageVariants}>
                 <div className="w-auto h-[210px] flex-col flex justify-center items-center">
                   <Image
-                    src={`/video-creation/work${card.id}.svg`}
-                    alt={`Step ${card.id}`}
+                    src={card.image}
+                    alt={`Step ${card.id_number}`}
                     width={400}
                     height={300}
                     className={`${
@@ -200,10 +266,10 @@ const CreationWork = ({ isImage }) => {
                     transition: { duration: 0.2 },
                   }}
                 >
-                  {`${card.id}`}
+                  {`${card.id_number}`}
                 </motion.p>
                 <h3 className="text-[20px] text-center text-white font-semibold ">
-                  {card.prompt}
+                  {card.title}
                 </h3>
               </div>
               <p className="text-[16px] text-center mt-2  text-gray-400">{card.text}</p>
@@ -230,7 +296,7 @@ const CreationWork = ({ isImage }) => {
           }}
           whileTap={{ scale: 0.95 }}
         >
-          Try Now
+          {ctaLabel}
         </motion.button>
 
         <motion.div
@@ -239,8 +305,8 @@ const CreationWork = ({ isImage }) => {
         >
           <motion.div variants={imageVariants} whileHover={{ scale: 1.02 }}>
             <Image
-              src="/video-creation/md.png"
-              alt="Try Now"
+              src={statsImage}
+              alt="Stats"
               width={5000}
               height={3000}
               className="mx-auto mt-[85px] md:h-[90px] h-[76px] w-full   md:w-[470px] "
@@ -251,17 +317,13 @@ const CreationWork = ({ isImage }) => {
             className="text-[30px] mt-4 text-center font-medium"
             variants={statsVariants}
           >
-            <span className="text-[#C209C1] mr-2">+18 Million Creators</span>
-            using AllmyAI
+            <span className="text-[#C209C1] mr-2">{statsHeading}</span>
           </motion.p>
           <motion.p
             className="text-[18px] font-normal text-center mt-3"
             variants={statsVariants}
           >
-            Our users love using Allmyai to build their marketing assets. We
-            empower them to <br />
-            create assets at scale, faster than ever, with cutting-edge
-            technology.
+            {statsParagraph}
           </motion.p>
           <motion.button
             className="md:w-[163px] w-full my-[40px] h-[56px] mx-auto rounded-[999px] cursor-pointer bg-[#BDFF00] font-medium text-[18px]"
@@ -274,7 +336,7 @@ const CreationWork = ({ isImage }) => {
             }}
             whileTap={{ scale: 0.95 }}
           >
-            Join Our Team
+            {ctaSecondaryLabel}
           </motion.button>
         </motion.div>
       </motion.div>

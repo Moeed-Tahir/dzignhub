@@ -16,7 +16,7 @@ export default function MessageBubble({
   isError = false,
 }) {
   const { Avatar } = useUserStore();
-  const isAI = sender === "ai";
+  const isAI = sender != "user";
   const userIcon = Avatar || "/avatar.png";
   // const aiIcon = "/Ai/ai-dp.png";
   const [selected, setSelected] = useState(null);
