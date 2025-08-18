@@ -16,7 +16,9 @@ export default function ChatPage({
   messages,
   setMessages,
   showIntro,
-  setShowIntro
+  setShowIntro,
+  onNewConversation,
+  onRefreshConversations
 }) {
   console.log("Rendering ChatPage with name:", description);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -177,6 +179,7 @@ export default function ChatPage({
       .trim();
   }
 
+
   const handleSend = async (msg) => {
     const newMessages = [...messages, { sender: "user", text: msg }];
     setMessages(newMessages);
@@ -185,21 +188,19 @@ export default function ChatPage({
     setSelectedOptions([]);
     setAiLoading(true);
     setAiTyping(false);
-
+  
     try {
       console.log(`🚀 Calling ${aiName} Python API...`);
-
-      // Python agents backend URL
+  
       const pythonApiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || "http://127.0.0.1:8000";
       const userId = UserId;
-
-      // Prepare previous messages for context
+  
+      // Prepare previous messages for context (EXCLUDE the current message we just added)
       const previousMessages = messages.map(message => ({
         role: message.sender === "user" ? "user" : "assistant",
         content: message.text
       }));
-
-      // Map AI names to Python endpoints
+  
       let endpoint;
       switch (aiName.toLowerCase()) {
         case "zara":
@@ -220,10 +221,7 @@ export default function ChatPage({
         default:
           endpoint = "brand-designer";
       }
-      console.log("Sending Python Agent Req")
-      console.log(userId)
-
-      // Call Python agent endpoint with previous messages
+  
       const response = await fetch(`${pythonApiUrl}/agents/${endpoint}`, {
         method: 'POST',
         headers: {
@@ -233,46 +231,56 @@ export default function ChatPage({
           prompt: msg,
           user_id: userId,
           conversation_id: conversationId == "" ? null : conversationId,
-          previous_messages: previousMessages, // Add this!
-          context: `${aiName} AI Assistant` // Add context too
+          previous_messages: previousMessages, 
+          context: `${aiName} AI Assistant`
         })
       });
-
+  
       const data = await response.json();
-
+  
       if (data.success) {
         const aiResponse = data.response;
         console.log('✅ Python Agent API response:', aiResponse);
-
-        // Check if this is a logo generation response
-        if (aiResponse.startsWith('ASSET_GENERATED|')) {
-          const parts = aiResponse.split('|');
-          const imageUrl = parts[1];
-          const message = parts[2];
-
-          setAiLoading(false);
-          setAiTyping(true);
-
-          setTimeout(() => {
+  
+        // Handle new conversation creation
+        if (data.is_new_conversation && data.conversation_id) {
+          console.log("[DEBUG] New conversation created:", data.conversation_id);
+          
+          setConversationId(data.conversation_id);
+          
+          const newUrl = `${window.location.pathname}?conversationId=${data.conversation_id}`;
+          window.history.pushState({}, '', newUrl);
+          
+          if (onNewConversation) {
+            onNewConversation(data.conversation_id);
+          }
+          
+          if (onRefreshConversations) {
+            onRefreshConversations();
+          }
+        }
+  
+        // ✅ FIXED: Only add AI response once, no duplicates
+        setAiLoading(false);
+        setAiTyping(true);
+  
+        setTimeout(() => {
+          if (aiResponse.startsWith('ASSET_GENERATED|')) {
+            const parts = aiResponse.split('|');
+            const imageUrl = parts[1];
+            const message = parts[2];
+  
             setMessages(prevMessages => [
               ...prevMessages,
               {
                 sender: "ai",
                 text: message,
-                imageUrl: imageUrl, // Add image URL to message
+                imageUrl: imageUrl,
                 isLogo: true,
                 typing: true
               }
             ]);
-            setAiTyping(false);
-          }, 700);
-
-        } else {
-          // Regular text response
-          setAiLoading(false);
-          setAiTyping(true);
-
-          setTimeout(() => {
+          } else {
             setMessages(prevMessages => [
               ...prevMessages,
               {
@@ -281,12 +289,23 @@ export default function ChatPage({
                 typing: true
               }
             ]);
-            setAiTyping(false);
-          }, 700);
-        }
+          }
+          setAiTyping(false);
+        }, 700);
+  
+      } else {
+        console.error("API Error:", data.error);
+        setAiLoading(false);
+        setMessages(prevMessages => [
+          ...prevMessages,
+          {
+            sender: "ai",
+            text: "Sorry, I encountered an error. Please try again.",
+            isError: true
+          }
+        ]);
       }
-
-
+  
     } catch (error) {
       console.error(`❌ Error calling ${aiName} Python API:`, error);
       setAiLoading(false);

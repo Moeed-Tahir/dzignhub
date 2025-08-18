@@ -169,6 +169,26 @@ const page = () => {
     }
   };
 
+  // Add these functions to your page.jsx component
+const handleNewConversation = (conversationId) => {
+  console.log("[DEBUG] Handling new conversation:", conversationId);
+  setActiveChat(conversationId);
+  setShowIntro(false);
+  
+  // Refresh conversations list
+  if (UserId) {
+    fetchConversations(UserId);
+  }
+};
+
+const refreshConversationsList = () => {
+  if (UserId) {
+    fetchConversations(UserId);
+  }
+};
+
+// Add these to your page.jsx component before the return statement
+
 
   // Load bot and conversations
   useEffect(() => {
@@ -282,6 +302,9 @@ const page = () => {
           setMessages={setMessages}
           showIntro={showIntro}
           setShowIntro={setShowIntro}
+          onNewConversation={handleNewConversation}          // Pass callback
+  onRefreshConversations={refreshConversationsList}  // Pass callback
+
         />
       </div>
     </div>
