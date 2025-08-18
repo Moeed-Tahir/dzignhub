@@ -65,8 +65,13 @@ const page = () => {
       <div className="mx-auto ">
         <CreationWork isImage={false} mediaData={mediaData} loading={loading} />
         <ToolKit isImage={false} mediaData={mediaData} loading={loading} />
-        <FAQ />
-        <DownloadSection />
+        <FAQ 
+          faqData={mediaData?.videoCreation?.faq?.faqs} 
+          title={mediaData?.videoCreation?.faq?.title}
+          subtitle={mediaData?.videoCreation?.faq?.subtitle}
+          loading={loading}
+        />
+        <DownloadSection isImage={false} mediaData={mediaData} loading={loading} />
         <Footer />
       </div>
     </div>

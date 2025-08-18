@@ -42,7 +42,11 @@ function page() {
           </div>
         
       </div>
-      <FAQ />
+      <FAQ 
+        faqData={contactData.faqSection?.faqs} 
+        title={contactData.faqSection?.title}
+        subtitle={contactData.faqSection?.subtitle}
+      />
       <Footer />
     </div>
   );

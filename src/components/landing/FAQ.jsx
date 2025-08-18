@@ -44,7 +44,12 @@ const faqData = [
   },
 ];
 
-function FAQ() {
+function FAQ({ faqData: propFaqData, title, subtitle, loading }) {
+  // Use passed faqData or fallback to static data
+  const currentFaqData = propFaqData && propFaqData.length > 0 ? propFaqData : faqData;
+  const currentTitle = title || "Have questions?";
+  const currentSubtitle = subtitle || "Have questions about how our Text-to-Image AI works? Find the answers to the most common inquiries below. If you don't see your question, feel free to reach out!";
+
   const [openIndex, setOpenIndex] = useState(null);
   const ref = useRef(null);
   const isInView = useInView(ref, {
@@ -152,9 +157,7 @@ function FAQ() {
                 <span className="text-[#C209C1]">questions?</span>
               </motion.div>
               <motion.p variants={titleVariants} className="text-[18px]">
-                Have questions about how our Text-to-Image AI works? Find the
-                answers to the most common inquiries below. If you don't see
-                your question, feel free to reach out!
+                {currentSubtitle}
               </motion.p>
             </div>
             {/* <motion.button 
@@ -169,7 +172,7 @@ function FAQ() {
             variants={faqListVariants}
             className="max-w-[741px] flex flex-col gap-[16px]"
           >
-            {faqData.map((item, index) => (
+            {currentFaqData.map((item, index) => (
               <motion.div
                 key={index}
                 variants={faqItemVariants}

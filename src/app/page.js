@@ -141,7 +141,11 @@ export default function Landing() {
       </div>
 
       <Testimonials testimonialSection={landingData.testimonialSection} />
-      <FAQ />
+      <FAQ 
+        faqData={landingData.faqSection?.faqs} 
+        title={landingData.faqSection?.title}
+        subtitle={landingData.faqSection?.subtitle}
+      />
 
       <Assistants assistantSection={landingData.assistantSection} />
       <Footer />
