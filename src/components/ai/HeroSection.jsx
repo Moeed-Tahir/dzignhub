@@ -2,9 +2,54 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-function Hero({ isImage }) {
+import { getStrapiImageUrl } from "@/utils/strapi";
+
+function Hero({ isImage, isVideoPage, mediaData, loading }) {
   const router = useRouter();
   const [prompt, setPrompt] = React.useState("");
+
+  // Determine the media key based on props
+  const mediaKey = isImage ? 'imageCreation' : 'videoCreation';
+  
+  // Get Strapi data for the current media type
+  const strapiHeroData = mediaData?.[mediaKey]?.hero;
+
+  // Prepare dynamic content with fallbacks
+  const getTitle = () => {
+    return strapiHeroData?.title || (isImage ? "Image Creation" : "Video Creation");
+  };
+
+  const getSubtitle = () => {
+    return strapiHeroData?.subtitle || "Create stunning videos effortlessly using powerful manual tools or let our AI assistants help you craft content faster.";
+  };
+
+  const getPlaceholderPrompt = () => {
+    return strapiHeroData?.placeholderPrompt || "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape";
+  };
+
+  const getCtaLabel = () => {
+    return strapiHeroData?.ctaLabel || `Create ${isImage ? "image" : "video"}`;
+  };
+
+  const getMainImageUrl = () => {
+    return getStrapiImageUrl(strapiHeroData?.mainImage) || "/video-creation/main.jpg";
+  };
+
+  const getLeftImageUrl = () => {
+    return getStrapiImageUrl(strapiHeroData?.leftImage) || "/video-creation/left1.jpg";
+  };
+
+  const getRightImageUrl = () => {
+    return getStrapiImageUrl(strapiHeroData?.rightImage) || "/video-creation/right.jpg";
+  };
+
+  const title = getTitle();
+  const subtitle = getSubtitle();
+  const placeholderPrompt = getPlaceholderPrompt();
+  const ctaLabel = getCtaLabel();
+  const mainImageUrl = getMainImageUrl();
+  const leftImageUrl = getLeftImageUrl();
+  const rightImageUrl = getRightImageUrl();
 
   const saveGeneration = async(type, url, prompt) => {
     const data = {
@@ -66,7 +111,7 @@ function Hero({ isImage }) {
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.5 }}
-          src={"/video-creation/main.jpg"}
+          src={mainImageUrl}
           className="md:rounded-t-[24px] lg:max-w-[778px] w-[90%] rounded-t-[32px] h-[220px] lg:h-[365px] overflow-hidden lg:w-full mx-auto object-cover object-top"
         />
       </motion.div>
@@ -98,7 +143,7 @@ function Hero({ isImage }) {
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          src={"/video-creation/left1.jpg"}
+          src={leftImageUrl}
           className="lg:w-[321px] lg:!h-[292px] h-[125px] w-[143px] object-cover rounded-[16px]  "
         />
       </motion.div>
@@ -130,7 +175,7 @@ function Hero({ isImage }) {
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.6, delay: 0.9 }}
-          src={"/video-creation/right.jpg"}
+          src={rightImageUrl}
           className="lg:w-[321px] lg:!h-[292px] h-[125px] w-[143px] object-cover rounded-[16px]  "
         />
       </motion.div>
@@ -153,7 +198,7 @@ function Hero({ isImage }) {
             transition={{ duration: 0.6, delay: 0.7 }}
             className="font-bold lg:text-[40px] xl:text-[68px] mx-auto  md:text-[28px] text-[24px]"
           >
-            {isImage ? "Image Creation" : "Video Creation"}
+            {title}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -161,8 +206,7 @@ function Hero({ isImage }) {
             transition={{ duration: 0.6, delay: 0.9 }}
             className="md:text-[20px] text-[18px] md:max-w-[70%] max-w-[90%] mx-auto"
           >
-            Create stunning videos effortlessly using powerful manual tools or
-            let our AI assistants help you craft content faster.{" "}
+            {subtitle}
           </motion.p>
         </motion.div>
         <motion.div
@@ -181,7 +225,7 @@ function Hero({ isImage }) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: 1.5 }}
               className="text-[18px] text-white w-[70%] focus:outline-none bg-transparent placeholder:text-white"
-              placeholder="A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+              placeholder={placeholderPrompt}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
             />
@@ -203,7 +247,7 @@ function Hero({ isImage }) {
                 className="w-[24px] h-[24px] object-contain"
               />
               <span className="text-[#1B1F3B]">
-                Create {isImage ? "image" : "video"}
+                {ctaLabel}
               </span>
             </motion.button>
           </motion.div>
@@ -230,7 +274,7 @@ function Hero({ isImage }) {
             >
               <input
                 className="lg:text-[18px] focus: text-[16px] text-white focus:outline-none bg-transparent placeholder:text-white"
-                placeholder="A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+                placeholder={placeholderPrompt}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
@@ -261,7 +305,7 @@ function Hero({ isImage }) {
                 transition={{ duration: 0.4, delay: 1.9 }}
                 className="text-[#1B1F3B]  lg:text-[18px] text-[16px]"
               >
-                Create {isImage ? "image" : "video"}
+                {ctaLabel}
               </motion.p>
             </motion.div>
           </motion.div>

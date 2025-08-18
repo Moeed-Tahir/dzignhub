@@ -302,3 +302,110 @@ export const fetchAssistantPageData = async () => {
     return {};
   }
 };
+
+// Fetch media page data with hero sections and scroll sections
+export const fetchMediaPageData = async () => {
+  try {
+    console.log('Strapi: Starting API call to fetch media page data...');
+    const response = await fetch(
+      `${STRAPI_URL}/api/media-pages?populate[hero_section][populate]=*&populate[scroll_section][populate][cards][populate]=*&populate[creation_section][populate][cards][populate]=*&populate[toolkit_section][populate][tabs][populate]=*`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Strapi: Media page API response received:', data);
+    
+    if (data.data && data.data.length > 0) {
+      // Create a map of key to sections data for easy lookup
+      const mediaData = {};
+      data.data.forEach(item => {
+        console.log('Strapi: Processing media page item:', item);
+        
+        // Process hero_section array
+        if (item.hero_section && item.hero_section.length > 0) {
+          item.hero_section.forEach(heroSection => {
+            if (heroSection.key) {
+              if (!mediaData[heroSection.key]) {
+                mediaData[heroSection.key] = {};
+              }
+              mediaData[heroSection.key].hero = {
+                title: heroSection.title,
+                subtitle: heroSection.subtitle,
+                placeholderPrompt: heroSection.placeholderPrompt,
+                ctaLabel: heroSection.ctaLabel,
+                mainImage: heroSection.mainImage,
+                leftImage: heroSection.leftImage,
+                rightImage: heroSection.rightImage
+              };
+            }
+          });
+        }
+        
+        // Process scroll_section array
+        if (item.scroll_section && item.scroll_section.length > 0) {
+          item.scroll_section.forEach(scrollSection => {
+            if (scrollSection.key) {
+              if (!mediaData[scrollSection.key]) {
+                mediaData[scrollSection.key] = {};
+              }
+              mediaData[scrollSection.key].scroll = {
+                title: scrollSection.title,
+                cards: scrollSection.cards || []
+              };
+            }
+          });
+        }
+        
+        // Process creation_section array
+        if (item.creation_section && item.creation_section.length > 0) {
+          item.creation_section.forEach(creationSection => {
+            if (creationSection.key) {
+              if (!mediaData[creationSection.key]) {
+                mediaData[creationSection.key] = {};
+              }
+              mediaData[creationSection.key].creation = {
+                titlePre: creationSection.title_pre,
+                titleHighlight: creationSection.title_highlight,
+                titlePost: creationSection.title_post,
+                subtitle: creationSection.subtitle,
+                cards: creationSection.cards || [],
+                ctaLabel: creationSection.cta_label,
+                ctaSecondaryLabel: creationSection.cta_secondary_label,
+                statsImage: creationSection.stats_image,
+                statsHeading: creationSection.stats_heading,
+                statsParagraph: creationSection.stats_paragraph
+              };
+            }
+          });
+        }
+
+        // Process toolkit_section array
+        if (item.toolkit_section && item.toolkit_section.length > 0) {
+          item.toolkit_section.forEach(toolkitSection => {
+            if (toolkitSection.key) {
+              if (!mediaData[toolkitSection.key]) {
+                mediaData[toolkitSection.key] = {};
+              }
+              mediaData[toolkitSection.key].toolkit = {
+                heading: toolkitSection.heading,
+                tabs: toolkitSection.tabs || []
+              };
+            }
+          });
+        }
+      });
+      console.log('Strapi: Final media data:', mediaData);
+      return mediaData;
+    }
+    
+    console.log('Strapi: No media data found, returning empty object');
+    return {};
+    
+  } catch (error) {
+    console.error('Strapi: Error fetching media page data:', error);
+    return {};
+  }
+};
