@@ -4,65 +4,93 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function GSAPScrollSection({ isImage }) {
-  const cardData = [
-    {
-      id: "01",
-      side: "left",
-      title: `${isImage ? "Image" : "Video"} Creation`,
-      subtitle:
-        "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
-      color: "bg-[#EBEBEB]",
-      image: `/${isImage ? "image" : "video"}-creation/1.png`,
-      button: "Create",
-    },
-    {
-      id: "02",
-      side: "right",
-      title: "Share your Video",
-      subtitle:
-        "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
-      color: "bg-[#EBEBEB]",
-      button: "Community",
-      image: `/${isImage ? "image" : "video"}-creation/2.png`,
-    },
-    {
-      id: "03",
-      side: "left",
-      title: "Edit all vidoes",
-      subtitle:
-        "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
-      color: "bg-[#EBEBEB]",
-      button: "Customization",
-      image: `/${isImage ? "image" : "video"}-creation/3.png`,
-    },
-    {
-      id: "04",
-      side: "right",
-      title: "Save into your Folders",
-      subtitle:
-        "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
-      color: "bg-[#EBEBEB]",
-      button: "Storage",
-      image: `/${isImage ? "image" : "video"}-creation/4.png`,
-    },
-    {
-      id: "05",
-      side: "left",
-      title: "Download the Video",
-      subtitle:
-        "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
-      color: "bg-[#EBEBEB]",
-      button: "Storage",
+export default function GSAPScrollSection({ isImage, mediaData, loading }) {
+  // Get the scroll section data for the current page type
+  const pageKey = isImage ? "imageCreation" : "videoCreation";
+  const strapiScrollData = mediaData?.[pageKey]?.scroll;
 
-      image: `/${isImage ? "image" : "video"}-creation/5.png`,
-    },
-  ];
+  // Prepare dynamic data or fallback to static
+  const getDynamicCardData = () => {
+    if (strapiScrollData?.cards && strapiScrollData.cards.length > 0) {
+      return strapiScrollData.cards.map(card => ({
+        id: card.id_number || "01",
+        side: card.side || "left",
+        title: card.title || `${isImage ? "Image" : "Video"} Creation`,
+        subtitle: card.subtitle || "Default subtitle text",
+        color: "bg-[#EBEBEB]",
+        image: getStrapiImageUrl(card.image) || `/${isImage ? "image" : "video"}-creation/1.png`,
+        button: card.button_text || "Create",
+      }));
+    }
+    
+    // Fallback to static data
+    return [
+      {
+        id: "01",
+        side: "left",
+        title: `${isImage ? "Image" : "Video"} Creation`,
+        subtitle:
+          "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+        color: "bg-[#EBEBEB]",
+        image: `/${isImage ? "image" : "video"}-creation/1.png`,
+        button: "Create",
+      },
+      {
+        id: "02",
+        side: "right",
+        title: "Share your Video",
+        subtitle:
+          "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+        color: "bg-[#EBEBEB]",
+        button: "Community",
+        image: `/${isImage ? "image" : "video"}-creation/2.png`,
+      },
+      {
+        id: "03",
+        side: "left",
+        title: "Edit all vidoes",
+        subtitle:
+          "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+        color: "bg-[#EBEBEB]",
+        button: "Customization",
+        image: `/${isImage ? "image" : "video"}-creation/3.png`,
+      },
+      {
+        id: "04",
+        side: "right",
+        title: "Save into your Folders",
+        subtitle:
+          "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+        color: "bg-[#EBEBEB]",
+        button: "Storage",
+        image: `/${isImage ? "image" : "video"}-creation/4.png`,
+      },
+      {
+        id: "05",
+        side: "left",
+        title: "Download the Video",
+        subtitle:
+          "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+        color: "bg-[#EBEBEB]",
+        button: "Storage",
+        image: `/${isImage ? "image" : "video"}-creation/5.png`,
+      },
+    ];
+  };
+
+  // Get the section title
+  const getSectionTitle = () => {
+    return strapiScrollData?.title || "You need us if";
+  };
+
+  const cardData = getDynamicCardData();
+  const sectionTitle = getSectionTitle();
   const containerRef = useRef(null);
   const titleRef = useRef(null);
   const leftCardsRef = useRef([]);
@@ -165,7 +193,7 @@ export default function GSAPScrollSection({ isImage }) {
             ref={titleRef}
             className="text-6xl md:text-[68px] font-bold text-black text-center z-0 relative"
           >
-            You need us if
+            {sectionTitle}
           </h1>
 
           <div className="absolute left-8 md:left-16 top-1/2 -translate-y-1/2 space-y-8">
@@ -236,7 +264,7 @@ export default function GSAPScrollSection({ isImage }) {
 
         <div className="lg:hidden flex justify-center flex-col my-[55px] mx-auto items-center w-[90%]">
           <h1 className="text-4xl md:text-5xl font-bold text-black text-center mb-8">
-            You Need Us If
+            {sectionTitle}
           </h1>
 
           <div className="space-y-6">

@@ -1,6 +1,6 @@
 "use client";
 import Hero from "@/components/ai/HeroSection";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/landing/Navbar";
 import Sidebar from "@/components/landing/Sidebar";
 import GSAPScrollSection from "@/components/gsap-scroll-section";
@@ -9,9 +9,31 @@ import Footer from "@/components/common/Footer";
 import CreationWork from "@/components/creation/CreationWork";
 import ToolKit from "@/components/creation/ToolKit";
 import DownloadSection from "@/components/creation/DownloadSection";
+import { fetchMediaPageData } from "@/utils/strapi";
 
 const page = () => {
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [mediaData, setMediaData] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  // Fetch media data on component mount
+  useEffect(() => {
+    const loadMediaData = async () => {
+      try {
+        setLoading(true);
+        console.log('ImageCreation: Starting to fetch media data...');
+        const data = await fetchMediaPageData();
+        console.log('ImageCreation: Fetched media data:', data);
+        setMediaData(data);
+      } catch (error) {
+        console.error('ImageCreation: Error loading media data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadMediaData();
+  }, []);
   return (
     <div className={`overflow-hidden w-full relative ${sidebarOpen ? "" : ""}`}>
       <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
@@ -23,7 +45,7 @@ const page = () => {
           />
         </div>
         <div className="max-w-[1440px] mx-auto">
-          <Hero isImage={true} />
+          <Hero isImage={true} mediaData={mediaData} loading={loading} />
         </div>
       </div>
       <div className="mt-[55px] md:w-full w-[90%] mx-auto  ">
@@ -37,14 +59,19 @@ const page = () => {
         </p>
       </div>
       <div className=" md:mt-[-200px] ">
-        <GSAPScrollSection isImage={true} />
+        <GSAPScrollSection isImage={true} mediaData={mediaData} loading={loading} />
       </div>
 
       <div className="mx-auto ">
-        <CreationWork isImage={true} />
-        <ToolKit />
-        <FAQ />
-        <DownloadSection />
+        <CreationWork isImage={true} mediaData={mediaData} loading={loading} />
+        <ToolKit isImage={true} mediaData={mediaData} loading={loading} />
+        <FAQ 
+          faqData={mediaData?.imageCreation?.faq?.faqs} 
+          title={mediaData?.imageCreation?.faq?.title}
+          subtitle={mediaData?.imageCreation?.faq?.subtitle}
+          loading={loading}
+        />
+        <DownloadSection isImage={true} mediaData={mediaData} loading={loading} />
         <Footer />
       </div>
     </div>

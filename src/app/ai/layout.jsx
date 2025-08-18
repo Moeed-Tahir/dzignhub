@@ -14,12 +14,13 @@ import AiResults from "@/components/common/ai/AiResults";
 import SmartSupport from "@/components/common/ai/SmartSupport";
 import { usePathname } from "next/navigation";
 import { notFound } from "next/navigation";
-import { fetchAssistantPageData } from "@/utils/strapi";
+import { fetchAssistantPageData, fetchFAQData } from "@/utils/strapi";
 
 export default function RootLayout({ children }) {
   console.log('Layout: Component rendering');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [assistantData, setAssistantData] = useState({});
+  const [faqData, setFaqData] = useState(null);
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const slug = pathname?.split("/").pop();
@@ -110,7 +111,12 @@ export default function RootLayout({ children }) {
         <AiResults />
         <SmartSupport currentKey={currentKey} assistantData={assistantData} loading={loading} />
         <Users />
-        <FAQ />
+        <FAQ 
+          faqData={assistantData?.[currentKey]?.faqSection?.faqs} 
+          title={assistantData?.[currentKey]?.faqSection?.title}
+          subtitle={assistantData?.[currentKey]?.faqSection?.subtitle}
+          loading={loading}
+        />
       </div>
 
       <div className="bg-[#1B1F3B]">

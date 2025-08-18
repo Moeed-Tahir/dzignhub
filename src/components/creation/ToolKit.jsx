@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -131,8 +132,48 @@ const tabData = {
   },
 };
 
-export default function DzignhubToolkit() {
-  const [activeTab, setActiveTab] = useState("Image Creation");
+export default function DzignhubToolkit({ isImage, mediaData, loading }) {
+  // Get the appropriate key based on isImage prop
+  const currentKey = isImage ? 'imageCreation' : 'videoCreation';
+  
+  // Get Strapi data for toolkit section
+  const strapiToolkitSection = mediaData?.[currentKey]?.toolkit;
+
+  // Prepare heading from Strapi or fallback to static
+  const getHeading = () => {
+    return strapiToolkitSection?.heading || (isImage ? "Allmyai Toolkit" : "Allmyai Toolkit");
+  };
+
+  // Prepare tab data from Strapi or fallback to static
+  const getTabData = () => {
+    if (strapiToolkitSection?.tabs && strapiToolkitSection.tabs.length > 0) {
+      const dynamicTabData = {};
+      strapiToolkitSection.tabs.forEach(tab => {
+        // Convert paragraphs objects to text strings
+        const content = tab.paragraphs?.map(paragraph => 
+          typeof paragraph === 'string' ? paragraph : paragraph.text || paragraph
+        ) || [];
+        
+        dynamicTabData[tab.label] = {
+          title: tab.title,
+          content: content,
+          image: getStrapiImageUrl(tab.image),
+          slug: tab.slug
+        };
+      });
+      return dynamicTabData;
+    }
+    // Fallback to static tabData
+    return tabData;
+  };
+
+  const currentTabData = getTabData();
+  const heading = getHeading();
+  
+  const [activeTab, setActiveTab] = useState(() => {
+    const tabKeys = Object.keys(currentTabData);
+    return tabKeys.length > 0 ? tabKeys[0] : "Image Creation";
+  });
 
   return (
     <motion.section 
@@ -148,8 +189,14 @@ export default function DzignhubToolkit() {
             className="text-[30px] md:text-[48px] font-medium md:font-semibold mb-8"
             variants={headingVariants}
           >
-            <span className="text-[#C209C1]">Allmyai</span>
-            <span className="text-white"> Toolkit</span>
+            {heading.includes('Allmyai') ? (
+              <>
+                <span className="text-[#C209C1]">Allmyai</span>
+                <span className="text-white"> {heading.replace('Allmyai', '').trim()}</span>
+              </>
+            ) : (
+              <span className="text-white">{heading}</span>
+            )}
           </motion.h1>
 
           <motion.div 
@@ -157,7 +204,7 @@ export default function DzignhubToolkit() {
             variants={tabsVariants}
           >
             <div className="flex border-b border-gray-600">
-              {Object.keys(tabData).map((tab, index) => (
+              {Object.keys(currentTabData).map((tab, index) => (
                 <motion.button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -207,11 +254,11 @@ export default function DzignhubToolkit() {
                 className="text-[20px] md:text-[24px] font-medium md:font-semibold text-white leading-tight"
                 variants={contentItemVariants}
               >
-                {tabData[activeTab].title}
+                {currentTabData[activeTab]?.title}
               </motion.h2>
 
               <motion.div className="space-y-4" variants={contentItemVariants}>
-                {tabData[activeTab].content.map((paragraph, index) => (
+                {currentTabData[activeTab]?.content?.map((paragraph, index) => (
                   <motion.p
                     key={index}
                     className="text-gray-300 font-normal text-lg leading-relaxed"
@@ -243,7 +290,7 @@ export default function DzignhubToolkit() {
                   }}
                 >
                   <Image
-                    src={tabData[activeTab].image || "/placeholder.svg"}
+                    src={currentTabData[activeTab]?.image || "/placeholder.svg"}
                     alt={`${activeTab} interface`}
                     width={800}
                     height={600}
