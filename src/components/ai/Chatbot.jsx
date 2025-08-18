@@ -586,11 +586,7 @@ export default function ChatPage({
             tagline={tagline}
           />
         )}
-        {
-          showIntro == false && conversationId !== "" ? (
-            <p>Conversation ID: {conversationId}</p>
-          ) : null
-        }
+        
         {allMessages.map((msg, index) => (
           <MessageBubble
             key={index}
