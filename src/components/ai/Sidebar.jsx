@@ -16,7 +16,7 @@ import { format } from 'timeago.js';
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/store";
 
-const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeChat, setActiveChat, onConversationSelect, setShowIntro, setMessages }) => {
+const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeChat, setActiveChat, onConversationSelect, setShowIntro, setMessages, setConversations }) => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -25,6 +25,85 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+
+  // states for handelling update title feature
+  const [editingConversationId, setEditingConversationId] = useState(null);
+  const [editingTitle, setEditingTitle] = useState("");
+  const [isUpdatingTitle, setIsUpdatingTitle] = useState(false);
+
+  // ADD THIS FUNCTION TO START EDITING
+  const startEditingTitle = (conversationId, currentTitle, e) => {
+    e.stopPropagation();
+    setEditingConversationId(conversationId);
+    setEditingTitle(currentTitle);
+  };
+
+  // ADD THIS FUNCTION TO CANCEL EDITING
+  const cancelEditingTitle = () => {
+    setEditingConversationId(null);
+    setEditingTitle("");
+  };
+
+  // ADD THIS FUNCTION TO SAVE TITLE
+  const saveConversationTitle = async (conversationId) => {
+    if (!editingTitle.trim()) {
+      alert("Title cannot be empty");
+      return;
+    }
+
+    setIsUpdatingTitle(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/${conversationId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title: editingTitle.trim()
+          })
+        }
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        console.log('[DEBUG] Title updated successfully');
+
+        // Update local state
+        const updatedConversations = conversations.map(conv =>
+          conv._id === conversationId
+            ? { ...conv, title: editingTitle.trim() }
+            : conv
+        );
+        setConversations(updatedConversations);
+
+        // Clear editing state
+        setEditingConversationId(null);
+        setEditingTitle("");
+
+      } else {
+        console.error('Title update failed:', data.error);
+        alert('Failed to update title. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error updating title:', error);
+      alert('Failed to update title. Please check your connection and try again.');
+    } finally {
+      setIsUpdatingTitle(false);
+    }
+  };
+
+  // ADD THIS FUNCTION TO HANDLE ENTER KEY
+  const handleTitleKeyPress = (e, conversationId) => {
+    if (e.key === 'Enter') {
+      saveConversationTitle(conversationId);
+    } else if (e.key === 'Escape') {
+      cancelEditingTitle();
+    }
+  };
+
+
 
 
   const searchConversations = async (query) => {
@@ -82,11 +161,61 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
 
 
 
-  const deleteConversation = (id, e) => {
+  const deleteConversation = async (id, e) => {
     e.stopPropagation();
-    setConversations(conversations.filter((conv) => conv.id !== id));
-    if (activeChat === id) {
-      setActiveChat(conversations[0]?._id || null);
+
+    try {
+      // Show confirmation dialog
+      if (!window.confirm('Are you sure you want to delete this conversation? This action cannot be undone.')) {
+        return;
+      }
+
+      console.log(`[DEBUG] Deleting conversation: ${id}`);
+
+      // Call backend API to delete conversation
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/${id}?user_id=${UserId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        console.log('[DEBUG] Conversation deleted successfully');
+
+        // Remove from local state
+        const updatedConversations = conversations.filter((conv) => conv._id !== id);
+        setConversations(updatedConversations);
+
+        // Handle active chat logic
+        if (activeChat === id) {
+          if (updatedConversations.length > 0) {
+            // Set to first remaining conversation
+            setActiveChat(updatedConversations[0]._id);
+            // Navigate to the new conversation
+            router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${updatedConversations[0]._id}`);
+          } else {
+            // No conversations left, go to new chat
+            setActiveChat(null);
+            setShowIntro(true);
+            setMessages([]);
+            router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}`);
+          }
+        }
+
+      } else {
+        console.error('Delete failed:', data.error);
+        alert('Failed to delete conversation. Please try again.');
+      }
+
+    } catch (error) {
+      console.error('Error deleting conversation:', error);
+      alert('Failed to delete conversation. Please check your connection and try again.');
     }
   };
 
@@ -276,47 +405,107 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                         <div
                           key={conversation._id}
                           onClick={() => {
+                            // Don't navigate if we're editing the title
+                            if (editingConversationId === conversation._id) return;
+                            
                             setActiveChat(conversation._id);
                             setShowIntro(false);
                             onConversationSelect && onConversationSelect(conversation._id);
                             router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${conversation._id}`);
                           }}
-                          className={`group relative p-3 mx-2 my-1 rounded-lg cursor-pointer transition-all ${activeChat === conversation._id
+                          className={`group relative p-3 mx-2 my-1 rounded-lg cursor-pointer transition-all ${
+                            activeChat === conversation._id
                               ? "bg-blue-50 border border-blue-200"
                               : "hover:bg-gray-50"
-                            }`}
+                          }`}
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1 min-w-0">
-                              <h3
-                                className={`text-sm font-medium truncate ${activeChat === conversation._id
-                                    ? "text-blue-900"
-                                    : "text-gray-900"
+                              {/* UPDATED TITLE SECTION WITH EDITING CAPABILITY */}
+                              {editingConversationId === conversation._id ? (
+                                <div className="flex items-center space-x-2">
+                                  <input
+                                    type="text"
+                                    value={editingTitle}
+                                    onChange={(e) => setEditingTitle(e.target.value)}
+                                    onKeyPress={(e) => handleTitleKeyPress(e, conversation._id)}
+                                    onBlur={() => saveConversationTitle(conversation._id)}
+                                    className="text-sm font-medium bg-white border border-blue-300 rounded px-2 py-1 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    autoFocus
+                                    disabled={isUpdatingTitle}
+                                  />
+                                  {isUpdatingTitle && (
+                                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
+                                  )}
+                                </div>
+                              ) : (
+                                <h3
+                                  className={`text-sm font-medium truncate ${
+                                    activeChat === conversation._id
+                                      ? "text-blue-900"
+                                      : "text-gray-900"
                                   }`}
-                              >
-                                {conversation.title}
-                              </h3>
+                                >
+                                  {conversation.title}
+                                </h3>
+                              )}
+                              
                               <span className="text-xs text-gray-400 mt-2 block">
                                 {format(conversation.createdAt)}
                               </span>
                             </div>
+                            
+                            {/* UPDATED ACTION BUTTONS */}
                             <div className="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1 ml-2">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                }}
-                                className="p-1 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600"
-                              >
-                                <Edit3 className="w-3 h-3" />
-                              </button>
-                              <button
-                                onClick={(e) =>
-                                  deleteConversation(conversation._id, e)
-                                }
-                                className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
-                              >
-                                <Trash2 className="w-3 h-3" />
-                              </button>
+                              {editingConversationId === conversation._id ? (
+                                // Show save/cancel buttons when editing
+                                <>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      saveConversationTitle(conversation._id);
+                                    }}
+                                    disabled={isUpdatingTitle}
+                                    className="p-1 hover:bg-green-100 rounded text-gray-400 hover:text-green-600"
+                                    title="Save title"
+                                  >
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  </button>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      cancelEditingTitle();
+                                    }}
+                                    disabled={isUpdatingTitle}
+                                    className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
+                                    title="Cancel"
+                                  >
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                  </button>
+                                </>
+                              ) : (
+                                // Show edit/delete buttons when not editing
+                                <>
+                                  <button
+                                    onClick={(e) => startEditingTitle(conversation._id, conversation.title, e)}
+                                    className="p-1 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600"
+                                    title="Edit title"
+                                  >
+                                    <Edit3 className="w-3 h-3" />
+                                  </button>
+                                  <button
+                                    onClick={(e) => deleteConversation(conversation._id, e)}
+                                    className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
+                                    title="Delete conversation"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -333,15 +522,15 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                     key={conversation._id}
                     onClick={() => setActiveChat(conversation._id)}
                     className={`w-8 h-8 mx-auto rounded-lg cursor-pointer transition-all flex items-center justify-center ${activeChat === conversation._id
-                        ? "bg-blue-100 border border-blue-200"
-                        : "bg-gray-100 hover:bg-gray-200"
+                      ? "bg-blue-100 border border-blue-200"
+                      : "bg-gray-100 hover:bg-gray-200"
                       }`}
                     title={conversation.title}
                   >
                     <MessageSquare
                       className={`w-4 h-4 ${activeChat === conversation._id
-                          ? "text-blue-600"
-                          : "text-gray-600"
+                        ? "text-blue-600"
+                        : "text-gray-600"
                         }`}
                     />
                   </div>
