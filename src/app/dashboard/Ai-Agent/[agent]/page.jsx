@@ -170,16 +170,19 @@ const page = () => {
   };
 
   // Add these functions to your page.jsx component
-const handleNewConversation = (conversationId) => {
-  console.log("[DEBUG] Handling new conversation:", conversationId);
-  setActiveChat(conversationId);
-  setShowIntro(false);
-  
-  // Refresh conversations list
-  if (UserId) {
-    fetchConversations(UserId);
-  }
-};
+  const handleNewConversation = (conversationId) => {
+    console.log("[DEBUG] Handling new conversation:", conversationId);
+    setActiveChat(conversationId);
+    setShowIntro(false);
+    
+    
+    fetchMessages(conversationId);
+    
+    // Refresh conversations list
+    if (UserId) {
+      fetchConversations(UserId);
+    }
+  };
 
 const refreshConversationsList = () => {
   if (UserId) {

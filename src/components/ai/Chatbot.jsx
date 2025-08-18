@@ -179,7 +179,6 @@ export default function ChatPage({
       .trim();
   }
 
-
   const handleSend = async (msg) => {
     const newMessages = [...messages, { sender: "user", text: msg }];
     setMessages(newMessages);
@@ -258,9 +257,17 @@ export default function ChatPage({
           if (onRefreshConversations) {
             onRefreshConversations();
           }
+  
+          // ✅ FOR NEW CONVERSATIONS: Don't add response to frontend state
+          // Backend already saved it, and parent will reload messages
+          console.log("[DEBUG] New conversation - not adding response to state, backend saved it");
+          setAiLoading(false);
+          setAiTyping(false);
+          return; // ✅ EXIT EARLY FOR NEW CONVERSATIONS
         }
   
-        // ✅ FIXED: Only add AI response once, no duplicates
+        // ✅ FOR EXISTING CONVERSATIONS: Add response to frontend state
+        console.log("[DEBUG] Existing conversation - adding response to frontend state");
         setAiLoading(false);
         setAiTyping(true);
   
@@ -319,7 +326,7 @@ export default function ChatPage({
       ]);
     }
   };
-
+  
   const handleOptionSelect = async (option) => {
     if (selectedOptions.includes(option)) return;
 
