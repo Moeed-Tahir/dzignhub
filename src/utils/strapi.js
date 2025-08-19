@@ -502,3 +502,181 @@ export const fetchFAQData = async (pageKey) => {
     return null;
   }
 };
+
+// Fetch login page data
+export const fetchLoginPageData = async () => {
+  try {
+    const apiUrl = `${STRAPI_URL}/api/login-pages?populate[side][populate]=*&populate=googleIcon&populate=appleIcon`;
+    
+    // Add timeout to the fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
+    const response = await fetch(apiUrl, { 
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const apiData = await response.json();
+    
+    if (apiData.data && apiData.data.length > 0) {
+      const loginPage = apiData.data[0];
+      
+      // Handle side as array (Strapi returns it as array)
+      const sideData = loginPage.side && Array.isArray(loginPage.side) && loginPage.side.length > 0 
+        ? loginPage.side[0] 
+        : loginPage.side;
+      
+      return {
+        heading: loginPage.heading || "Welcome back!",
+        subheading: loginPage.subheading || "Sign in to your allmyai account to access all allmyai products.",
+        emailLabel: loginPage.emailLabel || "Email Address",
+        passwordLabel: loginPage.passwordLabel || "Password",
+        rememberMeLabel: loginPage.rememberMeLabel || "Remember me",
+        forgotPasswordText: loginPage.forgotPasswordText || "Forgot password?",
+        loginButtonText: loginPage.loginButtonText || "Login",
+        orText: loginPage.orText || "or",
+        googleButtonText: loginPage.googleButtonText || "Google",
+        googleIcon: loginPage.googleIcon,
+        appleButtonText: loginPage.appleButtonText || "Apple",
+        appleIcon: loginPage.appleIcon,
+        signupText: loginPage.signupText || "Don't have an account? Create",
+        side: sideData ? {
+          brandTitle: sideData.brandTitle || "allmyai",
+          brandIcon: sideData.brandIcon || null,
+          slides: sideData.slides || [
+            {
+              title: "Your Ultimate advance AI assistance",
+              description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+            },
+            {
+              title: "Powerful NLP Features",
+              description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+            },
+            {
+              title: "Seamless Collaboration",
+              description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+            },
+            {
+              title: "Always Learning, Always Improving",
+              description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+            }
+          ],
+          backgroundImage: sideData.backgroundImage || null
+        } : {
+          brandTitle: "allmyai",
+          brandIcon: null,
+          slides: [
+            {
+              title: "Your Ultimate advance AI assistance",
+              description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+            },
+            {
+              title: "Powerful NLP Features",
+              description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+            },
+            {
+              title: "Seamless Collaboration",
+              description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+            },
+            {
+              title: "Always Learning, Always Improving",
+              description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+            }
+          ],
+          backgroundImage: null
+        }
+      };
+    }
+    
+    // Return fallback data if no data from Strapi
+    return {
+      heading: "Welcome back!",
+      subheading: "Sign in to your allmyai account to access all allmyai products.",
+      emailLabel: "Email Address",
+      passwordLabel: "Password",
+      rememberMeLabel: "Remember me",
+      forgotPasswordText: "Forgot password?",
+      loginButtonText: "Login",
+      orText: "or",
+      googleButtonText: "Google",
+      googleIcon: null,
+      appleButtonText: "Apple",
+      appleIcon: null,
+      signupText: "Don't have an account? Create",
+      side: {
+        brandTitle: "allmyai",
+        brandIcon: null,
+        slides: [
+          {
+            title: "Your Ultimate advance AI assistance",
+            description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+          },
+          {
+            title: "Powerful NLP Features", 
+            description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+          },
+          {
+            title: "Seamless Collaboration",
+            description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+          },
+          {
+            title: "Always Learning, Always Improving",
+            description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+          }
+        ],
+        backgroundImage: null
+      }
+    };
+    
+  } catch (error) {
+    console.error('Error fetching login page data:', error);
+    
+    // Return fallback data in case of error
+    return {
+      heading: "Welcome back!",
+      subheading: "Sign in to your allmyai account to access all allmyai products.",
+      emailLabel: "Email Address",
+      passwordLabel: "Password",
+      rememberMeLabel: "Remember me",
+      forgotPasswordText: "Forgot password?",
+      loginButtonText: "Login",
+      orText: "or",
+      googleButtonText: "Google",
+      googleIcon: null,
+      appleButtonText: "Apple",
+      appleIcon: null,
+      signupText: "Don't have an account? Create",
+      side: {
+        brandTitle: "allmyai",
+        brandIcon: null,
+        slides: [
+          {
+            title: "Your Ultimate advance AI assistance",
+            description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+          },
+          {
+            title: "Powerful NLP Features",
+            description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+          },
+          {
+            title: "Seamless Collaboration", 
+            description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+          },
+          {
+            title: "Always Learning, Always Improving",
+            description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+          }
+        ],
+        backgroundImage: null
+      }
+    };
+  }
+};

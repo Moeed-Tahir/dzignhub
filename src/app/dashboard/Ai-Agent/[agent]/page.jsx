@@ -169,6 +169,29 @@ const page = () => {
     }
   };
 
+  // Add these functions to your page.jsx component
+  const handleNewConversation = (conversationId) => {
+    console.log("[DEBUG] Handling new conversation:", conversationId);
+    setActiveChat(conversationId);
+    setShowIntro(false);
+    
+    
+    fetchMessages(conversationId);
+    
+    // Refresh conversations list
+    if (UserId) {
+      fetchConversations(UserId);
+    }
+  };
+
+const refreshConversationsList = () => {
+  if (UserId) {
+    fetchConversations(UserId);
+  }
+};
+
+// Add these to your page.jsx component before the return statement
+
 
   // Load bot and conversations
   useEffect(() => {
@@ -235,8 +258,8 @@ const page = () => {
 
   return (
     <div className="bg-[#F7F8F8] px-5 xl:px-0 max-w-[1440px] mx-auto min-h-screen">
-          setMessages={setMessages}
-      <Sidebar activeChat={activeChat} setActiveChat={setActiveChat} img={bot.img} aiName={bot.name} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} conversations={conversations} onConversationSelect={fetchMessages} setShowIntro={setShowIntro}  setMessages={setMessages} setConversations={setConversations} />
+       
+      <Sidebar activeChat={activeChat} setActiveChat={setActiveChat} img={bot.img} aiName={bot.name} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} conversations={conversations} onConversationSelect={fetchMessages} setShowIntro={setShowIntro}  setMessages={setMessages} setConversations={setConversations}  />
 
       {/* Mobile menu button */}
       {!isSidebarOpen && (
@@ -282,6 +305,9 @@ const page = () => {
           setMessages={setMessages}
           showIntro={showIntro}
           setShowIntro={setShowIntro}
+          onNewConversation={handleNewConversation}          // Pass callback
+  onRefreshConversations={refreshConversationsList}  // Pass callback
+
         />
       </div>
     </div>
