@@ -78,7 +78,7 @@ function page() {
         loading={dataLoading}
         pageContext="pricing"
       />
-      <Footer />
+      <Footer/>
     </div>
   );
 }

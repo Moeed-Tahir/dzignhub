@@ -791,3 +791,63 @@ export const fetchPricingPageData = async () => {
     };
   }
 };
+
+// Fetch footer data
+export const fetchFooterData = async () => {
+  try {
+    const apiUrl = `${STRAPI_URL}/api/footers?populate[socialLinks][populate]=*&populate[footerSections][populate][links][populate]=*&populate[navigationItems][populate]=*&populate=logo`;
+    
+    // Add timeout to the fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
+    const response = await fetch(apiUrl, { 
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const apiData = await response.json();
+    
+    if (apiData.data && apiData.data.length > 0) {
+      const footer = apiData.data[0];
+      
+      return {
+        logo: footer.logo ? getStrapiImageUrl(footer.logo) : "/common/footer/logo-with-name.svg",
+        logoAlt: footer.logoAlt || "Company Logo",
+        socialLinks: footer.socialLinks ? footer.socialLinks.map(social => ({
+          platform: social.platform || "Social",
+          icon: social.icon ? getStrapiImageUrl(social.icon) : "/common/footer/facebook.svg",
+          url: social.url || "#",
+          alt: social.alt || social.platform || "Social"
+        })) : [],
+        footerSections: footer.footerSections ? footer.footerSections.map(section => ({
+          title: section.title || "Section",
+          links: section.links ? section.links.map(link => ({
+            label: link.label || "Link",
+            href: link.href || "#"
+          })) : []
+        })) : [],
+        navigationItems: footer.navigationItems ? footer.navigationItems.map(nav => ({
+          label: nav.label || "Nav",
+          href: nav.href || "#"
+        })) : [],
+        copyrightText: footer.copyrightText || "© 2025 Copyright by",
+        companyName: footer.companyName || "Aiyaiya"
+      };
+    }
+    
+    // Return fallback data if no data from Strapi
+    return null;
+    
+  } catch (error) {
+    console.error('Error fetching footer data:', error);
+    return null;
+  }
+};

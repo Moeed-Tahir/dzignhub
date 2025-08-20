@@ -1,73 +1,10 @@
 import Link from "next/link";
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Roboto } from "next/font/google";
 import LanguageDropdown from "./LanguageDropdown";
 import { Syne } from "next/font/google";
 import { motion, useInView } from "framer-motion";
-const footerLinks = [
-  {
-    title: "Explore",
-    links: [
-      { label: "Image Tools", href: "#" },
-      { label: "Video Tools", href: "#" },
-      { label: "Design Tools", href: "#" },
-      { label: "AI Tools", href: "#" },
-      { label: "Templates", href: "#" },
-      { label: "Colors", href: "#" },
-      { label: "Fonts", href: "#" },
-    ],
-  },
-  {
-    title: "Solutions",
-    links: [
-      { label: "For Businesses", href: "#" },
-      { label: "For Developers", href: "#" },
-      { label: "For Google Drive", href: "#" },
-      { label: "For specific Industries", href: "#" },
-      { label: "Quicktools", href: "#" },
-      { label: "AI Avatar", href: "#" },
-      { label: "Pricing", href: "#" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { label: "Support", href: "#" },
-      { label: "Careers", href: "#" },
-      { label: "About us", href: "#" },
-      { label: "Affiliate Program", href: "#" },
-      { label: "Blog", href: "#" },
-      { label: "Press Center", href: "#" },
-    ],
-  },
-];
-const socialLinks = [
-  { alt: "Facebook", icon: "/common/footer/facebook.svg", href: "#" },
-  { alt: "Twitter", icon: "/common/footer/twitter.svg", href: "#" },
-  { alt: "Instagram", icon: "/common/footer/instagram.svg", href: "#" },
-  { alt: "LinkedIn", icon: "/common/footer/linkedin.svg", href: "#" },
-  { alt: "YouTube", icon: "/common/footer/youtube.svg", href: "#" },
-  { alt: "Pinterest", icon: "/common/footer/pinterest.svg", href: "#" },
-];
-
-const policyLinks = [
-  { label: "Terms of Use", href: "#" },
-  { label: "Privacy Policy", href: "#" },
-  { label: "Do Not Sell or Share My Personal Information", href: "#" },
-  { label: "Interest-Based Advertising", href: "#" },
-  { label: "Community Guidelines", href: "#" },
-  { label: "DMCA", href: "#" },
-  { label: "Security Policy", href: "#" },
-];
-
-const navItems = [
-  { label: "Use Case", href: "#" },
-  { label: "Feature", href: "#" },
-  { label: "Testimonial", href: "#" },
-  { label: "FAQ", href: "#" },
-  { label: "Pricing", href: "#" },
-  { label: "Articles", href: "#" },
-];
+import { fetchFooterData } from "@/utils/strapi";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -79,12 +16,96 @@ const syne = Syne({
   weight: ["400", "500", "600", "700"],
   variable: "--font-syne",
 });
-    function Footer() {
+    function Footer({ footerData = null }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { 
     threshold: 0.1,
     once: true
   });
+
+  // State for dynamic footer data
+  const [dynamicFooterData, setDynamicFooterData] = useState(footerData);
+  const [dataLoading, setDataLoading] = useState(!footerData);
+
+  // Fetch footer data if not provided via props
+  useEffect(() => {
+    if (!footerData) {
+      const loadFooterData = async () => {
+        try {
+          setDataLoading(true);
+          const data = await fetchFooterData();
+          setDynamicFooterData(data);
+        } catch (error) {
+          console.error('Error loading footer data:', error);
+        } finally {
+          setDataLoading(false);
+        }
+      };
+
+      loadFooterData();
+    }
+  }, [footerData]);
+
+  // Use dynamic data if available, otherwise use static fallback
+  const currentFooterData = dynamicFooterData || {
+    logo: "/common/footer/logo-with-name.svg",
+    logoAlt: "Company Logo",
+    socialLinks: [
+      { platform: "Facebook", icon: "/common/footer/facebook.svg", url: "#", alt: "Facebook" },
+      { platform: "Twitter", icon: "/common/footer/twitter.svg", url: "#", alt: "Twitter" },
+      { platform: "Instagram", icon: "/common/footer/instagram.svg", url: "#", alt: "Instagram" },
+      { platform: "LinkedIn", icon: "/common/footer/linkedin.svg", url: "#", alt: "LinkedIn" },
+      { platform: "YouTube", icon: "/common/footer/youtube.svg", url: "#", alt: "YouTube" },
+      { platform: "Pinterest", icon: "/common/footer/pinterest.svg", url: "#", alt: "Pinterest" },
+    ],
+    footerSections: [
+      {
+        title: "Explore",
+        links: [
+          { label: "Image Tools", href: "#" },
+          { label: "Video Tools", href: "#" },
+          { label: "Design Tools", href: "#" },
+          { label: "AI Tools", href: "#" },
+          { label: "Templates", href: "#" },
+          { label: "Colors", href: "#" },
+          { label: "Fonts", href: "#" },
+        ],
+      },
+      {
+        title: "Solutions",
+        links: [
+          { label: "For Businesses", href: "#" },
+          { label: "For Developers", href: "#" },
+          { label: "For Google Drive", href: "#" },
+          { label: "For specific Industries", href: "#" },
+          { label: "Quicktools", href: "#" },
+          { label: "AI Avatar", href: "#" },
+          { label: "Pricing", href: "#" },
+        ],
+      },
+      {
+        title: "Company",
+        links: [
+          { label: "Support", href: "#" },
+          { label: "Careers", href: "#" },
+          { label: "About us", href: "#" },
+          { label: "Affiliate Program", href: "#" },
+          { label: "Blog", href: "#" },
+          { label: "Press Center", href: "#" },
+        ],
+      },
+    ],
+    navigationItems: [
+      { label: "Use Case", href: "#" },
+      { label: "Feature", href: "#" },
+      { label: "Testimonial", href: "#" },
+      { label: "FAQ", href: "#" },
+      { label: "Pricing", href: "#" },
+      { label: "Articles", href: "#" },
+    ],
+    copyrightText: "© 2025 Copyright by",
+    companyName: "Aiyaiya"
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -149,22 +170,26 @@ const syne = Syne({
             className="max-w-[320px] w-full border-black  flex flex-col  gap-[32px]"
           >
             <img
-              src="/common/footer/logo-with-name.svg"
+              src={currentFooterData.logo}
+              alt={currentFooterData.logoAlt}
               className="max-w-[185.07px]  max-h-[35.26px]"
             />
             <div className="flex justify-between    max-h-[40px]">
-              {socialLinks.map(({ alt, icon, href }, index) => (
-                <Link key={index} href={href}>
-                  <img src={icon} alt={alt} className=" w-auto" />
+              {currentFooterData.socialLinks.map((social, index) => (
+                <Link key={index} href={social.url}>
+                  <img src={social.icon} alt={social.alt} className=" w-auto" />
                 </Link>
               ))}
+            </div>
+            <div className="mt-4">
+              <LanguageDropdown />
             </div>
           </motion.div>
           <motion.div 
             variants={linksSectionVariants}
             className="flex  flex-wrap gap-[120px]"
           >
-            {footerLinks.map((section, i) => (
+            {currentFooterData.footerSections.map((section, i) => (
               <motion.div
                 key={i}
                 variants={linksSectionVariants}
@@ -184,17 +209,7 @@ const syne = Syne({
           variants={bottomSectionVariants}
           className="max-w-[1280px] w-full mx-auto  flex flex-col gap-[16px] border-t border-[#E0E0E0]"
         >
-          <div className=" flex flex-col gap-[24px] py-[16px]  items-center">
-            <div className="flex gap-[24px] flex-wrap   mx-auto items-center text-[11.63px]">
-              {policyLinks.map(({ label, href }, index) => (
-                <Link key={index} href={href}>
-                  {label}
-                </Link>
-              ))}
-            </div>
-            {/* <LanguageDropdown /> */}
-            <p className="text-[11.63px]">© 2025 PicsArt, Inc.</p>
-          </div>
+        
         </motion.div>
         <motion.div
           variants={bottomSectionVariants}
@@ -202,15 +217,15 @@ const syne = Syne({
           style={{}}
         >
           <div className="h-full flex flex-col md:flex-row gap-[24px] ">
-            {navItems.map(({ label, href }, idx) => (
+            {currentFooterData.navigationItems.map(({ label, href }, idx) => (
               <Link key={idx} href={href} className="hover:underline">
                 {label}
               </Link>
             ))}
           </div>
           <div>
-            <span>© 2025 Copyright by </span>{" "}
-            <span className="font-bold">Aiyaiya</span>
+            <span>{currentFooterData.copyrightText} </span>{" "}
+            <span className="font-bold">{currentFooterData.companyName}</span>
           </div>
         </motion.div>
       </div>
