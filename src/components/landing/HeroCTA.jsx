@@ -4,7 +4,10 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import LoginModal from "../auth/LoginModal";
 
-function HeroCTA() {
+function HeroCTA({ 
+  placeholder = "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape",
+  buttonText = "Create image"
+}) {
   const [prompt, setPrompt] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
@@ -77,7 +80,7 @@ function HeroCTA() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
           className="text-[18px] text-white w-[70%] focus:outline-none bg-transparent placeholder:text-white"
-          placeholder="A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+          placeholder={placeholder}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
@@ -97,7 +100,7 @@ function HeroCTA() {
               alt="star"
               className="w-[24px] h-[24px] object-contain"
             />
-            Create image
+            {buttonText}
           </motion.button>
         </div>
       </div>

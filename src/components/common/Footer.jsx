@@ -107,6 +107,73 @@ const syne = Syne({
     companyName: "Aiyaiya"
   };
 
+  // Ensure we have valid data for each section with additional fallbacks
+  const safeFooterData = {
+    logo: currentFooterData.logo || "/common/footer/logo-with-name.svg",
+    logoAlt: currentFooterData.logoAlt || "Company Logo",
+    socialLinks: (currentFooterData.socialLinks && currentFooterData.socialLinks.length > 0) 
+      ? currentFooterData.socialLinks 
+      : [
+          { platform: "Facebook", icon: "/common/footer/facebook.svg", url: "#", alt: "Facebook" },
+          { platform: "Twitter", icon: "/common/footer/twitter.svg", url: "#", alt: "Twitter" },
+          { platform: "Instagram", icon: "/common/footer/instagram.svg", url: "#", alt: "Instagram" },
+          { platform: "LinkedIn", icon: "/common/footer/linkedin.svg", url: "#", alt: "LinkedIn" },
+          { platform: "YouTube", icon: "/common/footer/youtube.svg", url: "#", alt: "YouTube" },
+          { platform: "Pinterest", icon: "/common/footer/pinterest.svg", url: "#", alt: "Pinterest" },
+        ],
+    footerSections: (currentFooterData.footerSections && currentFooterData.footerSections.length > 0)
+      ? currentFooterData.footerSections
+      : [
+          {
+            title: "Explore",
+            links: [
+              { label: "Image Tools", href: "#" },
+              { label: "Video Tools", href: "#" },
+              { label: "Design Tools", href: "#" },
+              { label: "AI Tools", href: "#" },
+              { label: "Templates", href: "#" },
+              { label: "Colors", href: "#" },
+              { label: "Fonts", href: "#" },
+            ],
+          },
+          {
+            title: "Solutions",
+            links: [
+              { label: "For Businesses", href: "#" },
+              { label: "For Developers", href: "#" },
+              { label: "For Google Drive", href: "#" },
+              { label: "For specific Industries", href: "#" },
+              { label: "Quicktools", href: "#" },
+              { label: "AI Avatar", href: "#" },
+              { label: "Pricing", href: "#" },
+            ],
+          },
+          {
+            title: "Company",
+            links: [
+              { label: "Support", href: "#" },
+              { label: "Careers", href: "#" },
+              { label: "About us", href: "#" },
+              { label: "Affiliate Program", href: "#" },
+              { label: "Blog", href: "#" },
+              { label: "Press Center", href: "#" },
+            ],
+          },
+        ],
+    navigationItems: (currentFooterData.navigationItems && currentFooterData.navigationItems.length > 0)
+      ? currentFooterData.navigationItems
+      : [
+          { label: "Use Case", href: "#" },
+          { label: "Feature", href: "#" },
+          { label: "Testimonial", href: "#" },
+          { label: "FAQ", href: "#" },
+          { label: "Pricing", href: "#" },
+          { label: "Articles", href: "#" },
+        ],
+    copyrightText: currentFooterData.copyrightText || "© 2025 Copyright by",
+    companyName: currentFooterData.companyName || "Aiyaiya"
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -170,12 +237,12 @@ const syne = Syne({
             className="max-w-[320px] w-full border-black  flex flex-col  gap-[32px]"
           >
             <img
-              src={currentFooterData.logo}
-              alt={currentFooterData.logoAlt}
+              src={safeFooterData.logo}
+              alt={safeFooterData.logoAlt}
               className="max-w-[185.07px]  max-h-[35.26px]"
             />
             <div className="flex justify-between    max-h-[40px]">
-              {currentFooterData.socialLinks.map((social, index) => (
+              {safeFooterData.socialLinks.map((social, index) => (
                 <Link key={index} href={social.url}>
                   <img src={social.icon} alt={social.alt} className=" w-auto" />
                 </Link>
@@ -189,7 +256,7 @@ const syne = Syne({
             variants={linksSectionVariants}
             className="flex  flex-wrap gap-[120px]"
           >
-            {currentFooterData.footerSections.map((section, i) => (
+            {safeFooterData.footerSections.map((section, i) => (
               <motion.div
                 key={i}
                 variants={linksSectionVariants}
@@ -217,15 +284,15 @@ const syne = Syne({
           style={{}}
         >
           <div className="h-full flex flex-col md:flex-row gap-[24px] ">
-            {currentFooterData.navigationItems.map(({ label, href }, idx) => (
+            {safeFooterData.navigationItems.map(({ label, href }, idx) => (
               <Link key={idx} href={href} className="hover:underline">
                 {label}
               </Link>
             ))}
           </div>
           <div>
-            <span>{currentFooterData.copyrightText} </span>{" "}
-            <span className="font-bold">{currentFooterData.companyName}</span>
+            <span>{safeFooterData.copyrightText} </span>{" "}
+            <span className="font-bold">{safeFooterData.companyName}</span>
           </div>
         </motion.div>
       </div>

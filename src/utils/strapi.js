@@ -5,7 +5,7 @@ export const fetchLandingPageData = async () => {
   try {
     // Fetch with populate to get nested components and media
     const response = await fetch(
-      `${STRAPI_URL}/api/landing-pages?populate[carousal_images][populate]=*&populate[stack][populate][card][populate]=*&populate[work_card][populate]=*&populate[templates][populate]=*&populate[download_section][populate]=*&populate[cards][populate]=*&populate[pricing_plans][populate][benefits][populate]=*&populate[testimonial_section][populate][testimonial][populate]=*&populate[assistant_section][populate][assistants][populate]=*&populate[faq_section][populate][faqs][populate]=*`
+      `${STRAPI_URL}/api/landing-pages?populate[hero_section][populate]=*&populate[carousal_images][populate]=*&populate[stack][populate][card][populate]=*&populate[work_card][populate]=*&populate[templates][populate]=*&populate[download_section][populate]=*&populate[cards][populate]=*&populate[pricing_plans][populate][benefits][populate]=*&populate[testimonial_section][populate][testimonial][populate]=*&populate[assistant_section][populate][assistants][populate]=*&populate[faq_section][populate][faqs][populate]=*`
     );
     
     if (!response.ok) {
@@ -21,6 +21,7 @@ export const fetchLandingPageData = async () => {
       return {
         mainHeading: landingPage.MainHeading || "Turn Your Words Into Stunning Visuals",
         mainDescription: landingPage.MainDescription || "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+        heroSection: landingPage.hero_section || null,
         carouselImages: landingPage.carousal_images || [],
         stackSections: landingPage.stack || [],
         workCards: landingPage.work_card || [],
@@ -38,6 +39,7 @@ export const fetchLandingPageData = async () => {
     return {
       mainHeading: "Turn Your Words Into Stunning Visuals",
       mainDescription: "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+      heroSection: null,
       carouselImages: [],
       stackSections: [],
       workCards: [],
@@ -57,6 +59,7 @@ export const fetchLandingPageData = async () => {
     return {
       mainHeading: "Turn Your Words Into Stunning Visuals",
       mainDescription: "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+      heroSection: null,
       carouselImages: [],
       stackSections: [],
       workCards: [],
@@ -65,7 +68,8 @@ export const fetchLandingPageData = async () => {
       cards: [],
       pricingPlans: [],
       testimonialSection: null,
-      assistantSection: null
+      assistantSection: null,
+      faqSection: null
     };
   }
 };
@@ -850,4 +854,140 @@ export const fetchFooterData = async () => {
     console.error('Error fetching footer data:', error);
     return null;
   }
+};
+
+// Fetch signup page data
+export const fetchSignupPageData = async () => {
+  try {
+    const response = await fetch(
+      `${STRAPI_URL}/api/signup-pages?populate[submitButton][populate]=*&populate[LoginLink][populate]=*&populate[email_field][populate]=*&populate[mobile_field][populate]=*&populate[password_field][populate]=*&populate[confirmpassword_field][populate]=*`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Signup page data structure:', JSON.stringify(data, null, 2));
+    
+    // Check if data exists and has at least one item (since it's a collection)
+    if (!data?.data || !Array.isArray(data.data) || data.data.length === 0) {
+      console.log('No signup page data found, using fallback');
+      return getSignupPageFallbackData();
+    }
+    
+    const signupPage = data.data[0];
+    
+    // Transform the data to match the expected structure
+    return {
+      pageTitle: signupPage.pageTitle || "Let's Create Your Account",
+      pageDescription: signupPage.pageDescription || "Get started with allmyai and start using our AI assistance",
+      submitButton: signupPage.submitButton ? {
+        text: signupPage.submitButton.text || "Create Account",
+        loadingText: signupPage.submitButton.loadingText || "Creating..."
+      } : {
+        text: "Create Account",
+        loadingText: "Creating..."
+      },
+      termsText: signupPage.termsText || "By clicking the Create Account button, you acknowledge that you have read and agree to our Terms of Use and Privacy Policy.",
+      loginLink: signupPage.LoginLink ? {
+        preText: signupPage.LoginLink.preText || "Already have an account?",
+        linkText: signupPage.LoginLink.linkText || "Login",
+        url: signupPage.LoginLink.url || "/auth/login"
+      } : {
+        preText: "Already have an account?",
+        linkText: "Login", 
+        url: "/auth/login"
+      },
+      emailField: signupPage.email_field ? {
+        label: signupPage.email_field.label || "Email Address",
+        placeholder: signupPage.email_field.placeholder || "",
+        type: signupPage.email_field.type || "email",
+        required: signupPage.email_field.required !== undefined ? signupPage.email_field.required : true
+      } : {
+        label: "Email Address",
+        placeholder: "",
+        type: "email",
+        required: true
+      },
+      mobileField: signupPage.mobile_field ? {
+        label: signupPage.mobile_field.label || "Mobile Phone",
+        placeholder: signupPage.mobile_field.placeholder || "Enter your mobile phone",
+        type: signupPage.mobile_field.type || "text",
+        required: signupPage.mobile_field.required !== undefined ? signupPage.mobile_field.required : true
+      } : {
+        label: "Mobile Phone",
+        placeholder: "Enter your mobile phone",
+        type: "text",
+        required: true
+      },
+      passwordField: signupPage.password_field ? {
+        label: signupPage.password_field.label || "Password",
+        placeholder: signupPage.password_field.placeholder || "",
+        type: signupPage.password_field.type || "password",
+        required: signupPage.password_field.required !== undefined ? signupPage.password_field.required : true
+      } : {
+        label: "Password",
+        placeholder: "",
+        type: "password",
+        required: true
+      },
+      confirmPasswordField: signupPage.confirmpassword_field ? {
+        label: signupPage.confirmpassword_field.label || "Confirm Password",
+        placeholder: signupPage.confirmpassword_field.placeholder || "",
+        type: signupPage.confirmpassword_field.type || "password",
+        required: signupPage.confirmpassword_field.required !== undefined ? signupPage.confirmpassword_field.required : true
+      } : {
+        label: "Confirm Password",
+        placeholder: "",
+        type: "password",
+        required: true
+      }
+    };
+  } catch (error) {
+    console.error('Error fetching signup page data:', error);
+    return getSignupPageFallbackData();
+  }
+};
+
+// Fallback data for signup page
+const getSignupPageFallbackData = () => {
+  return {
+    pageTitle: "Let's Create Your Account",
+    pageDescription: "Get started with allmyai and start using our AI assistance",
+    submitButton: {
+      text: "Create Account",
+      loadingText: "Creating..."
+    },
+    termsText: "By clicking the Create Account button, you acknowledge that you have read and agree to our Terms of Use and Privacy Policy.",
+    loginLink: {
+      preText: "Already have an account?",
+      linkText: "Login",
+      url: "/auth/login"
+    },
+    emailField: {
+      label: "Email Address",
+      placeholder: "",
+      type: "email",
+      required: true
+    },
+    mobileField: {
+      label: "Mobile Phone",
+      placeholder: "Enter your mobile phone",
+      type: "text",
+      required: true
+    },
+    passwordField: {
+      label: "Password",
+      placeholder: "",
+      type: "password",
+      required: true
+    },
+    confirmPasswordField: {
+      label: "Confirm Password",
+      placeholder: "",
+      type: "password",
+      required: true
+    }
+  };
 };

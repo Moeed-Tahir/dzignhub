@@ -25,6 +25,7 @@ export default function Landing() {
   const [landingData, setLandingData] = useState({
     mainHeading: "Turn Your Words Into Stunning Visuals",
     mainDescription: "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+    heroSection: null,
     carouselImages: [],
     stackSections: [],
     workCards: [],
@@ -120,6 +121,7 @@ export default function Landing() {
               onOpenSidebar={() => setSidebarOpen(true)}
             />
             <Hero 
+              heroSection={landingData.heroSection}
               mainHeading={landingData.mainHeading}
               mainDescription={landingData.mainDescription}
             />

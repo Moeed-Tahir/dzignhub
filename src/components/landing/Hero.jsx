@@ -78,7 +78,36 @@ const buttonVariants = {
   }
 };
 
-export default function Hero({ mainHeading, mainDescription }) {
+export default function Hero({ heroSection = null, mainHeading, mainDescription }) {
+  // Use dynamic hero section data if available, otherwise use props or fallback
+  const heroData = heroSection || {
+    mainHeading: mainHeading || "Turn Your Words Into Stunning Visuals",
+    mainDescription: mainDescription || "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+    announcementIcon: null,
+    announcementText: "Speech to speech release!",
+    earlyAccessText: "Get early access",
+    earlyAccessLink: "/auth/sign-up",
+    ctaButtonText: "Create image",
+    ctaSecondaryText: null,
+    ctaLink: "/image-creation",
+    showAnnouncement: true,
+    ctaInputPlaceholder: "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+  };
+
+  // Process dynamic data with fallbacks
+  const processedHeroData = {
+    mainHeading: heroData.mainHeading || mainHeading || "Turn Your Words Into Stunning Visuals",
+    mainDescription: heroData.mainDescription || mainDescription || "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+    announcementIcon: heroData.announcementIcon,
+    announcementText: heroData.announcementText || "Speech to speech release!",
+    earlyAccessText: heroData.earlyAccessText || "Get early access",
+    earlyAccessLink: heroData.earlyAccessLink || "/auth/sign-up",
+    ctaButtonText: heroData.ctaButtonText || "Create image",
+    ctaSecondaryText: heroData.ctaSecondaryText,
+    ctaLink: heroData.ctaLink || "/image-creation",
+    showAnnouncement: heroData.showAnnouncement !== false, // Default to true
+    ctaInputPlaceholder: heroData.ctaInputPlaceholder || "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+  };
   return (
     <>
       {/* Center box with border */}
@@ -91,55 +120,67 @@ export default function Hero({ mainHeading, mainDescription }) {
         {/* Top section (announcement + heading + paragraph) */}
         <div className="flex flex-col lg:gap-[16px] mx-auto gap-[32px]">
           {/* Announcement */}
-          <motion.div 
-            className="lg:w-[492px] lg:h-[42px] w-[291px] h-[44px] flex items-center justify-around rounded-full mx-auto bg-[#212e62] "
-            variants={announcementVariants}
-          >
-            <div className="w-[24px] h-[24px] p-[1px] rounded-lg bg-gradient-to-tr from-[#5AE2B9] via-[#DCCC3A] to-[#1A76FF]">
-              <div className="w-full h-full bg-black rounded-lg flex items-center justify-center">
-                <MdTranslate className="w-[13px] h-[13px] text-white" />
+          {processedHeroData.showAnnouncement && (
+            <motion.div 
+              className="lg:w-[492px] lg:h-[42px] w-[291px] h-[44px] flex items-center justify-around rounded-full mx-auto bg-[#212e62] "
+              variants={announcementVariants}
+            >
+              <div className="w-[24px] h-[24px] p-[1px] rounded-lg bg-gradient-to-tr from-[#5AE2B9] via-[#DCCC3A] to-[#1A76FF]">
+                <div className="w-full h-full bg-black rounded-lg flex items-center justify-center">
+                  {processedHeroData.announcementIcon ? (
+                    <img 
+                      src={processedHeroData.announcementIcon.url || processedHeroData.announcementIcon} 
+                      alt="Announcement Icon"
+                      className="w-[13px] h-[13px]"
+                    />
+                  ) : (
+                    <MdTranslate className="w-[13px] h-[13px] text-white" />
+                  )}
+                </div>
               </div>
-            </div>
-            <p className="text-[#FFFFFF] text-[18px] font-medium">
-              Speech to speech release!
-            </p>
+              <p className="text-[#FFFFFF] text-[18px] font-medium">
+                {processedHeroData.announcementText}
+              </p>
 
-            <img
-              src="/landing/Announcement-separator.png"
-              className="w-[4px] h-[4px] lg:block hidden"
-            />
-            <p className="text-[#BDFF00] text-[18px] lg:block hidden font-medium">
-              Get early access
-            </p>
-            <Link href="/auth/sign-up">
-            <motion.button 
-              className="lg:flex hidden w-[38px] h-[26px] rounded-full bg-[#060606] border border-[#BDFF00] items-center justify-center"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-              >
-              <FaArrowRight className="text-white  lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
-            </motion.button>
-              </Link>
-          </motion.div>
-          <motion.div 
-            className="lg:hidden flex mx-auto gap-[10px] h-[28px] w-[191px]"
-            variants={itemVariants}
-          >
-            <p className="text-[#BDFF00] lg:text-[18px] text-[16px] font-medium ">
-              Get early access
-            </p>
-            <Link href="/auth/sign-up">
-            <motion.button 
-              className="flex  w-[38px] h-[26px] rounded-[100px] bg-[#060606] border border-[#BDFF00] items-center justify-center"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-              >
-              <FaArrowRight className="text-white lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
-            </motion.button>
-              </Link>
-          </motion.div>
+              <img
+                src="/landing/Announcement-separator.png"
+                className="w-[4px] h-[4px] lg:block hidden"
+              />
+              <p className="text-[#BDFF00] text-[18px] lg:block hidden font-medium">
+                {processedHeroData.earlyAccessText}
+              </p>
+              <Link href={processedHeroData.earlyAccessLink}>
+              <motion.button 
+                className="lg:flex hidden w-[38px] h-[26px] rounded-full bg-[#060606] border border-[#BDFF00] items-center justify-center"
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+                >
+                <FaArrowRight className="text-white  lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
+              </motion.button>
+                </Link>
+            </motion.div>
+          )}
+          {processedHeroData.showAnnouncement && (
+            <motion.div 
+              className="lg:hidden flex mx-auto gap-[10px] h-[28px] w-[191px]"
+              variants={itemVariants}
+            >
+              <p className="text-[#BDFF00] lg:text-[18px] text-[16px] font-medium ">
+                {processedHeroData.earlyAccessText}
+              </p>
+              <Link href={processedHeroData.earlyAccessLink}>
+              <motion.button 
+                className="flex  w-[38px] h-[26px] rounded-[100px] bg-[#060606] border border-[#BDFF00] items-center justify-center"
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+                >
+                <FaArrowRight className="text-white lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
+              </motion.button>
+                </Link>
+            </motion.div>
+          )}
           {/* Heading + Paragraph */}
           <motion.div 
             className="flex flex-col lg:gap-[32px] gap-[18px]"
@@ -149,23 +190,29 @@ export default function Hero({ mainHeading, mainDescription }) {
               className={`lg:text-[68px] max-w-[929px] w-full text-[46px] text-white  text-center leading-tight  font-bold`}
               variants={itemVariants}
             >
-              {mainHeading || "Turn Your Words Into Stunning Visuals"}
+              {processedHeroData.mainHeading}
             </motion.h1>
             <motion.p
               className={`lg:text-[18px] text-[16px] text-[#F0F0F3] text-center leading-[28px] lg:w-[727px] lg:h-[56px] h-[96px] w-[335px]  mx-auto `}
               variants={itemVariants}
             >
-              {mainDescription || "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life."}
+              {processedHeroData.mainDescription}
             </motion.p>
           </motion.div>
           
           <motion.div variants={itemVariants}>
-            <HeroCTA/>
+            <HeroCTA 
+              placeholder={processedHeroData.ctaInputPlaceholder}
+              buttonText={processedHeroData.ctaButtonText}
+            />
           </motion.div>
         </div>
 
         <motion.div variants={itemVariants}>
-          <HeroCTAMobile/>
+          <HeroCTAMobile 
+            placeholder={processedHeroData.ctaInputPlaceholder}
+            buttonText={processedHeroData.ctaButtonText}
+          />
         </motion.div>
       </motion.div>
     </>

@@ -1,11 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CustomInput from "../ui/CustomInput";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { fetchSignupPageData } from "@/utils/strapi";
 
 const Signup = () => {
   const router = useRouter();
+  const [signupData, setSignupData] = useState(null);
+  const [dataLoading, setDataLoading] = useState(true);
   const [formData, setFormData] = useState({
     email: "",
     phone: "",
@@ -15,6 +18,58 @@ const Signup = () => {
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  // Fetch signup page data
+  useEffect(() => {
+    const loadSignupData = async () => {
+      try {
+        setDataLoading(true);
+        const data = await fetchSignupPageData();
+        console.log('Signup data received:', data);
+        setSignupData(data);
+      } catch (error) {
+        console.error('Error loading signup page data:', error);
+      } finally {
+        setDataLoading(false);
+      }
+    };
+
+    loadSignupData();
+  }, []);
+
+  // Get field configuration by label
+  const getFieldConfig = (fieldType) => {
+    if (!signupData) return null;
+    
+    switch (fieldType) {
+      case 'email':
+        return signupData.emailField;
+      case 'mobile':
+        return signupData.mobileField;
+      case 'password':
+        return signupData.passwordField;
+      case 'confirmPassword':
+        return signupData.confirmPasswordField;
+      default:
+        return null;
+    }
+  };
+
+  // Get processed signup data with fallbacks
+  const processedSignupData = {
+    pageTitle: signupData?.pageTitle || "Let's Create Your Account",
+    pageDescription: signupData?.pageDescription || "Get started with allmyai and start using our AI assistance",
+    submitButton: {
+      text: signupData?.submitButton?.text || "Create Account",
+      loadingText: signupData?.submitButton?.loadingText || "Creating..."
+    },
+    termsText: signupData?.termsText || "By clicking the Create Account button, you acknowledge that you have read and agree to our Terms of Use and Privacy Policy.",
+    loginLink: {
+      preText: signupData?.loginLink?.preText || "Already have an account?",
+      linkText: signupData?.loginLink?.linkText || "Login",
+      url: signupData?.loginLink?.url || "/auth/login"
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,7 +121,7 @@ const Signup = () => {
 
     const newErrors = {};
 
-    // Basic form validation
+    // Basic form validation with better error messages
     if (!formData.email) newErrors.email = "Please enter a valid email address.";
     if (!formData.phone) newErrors.phone = "Please enter a valid phone number.";
     if (!formData.password) newErrors.password = "Minimum 8 characters";
@@ -79,25 +134,23 @@ const Signup = () => {
     if (Object.keys(newErrors).length === 0) {
       console.log("Form submitted successfully", formData);
       createAccount(formData)
-      // router.push("/auth/confirm-otp");
-
     }
   };
 
   return (
     <div className="lg:w-[80%] mx-auto p-6 justify-center items-center ">
-      <h2 className="text-[30px] font-medium text-[#2A0856]  text-center">
-        Let's Create Your Account
+      <h2 className="text-[30px] font-medium text-[#2A0856] text-center">
+        {processedSignupData.pageTitle}
       </h2>
       <p className="text-[#44444A] text-[14px] mb-6 text-center">
-        Get started with allmyai and start using our AI assistance
+        {processedSignupData.pageDescription}
       </p>
 
       <form onSubmit={handleSubmit}>
         <CustomInput
-          label="Email Address"
-          type="email"
-          placeholder=""
+          label={getFieldConfig("email")?.label || "Email Address"}
+          type={getFieldConfig("email")?.type || "email"}
+          placeholder={getFieldConfig("email")?.placeholder || ""}
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -105,9 +158,9 @@ const Signup = () => {
         />
 
         <CustomInput
-          label="Mobile Phone"
-          type="text"
-          placeholder="Enter your mobile phone"
+          label={getFieldConfig("mobile")?.label || "Mobile Phone"}
+          type={getFieldConfig("mobile")?.type || "text"}
+          placeholder={getFieldConfig("mobile")?.placeholder || "Enter your mobile phone"}
           name="phone"
           value={formData.phone}
           onChange={handleChange}
@@ -118,9 +171,9 @@ const Signup = () => {
         </p>
 
         <CustomInput
-          label="Password"
-          type="password"
-          placeholder=""
+          label={getFieldConfig("password")?.label || "Password"}
+          type={getFieldConfig("password")?.type || "password"}
+          placeholder={getFieldConfig("password")?.placeholder || ""}
           name="password"
           value={formData.password}
           onChange={handleChange}
@@ -128,37 +181,35 @@ const Signup = () => {
         />
 
         <CustomInput
-          label="Confirm Password"
-          type="password"
-          placeholder=""
+          label={getFieldConfig("confirmPassword")?.label || "Confirm Password"}
+          type={getFieldConfig("confirmPassword")?.type || "password"}
+          placeholder={getFieldConfig("confirmPassword")?.placeholder || ""}
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}
           error={errors.confirmPassword}
         />
 
-<button
+        <button
           type="submit"
           className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4 flex justify-center items-center"
           disabled={isLoading}
         >
-            {isLoading ? (
+          {isLoading ? (
             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
           ) : (
-            "Create Account"
+            processedSignupData.submitButton.text
           )}
         </button>
 
         <p className="text-[#44444A] mb-6 text-center text-sm">
-          By clicking the Create Account button, you acknowledge that you have
-          read and agree to our Terms of Use
-          and Privacy Policy.
+          {processedSignupData.termsText}
         </p>
 
-        <p className="text-center  text-[14px] mt-4 text-[#6C7278]">
-          Already have an account?{" "}
-          <Link href="/auth/login" className="hover:underline font-semibold text-[#C209C1]">
-            Login
+        <p className="text-center text-[14px] mt-4 text-[#6C7278]">
+          {processedSignupData.loginLink.preText}{" "}
+          <Link href={processedSignupData.loginLink.url} className="hover:underline font-semibold text-[#C209C1]">
+            {processedSignupData.loginLink.linkText}
           </Link>
         </p>
       </form>
