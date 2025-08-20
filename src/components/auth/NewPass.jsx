@@ -109,7 +109,7 @@ Enter a new password for your account. Make sure it’s strong and secure.      
         <CustomInput
           label="Password"
           type="password"
-          placeholder="Enter your password"
+          placeholder=""
           name="password"
           value={formData.password}
           onChange={handleChange}
@@ -143,7 +143,7 @@ Enter a new password for your account. Make sure it’s strong and secure.      
         <CustomInput
           label="Confirm Password"
           type="password"
-          placeholder="Re-enter your password"
+          placeholder=""
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}

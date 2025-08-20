@@ -680,3 +680,114 @@ export const fetchLoginPageData = async () => {
     };
   }
 };
+
+export const fetchPricingPageData = async () => {
+  try {
+    const apiUrl = `${STRAPI_URL}/api/pricing-pages?populate[hero_section][populate]=*&populate[plan_section][populate]=*&populate[plans][populate][plan_header][populate]=*&populate[plans][populate][plan_sections][populate][features][populate]=*&populate[testimonials_section][populate][testimonial][populate]=*&populate[faq_section][populate][faqs][populate]=*`;
+    
+    // Add timeout to the fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
+    const response = await fetch(apiUrl, { 
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const apiData = await response.json();
+    
+    if (apiData.data && apiData.data.length > 0) {
+      const pricingPage = apiData.data[0];
+      
+      // Handle hero_section as array or object
+      const heroData = pricingPage.hero_section && Array.isArray(pricingPage.hero_section) && pricingPage.hero_section.length > 0 
+        ? pricingPage.hero_section[0] 
+        : pricingPage.hero_section;
+      
+      // Handle plan_section as array or object
+      const planData = pricingPage.plan_section && Array.isArray(pricingPage.plan_section) 
+        ? pricingPage.plan_section 
+        : (pricingPage.plan_section ? [pricingPage.plan_section] : []);
+      
+      // Handle plans data
+      const plansData = pricingPage.plans || null;
+      
+      // Handle testimonials_section as array or object
+      const testimonialsData = pricingPage.testimonials_section && Array.isArray(pricingPage.testimonials_section) && pricingPage.testimonials_section.length > 0 
+        ? pricingPage.testimonials_section[0] 
+        : pricingPage.testimonials_section;
+      
+      // Handle faq_section as array or object
+      const faqData = pricingPage.faq_section && Array.isArray(pricingPage.faq_section) && pricingPage.faq_section.length > 0 
+        ? pricingPage.faq_section[0] 
+        : pricingPage.faq_section;
+      
+      return {
+        heroSection: heroData ? {
+          title: heroData.title || "Pricing",
+          subtitle: heroData.subtitle || "Subscriptions"
+        } : {
+          title: "Pricing",
+          subtitle: "Subscriptions"
+        },
+        planSection: planData.map(plan => ({
+          plan: plan.plan || "Plan",
+          price: plan.price || "$0 /mo",
+          benefits: plan.benefits || [],
+          buttonLabel: plan.buttonLabel || "Get Started",
+          link: plan.link || "#"
+        })),
+        plansData: plansData ? {
+          title: plansData.title || "Compare plans",
+          planHeaders: plansData.plan_header || [],
+          planSections: plansData.plan_sections || []
+        } : null,
+        testimonialsSection: testimonialsData ? {
+          headingPre: testimonialsData.headingPre || "What",
+          headingMain: testimonialsData.headingMain || "Our Users Are Saying",
+          testimonial: testimonialsData.testimonial || []
+        } : null,
+        faqSection: faqData ? {
+          key: faqData.key || "pricing",
+          title: faqData.title || "Have questions?",
+          subtitle: faqData.subtitle || "Have questions about how our pricing works? Find the answers to the most common inquiries below.",
+          faqs: faqData.faqs || []
+        } : null
+      };
+    }
+    
+    // Return fallback data if no data from Strapi
+    return {
+      heroSection: {
+        title: "Pricing",
+        subtitle: "Subscriptions"
+      },
+      planSection: [],
+      plansData: null,
+      testimonialsSection: null,
+      faqSection: null
+    };
+    
+  } catch (error) {
+    console.error('Error fetching pricing page data:', error);
+    
+    // Return fallback data in case of error
+    return {
+      heroSection: {
+        title: "Pricing",
+        subtitle: "Subscriptions"
+      },
+      planSection: [],
+      plansData: null,
+      testimonialsSection: null,
+      faqSection: null
+    };
+  }
+};

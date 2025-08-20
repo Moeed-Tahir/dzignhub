@@ -97,7 +97,7 @@ const Signup = () => {
         <CustomInput
           label="Email Address"
           type="email"
-          placeholder="Enter your email"
+          placeholder=""
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -120,7 +120,7 @@ const Signup = () => {
         <CustomInput
           label="Password"
           type="password"
-          placeholder="Enter your password"
+          placeholder=""
           name="password"
           value={formData.password}
           onChange={handleChange}
@@ -130,7 +130,7 @@ const Signup = () => {
         <CustomInput
           label="Confirm Password"
           type="password"
-          placeholder="Re-enter your password"
+          placeholder=""
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}

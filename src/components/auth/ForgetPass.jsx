@@ -90,7 +90,7 @@ const ForgetPass = () => {
         <CustomInput
           label="Email Address"
           type="email"
-          placeholder="Enter your email"
+          placeholder=""
           name="email"
           value={formData.email}
           onChange={handleChange}

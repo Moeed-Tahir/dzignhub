@@ -141,7 +141,7 @@ const LoginForm = () => {
         <CustomInput
           label={dataLoading ? "Email Address" : (loginPageData?.emailLabel || "Email Address")}
           type="email"
-          placeholder="Enter your email"
+          placeholder=""
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -150,7 +150,7 @@ const LoginForm = () => {
         <CustomInput
           label={dataLoading ? "Password" : (loginPageData?.passwordLabel || "Password")}
           type="password"
-          placeholder="Enter your password"
+          placeholder=""
           name="password"
           value={formData.password}
           onChange={handleChange}

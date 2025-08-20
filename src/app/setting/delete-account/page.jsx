@@ -74,7 +74,7 @@ const page = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     type="password"
                     className="w-full border border-[#E3E9EE] rounded-[12px] py-[12px] pr-[16px] pl-[40px] text-[#1B1F3B] text-[16px] font-medium focus:outline-none focus:border-[#C209C1] transition"
-                    placeholder=" Enter your password"
+                    placeholder=""
                   />
                   <span className="absolute left-4 top-1/2 -translate-y-1/2">
                     {" "}

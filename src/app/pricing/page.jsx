@@ -7,9 +7,13 @@ import FAQ from "@/components/landing/FAQ";
 import Footer from "@/components/common/Footer";
 import Plans from "@/components/pricing/Plans";
 import Hero from "@/components/common/Hero";
+import { fetchPricingPageData } from "@/utils/strapi";
+
 function page() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isContentVisible, setIsContentVisible] = useState(false);
+    const [pricingPageData, setPricingPageData] = useState(null);
+    const [dataLoading, setDataLoading] = useState(true);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -17,10 +21,32 @@ function page() {
         }, 300);
         return () => clearTimeout(timer);
     }, []);
+
+    // Fetch pricing page data
+    useEffect(() => {
+        const loadPricingPageData = async () => {
+            try {
+                setDataLoading(true);
+                const data = await fetchPricingPageData();
+                setPricingPageData(data);
+            } catch (error) {
+                console.error('Error loading pricing page data:', error);
+            } finally {
+                setDataLoading(false);
+            }
+        };
+
+        loadPricingPageData();
+    }, []);
   return (
     <div>
        <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
-      <Hero title={"Pricing"} subtitle={"Subscriptions"} setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen}/>
+      <Hero 
+        title={!dataLoading && pricingPageData?.heroSection?.title ? pricingPageData.heroSection.title : "Pricing"} 
+        subtitle={!dataLoading && pricingPageData?.heroSection?.subtitle ? pricingPageData.heroSection.subtitle : "Subscriptions"} 
+        setSidebarOpen={setSidebarOpen} 
+        sidebarOpen={sidebarOpen}
+      />
       <div className="max-w-[1440px] py-[64px] justify-center flex items-center mx-auto overflow-hidden">
         <div className="flex flex-col gap-[33px] justify-center items-center">
           <img
@@ -42,10 +68,16 @@ function page() {
           </div>
         </div>
       </div>
-      <Pricing />
-      <Plans/>
-      <Testimonials />
-      <FAQ />
+      <Pricing pricingPlans={!dataLoading && pricingPageData?.planSection ? pricingPageData.planSection : []} />
+      <Plans plansData={!dataLoading && pricingPageData?.plansData ? pricingPageData.plansData : null} />
+      <Testimonials testimonialSection={!dataLoading && pricingPageData?.testimonialsSection ? pricingPageData.testimonialsSection : null} />
+      <FAQ 
+        faqData={!dataLoading && pricingPageData?.faqSection?.faqs ? pricingPageData.faqSection.faqs : null}
+        title={!dataLoading && pricingPageData?.faqSection?.title ? pricingPageData.faqSection.title : null}
+        subtitle={!dataLoading && pricingPageData?.faqSection?.subtitle ? pricingPageData.faqSection.subtitle : null}
+        loading={dataLoading}
+        pageContext="pricing"
+      />
       <Footer />
     </div>
   );
