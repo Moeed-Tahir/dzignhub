@@ -1,6 +1,7 @@
 "use client"
 import React from "react";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 const page = () => {
   const [oldPassword, setOldPassword] = React.useState("");
@@ -10,7 +11,16 @@ const page = () => {
   const changePassword = async () => {
     setIsLoading(true);
     if (newPassword !== confirmNewPassword) {
-      alert("New password and confirm password do not match");
+      toast.error("New password and confirm password do not match", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       return;
     }
    try {
@@ -25,10 +35,28 @@ const page = () => {
 
     const data = await response.json();
     if (data.type === "success") {
-      alert(data.message);
+      toast.success(data.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       localStorage.setItem("token", data.token);
     } else {
-      alert(data.message);
+      toast.error(data.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
    }
    catch (error) {

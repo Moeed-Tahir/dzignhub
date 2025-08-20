@@ -54,57 +54,58 @@ const syne = Syne({
       { platform: "Facebook", icon: "/common/footer/facebook.svg", url: "#", alt: "Facebook" },
       { platform: "Twitter", icon: "/common/footer/twitter.svg", url: "#", alt: "Twitter" },
       { platform: "Instagram", icon: "/common/footer/instagram.svg", url: "#", alt: "Instagram" },
-      { platform: "LinkedIn", icon: "/common/footer/linkedin.svg", url: "#", alt: "LinkedIn" },
+      // { platform: "LinkedIn", icon: "/common/footer/linkedin.svg", url: "#", alt: "LinkedIn" },
       { platform: "YouTube", icon: "/common/footer/youtube.svg", url: "#", alt: "YouTube" },
-      { platform: "Pinterest", icon: "/common/footer/pinterest.svg", url: "#", alt: "Pinterest" },
+      // { platform: "Pinterest", icon: "/common/footer/pinterest.svg", url: "#", alt: "Pinterest" },
     ],
     footerSections: [
       {
         title: "Explore",
         links: [
-          { label: "Image Tools", href: "#" },
-          { label: "Video Tools", href: "#" },
-          { label: "Design Tools", href: "#" },
-          { label: "AI Tools", href: "#" },
-          { label: "Templates", href: "#" },
-          { label: "Colors", href: "#" },
-          { label: "Fonts", href: "#" },
-        ],
-      },
-      {
-        title: "Solutions",
-        links: [
-          { label: "For Businesses", href: "#" },
-          { label: "For Developers", href: "#" },
-          { label: "For Google Drive", href: "#" },
-          { label: "For specific Industries", href: "#" },
-          { label: "Quicktools", href: "#" },
-          { label: "AI Avatar", href: "#" },
-          { label: "Pricing", href: "#" },
+          { label: "Image Tools", href: "/dashboard/image-creation" },
+          { label: "Video Tools", href: "/dashboard/video-creation" },
+          // { label: "Design Tools", href: "#" },
+          // { label: "AI Tools", href: "#" },
+          // { label: "Templates", href: "#" },
+          // { label: "Colors", href: "#" },
+          // { label: "Fonts", href: "#" },
         ],
       },
       {
         title: "Company",
         links: [
-          { label: "Support", href: "#" },
-          { label: "Careers", href: "#" },
+          // { label: "Support", href: "#" },
+          // { label: "Careers", href: "#" },
           { label: "About us", href: "#" },
-          { label: "Affiliate Program", href: "#" },
-          { label: "Blog", href: "#" },
-          { label: "Press Center", href: "#" },
+          { label: "Latest Blog", href: "/blog" },
+          { label: "Pricing", href: "/pricing" },
+          { label: "Contact Us", href: "/contact-us" },
+          // { label: "Press Center", href: "#" },
+        ],
+      },
+      {
+        title: "AI assistants",
+        links: [
+          { label: "Zara - brand designer", href: "/dashboard/Ai-Agent/zara" },
+          { label: "Sana - Content writer", href: "/dashboard/Ai-Agent/sana" },
+          { label: "Mira - Strategy assistant", href: "/dashboard/Ai-Agent/mira" },
+          { label: "Kano - UI/UX Designer", href: "/dashboard/Ai-Agent/kano" },
+          { label: "Ellie - Pitch Deck Designer", href: "/dashboard/Ai-Agent/ellie" },
+          { label: "Devine - Software Developer", href: "/dashboard/Ai-Agent/devine" },
+          { label: "Lina - Marketing assistant", href: "/dashboard/Ai-Agent/lina" },
         ],
       },
     ],
     navigationItems: [
-      { label: "Use Case", href: "#" },
-      { label: "Feature", href: "#" },
-      { label: "Testimonial", href: "#" },
-      { label: "FAQ", href: "#" },
-      { label: "Pricing", href: "#" },
-      { label: "Articles", href: "#" },
+      { label: "Terms of Use", href: "#" },
+      { label: "Privacy Policy", href: "#" },
+      { label: "Cookie Policy", href: "#" },
+      // { label: "FAQ", href: "#" },
+      // { label: "Pricing", href: "#" },
+      // { label: "Articles", href: "#" },
     ],
     copyrightText: "© 2025 Copyright by",
-    companyName: "Aiyaiya"
+    companyName: "AllmyAi"
   };
 
   // Ensure we have valid data for each section with additional fallbacks
@@ -129,11 +130,11 @@ const syne = Syne({
             links: [
               { label: "Image Tools", href: "#" },
               { label: "Video Tools", href: "#" },
-              { label: "Design Tools", href: "#" },
-              { label: "AI Tools", href: "#" },
-              { label: "Templates", href: "#" },
-              { label: "Colors", href: "#" },
-              { label: "Fonts", href: "#" },
+              // { label: "Design Tools", href: "#" },
+              // { label: "AI Tools", href: "#" },
+              // { label: "Templates", href: "#" },
+              // { label: "Colors", href: "#" },
+              // { label: "Fonts", href: "#" },
             ],
           },
           {
@@ -237,11 +238,11 @@ const syne = Syne({
             className="max-w-[320px] w-full border-black  flex flex-col  gap-[32px]"
           >
             <img
-              src={safeFooterData.logo}
+              src={"/GreenLogo.svg"}
               alt={safeFooterData.logoAlt}
-              className="max-w-[185.07px]  max-h-[35.26px]"
+              className="max-w-[160px]  max-h-[35.26px]"
             />
-            <div className="flex justify-between    max-h-[40px]">
+            <div className="flex gap-2    max-h-[40px]">
               {safeFooterData.socialLinks.map((social, index) => (
                 <Link key={index} href={social.url}>
                   <img src={social.icon} alt={social.alt} className=" w-auto" />

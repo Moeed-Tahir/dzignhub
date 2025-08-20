@@ -22,7 +22,7 @@ const ProCard = () => {
 
       <div className="w-[56px] flex justify-center left-1/2 -translate-x-1/2 items-center absolute -top-[30px] h-[56px] rounded-full bg-[#BDFF00]  border-[3px] border-white ">
         <Image
-          src="/Logo.svg"
+          src="/ai.svg"
           alt="Logo"
           width={100}
           height={100}

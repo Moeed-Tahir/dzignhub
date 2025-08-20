@@ -15,6 +15,7 @@ import Image from "next/image";
 import { format } from 'timeago.js';
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/store";
+import { toast } from "react-toastify";
 
 const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeChat, setActiveChat, onConversationSelect, setShowIntro, setMessages, setConversations }) => {
   const router = useRouter();
@@ -47,7 +48,8 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
   // ADD THIS FUNCTION TO SAVE TITLE
   const saveConversationTitle = async (conversationId) => {
     if (!editingTitle.trim()) {
-      alert("Title cannot be empty");
+      // alert("Title cannot be empty");
+      toast.error("Title cannot be empty");
       return;
     }
 
@@ -84,11 +86,11 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
 
       } else {
         console.error('Title update failed:', data.error);
-        alert('Failed to update title. Please try again.');
+        // alert('Failed to update title. Please try again.');
       }
     } catch (error) {
       console.error('Error updating title:', error);
-      alert('Failed to update title. Please check your connection and try again.');
+      // alert('Failed to update title. Please check your connection and try again.');
     } finally {
       setIsUpdatingTitle(false);
     }
@@ -210,12 +212,12 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
 
       } else {
         console.error('Delete failed:', data.error);
-        alert('Failed to delete conversation. Please try again.');
+        // alert('Failed to delete conversation. Please try again.');
       }
 
     } catch (error) {
       console.error('Error deleting conversation:', error);
-      alert('Failed to delete conversation. Please check your connection and try again.');
+      // alert('Failed to delete conversation. Please check your connection and try again.');
     }
   };
 

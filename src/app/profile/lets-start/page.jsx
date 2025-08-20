@@ -128,8 +128,16 @@ const page = () => {
             let token = localStorage.getItem("token");
             await verifyToken(token);
           } else {
-            alert("Error saving data. Please try again.");
-          }
+            toast.error("Error saving data. Please try again.", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });          }
         }
       }
       setTimeout(() => {

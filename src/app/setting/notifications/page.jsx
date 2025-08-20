@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const CustomSwitch = ({ checked, onChange }) => (
   <button
@@ -48,7 +49,7 @@ const page = () => {
     setChecks((prev) => prev.map((c, i) => (i === idx ? value : c)));
   };
 
-  const updateNotificationSettings = async() => {
+  const updateNotificationSettings = async () => {
     setLoading(true);
 
     console.log("Updated settings:", {
@@ -56,52 +57,79 @@ const page = () => {
       checks,
     });
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/update-notification-settings`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-        body: JSON.stringify({
-          notifications: allEnabled,
-          newNotifications: checks[0],
-          softwareUpdatesNewsletter: checks[1],
-          newMessagesFromBots: checks[2],
-        }),
-      });
-  
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/update-notification-settings`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            notifications: allEnabled,
+            newNotifications: checks[0],
+            softwareUpdatesNewsletter: checks[1],
+            newMessagesFromBots: checks[2],
+          }),
+        }
+      );
+
       const data = await response.json();
-  
+
       if (data.type === "success") {
         console.log("Notification settings updated successfully");
       } else {
         console.error("Failed to update notification settings");
       }
-      alert(data.message);
-    }
-    catch (error) {
+      toast.success(data.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } catch (error) {
       console.error("Error updating notification settings:", error);
-      alert("Failed to update notification settings");
+      toast.error("An error occurred while updating notification settings", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const getNotificationSettings = async() => {
+  const getNotificationSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-notification-settings`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/get-notification-settings`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-      });
-  
+      );
+
       const data = await response.json();
-  
+
       if (data.type === "success") {
         console.log("Notification settings fetched successfully");
-        setAllEnabled(data.data.newNotifications && data.data.softwareUpdatesNewsletter && data.data.newMessagesFromBots);
+        setAllEnabled(
+          data.data.newNotifications &&
+            data.data.softwareUpdatesNewsletter &&
+            data.data.newMessagesFromBots
+        );
         setChecks([
           data.data.newNotifications,
           data.data.softwareUpdatesNewsletter,
@@ -110,21 +138,17 @@ const page = () => {
       } else {
         console.error("Failed to update notification settings");
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error updating notification settings:", error);
-      alert("Failed to update notification settings");
+      // alert("Failed to update notification settings");
     } finally {
       setLoading(false);
     }
   };
 
-
   useEffect(() => {
     getNotificationSettings();
-  }
-  , []);
-
+  }, []);
 
   return (
     <div className="flex flex-1 flex-col items-start justify-center py-[40px] xl:py-[80px] bg-white px-[40px] xl:px-[160px]">
@@ -138,7 +162,9 @@ const page = () => {
       </div>
       <hr className="w-full border-[#E3E9EE] mb-10" />
       <div className="w-full max-w-[600px]">
-        <div className="text-[24px] font-semibold text-[#2A0856] mb-6">allmyai</div>
+        <div className="text-[24px] font-semibold text-[#2A0856] mb-6">
+          allmyai
+        </div>
         <div className="flex flex-col gap-8 mb-12">
           <div className="flex items-center justify-between">
             <span className="text-[#393E44] text-[14px]">
@@ -169,18 +195,18 @@ const page = () => {
           </div>
         </div>
         <div className="flex gap-4 mt-2">
-         <button
+          <button
             type="submit"
             className="bg-[#D0FF00] hover:bg-[#b8e600] text-[#1B1F3B] font-medium rounded-full text-[14px] w-[130px] h-[44px] transition flex items-center justify-center"
             onClick={updateNotificationSettings}
           >
             {loading ? (
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
-          ) : (
-            "Save Changes"
-          )}
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+            ) : (
+              "Save Changes"
+            )}
           </button>
-             <button
+          <button
             type="button"
             className="border border-[#E3E9EE] text-[#1B1F3B] font-medium rounded-full text-[14px] w-[130px] h-[44px] bg-white hover:bg-[#F6F6F6] transition"
           >

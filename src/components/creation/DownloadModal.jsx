@@ -59,7 +59,7 @@ const DownloadModal = ({ isOpen, onClose, src }) => {
       
     } catch (error) {
       console.error("Download failed:", error);
-      alert("Failed to download video. Please try again.");
+      // alert("Failed to download video. Please try again.");
     } finally {
       setIsDownloading(false);
     }

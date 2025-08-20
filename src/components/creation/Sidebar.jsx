@@ -11,6 +11,7 @@ import Duration from "./Duration";
 import ProCard from "./ProCard";
 import Colors from "./Colors";
 import { useUserStore } from "@/store/store";
+import { toast } from "react-toastify";
 
 const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const router = useRouter();
@@ -26,7 +27,8 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
     c3: "#BFA293",
   });
   const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const { SetGenerateImages, SetGenerateVideo, AddGenerateVideos } = useUserStore();
+  const { SetGenerateImages, SetGenerateVideo, AddGenerateVideos } =
+    useUserStore();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(
     isImagePage ? "text-to-image" : "image-to-image"
@@ -44,6 +46,11 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const handleImageUploadFromTextArea = (file) => {
     setUploadedImageFromTextArea(file);
     setStartImage(file);
+  };
+
+  const handleImageRemoveFromTextArea = () => {
+    setUploadedImageFromTextArea(null);
+    setStartImage(null);
   };
 
   const saveGeneration = async (type, url, prompt, isMultiple) => {
@@ -152,8 +159,19 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         setError(`${error}`);
         setIsError(true);
         console.error("Error during image generation:", error);
-        alert(
-          "An error occurred while generating the image. Please try again."
+
+        toast.error(
+          "An error occurred while generating the image. Please try again.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          }
         );
         setIsLoading(false);
       }
@@ -215,15 +233,16 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
           setError(`${res.message}`);
           setIsError(true);
           console.error("Video generation failed:", res);
-          alert(`Video generation failed: ${res.error || "Unknown error"}`);
+          toast.error(
+            `Video generation failed: ${res.error || "Unknown error"}`
+          );
         }
       } catch (error) {
         setError(`${error}`);
         setIsError(true);
         console.error("Error during video generation:", error);
-        alert(
-          "An error occurred while generating the video. Please try again."
-        );
+
+        toast.error(`Video generation failed.`);
       } finally {
         setIsLoading(false);
       }
@@ -242,11 +261,9 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
             alt="Logo"
             width={100}
             height={100}
-            className="w-[25px] h-[25px] object-contain"
+            className="w-[108px] h-[25px] object-contain"
           />
-          <span className="font-semibold text-[16px] text-[#1B1F3B] leading-none">
-            allmyai
-          </span>
+        
         </div>
         {showClose && (
           <button
@@ -293,6 +310,8 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         onChange={(e) => setTextValue(e.target.value)}
         showUploadIcon={activeTab === "image-to-image"}
         onImageUpload={handleImageUploadFromTextArea}
+        uploadedImage={uploadedImageFromTextArea}
+        onImageRemove={handleImageRemoveFromTextArea}
       />
 
       {!isImagePage && (

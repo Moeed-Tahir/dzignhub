@@ -29,7 +29,7 @@ export default function ChatView({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="flex-1 flex p-3 !max-h-[48vh] mt-10  overflow-y-scroll flex-col"
+      className="flex-1 flex p-3 !max-h-[600px] mt-10  overflow-y-scroll flex-col"
     >
       <motion.div
         initial={{ opacity: 0 }}

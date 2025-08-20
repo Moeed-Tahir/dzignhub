@@ -272,10 +272,10 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
   };
 
   const [isMobile, setIsMobile] = useState(false);
- useEffect(() => {
+  useEffect(() => {
     // Function to check screen width
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 1025); 
+      setIsMobile(window.innerWidth < 1025);
     };
 
     // Run on mount
@@ -293,7 +293,6 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
   const [isMobileWorkspaceOpen, setIsMobileWorkspaceOpen] = useState(false);
   const [isMobileAssistantsOpen, setIsMobileAssistantsOpen] = useState(false);
   const [isMobileSettingsOpen, setIsMobileSettingsOpen] = useState(false);
-
 
   return (
     <nav
@@ -355,15 +354,12 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
               onClick={() => router.push("/dashboard")}
             >
               <Image
-                src="/logo-icon.svg"
+                src="/Logo.svg"
                 alt="Logo"
                 width={32}
                 height={32}
-                className="w-[26px] h-[26px] "
+                className="w-[108px] h-[26px] "
               />
-              <span className="text-lg font-semibold text-gray-900">
-                allmyai
-              </span>
             </div>
           )}
         </div>
@@ -786,7 +782,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                   <hr className="my-1 border-gray-200" />
                   <button
                     onClick={logout}
-                    className="block px-4 py-2 cursor-pointer text-sm text-gray-700 hover:bg-gray-50 "
+                    className="px-4 w-full flex justify-start py-2 cursor-pointer text-sm text-gray-700 hover:bg-gray-50 "
                   >
                     <LogOut className="w-4 h-4 inline-block mr-2" /> Log out
                   </button>
