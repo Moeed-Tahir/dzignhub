@@ -56,6 +56,7 @@ const PassReset = ({ isPassReset }) => {
           SetIsLogin(true);
           SetEmail(data.user.email);
           SetUserId(data.user._id);
+          localStorage.setItem("isLogin", true);
           router.push("/profile/onboarding");
         }
       } else {

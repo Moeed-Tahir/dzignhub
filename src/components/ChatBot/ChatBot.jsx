@@ -58,11 +58,11 @@ export default function DesignChatbot() {
                   alt="Logo"
                   width={100}
                   height={100}
-                  className="w-[44px] h-[44px] object-contain"
+                  className="w-[134px] h-[30px] object-contain"
                 />
-                <span className="font-medium text-[#1B1F3B] text-[22px] leading-none">
+                {/* <span className="font-medium text-[#1B1F3B] text-[22px] leading-none">
                   allmyai
-                </span>
+                </span> */}
               </div>
             )}
             {chatState === "chat" && (

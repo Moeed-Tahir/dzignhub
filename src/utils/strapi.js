@@ -5,7 +5,7 @@ export const fetchLandingPageData = async () => {
   try {
     // Fetch with populate to get nested components and media
     const response = await fetch(
-      `${STRAPI_URL}/api/landing-pages?populate[carousal_images][populate]=*&populate[stack][populate][card][populate]=*&populate[work_card][populate]=*&populate[templates][populate]=*&populate[download_section][populate]=*&populate[cards][populate]=*&populate[pricing_plans][populate][benefits][populate]=*&populate[testimonial_section][populate][testimonial][populate]=*&populate[assistant_section][populate][assistants][populate]=*&populate[faq_section][populate][faqs][populate]=*`
+      `${STRAPI_URL}/api/landing-pages?populate[hero_section][populate]=*&populate[carousal_images][populate]=*&populate[stack][populate][card][populate]=*&populate[work_card][populate]=*&populate[templates][populate]=*&populate[download_section][populate]=*&populate[cards][populate]=*&populate[pricing_plans][populate][benefits][populate]=*&populate[testimonial_section][populate][testimonial][populate]=*&populate[assistant_section][populate][assistants][populate]=*&populate[faq_section][populate][faqs][populate]=*`
     );
     
     if (!response.ok) {
@@ -21,6 +21,7 @@ export const fetchLandingPageData = async () => {
       return {
         mainHeading: landingPage.MainHeading || "Turn Your Words Into Stunning Visuals",
         mainDescription: landingPage.MainDescription || "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+        heroSection: landingPage.hero_section || null,
         carouselImages: landingPage.carousal_images || [],
         stackSections: landingPage.stack || [],
         workCards: landingPage.work_card || [],
@@ -38,6 +39,7 @@ export const fetchLandingPageData = async () => {
     return {
       mainHeading: "Turn Your Words Into Stunning Visuals",
       mainDescription: "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+      heroSection: null,
       carouselImages: [],
       stackSections: [],
       workCards: [],
@@ -57,6 +59,7 @@ export const fetchLandingPageData = async () => {
     return {
       mainHeading: "Turn Your Words Into Stunning Visuals",
       mainDescription: "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+      heroSection: null,
       carouselImages: [],
       stackSections: [],
       workCards: [],
@@ -65,7 +68,8 @@ export const fetchLandingPageData = async () => {
       cards: [],
       pricingPlans: [],
       testimonialSection: null,
-      assistantSection: null
+      assistantSection: null,
+      faqSection: null
     };
   }
 };
@@ -679,4 +683,311 @@ export const fetchLoginPageData = async () => {
       }
     };
   }
+};
+
+export const fetchPricingPageData = async () => {
+  try {
+    const apiUrl = `${STRAPI_URL}/api/pricing-pages?populate[hero_section][populate]=*&populate[plan_section][populate]=*&populate[plans][populate][plan_header][populate]=*&populate[plans][populate][plan_sections][populate][features][populate]=*&populate[testimonials_section][populate][testimonial][populate]=*&populate[faq_section][populate][faqs][populate]=*`;
+    
+    // Add timeout to the fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
+    const response = await fetch(apiUrl, { 
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const apiData = await response.json();
+    
+    if (apiData.data && apiData.data.length > 0) {
+      const pricingPage = apiData.data[0];
+      
+      // Handle hero_section as array or object
+      const heroData = pricingPage.hero_section && Array.isArray(pricingPage.hero_section) && pricingPage.hero_section.length > 0 
+        ? pricingPage.hero_section[0] 
+        : pricingPage.hero_section;
+      
+      // Handle plan_section as array or object
+      const planData = pricingPage.plan_section && Array.isArray(pricingPage.plan_section) 
+        ? pricingPage.plan_section 
+        : (pricingPage.plan_section ? [pricingPage.plan_section] : []);
+      
+      // Handle plans data
+      const plansData = pricingPage.plans || null;
+      
+      // Handle testimonials_section as array or object
+      const testimonialsData = pricingPage.testimonials_section && Array.isArray(pricingPage.testimonials_section) && pricingPage.testimonials_section.length > 0 
+        ? pricingPage.testimonials_section[0] 
+        : pricingPage.testimonials_section;
+      
+      // Handle faq_section as array or object
+      const faqData = pricingPage.faq_section && Array.isArray(pricingPage.faq_section) && pricingPage.faq_section.length > 0 
+        ? pricingPage.faq_section[0] 
+        : pricingPage.faq_section;
+      
+      return {
+        heroSection: heroData ? {
+          title: heroData.title || "Pricing",
+          subtitle: heroData.subtitle || "Subscriptions"
+        } : {
+          title: "Pricing",
+          subtitle: "Subscriptions"
+        },
+        planSection: planData.map(plan => ({
+          plan: plan.plan || "Plan",
+          price: plan.price || "$0 /mo",
+          benefits: plan.benefits || [],
+          buttonLabel: plan.buttonLabel || "Get Started",
+          link: plan.link || "#"
+        })),
+        plansData: plansData ? {
+          title: plansData.title || "Compare plans",
+          planHeaders: plansData.plan_header || [],
+          planSections: plansData.plan_sections || []
+        } : null,
+        testimonialsSection: testimonialsData ? {
+          headingPre: testimonialsData.headingPre || "What",
+          headingMain: testimonialsData.headingMain || "Our Users Are Saying",
+          testimonial: testimonialsData.testimonial || []
+        } : null,
+        faqSection: faqData ? {
+          key: faqData.key || "pricing",
+          title: faqData.title || "Have questions?",
+          subtitle: faqData.subtitle || "Have questions about how our pricing works? Find the answers to the most common inquiries below.",
+          faqs: faqData.faqs || []
+        } : null
+      };
+    }
+    
+    // Return fallback data if no data from Strapi
+    return {
+      heroSection: {
+        title: "Pricing",
+        subtitle: "Subscriptions"
+      },
+      planSection: [],
+      plansData: null,
+      testimonialsSection: null,
+      faqSection: null
+    };
+    
+  } catch (error) {
+    console.error('Error fetching pricing page data:', error);
+    
+    // Return fallback data in case of error
+    return {
+      heroSection: {
+        title: "Pricing",
+        subtitle: "Subscriptions"
+      },
+      planSection: [],
+      plansData: null,
+      testimonialsSection: null,
+      faqSection: null
+    };
+  }
+};
+
+// Fetch footer data
+export const fetchFooterData = async () => {
+  try {
+    const apiUrl = `${STRAPI_URL}/api/footers?populate[socialLinks][populate]=*&populate[footerSections][populate][links][populate]=*&populate[navigationItems][populate]=*&populate=logo`;
+    
+    // Add timeout to the fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
+    const response = await fetch(apiUrl, { 
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const apiData = await response.json();
+    
+    if (apiData.data && apiData.data.length > 0) {
+      const footer = apiData.data[0];
+      
+      return {
+        logo: footer.logo ? getStrapiImageUrl(footer.logo) : "/common/footer/logo-with-name.svg",
+        logoAlt: footer.logoAlt || "Company Logo",
+        socialLinks: footer.socialLinks ? footer.socialLinks.map(social => ({
+          platform: social.platform || "Social",
+          icon: social.icon ? getStrapiImageUrl(social.icon) : "/common/footer/facebook.svg",
+          url: social.url || "#",
+          alt: social.alt || social.platform || "Social"
+        })) : [],
+        footerSections: footer.footerSections ? footer.footerSections.map(section => ({
+          title: section.title || "Section",
+          links: section.links ? section.links.map(link => ({
+            label: link.label || "Link",
+            href: link.href || "#"
+          })) : []
+        })) : [],
+        navigationItems: footer.navigationItems ? footer.navigationItems.map(nav => ({
+          label: nav.label || "Nav",
+          href: nav.href || "#"
+        })) : [],
+        copyrightText: footer.copyrightText || "© 2025 Copyright by",
+        companyName: footer.companyName || "Aiyaiya"
+      };
+    }
+    
+    // Return fallback data if no data from Strapi
+    return null;
+    
+  } catch (error) {
+    console.error('Error fetching footer data:', error);
+    return null;
+  }
+};
+
+// Fetch signup page data
+export const fetchSignupPageData = async () => {
+  try {
+    const response = await fetch(
+      `${STRAPI_URL}/api/signup-pages?populate[submitButton][populate]=*&populate[LoginLink][populate]=*&populate[email_field][populate]=*&populate[mobile_field][populate]=*&populate[password_field][populate]=*&populate[confirmpassword_field][populate]=*`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Signup page data structure:', JSON.stringify(data, null, 2));
+    
+    // Check if data exists and has at least one item (since it's a collection)
+    if (!data?.data || !Array.isArray(data.data) || data.data.length === 0) {
+      console.log('No signup page data found, using fallback');
+      return getSignupPageFallbackData();
+    }
+    
+    const signupPage = data.data[0];
+    
+    // Transform the data to match the expected structure
+    return {
+      pageTitle: signupPage.pageTitle || "Let's Create Your Account",
+      pageDescription: signupPage.pageDescription || "Get started with allmyai and start using our AI assistance",
+      submitButton: signupPage.submitButton ? {
+        text: signupPage.submitButton.text || "Create Account",
+        loadingText: signupPage.submitButton.loadingText || "Creating..."
+      } : {
+        text: "Create Account",
+        loadingText: "Creating..."
+      },
+      termsText: signupPage.termsText || "By clicking the Create Account button, you acknowledge that you have read and agree to our Terms of Use and Privacy Policy.",
+      loginLink: signupPage.LoginLink ? {
+        preText: signupPage.LoginLink.preText || "Already have an account?",
+        linkText: signupPage.LoginLink.linkText || "Login",
+        url: signupPage.LoginLink.url || "/auth/login"
+      } : {
+        preText: "Already have an account?",
+        linkText: "Login", 
+        url: "/auth/login"
+      },
+      emailField: signupPage.email_field ? {
+        label: signupPage.email_field.label || "Email Address",
+        placeholder: signupPage.email_field.placeholder || "",
+        type: signupPage.email_field.type || "email",
+        required: signupPage.email_field.required !== undefined ? signupPage.email_field.required : true
+      } : {
+        label: "Email Address",
+        placeholder: "",
+        type: "email",
+        required: true
+      },
+      mobileField: signupPage.mobile_field ? {
+        label: signupPage.mobile_field.label || "Mobile Phone",
+        placeholder: signupPage.mobile_field.placeholder || "Enter your mobile phone",
+        type: signupPage.mobile_field.type || "text",
+        required: signupPage.mobile_field.required !== undefined ? signupPage.mobile_field.required : true
+      } : {
+        label: "Mobile Phone",
+        placeholder: "Enter your mobile phone",
+        type: "text",
+        required: true
+      },
+      passwordField: signupPage.password_field ? {
+        label: signupPage.password_field.label || "Password",
+        placeholder: signupPage.password_field.placeholder || "",
+        type: signupPage.password_field.type || "password",
+        required: signupPage.password_field.required !== undefined ? signupPage.password_field.required : true
+      } : {
+        label: "Password",
+        placeholder: "",
+        type: "password",
+        required: true
+      },
+      confirmPasswordField: signupPage.confirmpassword_field ? {
+        label: signupPage.confirmpassword_field.label || "Confirm Password",
+        placeholder: signupPage.confirmpassword_field.placeholder || "",
+        type: signupPage.confirmpassword_field.type || "password",
+        required: signupPage.confirmpassword_field.required !== undefined ? signupPage.confirmpassword_field.required : true
+      } : {
+        label: "Confirm Password",
+        placeholder: "",
+        type: "password",
+        required: true
+      }
+    };
+  } catch (error) {
+    console.error('Error fetching signup page data:', error);
+    return getSignupPageFallbackData();
+  }
+};
+
+// Fallback data for signup page
+const getSignupPageFallbackData = () => {
+  return {
+    pageTitle: "Let's Create Your Account",
+    pageDescription: "Get started with allmyai and start using our AI assistance",
+    submitButton: {
+      text: "Create Account",
+      loadingText: "Creating..."
+    },
+    termsText: "By clicking the Create Account button, you acknowledge that you have read and agree to our Terms of Use and Privacy Policy.",
+    loginLink: {
+      preText: "Already have an account?",
+      linkText: "Login",
+      url: "/auth/login"
+    },
+    emailField: {
+      label: "Email Address",
+      placeholder: "",
+      type: "email",
+      required: true
+    },
+    mobileField: {
+      label: "Mobile Phone",
+      placeholder: "Enter your mobile phone",
+      type: "text",
+      required: true
+    },
+    passwordField: {
+      label: "Password",
+      placeholder: "",
+      type: "password",
+      required: true
+    },
+    confirmPasswordField: {
+      label: "Confirm Password",
+      placeholder: "",
+      type: "password",
+      required: true
+    }
+  };
 };

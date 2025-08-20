@@ -198,7 +198,9 @@ const Page = () => {
       <div className="w-full min-h-screen ">
         <Navbar isCreationPage={true} />
         {showSuggestion ? (
-          <StartingSuggestion />
+          // <StartingSuggestion />
+
+<>asd</>
         ) : (
           <ImagesResults generations={generations} localGenerations={localGenerations} />
         )}

@@ -3,7 +3,10 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import LoginModal from "../auth/LoginModal";
 
-function HeroCTAMobile() {
+function HeroCTAMobile({ 
+  placeholder = "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape",
+  buttonText = "Create image"
+}) {
   const [prompt, setPrompt] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
@@ -73,8 +76,8 @@ function HeroCTAMobile() {
         <div className="bg-[#212e62] flex flex-col border-t-[0.49px] border-[#1B1F3B] py-[12px] px-[24px] rounded-[490.57px]">
           <input  value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-           className="lg:text-[18px] text-[16px] text-[#FFFFFF]"
-           placeholder='A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape'/>
+           className="lg:text-[18px] text-[16px] text-[#FFFFFF] bg-transparent focus:outline-none placeholder:text-white"
+           placeholder={placeholder}/>
             
         
         </div>
@@ -86,7 +89,7 @@ function HeroCTAMobile() {
               className="lg:w-[24px] w-[20px] h-[20px] lg:h-[24px] object-contain"
             />
           <p className="text-[#1B1F3B]  lg:text-[18px] text-[16px]">
-            Create image
+            {buttonText}
           </p>
           </button>
         </div>

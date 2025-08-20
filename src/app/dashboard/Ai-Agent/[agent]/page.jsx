@@ -18,7 +18,10 @@ const page = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const agents = {
-    "zara": "brand-designer"
+    "zara": "brand-designer",
+    "sana": "content-creator",
+    "novi": "seo-specialist",
+    "mira": "strategist"
   }
 
   const [conversations, setConversations] = useState([]);

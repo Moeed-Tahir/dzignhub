@@ -2,6 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 // Convert to proper React components
 const TrashIcon = () => (
   <svg width="22" height="22" fill="none" viewBox="0 0 22 22">
@@ -24,8 +25,16 @@ const page = () => {
 
   const handleDeleteAccount = async() => {
     if (!password) {
-      alert("Please enter your password");
-      return;
+ toast.error("Please enter your password", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });      return;
     }
     setIsLoading(true);
 
@@ -41,11 +50,29 @@ const page = () => {
 
       const data = await response.json();
       if (data.type === "success") {
-        alert("Account deleted successfully");
+        toast.success("Account deleted successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         router.push("/auth/login");
       }
       else {
-        alert(data.message || "Failed to delete account");
+        toast.error(data.message || "Failed to delete account", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         console.error("Error deleting account:", data.message);
       }
     }
@@ -74,7 +101,7 @@ const page = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     type="password"
                     className="w-full border border-[#E3E9EE] rounded-[12px] py-[12px] pr-[16px] pl-[40px] text-[#1B1F3B] text-[16px] font-medium focus:outline-none focus:border-[#C209C1] transition"
-                    placeholder=" Enter your password"
+                    placeholder=""
                   />
                   <span className="absolute left-4 top-1/2 -translate-y-1/2">
                     {" "}

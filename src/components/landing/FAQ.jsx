@@ -44,11 +44,77 @@ const faqData = [
   },
 ];
 
-function FAQ({ faqData: propFaqData, title, subtitle, loading }) {
-  // Use passed faqData or fallback to static data
-  const currentFaqData = propFaqData && propFaqData.length > 0 ? propFaqData : faqData;
-  const currentTitle = title || "Have questions?";
-  const currentSubtitle = subtitle || "Have questions about how our Text-to-Image AI works? Find the answers to the most common inquiries below. If you don't see your question, feel free to reach out!";
+// Pricing-specific FAQ data as fallback
+const pricingFaqData = [
+  {
+    question: "What payment methods do you accept?",
+    answer:
+      "We accept all major credit cards, PayPal, and bank transfers for annual subscriptions. All payments are processed securely through our trusted payment partners.",
+  },
+  {
+    question: "Can I cancel my subscription at any time?",
+    answer:
+      "Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period, and no further charges will be made.",
+  },
+  {
+    question: "Is there a free trial available?",
+    answer:
+      "Yes, we offer a free plan that includes basic features and limited usage. You can upgrade to a paid plan at any time to access more features and higher usage limits.",
+  },
+  {
+    question: "Do you offer refunds?",
+    answer:
+      "We offer a 30-day money-back guarantee for all new subscriptions. If you're not satisfied with our service, contact our support team for a full refund.",
+  },
+  {
+    question: "Can I change my plan later?",
+    answer:
+      "Yes, you can upgrade or downgrade your plan at any time. Changes will be prorated and reflected in your next billing cycle.",
+  },
+  {
+    question: "Are there any setup fees?",
+    answer:
+      "No, there are no setup fees or hidden charges. You only pay the subscription fee for your chosen plan.",
+  },
+  {
+    question: "Do you offer team or enterprise plans?",
+    answer:
+      "Yes, we offer custom enterprise plans for teams and organizations. Contact our sales team to discuss your specific requirements and pricing.",
+  },
+  {
+    question: "How do I access my invoices?",
+    answer:
+      "You can access and download your invoices from your account dashboard. We also send email receipts for all payments.",
+  },
+];
+
+function FAQ({ faqData: propFaqData, title, subtitle, loading, pageContext = "general" }) {
+  // Determine which default data to use based on context
+  const getDefaultFaqData = () => {
+    if (pageContext === "pricing") {
+      return pricingFaqData;
+    }
+    return faqData;
+  };
+
+  const getDefaultTitle = () => {
+    if (pageContext === "pricing") {
+      return "Pricing Questions?";
+    }
+    return "Have questions?";
+  };
+
+  const getDefaultSubtitle = () => {
+    if (pageContext === "pricing") {
+      return "Have questions about our pricing plans? Find the answers to the most common pricing and billing inquiries below. If you don't see your question, feel free to reach out!";
+    }
+    return "Have questions about how our Text-to-Image AI works? Find the answers to the most common inquiries below. If you don't see your question, feel free to reach out!";
+  };
+
+  // Use passed faqData or fallback to default data based on context
+  const currentFaqData = propFaqData && propFaqData.length > 0 ? propFaqData : getDefaultFaqData();
+  const currentTitle = title || getDefaultTitle();
+  const currentSubtitle = subtitle || getDefaultSubtitle();
 
   const [openIndex, setOpenIndex] = useState(null);
   const ref = useRef(null);

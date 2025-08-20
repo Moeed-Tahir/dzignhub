@@ -99,7 +99,7 @@ useEffect(() => {
         </div>
         <div className="absolute md:top-[60%] top-[55%] max-w-[94%] left-[3%]  w-full border-black  flex flex-col gap-[16px] md:flex-row  justify-between">
           <img
-            src="/landing/sidebar/logo-with-name.svg"
+            src="/Logo.svg"
             className="max-w-[185.07px]  max-h-[35.26px]"
           />
           <div className="flex justify-between gap-[16px] mt-[16px] md:mt-[0px]  max-h-[40px]">
