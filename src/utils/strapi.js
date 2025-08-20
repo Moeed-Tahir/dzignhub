@@ -1,5 +1,5 @@
 // utils/strapi.js
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://rational-growth-935ad59588.strapiapp.com';
 
 export const fetchLandingPageData = async () => {
   try {
