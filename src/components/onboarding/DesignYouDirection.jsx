@@ -53,7 +53,7 @@ const DesignYouDirection = forwardRef(({ onDataChange }, ref) => {
     { id: 1, value: "refined", icon: "🎨", label: "Refined" },
     { id: 2, value: "bold", icon: "️🖥️", label: "Bold" },
     { id: 3, value: "visionary", icon: "🖌️", label: "Visionary" },
-    { id: 4, value: "draw-cano", icon: "📊", label: "Draw Cano" },
+    { id: 4, value: "draw-cano", icon: "✏️", label: "Draw Cano" },
     { id: 5, value: "grounded", icon: "📊", label: "Grounded" },
     { id: 6, value: "minimalist", icon: "🚀", label: "Minimalist" },
   ];
@@ -239,7 +239,7 @@ const DesignYouDirection = forwardRef(({ onDataChange }, ref) => {
         What visual style resonates with your brand?
       </p>
       
-      <div className="flex gap-[8px] flex-wrap">
+      <div className="flex gap-[8px] mb-4 flex-wrap">
         {cardOptions.map((card) => (
           <SelectableCard
             key={card.id}

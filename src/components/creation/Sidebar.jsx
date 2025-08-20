@@ -11,6 +11,7 @@ import Duration from "./Duration";
 import ProCard from "./ProCard";
 import Colors from "./Colors";
 import { useUserStore } from "@/store/store";
+import { toast } from "react-toastify";
 
 const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const router = useRouter();
@@ -26,14 +27,18 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
     c3: "#BFA293",
   });
   const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const { SetGenerateImages, SetGenerateVideo } = useUserStore();
+  const { SetGenerateImages, SetGenerateVideo, AddGenerateVideos } =
+    useUserStore();
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState(isImagePage ? "text-to-image" : "image-to-image");
+  const [activeTab, setActiveTab] = useState(
+    isImagePage ? "text-to-image" : "image-to-image"
+  );
 
   // Add states for uploaded images
   const [startImage, setStartImage] = useState(null);
   const [endImage, setEndImage] = useState(null);
-  const [uploadedImageFromTextArea, setUploadedImageFromTextArea] = useState(null);
+  const [uploadedImageFromTextArea, setUploadedImageFromTextArea] =
+    useState(null);
 
   const [isError, setIsError] = useState("");
   const [error, setError] = useState("");
@@ -41,6 +46,11 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
   const handleImageUploadFromTextArea = (file) => {
     setUploadedImageFromTextArea(file);
     setStartImage(file);
+  };
+
+  const handleImageRemoveFromTextArea = () => {
+    setUploadedImageFromTextArea(null);
+    setStartImage(null);
   };
 
   const saveGeneration = async (type, url, prompt, isMultiple) => {
@@ -81,7 +91,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
     console.log("Selected Quantity:", selectedQuantity);
     console.log("Text Value:", textValue);
 
-    
     // const data = {
     //   prompt: textValue,
     //   style: selectedStyle,
@@ -94,60 +103,78 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
     //   endImage: null,
     //   uploadedImageFromTextArea: activeTab === "image-to-image" ? uploadedImageFromTextArea : null,
     // };
- 
-   
+
     if (isImagePage) {
       const formData = new FormData();
       formData.append("prompt", textValue);
       if (selectedStyle) {
         formData.append("style", JSON.stringify(selectedStyle));
-      }
-      else {
+      } else {
         formData.append("style", JSON.stringify({ name: "normal style" }));
       }
       formData.append("size", selectedSize || "1024x1024");
-      formData.append("colors", JSON.stringify([selectedColors.c1, selectedColors.c2, selectedColors.c3]));
+      formData.append(
+        "colors",
+        JSON.stringify([
+          selectedColors.c1,
+          selectedColors.c2,
+          selectedColors.c3,
+        ])
+      );
       formData.append("quantity", selectedQuantity.toString());
 
-      
-    // Add image file if it's image-to-image mode
-    if (activeTab === "image-to-image" && uploadedImageFromTextArea) {
-      formData.append("uploadedImageFromTextArea", uploadedImageFromTextArea);
-      console.log("Image file added to FormData:", uploadedImageFromTextArea.name);
-    }
-  
-    try {
-      const req = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/generate-image`,
-        {
-          method: "POST",
-          body: formData
-        }
-      );
-
-      const res = await req.json();
-      console.log(res)
-      if (res.type == "success" || res.type == "partial_success") {
-        if (onGenerate) onGenerate();
-        SetGenerateImages(res.images);
-
-        // Save the generation to the database
-        if (selectedQuality > 1) {
-          saveGeneration("image", res.images, textValue, true);
-        } else {
-          saveGeneration("image", res.images[0], textValue, false);
-        }
+      // Add image file if it's image-to-image mode
+      if (activeTab === "image-to-image" && uploadedImageFromTextArea) {
+        formData.append("uploadedImageFromTextArea", uploadedImageFromTextArea);
+        console.log(
+          "Image file added to FormData:",
+          uploadedImageFromTextArea.name
+        );
       }
-      setIsLoading(false);
-    }
-    catch(error) {
-      setError(`${error}`);
-      setIsError(true);
-      console.error("Error during image generation:", error);
-      alert("An error occurred while generating the image. Please try again.");
-      setIsLoading(false);
 
-    }
+      try {
+        const req = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/generate-image`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const res = await req.json();
+        console.log(res);
+        if (res.type == "success" || res.type == "partial_success") {
+          if (onGenerate) onGenerate();
+          SetGenerateImages(res.images);
+
+          // Save the generation to the database
+          if (selectedQuality > 1) {
+            saveGeneration("image", res.images, textValue, true);
+          } else {
+            saveGeneration("image", res.images[0], textValue, false);
+          }
+        }
+        setIsLoading(false);
+      } catch (error) {
+        setError(`${error}`);
+        setIsError(true);
+        console.error("Error during image generation:", error);
+
+        toast.error(
+          "An error occurred while generating the image. Please try again.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          }
+        );
+        setIsLoading(false);
+      }
     } else {
       // Video generation - use FormData for file uploads
       const formData = new FormData();
@@ -155,7 +182,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
 
       // Make sure we're sending the correct style value
       const styleValue = selectedStyle?.name || selectedStyle;
-      formData.append("style", styleValue  || "Golden hour");
+      formData.append("style", styleValue || "Golden hour");
 
       // Send duration as-is (it's already in "4 sec" format from Duration component)
       formData.append("duration", selectedDuration || "5 sec");
@@ -164,11 +191,10 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       // Add image files if selected
       if (startImage) {
         formData.append("startImage", startImage);
-      }
-      else if (uploadedImageFromTextArea) {
+      } else if (uploadedImageFromTextArea) {
         formData.append("startImage", uploadedImageFromTextArea);
       }
-      
+
       // else {
       //   setError("Start image is required");
       //   setIsError(true);
@@ -207,15 +233,16 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
           setError(`${res.message}`);
           setIsError(true);
           console.error("Video generation failed:", res);
-          alert(`Video generation failed: ${res.error || "Unknown error"}`);
+          toast.error(
+            `Video generation failed: ${res.error || "Unknown error"}`
+          );
         }
       } catch (error) {
         setError(`${error}`);
         setIsError(true);
         console.error("Error during video generation:", error);
-        alert(
-          "An error occurred while generating the video. Please try again."
-        );
+
+        toast.error(`Video generation failed.`);
       } finally {
         setIsLoading(false);
       }
@@ -234,11 +261,9 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
             alt="Logo"
             width={100}
             height={100}
-            className="w-[25px] h-[25px] object-contain"
+            className="w-[108px] h-[25px] object-contain"
           />
-          <span className="font-semibold text-[16px] text-[#1B1F3B] leading-none">
-            allmyai
-          </span>
+        
         </div>
         {showClose && (
           <button
@@ -285,6 +310,8 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         onChange={(e) => setTextValue(e.target.value)}
         showUploadIcon={activeTab === "image-to-image"}
         onImageUpload={handleImageUploadFromTextArea}
+        uploadedImage={uploadedImageFromTextArea}
+        onImageRemove={handleImageRemoveFromTextArea}
       />
 
       {!isImagePage && (
@@ -376,10 +403,9 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
 
       <button
         type="submit"
-        className={`w-full ${
-          isValid ? "bg-[#BDFF00]" : "bg-[#BDFF005C] cursor-not-allowed"
+        className={`w-full bg-[#BDFF00]
         } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
-        disabled={!isValid}
+        // disabled={!isValid}
         onClick={handleGenerate}
       >
         {isLoading ? (

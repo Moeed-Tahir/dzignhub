@@ -69,16 +69,14 @@ const SideComponent = ({ isProfilePage, title, desc, sideData }) => {
               />
             ) : (
               <Image
-                src={"/white-logo.png"}
+                src={"/white-logo.svg"}
                 alt="Logo"
                 width={100}
                 height={100}
-                className="w-[44px] h-[44px] object-contain"
+                className="w-[200px] h-[44px] object-contain"
               />
             )}
-            <p className="text-white text-[27px] font-medium">
-              {sideData?.brandTitle || "allmyai"}
-            </p>
+         
           </div>
 
           <div className="w-[80%] flex flex-col items-center justify-center">

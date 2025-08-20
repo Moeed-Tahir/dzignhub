@@ -57,7 +57,7 @@ export default function SettingSidebar() {
 
   return (
     <aside
-      className={`transition-all duration-300 bg-white border-r-4 border-[#E3E9EE] xl:flex hidden  py-[80px] ${
+      className={`transition-all duration-300 bg-white border-r-4 border-[#E3E9EE] lg:flex hidden  py-[80px] ${
         collapsed ? "w-[75px]" : "w-[360px]"
       }`}
     >

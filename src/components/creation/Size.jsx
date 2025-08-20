@@ -36,6 +36,9 @@ const Size = ({ selected, onChange }) => {
           className="w-[24px] h-[24px] object-cover rounded-md"
         />
         <span className="text-[20px] font-normal text-[#202126]">Size</span>
+        <span className="text-[14px] font-normal text-gray-400 ">
+          (optional)
+        </span>
       </div>
 
       <div className="flex flex-wrap gap-[3px]">
@@ -43,9 +46,7 @@ const Size = ({ selected, onChange }) => {
           <div
             key={size.key}
             className={`flex items-center rounded-[8px] gap-2 py-[12px] px-[8px] bg-[#F7F8F8] justify-center flex-col w-[32%] h-[98px] cursor-pointer border-2 ${
-              selected === size.key
-                ? "border-[#C209C1]"
-                : "border-transparent"
+              selected === size.key ? "border-[#C209C1]" : "border-transparent"
             }`}
             onClick={() => onChange && onChange(size.key)}
           >

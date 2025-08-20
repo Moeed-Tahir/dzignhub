@@ -22,21 +22,21 @@ function Testimonials({ testimonialSection = null }) {
         name: "Jerry Tang",
         role: "Recent graduate, Marketing at Sweatpals",
         quote: "Using Text-to-Voice has saved me countless hours. The multilingual support allows me to reach students around the world with high-quality audio narrations.",
-        avatar: "/landing/testimonials/icon.png",
+        avatar: "/image.svg",
         layoutVariant: "variant-1"
       },
       {
         name: "Sarah Johnson",
         role: "Content Creator, Digital Marketing",
         quote: "The quality of voice generation is incredible. It's revolutionized how I create content for my clients across different industries.",
-        avatar: "/landing/testimonials/icon.png",
+        avatar: "/image.svg",
         layoutVariant: "variant-2"
       },
       {
         name: "Mike Chen",
         role: "Product Manager, Tech Startup",
         quote: "Our team productivity has increased dramatically since implementing this solution. The API integration was seamless and the results are outstanding.",
-        avatar: "/landing/testimonials/icon.png",
+        avatar: "/image.svg",
         layoutVariant: "variant-3"
       }
     ]
@@ -173,7 +173,7 @@ function Testimonials({ testimonialSection = null }) {
         variants={containerVariants}
       >
         <motion.img
-          src={testimonial.avatar}
+          src={"/image.svg"}
           alt={`${testimonial.name} avatar`}
           className="w-[56px] h-[56px] rounded-[69px] object-cover"
           variants={avatarVariants}

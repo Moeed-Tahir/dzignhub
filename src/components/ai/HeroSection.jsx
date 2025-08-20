@@ -3,28 +3,37 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { getStrapiImageUrl } from "@/utils/strapi";
+import { toast } from "react-toastify";
 
 function Hero({ isImage, isVideoPage, mediaData, loading }) {
   const router = useRouter();
   const [prompt, setPrompt] = React.useState("");
 
   // Determine the media key based on props
-  const mediaKey = isImage ? 'imageCreation' : 'videoCreation';
-  
+  const mediaKey = isImage ? "imageCreation" : "videoCreation";
+
   // Get Strapi data for the current media type
   const strapiHeroData = mediaData?.[mediaKey]?.hero;
 
   // Prepare dynamic content with fallbacks
   const getTitle = () => {
-    return strapiHeroData?.title || (isImage ? "Image Creation" : "Video Creation");
+    return (
+      strapiHeroData?.title || (isImage ? "Image Creation" : "Video Creation")
+    );
   };
 
   const getSubtitle = () => {
-    return strapiHeroData?.subtitle || "Create stunning videos effortlessly using powerful manual tools or let our AI assistants help you craft content faster.";
+    return (
+      strapiHeroData?.subtitle ||
+      "Create stunning videos effortlessly using powerful manual tools or let our AI assistants help you craft content faster."
+    );
   };
 
   const getPlaceholderPrompt = () => {
-    return strapiHeroData?.placeholderPrompt || "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape";
+    return (
+      strapiHeroData?.placeholderPrompt ||
+      "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+    );
   };
 
   const getCtaLabel = () => {
@@ -32,15 +41,23 @@ function Hero({ isImage, isVideoPage, mediaData, loading }) {
   };
 
   const getMainImageUrl = () => {
-    return getStrapiImageUrl(strapiHeroData?.mainImage) || "/video-creation/main.jpg";
+    return (
+      getStrapiImageUrl(strapiHeroData?.mainImage) || "/video-creation/main.jpg"
+    );
   };
 
   const getLeftImageUrl = () => {
-    return getStrapiImageUrl(strapiHeroData?.leftImage) || "/video-creation/left1.jpg";
+    return (
+      getStrapiImageUrl(strapiHeroData?.leftImage) ||
+      "/video-creation/left1.jpg"
+    );
   };
 
   const getRightImageUrl = () => {
-    return getStrapiImageUrl(strapiHeroData?.rightImage) || "/video-creation/right.jpg";
+    return (
+      getStrapiImageUrl(strapiHeroData?.rightImage) ||
+      "/video-creation/right.jpg"
+    );
   };
 
   const title = getTitle();
@@ -51,32 +68,41 @@ function Hero({ isImage, isVideoPage, mediaData, loading }) {
   const leftImageUrl = getLeftImageUrl();
   const rightImageUrl = getRightImageUrl();
 
-  const saveGeneration = async(type, url, prompt) => {
+  const saveGeneration = async (type, url, prompt) => {
     const data = {
       type: type,
       url: url,
-      prompt: prompt
-    }
+      prompt: prompt,
+    };
     let prevGenerations = JSON.parse(localStorage.getItem("generations")) || [];
     prevGenerations.push(data);
 
     localStorage.setItem("generations", JSON.stringify(prevGenerations));
 
-    alert("Login to see your generation.");
-  }
+    // alert("Login to see your generation.");
+  };
 
-  const imageGeneration = async() => {
+  const imageGeneration = async () => {
     if (!prompt) {
-      alert("Please enter a prompt.");
+      toast.error("Please enter a prompt", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       return;
     }
-      const data = {
-          prompt: prompt,
-          style: "",
-          size: "",
-          colors: [],
-          quantity: 1,
-        };
+    const data = {
+      prompt: prompt,
+      style: "",
+      size: "",
+      colors: [],
+      quantity: 1,
+    };
     const req = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/generate-image`,
       {
@@ -90,10 +116,10 @@ function Hero({ isImage, isVideoPage, mediaData, loading }) {
 
     const res = await req.json();
     if (res.type == "success") {
-        saveGeneration("image", res.images, prompt);
-      }
+      saveGeneration("image", res.images, prompt);
+    }
     setIsLoading(false);
-  }
+  };
 
   return (
     <>
@@ -246,9 +272,7 @@ function Hero({ isImage, isVideoPage, mediaData, loading }) {
                 alt="star"
                 className="w-[24px] h-[24px] object-contain"
               />
-              <span className="text-[#1B1F3B]">
-                {ctaLabel}
-              </span>
+              <span className="text-[#1B1F3B]">{ctaLabel}</span>
             </motion.button>
           </motion.div>
 

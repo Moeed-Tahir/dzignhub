@@ -108,9 +108,9 @@ function Navbar({ onOpenSidebar }) {
     >
       <Link href="/">
         <motion.img
-          src="/landing/Group.png"
+          src="/GreenLogo.svg"
           alt="logo"
-          className="w-[44px] h-[44px] object-contain"
+          className="w-[160px] h-[40px] object-contain"
           variants={logoVariants}
         />
       </Link>

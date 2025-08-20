@@ -51,13 +51,13 @@ export default function AuthLayout({ children }) {
               <Image
                 src="/Logo.svg"
                 alt="Logo"
-                width={100}
-                height={100}
-                className="w-[44px] h-[44px] object-contain "
+                width={120}
+                height={1000}
+                className="w-[120px] h-[28px] object-contain "
               />
-              <span className="font-medium text-[#1B1F3B] text-[22px] leading-none">
+              {/* <span className="font-medium text-[#1B1F3B] text-[22px] leading-none">
                 allmyai
-              </span>
+              </span> */}
             </div>
           )}
         </div>

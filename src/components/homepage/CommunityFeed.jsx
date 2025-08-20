@@ -139,7 +139,7 @@ function CommunityFeed() {
 
       {/* Masonry Layout using CSS Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[10px] w-full">
-        {generations.map((generation, index) => {
+        {generations.reverse().map((generation, index) => {
           // Filter logic
           if (filter === "all" || generation.type === filter) {
             const randomHeight = getRandomHeight();

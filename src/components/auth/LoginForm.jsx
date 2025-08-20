@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import CustomInput from "../ui/CustomInput";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useUserStore } from "@/store/store";
 import { fetchLoginPageData, getStrapiImageUrl } from "@/utils/strapi";
 
@@ -21,14 +21,8 @@ const LoginForm = () => {
   const [loginPageData, setLoginPageData] = useState(null);
   const [dataLoading, setDataLoading] = useState(true);
 
-  const {SetIsLogin, SetEmail, SetUserId,SetAvatar} = useUserStore()
+  const { SetIsLogin, SetEmail, SetUserId, SetAvatar } = useUserStore();
 
-  const adminCredentials = {
-    email: "admin@example.com",
-    password: "admin123",
-  };
-
-  // Fetch login page data from Strapi
   useEffect(() => {
     const loadLoginPageData = async () => {
       try {
@@ -36,7 +30,7 @@ const LoginForm = () => {
         const data = await fetchLoginPageData();
         setLoginPageData(data);
       } catch (error) {
-        console.error('Error loading login page data:', error);
+        console.error("Error loading login page data:", error);
       } finally {
         setDataLoading(false);
       }
@@ -57,12 +51,11 @@ const LoginForm = () => {
     });
   };
 
-  const loginToAccount = async(formData) => {
+  const loginToAccount = async (formData) => {
     setIsLoading(true);
 
     const newErrors = {};
 
-    
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         method: "POST",
@@ -73,33 +66,32 @@ const LoginForm = () => {
       });
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       if (data.type === "success") {
-
         localStorage.setItem("token", data.token);
         SetAvatar(data.user.avatar);
         SetIsLogin(true);
         SetEmail(data.user.email);
         SetUserId(data.user.userId);
         let route = localStorage.getItem("route");
+        localStorage.setItem("isLogin", true);
         console.log("Route from localStorage:", route);
         if (route !== null && route !== undefined) {
           localStorage.removeItem("route");
           router.push(route);
-        }
-        else {
+        } else {
           router.push(`/dashboard`);
         }
-
-      }
-      else {
+      } else {
         if (data.field === "email") {
-          newErrors.email = "The email you entered is not registered, please check again";
+          newErrors.email =
+            "The email you entered is not registered, please check again";
         }
         if (data.field === "password") {
-          newErrors.password = "The password you provided is incorrect. Please try again.";
+          newErrors.password =
+            "The password you provided is incorrect. Please try again.";
         }
-  
+
         setErrors(newErrors);
       }
     } catch (error) {
@@ -108,7 +100,7 @@ const LoginForm = () => {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -132,14 +124,23 @@ const LoginForm = () => {
   return (
     <div className="lg:w-[80%] mx-auto p-6 justify-center items-center ">
       <h2 className="text-[30px] font-medium text-[#2A0856]  text-center">
-        {dataLoading ? "Welcome back!" : (loginPageData?.heading || "Welcome back!")}
+        {dataLoading
+          ? "Welcome back!"
+          : loginPageData?.heading || "Welcome back!"}
       </h2>
       <p className="text-[#44444A] text-[14px] mb-6 text-center">
-        {dataLoading ? "Sign in to your allmyai account to access all allmyai products." : (loginPageData?.subheading || "Sign in to your allmyai account to access all allmyai products.")}
+        {dataLoading
+          ? "Sign in to your allmyai account to access all allmyai products."
+          : loginPageData?.subheading ||
+            "Sign in to your allmyai account to access all allmyai products."}
       </p>
       <form onSubmit={handleSubmit}>
         <CustomInput
-          label={dataLoading ? "Email Address" : (loginPageData?.emailLabel || "Email Address")}
+          label={
+            dataLoading
+              ? "Email Address"
+              : loginPageData?.emailLabel || "Email Address"
+          }
           type="email"
           placeholder=""
           name="email"
@@ -148,7 +149,11 @@ const LoginForm = () => {
           error={errors.email}
         />
         <CustomInput
-          label={dataLoading ? "Password" : (loginPageData?.passwordLabel || "Password")}
+          label={
+            dataLoading
+              ? "Password"
+              : loginPageData?.passwordLabel || "Password"
+          }
           type="password"
           placeholder=""
           name="password"
@@ -165,14 +170,18 @@ const LoginForm = () => {
               className="mr-2 accent-[#C209C1]"
             />
             <label htmlFor="remember" className="text-[#44444A] text-[12px]">
-              {dataLoading ? "Remember me" : (loginPageData?.rememberMeLabel || "Remember me")}
+              {dataLoading
+                ? "Remember me"
+                : loginPageData?.rememberMeLabel || "Remember me"}
             </label>
           </div>
           <Link
             href="/auth/forget-password"
             className="text-[#2A0856] font-medium text-[12px] hover:underline"
           >
-            {dataLoading ? "Forgot password?" : (loginPageData?.forgotPasswordText || "Forgot password?")}
+            {dataLoading
+              ? "Forgot password?"
+              : loginPageData?.forgotPasswordText || "Forgot password?"}
           </Link>
         </div>
         <button
@@ -182,25 +191,33 @@ const LoginForm = () => {
         >
           {isLoading ? (
             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+          ) : dataLoading ? (
+            "Login"
           ) : (
-            dataLoading ? "Login" : (loginPageData?.loginButtonText || "Login")
+            loginPageData?.loginButtonText || "Login"
           )}
         </button>
         <div className="text-center mb-4">
-          {dataLoading ? "or" : (loginPageData?.orText || "or")}
+          {dataLoading ? "or" : loginPageData?.orText || "or"}
         </div>
         <div className="flex justify-between gap-2">
           <button
-           onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+            onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
             type="button"
             className="w-full bg-white border text-[16px] border-gray-300 p-2 font-semibold rounded-full flex items-center justify-center"
           >
             <img
-              src={!dataLoading && loginPageData?.googleIcon ? getStrapiImageUrl(loginPageData.googleIcon) : "https://www.google.com/favicon.ico"}
+              src={
+                !dataLoading && loginPageData?.googleIcon
+                  ? getStrapiImageUrl(loginPageData.googleIcon)
+                  : "https://www.google.com/favicon.ico"
+              }
               alt="Google"
               className="w-8 h-8 mr-2"
             />
-            {dataLoading ? "Google" : (loginPageData?.googleButtonText || "Google")}
+            {dataLoading
+              ? "Google"
+              : loginPageData?.googleButtonText || "Google"}
           </button>
 
           <button
@@ -208,16 +225,27 @@ const LoginForm = () => {
             className="w-full bg-white border text-[16px] border-gray-300 font-semibold p-2 rounded-full flex items-center justify-center"
           >
             <img
-              src={!dataLoading && loginPageData?.appleIcon ? getStrapiImageUrl(loginPageData.appleIcon) : "https://www.apple.com/favicon.ico"}
+              src={
+                !dataLoading && loginPageData?.appleIcon
+                  ? getStrapiImageUrl(loginPageData.appleIcon)
+                  : "https://www.apple.com/favicon.ico"
+              }
               alt="Apple"
               className="w-8 h-8 mr-2"
             />
-            {dataLoading ? "Apple" : (loginPageData?.appleButtonText || "Apple")}
+            {dataLoading ? "Apple" : loginPageData?.appleButtonText || "Apple"}
           </button>
         </div>
         <p className="text-center text-[14px] mt-4 text-[#6C7278]">
-          {dataLoading ? "Don't have an account? " : (loginPageData?.signupText ? loginPageData.signupText.split("Create")[0] : "Don't have an account? ")}
-          <Link href="/auth/sign-up" className="hover:underline font-semibold text-[#C209C1]">
+          {dataLoading
+            ? "Don't have an account? "
+            : loginPageData?.signupText
+            ? loginPageData.signupText.split("Create")[0]
+            : "Don't have an account? "}
+          <Link
+            href="/auth/sign-up"
+            className="hover:underline font-semibold text-[#C209C1]"
+          >
             Create
           </Link>
         </p>
