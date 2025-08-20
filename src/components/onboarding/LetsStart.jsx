@@ -1,4 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
+import { toast } from "react-toastify";
 import Image from "next/image";
 import SelectableCard from "@/components/onboarding/SelectableCard";
 import SelectableButton from "@/components/onboarding/SelectableButton";
@@ -88,6 +89,18 @@ const LetsStart = forwardRef(({ onDataChange }, ref) => {
   // State for selected creation goals (multiple selection)
   const [selectedCreation, setSelectedCreation] = useState([]);
 
+    // Notify parent of selection changes
+    React.useEffect(() => {
+      if (onDataChange) {
+        onDataChange({
+          userTypeCount: selectedCards.length,
+          creationGoalsCount: selectedCreation.length,
+          userType: getSelectedUserTypes(),
+          creationGoals: getSelectedCreationGoals()
+        });
+      }
+    }, [selectedCards, selectedCreation]);
+
   // Function to get values from selected IDs
   const getSelectedUserTypes = () => {
     return selectedCards.map(id => 
@@ -105,6 +118,12 @@ const LetsStart = forwardRef(({ onDataChange }, ref) => {
   const saveTab1Data = async () => {
     const userTypes = getSelectedUserTypes();
     const creationGoals = getSelectedCreationGoals();
+
+    // Validation: At least two selections required from both
+    if (userTypes.length < 2 || creationGoals.length < 2) {
+      toast.error("Please select at least two options from both sections before proceeding.");
+      return false;
+    }
 
     const tab1Data = {
       userType: userTypes,
@@ -182,7 +201,7 @@ const LetsStart = forwardRef(({ onDataChange }, ref) => {
       <p className="text-[18px] text-[#1B1F3B] mb-6 mt-8 font-medium">
         What are you hoping to create first?{" "}
       </p>
-      <div className="flex gap-[8px] transition-all ease-in-out duration-300 flex-wrap">
+      <div className="flex gap-[8px] transition-all mb-4 ease-in-out duration-300 flex-wrap">
         {creationOptions.map((card) => (
           <SelectableButton
             key={card.id}

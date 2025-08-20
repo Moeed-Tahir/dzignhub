@@ -5,8 +5,8 @@ const CustomSwitch = ({ checked, onChange }) => (
   <button
     type="button"
     onClick={() => onChange(!checked)}
-    className={`w-12 h-6 rounded-full transition bg-[#C209C1] flex items-center ${
-      checked ? "justify-end" : "justify-start"
+    className={`w-12 h-6 rounded-full transition flex items-center ${
+      checked ? "justify-end bg-[#C209C1]" : "justify-start bg-gray-300"
     } px-1`}
     aria-checked={checked}
     role="switch"

@@ -229,40 +229,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
     },
   ];
 
-  const notifications = [
-    {
-      id: 1,
-      icon: "/homepage/notifications/document.png",
-      title: "allmyai",
-      time: "17:10",
-      description: "allmyai allmyai allmyai",
-      isRead: false,
-    },
-    {
-      id: 2,
-      icon: "/homepage/notifications/message-text.png",
-      title: "allmyai",
-      time: "17:10",
-      description: "allmyai allmyai allmyai",
-      isRead: false,
-    },
-    {
-      id: 3,
-      icon: "/homepage/notifications/notification.png",
-      title: "allmyai",
-      time: "17:10",
-      description: "allmyai allmyai allmyai",
-      isRead: true,
-    },
-    {
-      id: 4,
-      icon: "/homepage/notifications/document.png",
-      title: "allmyai",
-      time: "17:10",
-      description: "allmyai allmyai allmyai",
-      isRead: true,
-    },
-  ];
+  const notifications = [];
 
   const handleMenuClick = (item) => {
     if (item.type === "dropdown") {
@@ -305,22 +272,37 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
   };
 
   const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (window.innerWidth < 1280) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
+ useEffect(() => {
+    // Function to check screen width
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 1025); 
+    };
+
+    // Run on mount
+    checkScreenSize();
+
+    // Add event listener
+    window.addEventListener("resize", checkScreenSize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
   }, []);
 
   const [isMobileWorkspaceOpen, setIsMobileWorkspaceOpen] = useState(false);
   const [isMobileAssistantsOpen, setIsMobileAssistantsOpen] = useState(false);
   const [isMobileSettingsOpen, setIsMobileSettingsOpen] = useState(false);
 
+
   return (
     <nav
       className={`  ${
-        isCreationPage ? "" : isSettingPage ? "lg:m-5 w-full  my-5" : " m-8"
+        isCreationPage
+          ? ""
+          : isSettingPage
+          ? "lg:m-5 w-full  my-5"
+          : " my-4 mx-8"
       } bg-white px-4 max-w-[1440px]    xl:mx-auto py-4 rounded-full`}
     >
       <div className="flex items-center justify-between">
@@ -507,7 +489,12 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
         </div>
 
         {/* Right - Conditionally Rendered Section */}
-        {IsLogin ? (
+        {isAuthChecking ? (
+          // Show loading state while checking authentication
+          <div className="flex items-center space-x-4">
+            <div className="w-8 h-8 animate-spin rounded-full border-2 border-[#C209C1] border-t-gray-600"></div>
+          </div>
+        ) : IsLogin ? (
           <div
             id="rightNav"
             className="flex items-center bg-[#F7F8F8] rounded-full px-2 py-1"
@@ -552,45 +539,52 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                   </div>
 
                   <div className="max-h-96 overflow-y-auto">
-                    {notifications.map((notification) => (
-                      <div
-                        key={notification.id}
-                        className={`px-4 py-3 hover:bg-gray-50`}
-                      >
-                        <div className="flex cursor-pointer items-center justify-between">
-                          <div className="mr-3 bg-[#C209C11A] rounded-full">
-                            <Image
-                              src={notification.icon}
-                              alt="Notification Icon"
-                              width={64}
-                              height={64}
-                              className="w-10 h-10 p-2"
-                            />
-                          </div>
-                          <div className="flex items-start space-x-3 flex-1">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-space-between">
-                                <p className="text-sm font-semibold text-gray-900 truncate">
-                                  {notification.title}
-                                </p>
-                                <span className="mx-2 text-xs text-gray-500">
-                                  {notification.time}
-                                </span>
-                                {!notification.isRead && (
-                                  <div className="w-2 h-2 bg-[#C209C1] rounded-full"></div>
-                                )}
-                              </div>
-                              <p className="text-sm text-gray-500 mt-1">
-                                {notification.description}
-                              </p>
-                            </div>
-                          </div>
-                          <button className="ml-2 p-1 text-custom-blue hover:text-gray-600">
-                            <MoreVertical className="w-4 h-4" />
-                          </button>
-                        </div>
+                    {notifications.length === 0 ? (
+                      <div className="px-4 py-8 text-center text-gray-500">
+                        You don&apos;t have any notification in notification
+                        drop down
                       </div>
-                    ))}
+                    ) : (
+                      notifications.map((notification) => (
+                        <div
+                          key={notification.id}
+                          className={`px-4 py-3 hover:bg-gray-50`}
+                        >
+                          <div className="flex cursor-pointer items-center justify-between">
+                            <div className="mr-3 bg-[#C209C11A] rounded-full">
+                              <Image
+                                src={notification.icon}
+                                alt="Notification Icon"
+                                width={64}
+                                height={64}
+                                className="w-10 h-10 p-2"
+                              />
+                            </div>
+                            <div className="flex items-start space-x-3 flex-1">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-space-between">
+                                  <p className="text-sm font-semibold text-gray-900 truncate">
+                                    {notification.title}
+                                  </p>
+                                  <span className="mx-2 text-xs text-gray-500">
+                                    {notification.time}
+                                  </span>
+                                  {!notification.isRead && (
+                                    <div className="w-2 h-2 bg-[#C209C1] rounded-full"></div>
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-500 mt-1">
+                                  {notification.description}
+                                </p>
+                              </div>
+                            </div>
+                            <button className="ml-2 p-1 text-custom-blue hover:text-gray-600">
+                              <MoreVertical className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
 
                   <div className="px-4 py-3 border-t border-gray-200 flex space-x-2">
@@ -722,7 +716,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                                         width={32}
                                         height={32}
                                         alt={assistant.name}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full aspect-square object-cover"
                                       />
                                     </div>
                                     <div className="flex justify-center items-center flex-row min-w-0">
@@ -741,7 +735,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                         </div>
                       ))}
                       {/* Settings dropdown for /setting routes */}
-                      {pathname.startsWith("/setting") && (
+                      {
                         <div>
                           <button
                             onClick={() => {
@@ -778,13 +772,13 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
                             ))}
                           </div>
                         </div>
-                      )}
+                      }
                       <hr className="my-1 border-gray-200" />
                     </div>
                   )}
                   <a
                     href="/setting/edit-profile"
-                    className="xl:block px-4 hidden py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    className="lg:block px-4 hidden py-2 text-sm text-gray-700 hover:bg-gray-50"
                   >
                     <SettingsIcon className="w-4 h-4 inline-block mr-2" />{" "}
                     Settings

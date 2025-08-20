@@ -84,6 +84,7 @@ const Style = ({ selected, onChange,isImagePage }) => {
 
         {}
         <span className="text-[18px] font-normal text-[#202126] ">Style</span>
+        <span className="text-[14px] font-normal text-gray-400 ">(optional)</span>
       </div>
 
       <div className="flex flex-wrap gap-[3px] ">

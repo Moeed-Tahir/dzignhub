@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,12 @@ const ImageModal = ({
   subtitle,
 }) => {
   const router = useRouter();
+
+  const [currentMainPic, setCurrentMainPic] = useState(mainPic);
+
+  useEffect(() => {
+    setCurrentMainPic(mainPic);
+  }, [mainPic]);
 
   if (!isOpen) return null;
 
@@ -68,23 +74,23 @@ const ImageModal = ({
             <div className="flex gap-2">
 
             {suggestions && suggestions.length > 0 ? (
-                suggestions.map((suggestion, index) => (
-                    <div
-                    key={index}
-                    className="flex items-center gap-2 mb-4 cursor-pointer"
-                    onClick={() => router.push(suggestion.href)}
-                    >
+              suggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className="flex items-start justify-start gap-2 mb-4 cursor-pointer"
+                  onClick={() => setCurrentMainPic(suggestion)}
+                >
                   <Image
                     src={suggestion}
-                    alt={""}
+                    alt={"Suggestion"}
                     width={80}
                     height={42}
                     className="rounded-[12px] object-cover"
-                    />
+                  />
                 </div>
               ))
             ) : (
-                <p className="text-[14px] font-medium">
+              <p className="text-[14px] font-medium">
                 No related templates found.
               </p>
             )}
@@ -104,7 +110,7 @@ const ImageModal = ({
 
         <div className="hidden lg:flex w-[543px]">
           <Image
-            src={mainPic}
+            src={currentMainPic}
             alt="Login Preview"
             width={543}
             height={686}

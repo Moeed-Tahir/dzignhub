@@ -299,7 +299,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       {/* Collapsible Style Section */}
       <details open className="block lg:hidden">
         <summary className="font-medium text-[16px] mb-2 cursor-pointer">
-          Style
+          Style 
         </summary>
         <Style
           selected={selectedStyle}

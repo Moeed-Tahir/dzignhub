@@ -8,17 +8,28 @@ export const metadata = {
 
 import SessionWrapper from "@/components/SessionWrapper";
 import { Toaster } from "react-hot-toast";
+import { ToastContainer } from "react-toastify";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body cz-shortcut-listen="true">
-        <Toaster/>
+        <Toaster />
         <NextTopLoader showSpinner={false} color="#C209C1" />
-
-        <SessionWrapper>
-          {children}
-        </SessionWrapper>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          // transition={Bounce}
+        />
+        <SessionWrapper>{children}</SessionWrapper>
       </body>
     </html>
   );
