@@ -19,7 +19,8 @@ const page = () => {
 
   const agents = {
     "zara": "brand-designer",
-    "sana": "content-creator"
+    "sana": "content-creator",
+    "novi": "seo-specialist"
   }
 
   const [conversations, setConversations] = useState([]);
