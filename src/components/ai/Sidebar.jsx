@@ -116,7 +116,9 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
     const agents = {
       "zara": "brand-designer",
       "sana": "content-creator",
-      "novi": "seo-specialist"
+      "novi": "seo-specialist",
+      "mira": "strategist"
+
     }
 
     setIsSearching(true);
