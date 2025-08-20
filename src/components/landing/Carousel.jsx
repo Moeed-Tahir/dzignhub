@@ -113,7 +113,7 @@ function Carousel({ carouselImages = [] }) {
         </div>
       </motion.div>
 
-      <motion.div 
+      {/* <motion.div 
         className="lg:h-[200px] h-[130px]  relative overflow-hidden"
         variants={carouselRowVariants}
       >
@@ -129,7 +129,7 @@ function Carousel({ carouselImages = [] }) {
             />
           ))}
         </div>
-      </motion.div>
+      </motion.div> */}
     </motion.div>
   );
 }

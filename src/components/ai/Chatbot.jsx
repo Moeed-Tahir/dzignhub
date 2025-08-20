@@ -5,6 +5,7 @@ import MessageBubble from "./MessageBubble";
 import AIIntro from "./AiIntro";
 import Image from "next/image";
 import { useUserStore } from "@/store/store";
+import { useSearchParams } from "next/navigation";
 
 export default function ChatPage({
   aiName,
@@ -23,9 +24,34 @@ export default function ChatPage({
   console.log("Rendering ChatPage with name:", description);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [conversationId, setConversationId] = useState("")
+  const searchParams = useSearchParams();
+  
+  // ✅ GET CONVERSATION ID FROM URL ON COMPONENT MOUNT
+  useEffect(() => {
+    const urlConversationId = searchParams.get('conversationId');
+    if (urlConversationId) {
+      console.log("[DEBUG] Setting conversationId from URL:", urlConversationId);
+      setConversationId(urlConversationId);
+    } else {
+      console.log("[DEBUG] No conversationId in URL, starting fresh");
+      setConversationId("");
+    }
+  }, [searchParams]);
+
+  // ✅ UPDATE CONVERSATION ID WHEN MESSAGES ARE LOADED FOR EXISTING CONVERSATION
+  useEffect(() => {
+    if (messages.length > 0 && !conversationId) {
+      const urlConversationId = searchParams.get('conversationId');
+      if (urlConversationId) {
+        console.log("[DEBUG] Setting conversationId from URL (messages loaded):", urlConversationId);
+        setConversationId(urlConversationId);
+      }
+    }
+  }, [messages, conversationId, searchParams]);
+
   const aiAnswers = [
     {
-      text: "Let’s begin by choosing your brand’s personality style.",
+      text: "Let's begin by choosing your brand's personality style.",
       options: ["Elegant", "Bold", "Minimal", "Playful"],
     },
     {
@@ -67,8 +93,6 @@ export default function ChatPage({
   const { UserId } = useUserStore();
 
   const getBrandDesignData = async () => {
-
-
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/get-brand-designer-data`, {
       method: 'POST',
       headers: {
@@ -78,7 +102,6 @@ export default function ChatPage({
     });
 
     const res = await response.json();
-
     console.log(res)
 
     if (res.type == "success") {
@@ -99,14 +122,12 @@ export default function ChatPage({
 
     const res = await response.json();
     console.log(res);
-
   }
 
   const generateLogo = async (prompt, type, size = "1024x1024") => {
     try {
       console.log('🎨 Generating logo with prompt:', prompt);
 
-      // Add loading message for logo generation
       setMessages(prevMessages => [
         ...prevMessages,
         {
@@ -115,6 +136,7 @@ export default function ChatPage({
           isLoading: true
         }
       ]);
+      
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/logo-designer`, {
         method: 'POST',
         headers: {
@@ -129,7 +151,6 @@ export default function ChatPage({
       const data = await response.json();
 
       if (data.type === 'success' && data.data.imageUrl) {
-        // Remove loading message and add logo
         setMessages(prevMessages =>
           prevMessages.filter(msg => !msg.isLoading).concat([
             {
@@ -141,7 +162,6 @@ export default function ChatPage({
           ])
         );
       } else {
-        // Remove loading message and show error
         setMessages(prevMessages =>
           prevMessages.filter(msg => !msg.isLoading).concat([
             {
@@ -155,7 +175,6 @@ export default function ChatPage({
 
     } catch (error) {
       console.error('❌ Error generating logo:', error);
-      // Remove loading message and show error
       setMessages(prevMessages =>
         prevMessages.filter(msg => !msg.isLoading).concat([
           {
@@ -166,16 +185,15 @@ export default function ChatPage({
         ])
       );
     }
-
   }
 
   function cleanAIResponse(aiResponse) {
     return aiResponse
       .trim()
-      .replace(/^```json\s*/i, '') // removes ```json
-      .replace(/^json\s*/i, '')    // removes json
-      .replace(/^```/, '')         // removes starting ```
-      .replace(/```$/, '')         // removes ending ```
+      .replace(/^```json\s*/i, '')
+      .replace(/^json\s*/i, '')
+      .replace(/^```/, '')
+      .replace(/```$/, '')
       .trim();
   }
 
@@ -190,11 +208,11 @@ export default function ChatPage({
   
     try {
       console.log(`🚀 Calling ${aiName} Python API...`);
+      console.log(`🔍 Current conversationId: ${conversationId}`); // ✅ ADD DEBUG LOG
   
       const pythonApiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || "http://127.0.0.1:8000";
       const userId = UserId;
   
-      // Prepare previous messages for context (EXCLUDE the current message we just added)
       const previousMessages = messages.map(message => ({
         role: message.sender === "user" ? "user" : "assistant",
         content: message.text
@@ -221,18 +239,23 @@ export default function ChatPage({
           endpoint = "brand-designer";
       }
   
+      // ✅ SEND CURRENT CONVERSATION ID (EMPTY STRING OR ACTUAL ID)
+      const requestBody = {
+        prompt: msg,
+        user_id: userId,
+        conversation_id: conversationId || null, // ✅ SEND NULL IF EMPTY
+        previous_messages: previousMessages, 
+        context: `${aiName} AI Assistant`
+      };
+      
+      console.log(`🔍 Request body:`, requestBody); // ✅ ADD DEBUG LOG
+
       const response = await fetch(`${pythonApiUrl}/agents/${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          prompt: msg,
-          user_id: userId,
-          conversation_id: conversationId == "" ? null : conversationId,
-          previous_messages: previousMessages, 
-          context: `${aiName} AI Assistant`
-        })
+        body: JSON.stringify(requestBody)
       });
   
       const data = await response.json();
@@ -241,15 +264,18 @@ export default function ChatPage({
         const aiResponse = data.response;
         console.log('✅ Python Agent API response:', aiResponse);
   
-        // Handle new conversation creation
+        // ✅ HANDLE NEW CONVERSATION CREATION
         if (data.is_new_conversation && data.conversation_id) {
           console.log("[DEBUG] New conversation created:", data.conversation_id);
           
+          // ✅ UPDATE LOCAL STATE IMMEDIATELY
           setConversationId(data.conversation_id);
           
+          // ✅ UPDATE URL WITHOUT PAGE RELOAD
           const newUrl = `${window.location.pathname}?conversationId=${data.conversation_id}`;
           window.history.pushState({}, '', newUrl);
           
+          // ✅ NOTIFY PARENT COMPONENTS
           if (onNewConversation) {
             onNewConversation(data.conversation_id);
           }
@@ -257,13 +283,11 @@ export default function ChatPage({
           if (onRefreshConversations) {
             onRefreshConversations();
           }
-  
-          // ✅ FOR NEW CONVERSATIONS: Don't add response to frontend state
-          // Backend already saved it, and parent will reload messages
+
           console.log("[DEBUG] New conversation - not adding response to state, backend saved it");
           setAiLoading(false);
           setAiTyping(false);
-          return; // ✅ EXIT EARLY FOR NEW CONVERSATIONS
+          return;
         }
   
         // ✅ FOR EXISTING CONVERSATIONS: Add response to frontend state
@@ -336,7 +360,6 @@ export default function ChatPage({
     setAiTyping(false);
 
     try {
-      // Prepare previous messages for API call
       const previousMessages = messages.map(message => ({
         role: message.sender === "user" ? "user" : "assistant",
         content: message.text
@@ -386,12 +409,10 @@ export default function ChatPage({
         let isValidJson = false;
 
         try {
-          // Try to parse the string
           jsonResponse = JSON.parse(aiResponse);
           isValidJson = true;
           console.log('✅ Parsed JSON response (option):', jsonResponse);
         } catch (err) {
-          // It's just a plain string, not valid JSON
           console.error('❌ Not valid JSON, using as plain string.');
           if (aiName.toLowerCase() == "sana" || aiName.toLowerCase() == "novi" || aiName.toLowerCase() == "ellie") {
             if (aiResponse.includes('"isFinal": true')) {
@@ -414,7 +435,6 @@ export default function ChatPage({
                 isValidJson = true;
               }
 
-              // Handle Ellie UI/UX generation
               if (aiName.toLowerCase() == "ellie") {
                 let userSelectionObj;
                 const userSelection = aiResponse.match(/"userSelection"\s*:\s*\[([^\]]*)\]/);
@@ -437,7 +457,6 @@ export default function ChatPage({
             }
             else {
               console.log("isFinal not found in invalid Json")
-              // Try to extract answer and options from invalid JSON
               const answerMatch = aiResponse.match(/"answer"\s*:\s*"([^"]*)"/);
               const optionsMatch = aiResponse.match(/"options"\s*:\s*\[([^\]]*)\]/);
 
@@ -474,7 +493,6 @@ export default function ChatPage({
           }
         }
 
-        // Check if the response is final JSON object for Zara (brand designer)
         if (isValidJson && jsonResponse.isFinal && aiName.toLowerCase() == "zara") {
           const formattedString = Object.entries(jsonResponse.userSelection)
             .map(([key, value]) => `${key}: ${value}`)
@@ -497,7 +515,6 @@ export default function ChatPage({
         setAiLoading(false);
         setAiTyping(true);
 
-        // Add AI response to messages after a short delay for typing effect
         setTimeout(() => {
           setMessages(prevMessages => [
             ...prevMessages,
@@ -508,7 +525,7 @@ export default function ChatPage({
                 jsonResponse.message && `${jsonResponse.message}`,
                 jsonResponse.prompt && `${jsonResponse.prompt}`
               ].filter(Boolean).join('\n\n') || "" : aiResponse,
-              options: isValidJson && jsonResponse.options ? jsonResponse.options : [], // Extract options from JSON
+              options: isValidJson && jsonResponse.options ? jsonResponse.options : [],
               typing: true
             }
           ]);
@@ -547,17 +564,12 @@ export default function ChatPage({
       setAiTyping(false);
       setPendingAiMsg(null);
     }
-    // eslint-disable-next-line
   }, [aiTyping, pendingAiMsg]);
 
   useEffect(() => {
-    // Fetch initial brand design data
     getBrandDesignData();
   }, []);
 
-
-
-  // Auto-scroll to bottom with smooth animation when messages change
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo({
@@ -572,7 +584,7 @@ export default function ChatPage({
     : messages;
 
   return (
-    <div className=" flex flex-col  max-w-[1280px] mx-auto justify-between">
+    <div className=" flex flex-col  max-w-[1280px] w-full mx-auto justify-between">
       <div
         className="flex-1 max-h-[70vh] scrollbar-hide pb-20 overflow-y-auto"
         ref={chatContainerRef}
@@ -599,7 +611,7 @@ export default function ChatPage({
             isLoading={msg.isLoading}
             typing={msg.typing}
             imageUrl={msg.imageUrl}
-            isLogo={msg.isLogo || false} // Add this line
+            isLogo={msg.isLogo || false}
           />
         ))}
       </div>

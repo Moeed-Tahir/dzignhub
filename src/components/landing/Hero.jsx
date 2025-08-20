@@ -28,31 +28,31 @@ const containerVariants = {
     transition: {
       duration: 0.3,
       staggerChildren: 0.2,
-      delayChildren: 0.1
-    }
-  }
+      delayChildren: 0.1,
+    },
+  },
 };
 
 const itemVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 30 
+  hidden: {
+    opacity: 0,
+    y: 30,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.6,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const announcementVariants = {
-  hidden: { 
-    opacity: 0, 
+  hidden: {
+    opacity: 0,
     scale: 0.8,
-    y: -20
+    y: -20,
   },
   visible: {
     opacity: 1,
@@ -60,9 +60,9 @@ const announcementVariants = {
     y: 0,
     transition: {
       duration: 0.7,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const buttonVariants = {
@@ -70,48 +70,63 @@ const buttonVariants = {
     scale: 1.05,
     transition: {
       duration: 0.2,
-      ease: "easeInOut"
-    }
+      ease: "easeInOut",
+    },
   },
   tap: {
-    scale: 0.95
-  }
+    scale: 0.95,
+  },
 };
 
-export default function Hero({ heroSection = null, mainHeading, mainDescription }) {
+export default function Hero({
+  heroSection = null,
+  mainHeading,
+  mainDescription,
+}) {
   // Use dynamic hero section data if available, otherwise use props or fallback
   const heroData = heroSection || {
-    mainHeading: mainHeading || "Turn Your Words Into Stunning Visuals",
-    mainDescription: mainDescription || "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+    mainHeading: mainHeading || "The Ultimate all in one AI Website Creator",
+    mainDescription:
+      mainDescription ||
+      "Website, app, and brand-one promt does it all.",
     announcementIcon: null,
-    announcementText: "Speech to speech release!",
+    announcementText: "New Agent Release",
     earlyAccessText: "Get early access",
     earlyAccessLink: "/auth/sign-up",
     ctaButtonText: "Create image",
     ctaSecondaryText: null,
     ctaLink: "/image-creation",
     showAnnouncement: true,
-    ctaInputPlaceholder: "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+    ctaInputPlaceholder:
+      "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape",
   };
 
   // Process dynamic data with fallbacks
   const processedHeroData = {
-    mainHeading: heroData.mainHeading || mainHeading || "Turn Your Words Into Stunning Visuals",
-    mainDescription: heroData.mainDescription || mainDescription || "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+    mainHeading:
+      heroData.mainHeading ||
+      mainHeading ||
+      "The Ultimate all in one AI Website Creator",
+    mainDescription:
+      heroData.mainDescription ||
+      mainDescription ||
+      "Website, app, and brand-one promt does it all.",
     announcementIcon: heroData.announcementIcon,
-    announcementText: heroData.announcementText || "Speech to speech release!",
+    announcementText: heroData.announcementText || "New Agent Release!",
     earlyAccessText: heroData.earlyAccessText || "Get early access",
     earlyAccessLink: heroData.earlyAccessLink || "/auth/sign-up",
     ctaButtonText: heroData.ctaButtonText || "Create image",
     ctaSecondaryText: heroData.ctaSecondaryText,
     ctaLink: heroData.ctaLink || "/image-creation",
     showAnnouncement: heroData.showAnnouncement !== false, // Default to true
-    ctaInputPlaceholder: heroData.ctaInputPlaceholder || "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape"
+    ctaInputPlaceholder:
+      heroData.ctaInputPlaceholder ||
+      "A Cyberpunk Dystopia With A Sprawling, Rain-Soaked Cityscape",
   };
   return (
     <>
       {/* Center box with border */}
-      <motion.div 
+      <motion.div
         className=" mx-auto lg:rounded-[16px] flex flex-col lg:gap-[40px] mt-10 gap-[32px] lg:static    "
         variants={containerVariants}
         initial="hidden"
@@ -121,15 +136,18 @@ export default function Hero({ heroSection = null, mainHeading, mainDescription 
         <div className="flex flex-col lg:gap-[16px] mx-auto gap-[32px]">
           {/* Announcement */}
           {processedHeroData.showAnnouncement && (
-            <motion.div 
-              className="lg:w-[492px] lg:h-[42px] w-[291px] h-[44px] flex items-center justify-around rounded-full mx-auto bg-[#212e62] "
+            <motion.div
+              className="lg:w-auto lg:px-3 lg:gap-4 lg:h-[42px] w-[250px] h-[44px] flex items-center justify-around rounded-full mx-auto bg-[#212e62] "
               variants={announcementVariants}
             >
               <div className="w-[24px] h-[24px] p-[1px] rounded-lg bg-gradient-to-tr from-[#5AE2B9] via-[#DCCC3A] to-[#1A76FF]">
                 <div className="w-full h-full bg-black rounded-lg flex items-center justify-center">
                   {processedHeroData.announcementIcon ? (
-                    <img 
-                      src={processedHeroData.announcementIcon.url || processedHeroData.announcementIcon} 
+                    <img
+                      src={
+                        processedHeroData.announcementIcon.url ||
+                        processedHeroData.announcementIcon
+                      }
                       alt="Announcement Icon"
                       className="w-[13px] h-[13px]"
                     />
@@ -146,11 +164,11 @@ export default function Hero({ heroSection = null, mainHeading, mainDescription 
                 src="/landing/Announcement-separator.png"
                 className="w-[4px] h-[4px] lg:block hidden"
               />
-              <p className="text-[#BDFF00] text-[18px] lg:block hidden font-medium">
+              {/* <p className="text-[#BDFF00] text-[18px] lg:block hidden font-medium">
                 {processedHeroData.earlyAccessText}
-              </p>
-              <Link href={processedHeroData.earlyAccessLink}>
-              <motion.button 
+              </p> */}
+              {/* <Link href={processedHeroData.earlyAccessLink}> */}
+              {/* <motion.button 
                 className="lg:flex hidden w-[38px] h-[26px] rounded-full bg-[#060606] border border-[#BDFF00] items-center justify-center"
                 variants={buttonVariants}
                 whileHover="hover"
@@ -158,11 +176,11 @@ export default function Hero({ heroSection = null, mainHeading, mainDescription 
                 >
                 <FaArrowRight className="text-white  lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
               </motion.button>
-                </Link>
+                </Link> */}
             </motion.div>
           )}
-          {processedHeroData.showAnnouncement && (
-            <motion.div 
+          {/* {processedHeroData.showAnnouncement && (
+            <motion.div
               className="lg:hidden flex mx-auto gap-[10px] h-[28px] w-[191px]"
               variants={itemVariants}
             >
@@ -170,24 +188,24 @@ export default function Hero({ heroSection = null, mainHeading, mainDescription 
                 {processedHeroData.earlyAccessText}
               </p>
               <Link href={processedHeroData.earlyAccessLink}>
-              <motion.button 
-                className="flex  w-[38px] h-[26px] rounded-[100px] bg-[#060606] border border-[#BDFF00] items-center justify-center"
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
+                <motion.button
+                  className="flex  w-[38px] h-[26px] rounded-[100px] bg-[#060606] border border-[#BDFF00] items-center justify-center"
+                  variants={buttonVariants}
+                  whileHover="hover"
+                  whileTap="tap"
                 >
-                <FaArrowRight className="text-white lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
-              </motion.button>
-                </Link>
+                  <FaArrowRight className="text-white lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
+                </motion.button>
+              </Link>
             </motion.div>
-          )}
+          )} */}
           {/* Heading + Paragraph */}
-          <motion.div 
+          <motion.div
             className="flex flex-col lg:gap-[32px] gap-[18px]"
             variants={itemVariants}
           >
             <motion.h1
-              className={`lg:text-[68px] max-w-[929px] w-full text-[46px] text-white  text-center leading-tight  font-bold`}
+              className={`lg:text-[68px] px-2 lg:px-0 max-w-[929px] w-full text-[46px] text-white  text-center leading-tight  font-bold`}
               variants={itemVariants}
             >
               {processedHeroData.mainHeading}
@@ -199,9 +217,9 @@ export default function Hero({ heroSection = null, mainHeading, mainDescription 
               {processedHeroData.mainDescription}
             </motion.p>
           </motion.div>
-          
+
           <motion.div variants={itemVariants}>
-            <HeroCTA 
+            <HeroCTA
               placeholder={processedHeroData.ctaInputPlaceholder}
               buttonText={processedHeroData.ctaButtonText}
             />
@@ -209,7 +227,7 @@ export default function Hero({ heroSection = null, mainHeading, mainDescription 
         </div>
 
         <motion.div variants={itemVariants}>
-          <HeroCTAMobile 
+          <HeroCTAMobile
             placeholder={processedHeroData.ctaInputPlaceholder}
             buttonText={processedHeroData.ctaButtonText}
           />
