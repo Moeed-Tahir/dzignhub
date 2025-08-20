@@ -12,12 +12,24 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Image from "next/image";
-import { format } from 'timeago.js';
+import { format } from "timeago.js";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/store";
 import { toast } from "react-toastify";
 
-const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeChat, setActiveChat, onConversationSelect, setShowIntro, setMessages, setConversations }) => {
+const ChatbotSidebar = ({
+  aiName,
+  img,
+  isOpen,
+  setIsOpen,
+  conversations,
+  activeChat,
+  setActiveChat,
+  onConversationSelect,
+  setShowIntro,
+  setMessages,
+  setConversations,
+}) => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -31,6 +43,10 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
   const [editingConversationId, setEditingConversationId] = useState(null);
   const [editingTitle, setEditingTitle] = useState("");
   const [isUpdatingTitle, setIsUpdatingTitle] = useState(false);
+
+  // states for delete confirmation modal
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [conversationToDelete, setConversationToDelete] = useState(null);
 
   // ADD THIS FUNCTION TO START EDITING
   const startEditingTitle = (conversationId, currentTitle, e) => {
@@ -58,22 +74,22 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/${conversationId}`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            title: editingTitle.trim()
-          })
+            title: editingTitle.trim(),
+          }),
         }
       );
       const data = await response.json();
 
       if (data.success) {
-        console.log('[DEBUG] Title updated successfully');
+        console.log("[DEBUG] Title updated successfully");
 
         // Update local state
-        const updatedConversations = conversations.map(conv =>
+        const updatedConversations = conversations.map((conv) =>
           conv._id === conversationId
             ? { ...conv, title: editingTitle.trim() }
             : conv
@@ -83,13 +99,12 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
         // Clear editing state
         setEditingConversationId(null);
         setEditingTitle("");
-
       } else {
-        console.error('Title update failed:', data.error);
+        console.error("Title update failed:", data.error);
         // alert('Failed to update title. Please try again.');
       }
     } catch (error) {
-      console.error('Error updating title:', error);
+      console.error("Error updating title:", error);
       // alert('Failed to update title. Please check your connection and try again.');
     } finally {
       setIsUpdatingTitle(false);
@@ -98,15 +113,12 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
 
   // ADD THIS FUNCTION TO HANDLE ENTER KEY
   const handleTitleKeyPress = (e, conversationId) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       saveConversationTitle(conversationId);
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       cancelEditingTitle();
     }
   };
-
-
-
 
   const searchConversations = async (query) => {
     if (!query.trim()) {
@@ -114,25 +126,27 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
       return;
     }
 
-   
     const agents = {
-      "zara": "brand-designer",
-      "sana": "content-creator",
-      "novi": "seo-specialist",
-      "mira": "strategist"
-
-    }
+      zara: "brand-designer",
+      sana: "content-creator",
+      novi: "seo-specialist",
+      mira: "strategist",
+    };
 
     setIsSearching(true);
     try {
       const userId = UserId;
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/search?query=${encodeURIComponent(query)}&user_id=${userId}&agent=${agents[aiName.toLowerCase()]}&limit=10`,
+        `${
+          process.env.NEXT_PUBLIC_PYTHON_API_URL
+        }/agents/conversations/search?query=${encodeURIComponent(
+          query
+        )}&user_id=${userId}&agent=${agents[aiName.toLowerCase()]}&limit=10`,
         {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
         }
       );
@@ -143,21 +157,16 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
         setSearchResults(data.results);
         console.log(`Found ${data.count} conversation matches`);
       } else {
-        console.error('Search failed:', data.error);
+        console.error("Search failed:", data.error);
         setSearchResults([]);
       }
     } catch (error) {
-      console.error('Search error:', error);
+      console.error("Search error:", error);
       setSearchResults([]);
     } finally {
       setIsSearching(false);
     }
   };
-
-
-
-
-
 
   const filteredConversations = conversations.filter(
     (conv) =>
@@ -165,27 +174,27 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
       conv.preview.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
-
-
   const deleteConversation = async (id, e) => {
     e.stopPropagation();
+    setConversationToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteConversation = async () => {
+    const id = conversationToDelete;
+    setShowDeleteModal(false);
+    setConversationToDelete(null);
 
     try {
-      // Show confirmation dialog
-      if (!window.confirm('Are you sure you want to delete this conversation? This action cannot be undone.')) {
-        return;
-      }
-
       console.log(`[DEBUG] Deleting conversation: ${id}`);
 
       // Call backend API to delete conversation
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/${id}?user_id=${UserId}`,
         {
-          method: 'DELETE',
+          method: "DELETE",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
         }
       );
@@ -193,10 +202,12 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
       const data = await response.json();
 
       if (data.success) {
-        console.log('[DEBUG] Conversation deleted successfully');
+        console.log("[DEBUG] Conversation deleted successfully");
 
         // Remove from local state
-        const updatedConversations = conversations.filter((conv) => conv._id !== id);
+        const updatedConversations = conversations.filter(
+          (conv) => conv._id !== id
+        );
         setConversations(updatedConversations);
 
         // Handle active chat logic
@@ -205,7 +216,11 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
             // Set to first remaining conversation
             setActiveChat(updatedConversations[0]._id);
             // Navigate to the new conversation
-            router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${updatedConversations[0]._id}`);
+            router.push(
+              `/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${
+                updatedConversations[0]._id
+              }`
+            );
           } else {
             // No conversations left, go to new chat
             setActiveChat(null);
@@ -214,16 +229,21 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
             router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}`);
           }
         }
-
       } else {
-        console.error('Delete failed:', data.error);
-        // alert('Failed to delete conversation. Please try again.');
+        console.error("Delete failed:", data.error);
+        toast.error("Failed to delete conversation. Please try again.");
       }
-
     } catch (error) {
-      console.error('Error deleting conversation:', error);
-      // alert('Failed to delete conversation. Please check your connection and try again.');
+      console.error("Error deleting conversation:", error);
+      toast.error(
+        "Failed to delete conversation. Please check your connection and try again."
+      );
     }
+  };
+
+  const cancelDeleteConversation = () => {
+    setShowDeleteModal(false);
+    setConversationToDelete(null);
   };
 
   const startNewChat = () => {
@@ -246,17 +266,19 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
           className={`bg-white h-screen border-r border-gray-200 transition-all duration-300 flex flex-col overflow-hidden
             ${isOpen ? "w-80" : "w-16"}
             md:relative md:translate-x-0
-            ${isOpen
-              ? "fixed translate-x-0"
-              : "fixed -translate-x-full md:translate-x-0"
+            ${
+              isOpen
+                ? "fixed translate-x-0"
+                : "fixed -translate-x-full md:translate-x-0"
             }
           `}
         >
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <div className="flex items-center h-[40px] space-x-3">
               <div
-                className={`${isOpen ? "flex" : "hidden"
-                  } transition-all duration-300 ease-in-out items-end mr-2`}
+                className={`${
+                  isOpen ? "flex" : "hidden"
+                } transition-all duration-300 ease-in-out items-end mr-2`}
               >
                 <Image
                   src={img}
@@ -284,9 +306,10 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
           <div className="p-4">
             <button
               onClick={startNewChat}
-              className={`flex items-center justify-center space-x-3 px-4 py-3 bg-[#c209c1] hover:bg-[#a50b8e] text-white rounded-full transition-colors ${isOpen ? "w-full" : "w-8 h-8 !p-0"
-                }`}
-            // title={!isOpen ? "New Chat" : ""}
+              className={`flex items-center justify-center space-x-3 px-4 py-3 bg-[#c209c1] hover:bg-[#a50b8e] text-white rounded-full transition-colors ${
+                isOpen ? "w-full" : "w-8 h-8 !p-0"
+              }`}
+              // title={!isOpen ? "New Chat" : ""}
             >
               <Plus className="w-5 h-5" />
               {isOpen && <span>New Chat</span>}
@@ -337,8 +360,13 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                         onClick={() => {
                           setActiveChat(result._id);
                           setShowIntro(false);
-                          onConversationSelect && onConversationSelect(result._id);
-                          router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${result._id}`);
+                          onConversationSelect &&
+                            onConversationSelect(result._id);
+                          router.push(
+                            `/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${
+                              result._id
+                            }`
+                          );
                           setSearchQuery(""); // Clear search
                           setSearchResults([]);
                         }}
@@ -350,7 +378,8 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                               {result.title}
                             </h3>
                             <p className="text-xs text-blue-600 mt-1">
-                              {(result.similarity_score * 100).toFixed(1)}% match
+                              {(result.similarity_score * 100).toFixed(1)}%
+                              match
                             </p>
                             <span className="text-xs text-gray-400 mt-1 block">
                               {format(result.createdAt)}
@@ -366,9 +395,7 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                               <Edit3 className="w-3 h-3" />
                             </button>
                             <button
-                              onClick={(e) =>
-                                deleteConversation(result._id, e)
-                              }
+                              onClick={(e) => deleteConversation(result._id, e)}
                               className="p-1 hover:bg-red-100 rounded text-blue-400 hover:text-red-600"
                             >
                               <Trash2 className="w-3 h-3" />
@@ -378,7 +405,9 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                       </div>
                     ))}
                   </>
-                ) : searchQuery && searchResults.length === 0 && !isSearching ? (
+                ) : searchQuery &&
+                  searchResults.length === 0 &&
+                  !isSearching ? (
                   // Show no results found
                   <div className="text-center py-8 text-gray-500">
                     <Search className="w-12 h-12 mx-auto mb-3 text-gray-300" />
@@ -413,12 +442,18 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                           key={conversation._id}
                           onClick={() => {
                             // Don't navigate if we're editing the title
-                            if (editingConversationId === conversation._id) return;
-                            
+                            if (editingConversationId === conversation._id)
+                              return;
+
                             setActiveChat(conversation._id);
                             setShowIntro(false);
-                            onConversationSelect && onConversationSelect(conversation._id);
-                            router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${conversation._id}`);
+                            onConversationSelect &&
+                              onConversationSelect(conversation._id);
+                            router.push(
+                              `/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${
+                                conversation._id
+                              }`
+                            );
                           }}
                           className={`group relative p-3 mx-2 my-1 rounded-lg cursor-pointer transition-all ${
                             activeChat === conversation._id
@@ -434,9 +469,15 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                                   <input
                                     type="text"
                                     value={editingTitle}
-                                    onChange={(e) => setEditingTitle(e.target.value)}
-                                    onKeyPress={(e) => handleTitleKeyPress(e, conversation._id)}
-                                    onBlur={() => saveConversationTitle(conversation._id)}
+                                    onChange={(e) =>
+                                      setEditingTitle(e.target.value)
+                                    }
+                                    onKeyPress={(e) =>
+                                      handleTitleKeyPress(e, conversation._id)
+                                    }
+                                    onBlur={() =>
+                                      saveConversationTitle(conversation._id)
+                                    }
                                     className="text-sm font-medium bg-white border border-blue-300 rounded px-2 py-1 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     autoFocus
                                     disabled={isUpdatingTitle}
@@ -456,12 +497,12 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                                   {conversation.title}
                                 </h3>
                               )}
-                              
+
                               <span className="text-xs text-gray-400 mt-2 block">
                                 {format(conversation.createdAt)}
                               </span>
                             </div>
-                            
+
                             {/* UPDATED ACTION BUTTONS */}
                             <div className="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1 ml-2">
                               {editingConversationId === conversation._id ? (
@@ -476,8 +517,18 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                                     className="p-1 hover:bg-green-100 rounded text-gray-400 hover:text-green-600"
                                     title="Save title"
                                   >
-                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    <svg
+                                      className="w-3 h-3"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M5 13l4 4L19 7"
+                                      />
                                     </svg>
                                   </button>
                                   <button
@@ -489,8 +540,18 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                                     className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
                                     title="Cancel"
                                   >
-                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    <svg
+                                      className="w-3 h-3"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
+                                      />
                                     </svg>
                                   </button>
                                 </>
@@ -498,14 +559,22 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                                 // Show edit/delete buttons when not editing
                                 <>
                                   <button
-                                    onClick={(e) => startEditingTitle(conversation._id, conversation.title, e)}
+                                    onClick={(e) =>
+                                      startEditingTitle(
+                                        conversation._id,
+                                        conversation.title,
+                                        e
+                                      )
+                                    }
                                     className="p-1 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600"
                                     title="Edit title"
                                   >
                                     <Edit3 className="w-3 h-3" />
                                   </button>
                                   <button
-                                    onClick={(e) => deleteConversation(conversation._id, e)}
+                                    onClick={(e) =>
+                                      deleteConversation(conversation._id, e)
+                                    }
                                     className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
                                     title="Delete conversation"
                                   >
@@ -528,17 +597,19 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
                   <div
                     key={conversation._id}
                     onClick={() => setActiveChat(conversation._id)}
-                    className={`w-8 h-8 mx-auto rounded-lg cursor-pointer transition-all flex items-center justify-center ${activeChat === conversation._id
-                      ? "bg-blue-100 border border-blue-200"
-                      : "bg-gray-100 hover:bg-gray-200"
-                      }`}
+                    className={`w-8 h-8 mx-auto rounded-lg cursor-pointer transition-all flex items-center justify-center ${
+                      activeChat === conversation._id
+                        ? "bg-blue-100 border border-blue-200"
+                        : "bg-gray-100 hover:bg-gray-200"
+                    }`}
                     title={conversation.title}
                   >
                     <MessageSquare
-                      className={`w-4 h-4 ${activeChat === conversation._id
-                        ? "text-blue-600"
-                        : "text-gray-600"
-                        }`}
+                      className={`w-4 h-4 ${
+                        activeChat === conversation._id
+                          ? "text-blue-600"
+                          : "text-gray-600"
+                      }`}
                     />
                   </div>
                 ))}
@@ -570,6 +641,38 @@ const ChatbotSidebar = ({ aiName, img, isOpen, setIsOpen, conversations, activeC
           </svg>
         </button>
       )} */}
+
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-lg bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center mb-4">
+              <Trash2 className="w-6 h-6 text-red-500 mr-3" />
+              <h3 className="text-lg font-semibold text-gray-900">
+                Delete Conversation
+              </h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete this conversation? This action
+              cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={cancelDeleteConversation}
+                className="px-4 py-2 text-gray-500 border rounded-lg hover:text-gray-700 font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteConversation}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
