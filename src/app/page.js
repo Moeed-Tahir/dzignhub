@@ -23,8 +23,9 @@ export default function Landing() {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [landingData, setLandingData] = useState({
-    mainHeading: "Turn Your Words Into Stunning Visuals",
-    mainDescription: "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+    mainHeading: "The Ultimate all in one AI Website Creator",
+    mainDescription:
+      "Website, app, and brand-one promt does it all.",
     heroSection: null,
     carouselImages: [],
     stackSections: [],
@@ -34,19 +35,22 @@ export default function Landing() {
     cards: [],
     pricingPlans: [],
     testimonialSection: null,
-    assistantSection: null
+    assistantSection: null,
   });
 
   useEffect(() => {
     const loadLandingData = async () => {
       try {
         const data = await fetchLandingPageData();
-        console.log('Landing page data loaded:', data);
-        console.log('Testimonial section specifically:', data.testimonialSection);
-        console.log('Assistant section specifically:', data.assistantSection);
+        console.log("Landing page data loaded:", data);
+        console.log(
+          "Testimonial section specifically:",
+          data.testimonialSection
+        );
+        console.log("Assistant section specifically:", data.assistantSection);
         setLandingData(data);
       } catch (error) {
-        console.error('Error loading landing page data:', error);
+        console.error("Error loading landing page data:", error);
         // Keep the default fallback data if there's an error
       }
     };
@@ -96,7 +100,7 @@ export default function Landing() {
       x: 0,
       transition: {
         duration: 0.5,
-        
+
         ease: "easeOut",
       },
     },
@@ -105,7 +109,7 @@ export default function Landing() {
   return (
     <>
       <div
-        className={`overflow-hidden w-full lg:h-[1095px] h-[1146px]  ${
+        className={`overflow-hidden w-full lg:h-[950px] h-[1146px]  ${
           sidebarOpen ? "" : ""
         }`}
         style={{
@@ -120,7 +124,7 @@ export default function Landing() {
               showSidebarBtn={!sidebarOpen}
               onOpenSidebar={() => setSidebarOpen(true)}
             />
-            <Hero 
+            <Hero
               heroSection={landingData.heroSection}
               mainHeading={landingData.mainHeading}
               mainDescription={landingData.mainDescription}
@@ -131,20 +135,20 @@ export default function Landing() {
 
       <Carousel carouselImages={landingData.carouselImages} />
 
-      
-      <StackingImages stackSections={landingData.stackSections} />
+      {/* <StackingImages stackSections={landingData.stackSections} /> */}
       <Work workCards={landingData.workCards} />
       <Templates templates={landingData.templates} />
       <Download downloadSection={landingData.downloadSection} />
       {/* <FeatureSection /> */}
-      <CardsAnimation cards={landingData.cards} />
-      <div className=" mt-[-800px] sm:mt-[-400px] z-1000 relative ">
+      {/* <CardsAnimation cards={landingData.cards} /> */}
+      {/* <div className=" mt-[-800px] sm:mt-[-400px] z-1000 relative "> */}
+      <div className="  relative ">
         <Pricing pricingPlans={landingData.pricingPlans} />
       </div>
 
       <Testimonials testimonialSection={landingData.testimonialSection} />
-      <FAQ 
-        faqData={landingData.faqSection?.faqs} 
+      <FAQ
+        faqData={landingData.faqSection?.faqs}
         title={landingData.faqSection?.title}
         subtitle={landingData.faqSection?.subtitle}
       />
