@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { getStrapiImageUrl } from "@/utils/strapi";
+import Image from "next/image";
 
 function Work({ workCards = [] }) {
   // Default fallback data
@@ -182,10 +183,20 @@ function Work({ workCards = [] }) {
           variants={containerVariants}
         >
           <motion.h2
-            className=" xl:text-[48px] text-center xl:text-start text-[28px] font-semibold text-white"
+            className=" xl:text-[48px] flex text-center xl:text-start text-[28px] font-semibold text-white"
             variants={headerVariants}
           >
-            How AllMyAI works
+            How
+            <span className="mx-3 mt-5">
+              <Image
+                src={"/white-logo.svg"}
+                alt="Logo"
+                width={215}
+                height={54}
+                // className="mt-1"
+              />
+            </span>
+            works
           </motion.h2>
 
           <motion.div
