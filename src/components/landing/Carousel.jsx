@@ -5,13 +5,20 @@ import { getStrapiImageUrl } from "@/utils/strapi";
 function Carousel({ carouselImages = [] }) {
   // Fallback images if no Strapi data
   const defaultImages1 = [
-    "/landing/carousel-1/1.webp",
-    "/landing/carousel-1/2.webp",
-    "/landing/carousel-1/3.jpg",
-    "/landing/carousel-1/4.webp",
-    "/landing/carousel-1/5.webp",
-    "/landing/carousel-1/6.webp",
-    "/landing/carousel-1/7.webp",
+    "/Latest/1.png",
+    "/Latest/2.png",
+    "/Latest/3.png",
+    "/Latest/4.png",
+    "/Latest/5.png",
+    "/Latest/6.png",
+    "/Latest/7.png",
+    "/Latest/8.png",
+    // "/landing/carousel-1/2.webp",
+    // "/landing/carousel-1/3.jpg",
+    // "/landing/carousel-1/4.webp",
+    // "/landing/carousel-1/5.webp",
+    // "/landing/carousel-1/6.webp",
+    // "/landing/carousel-1/7.webp",
   ];
 
   const defaultImages2 = [
@@ -90,7 +97,7 @@ function Carousel({ carouselImages = [] }) {
 
   return (
     <motion.div 
-      className="lg:h-[420px] h-[280px] flex flex-col gap-[20px] lg:mt-[40px]  absolute top-[867px] lg:top-[635px]  w-full overflow-hidden"
+      className="lg:h-[210px] h-[280px] flex flex-col gap-[20px] lg:mt-[40px]  absolute top-[867px] lg:top-[635px]  w-full overflow-hidden"
       variants={carouselContainerVariants}
       initial="hidden"
       animate="visible"

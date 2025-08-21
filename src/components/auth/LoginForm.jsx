@@ -142,7 +142,7 @@ const LoginForm = () => {
               : loginPageData?.emailLabel || "Email Address"
           }
           type="email"
-          placeholder=""
+          placeholder="Enter your email"
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -155,7 +155,7 @@ const LoginForm = () => {
               : loginPageData?.passwordLabel || "Password"
           }
           type="password"
-          placeholder=""
+          placeholder="Enter your password"
           name="password"
           value={formData.password}
           onChange={handleChange}

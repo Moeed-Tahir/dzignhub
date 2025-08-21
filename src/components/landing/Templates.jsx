@@ -7,70 +7,87 @@ import {
 import { GoDotFill, GoDot } from "react-icons/go";
 import { AnimatePresence } from "framer-motion";
 import { getStrapiImageUrl } from "@/utils/strapi";
+import Image from "next/image";
 
 function Templates({ templates = [] }) {
   // Default fallback data organized by layout type
   const defaultTemplates = {
     website: {
       title: "Website",
-      description: "Create gorgeous landing pages with a simple prompt.",
+      description: "Complete responsive sites with mobile optimization and hosting.",
       images: [
-        "/landing/templates/1/1.jpg",
-        "/landing/templates/1/2.jpg", 
-        "/landing/templates/1/3.jpg",
-        "/landing/templates/1/4.jpg",
-        "/landing/templates/1/5.jpg",
-        "/landing/templates/1/6.jpg"
-      ]
+        "/landing/templates/1/1.png",
+        "/landing/templates/1/2.png",
+        "/landing/templates/1/3.png",
+        "/landing/templates/1/4.png",
+        "/landing/templates/1/5.png",
+        // "/landing/templates/1/6.png"
+      ],
     },
     lummi: {
-      title: "Lummi", 
-      description: "Unlock 20,000+ AI-generated images made by global creators.",
+      title: "Mobile Apps",
+      description:
+        "Cross-platform apps ready for App Store and Google Play.",
       images: [
-        "/landing/templates/2/1.jpg",
-        "/landing/templates/2/2.jpg",
-        "/landing/templates/2/3.jpg"
-      ]
+        "/landing/templates/2/1.png",
+        "/landing/templates/2/2.png",
+        "/landing/templates/2/3.png",
+      ],
     },
     brands: {
-      title: "Brands",
-      description: "Get on-brand, consistent designs with every iteration.",
+      title: "Brand Identity",
+      description: "Logos, colors, typography, and complete visual guidelines.",
       images: [
-        "/landing/templates/3/1.jpg",
-        "/landing/templates/3/2.jpg", 
-        "/landing/templates/3/3.jpg"
-      ]
+        // "/landing/templates/3/1.jpg",
+        // "/landing/templates/3/2.jpg",
+        "/landing/templates/3/Image-6.png",
+        "/landing/templates/3/Image-7.png",
+        "/landing/templates/3/Image-5.png",
+      ],
     },
     social: {
-      title: "Social",
-      description: "Streamline your content with our AI social media post generator",
+      title: "Business Strategy",
+      description:
+        "Plans, pitch decks, financial models, and market analysis.",
       images: [
-        "/landing/templates/4/1.jpg",
-        "/landing/templates/4/2.jpg"
-      ]
+        "/landing/templates/4/Image-9.png",
+        "/landing/templates/4/Image-10.png",
+      ],
     },
     slides: {
-      title: "Slides",
-      description: "Make convincing presentations and pitches in seconds.",
+      title: "Marketing",
+      description: "Content, SEO, social media, and automated campaigns.",
       slides: [
-        "/landing/templates/5/1.jpg",
-        "/landing/templates/5/1.jpg",
-        "/landing/templates/5/1.jpg"
-      ]
-    }
+        "/landing/templates/5/1.png",
+        "/landing/templates/5/2.png",
+        // "/landing/templates/5/1.jpg",
+        // "/landing/templates/5/1.jpg",
+      ],
+    },
   };
 
   // Process Strapi templates data or use defaults
   const processedTemplates = {};
-  
+
   if (templates.length > 0) {
-    templates.forEach(template => {
-      const layout = template.layout || 'other';
+    templates.forEach((template) => {
+      const layout = template.layout || "other";
       processedTemplates[layout] = {
         title: template.title || defaultTemplates[layout]?.title || layout,
-        description: template.description || defaultTemplates[layout]?.description || "",
-        images: template.images?.map(img => getStrapiImageUrl(img)).filter(Boolean) || defaultTemplates[layout]?.images || [],
-        slides: template.slides?.map(slide => getStrapiImageUrl(slide)).filter(Boolean) || defaultTemplates[layout]?.slides || []
+        description:
+          template.description || defaultTemplates[layout]?.description || "",
+        images:
+          template.images
+            ?.map((img) => getStrapiImageUrl(img))
+            .filter(Boolean) ||
+          defaultTemplates[layout]?.images ||
+          [],
+        slides:
+          template.slides
+            ?.map((slide) => getStrapiImageUrl(slide))
+            .filter(Boolean) ||
+          defaultTemplates[layout]?.slides ||
+          [],
       };
     });
   }
@@ -78,7 +95,7 @@ function Templates({ templates = [] }) {
   // Merge with defaults for missing layouts
   const templateData = {
     ...defaultTemplates,
-    ...processedTemplates
+    ...processedTemplates,
   };
 
   // State for slides carousel
@@ -189,14 +206,14 @@ function Templates({ templates = [] }) {
               transition={{ duration: 0.5, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              150,000
+              10,000+{" "}
             </motion.span>{" "}
-            ready-made templates to choose from
+            ready-made solutions to choose from{" "}
           </motion.div>
           <motion.div className="p-2" variants={headerVariants}>
             <p className="leading-[22px] font-[400] text-[20px] align-middle text-[#3D4050] font-[general-sans]">
-              Discover our curated website design catalog featuring a range of
-              categories <br /> to match your preferences and projects.
+              Discover our curated collection featuring websites, apps, 
+<br />and brands to match your vision and goals.
             </p>
           </motion.div>
         </motion.div>
@@ -213,7 +230,9 @@ function Templates({ templates = [] }) {
             whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
           >
             <div className="absolute top-[20.04px] left-[20.5px] flex flex-col gap-[8.64px]">
-              <p className="text-[30px] text-[#C209C1]  font-semibold md:font-medium">{templateData.website.title}</p>
+              <p className="text-[30px] text-[#C209C1]  font-semibold md:font-medium">
+                {templateData.website.title}
+              </p>
               <p className="text-[18px] text-[#3D4050] break-words whitespace-normal ">
                 {templateData.website.description}
               </p>
@@ -227,8 +246,8 @@ function Templates({ templates = [] }) {
               {templateData.website.images.slice(0, 3).map((image, index) => {
                 const positions = [
                   "left-[10px] top-[60px] z-2",
-                  "left-[90px] top-[40px] z-1", 
-                  "left-[170px] top-[20px]"
+                  "left-[90px] top-[40px] z-1",
+                  "left-[170px] top-[20px]",
                 ];
                 return (
                   <motion.div
@@ -258,12 +277,12 @@ function Templates({ templates = [] }) {
             >
               {templateData.website.images.slice(0, 6).map((image, index) => {
                 const positions = [
-                  "left-[0.48px] top-[118.42px] z-2 w-[255.38px]",
-                  "left-[183.12px] top-[92.75px] z-1 w-[255.38px]",
-                  "left-[365.76px] top-[67.08px] w-[255.38px]",
-                  "left-[548.76px] top-[118.58px] z-1 w-[255.38px]",
-                  "left-[730.64px] top-[92.91px] w-[255.38px]",
-                  "left-[964px] top-[149.63px] w-[505.17px]"
+                  "left-[0.48px] top-[118.42px] z-2 w-[348.38px]",
+                  "left-[300.12px] top-[92.75px] z-1 w-[255.38px]",
+                  "left-[530.76px] top-[67.08px] w-[255.38px]",
+                  "left-[760.76px] top-[148.58px] z-1 w-[313.38px]",
+                  "left-[1000.64px] top-[92.91px] w-[255.38px]",
+                  // "left-[964px] top-[149.63px] w-[505.17px]"
                 ];
                 return (
                   <motion.div
@@ -310,10 +329,13 @@ function Templates({ templates = [] }) {
                 const positions = [
                   "w-[219.36px] h-[250.7px] left-[-62.84px] top-[190.13px] rotate-[-12deg]",
                   "w-[250.7px] h-[250.7px] left-[34.59px] top-[197.96px] rotate-[-6deg]",
-                  "w-[250.7px] h-[219.36px] left-[98.33px] top-[214.76px] rotate-[6deg]"
+                  "w-[250.7px] h-[219.36px] left-[98.33px] top-[214.76px] rotate-[6deg]",
                 ];
                 return (
-                  <div key={index} className={`absolute ${positions[index]} rounded-[3.92px] border-[6px] border-[#C209C1]`}>
+                  <div
+                    key={index}
+                    className={`absolute ${positions[index]} rounded-[3.92px]`}
+                  >
                     <img
                       src={image}
                       alt={`${templateData.lummi.title} ${index + 1}`}
@@ -342,15 +364,17 @@ function Templates({ templates = [] }) {
               {/* Mobile Layout */}
               <div className="md:hidden mt-10 p-[20px] pt-[100px] flex gap-[16px]">
                 <div className="flex-1 flex flex-col gap-[14px]">
-                  {templateData.brands.images.slice(0, 2).map((image, index) => (
-                    <div key={index} className="w-full">
-                      <img
-                        src={image}
-                        alt={`${templateData.brands.title} ${index + 1}`}
-                        className="h-[120px] rounded-[10.88px] w-full object-cover"
-                      />
-                    </div>
-                  ))}
+                  {templateData.brands.images
+                    .slice(0, 2)
+                    .map((image, index) => (
+                      <div key={index} className="w-full">
+                        <img
+                          src={image}
+                          alt={`${templateData.brands.title} ${index + 1}`}
+                          className="h-[120px] rounded-[10.88px] w-full object-cover"
+                        />
+                      </div>
+                    ))}
                 </div>
                 <div className="flex-1">
                   <img
@@ -364,21 +388,26 @@ function Templates({ templates = [] }) {
               {/* Desktop Layout */}
               <div className="hidden md:block">
                 <div className="h-[246px] top-[100px] left-[32.31px] flex flex-col gap-[14.5px] absolute overflow-hidden">
-                  {templateData.brands.images.slice(0, 2).map((image, index) => (
-                    <div key={index} className="w-[379.59px]">
-                      <img
-                        src={image}
-                        alt={`${templateData.brands.title} ${index + 1}`}
-                        className="h-[130.5px] rounded-[10.88px] w-full object-cover"
-                      />
-                    </div>
-                  ))}
+                  {templateData.brands.images
+                    .slice(0, 2)
+                    .map((image, index) => (
+                      <div key={index} className="w-[379.59px]">
+                        <img
+                          src={image}
+                          alt={`${templateData.brands.title} ${index + 1}`}
+                          className="h-[130.5px] rounded-[10.88px] w-full object-cover"
+                        />
+                      </div>
+                    ))}
                 </div>
-                <div className="w-[335.43px] h-[318.56px] top-[97.57px] left-[433.64px] rounded-[10.88px] absolute">
-                  <img
+                <div className="w-[335.43px]  flex items-start justify-start top-[97.57px] left-[433.64px] rounded-[10.88px] absolute">
+                  <Image
                     src={templateData.brands.images[2]}
                     alt={`${templateData.brands.title} 3`}
-                    className="rounded-[10.88px] w-full h-full object-cover"
+                    // layout="fill"
+                    width={10000}
+                    height={250}
+                    className="!rounded-[10.88px] w-full h-[257px] object-cover"
                   />
                 </div>
               </div>
@@ -407,10 +436,13 @@ function Templates({ templates = [] }) {
               {templateData.social.images.slice(0, 2).map((image, index) => {
                 const positions = [
                   "w-[508.42px] h-[381.93px] top-[196.22px] left-[39.92px] rotate-[6deg]",
-                  "w-[500.66px] h-[457.62px] top-[159px] left-[337.05px] rotate-[6deg]"
+                  "w-[500.66px] h-[457.62px] top-[159px] left-[337.05px] rotate-[6deg]",
                 ];
                 return (
-                  <div key={index} className={`${positions[index]} rounded-[9.71px] overflow-hidden absolute`}>
+                  <div
+                    key={index}
+                    className={`${positions[index]} rounded-[9.71px] overflow-hidden absolute`}
+                  >
                     <img
                       src={image}
                       alt={`${templateData.social.title} ${index + 1}`}
@@ -461,7 +493,7 @@ function Templates({ templates = [] }) {
                   className="w-[32px] h-[32px] top-[215px] md:left-[22px] left-[15px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
                 />
               </motion.div>
-              <motion.div >
+              <motion.div>
                 <IoIosArrowDroprightCircle
                   onClick={nextSlide}
                   className="w-[32px] h-[32px] top-[215px] md:right-[22px] right-[15px] text-[#C209C1] rounded-full absolute cursor-pointer hover:opacity-75"
