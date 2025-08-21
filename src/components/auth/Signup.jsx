@@ -3,12 +3,29 @@ import React, { useState, useEffect } from "react";
 import CustomInput from "../ui/CustomInput";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { fetchSignupPageData } from "@/utils/strapi";
+// import { fetchSignupPageData } from "@/utils/strapi";
 
 const Signup = () => {
+  // Hardcoded processed signup data
+  const processedSignupData = {
+    pageTitle: "Let's Create Your Account",
+    pageDescription:
+      "Get started with allmyai and start using our AI assistance",
+    submitButton: {
+      text: "Create Account",
+      loadingText: "Creating...",
+    },
+    termsText:
+      "By clicking the Create Account button, you acknowledge that you have read and agree to our Terms of Use and Privacy Policy.",
+    loginLink: {
+      preText: "Already have an account?",
+      linkText: "Login",
+      url: "/auth/login",
+    },
+  };
   const router = useRouter();
-  const [signupData, setSignupData] = useState(null);
-  const [dataLoading, setDataLoading] = useState(true);
+  // const [signupData, setSignupData] = useState(null);
+  // const [dataLoading, setDataLoading] = useState(true);
   const [formData, setFormData] = useState({
     email: "",
     phone: "",
@@ -20,56 +37,56 @@ const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch signup page data
-  useEffect(() => {
-    const loadSignupData = async () => {
-      try {
-        setDataLoading(true);
-        const data = await fetchSignupPageData();
-        console.log('Signup data received:', data);
-        setSignupData(data);
-      } catch (error) {
-        console.error('Error loading signup page data:', error);
-      } finally {
-        setDataLoading(false);
-      }
-    };
-
-    loadSignupData();
-  }, []);
+  // useEffect(() => {
+  //   const loadSignupData = async () => {
+  //     try {
+  //       setDataLoading(true);
+  //       const data = await fetchSignupPageData();
+  //       console.log('Signup data received:', data);
+  //       setSignupData(data);
+  //     } catch (error) {
+  //       console.error('Error loading signup page data:', error);
+  //     } finally {
+  //       setDataLoading(false);
+  //     }
+  //   };
+  //
+  //   loadSignupData();
+  // }, []);
 
   // Get field configuration by label
-  const getFieldConfig = (fieldType) => {
-    if (!signupData) return null;
-    
-    switch (fieldType) {
-      case 'email':
-        return signupData.emailField;
-      case 'mobile':
-        return signupData.mobileField;
-      case 'password':
-        return signupData.passwordField;
-      case 'confirmPassword':
-        return signupData.confirmPasswordField;
-      default:
-        return null;
-    }
-  };
+  // const getFieldConfig = (fieldType) => {
+  //   if (!signupData) return null;
+  //
+  //   switch (fieldType) {
+  //     case 'email':
+  //       return signupData.emailField;
+  //     case 'mobile':
+  //       return signupData.mobileField;
+  //     case 'password':
+  //       return signupData.passwordField;
+  //     case 'confirmPassword':
+  //       return signupData.confirmPasswordField;
+  //     default:
+  //       return null;
+  //   }
+  // };
 
   // Get processed signup data with fallbacks
-  const processedSignupData = {
-    pageTitle: signupData?.pageTitle || "Let's Create Your Account",
-    pageDescription: signupData?.pageDescription || "Get started with allmyai and start using our AI assistance",
-    submitButton: {
-      text: signupData?.submitButton?.text || "Create Account",
-      loadingText: signupData?.submitButton?.loadingText || "Creating..."
-    },
-    termsText: signupData?.termsText || "By clicking the Create Account button, you acknowledge that you have read and agree to our Terms of Use and Privacy Policy.",
-    loginLink: {
-      preText: signupData?.loginLink?.preText || "Already have an account?",
-      linkText: signupData?.loginLink?.linkText || "Login",
-      url: signupData?.loginLink?.url || "/auth/login"
-    }
-  };
+  // const processedSignupData = {
+  //   pageTitle: signupData?.pageTitle || "Let's Create Your Account",
+  //   pageDescription: signupData?.pageDescription || "Get started with allmyai and start using our AI assistance",
+  //   submitButton: {
+  //     text: signupData?.submitButton?.text || "Create Account",
+  //     loadingText: signupData?.submitButton?.loadingText || "Creating..."
+  //   },
+  //   termsText: signupData?.termsText || "By clicking the Create Account button, you acknowledge that you have read and agree to our Terms of Use and Privacy Policy.",
+  //   loginLink: {
+  //     preText: signupData?.loginLink?.preText || "Already have an account?",
+  //     linkText: signupData?.loginLink?.linkText || "Login",
+  //     url: signupData?.loginLink?.url || "/auth/login"
+  //   }
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -88,33 +105,38 @@ const Signup = () => {
   const createAccount = async (formData) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-  
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       if (data.type === "success") {
-        router.push(`/auth/confirm-otp?email=${encodeURIComponent(formData.email)}`);
-      }
-      else {
+        router.push(
+          `/auth/confirm-otp?email=${encodeURIComponent(formData.email)}`
+        );
+      } else {
         if (data.field == "email") {
           setErrors({ email: data.message });
         }
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error creating account:", error);
-      setErrors({ general: "An error occurred while creating your account. Please try again." });
+      setErrors({
+        general:
+          "An error occurred while creating your account. Please try again.",
+      });
     } finally {
       setIsLoading(false);
     }
-    
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -122,10 +144,14 @@ const Signup = () => {
     const newErrors = {};
 
     // Basic form validation with better error messages
-    if (!formData.email) newErrors.email = "Please enter a valid email address.";
+    if (!formData.email)
+      newErrors.email = "Please enter a valid email address.";
     if (!formData.phone) newErrors.phone = "Please enter a valid phone number.";
     if (!formData.password) newErrors.password = "Minimum 8 characters";
-    if (formData.password !== formData.confirmPassword || formData.confirmPassword === "") {
+    if (
+      formData.password !== formData.confirmPassword ||
+      formData.confirmPassword === ""
+    ) {
       newErrors.confirmPassword = "Passwords do not match.";
     }
 
@@ -133,9 +159,10 @@ const Signup = () => {
 
     if (Object.keys(newErrors).length === 0) {
       console.log("Form submitted successfully", formData);
-      createAccount(formData)
+      createAccount(formData);
     }
   };
+  // console.log("Signup data received:", signupData);
 
   return (
     <div className="lg:w-[80%] mx-auto p-6 justify-center items-center ">
@@ -148,9 +175,9 @@ const Signup = () => {
 
       <form onSubmit={handleSubmit}>
         <CustomInput
-          label={getFieldConfig("email")?.label || "Email Address"}
-          type={getFieldConfig("email")?.type || "email"}
-          placeholder={getFieldConfig("email")?.placeholder || "Enter your email"}
+          label={"Email Address"}
+          type={"email"}
+          placeholder={"Enter your email"}
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -158,9 +185,9 @@ const Signup = () => {
         />
 
         <CustomInput
-          label={getFieldConfig("mobile")?.label || "Mobile Phone"}
-          type={getFieldConfig("mobile")?.type || "text"}
-          placeholder={getFieldConfig("mobile")?.placeholder || "Enter your mobile phone"}
+          label={"Mobile Phone"}
+          type={"text"}
+          placeholder={"Enter your mobile phone"}
           name="phone"
           value={formData.phone}
           onChange={handleChange}
@@ -171,9 +198,9 @@ const Signup = () => {
         </p>
 
         <CustomInput
-          label={getFieldConfig("password")?.label || "Password"}
-          type={getFieldConfig("password")?.type || "password"}
-          placeholder={getFieldConfig("password")?.placeholder || "Enter your password"}
+          label={"Password"}
+          type={"password"}
+          placeholder={"Enter your password"}
           name="password"
           value={formData.password}
           onChange={handleChange}
@@ -181,9 +208,9 @@ const Signup = () => {
         />
 
         <CustomInput
-          label={getFieldConfig("confirmPassword")?.label || "Confirm Password"}
-          type={getFieldConfig("confirmPassword")?.type || "password"}
-          placeholder={getFieldConfig("confirmPassword")?.placeholder || "Confirm your password"}
+          label={"Confirm Password"}
+          type={"password"}
+          placeholder={"Confirm your password"}
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}
@@ -208,7 +235,10 @@ const Signup = () => {
 
         <p className="text-center text-[14px] mt-4 text-[#6C7278]">
           {processedSignupData.loginLink.preText}{" "}
-          <Link href={processedSignupData.loginLink.url} className="hover:underline font-semibold text-[#C209C1]">
+          <Link
+            href={processedSignupData.loginLink.url}
+            className="hover:underline font-semibold text-[#C209C1]"
+          >
             {processedSignupData.loginLink.linkText}
           </Link>
         </p>
