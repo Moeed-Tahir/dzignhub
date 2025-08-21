@@ -40,9 +40,9 @@ function Templates({ templates = [] }) {
       images: [
         // "/landing/templates/3/1.jpg",
         // "/landing/templates/3/2.jpg",
-        "/landing/templates/3/image-6.png",
-        "/landing/templates/3/image-7.png",
-        "/landing/templates/3/image-5.png",
+        "/landing/templates/3/Image-6.png",
+        "/landing/templates/3/Image-7.png",
+        "/landing/templates/3/Image-5.png",
       ],
     },
     social: {
@@ -50,8 +50,8 @@ function Templates({ templates = [] }) {
       description:
         "Plans, pitch decks, financial models, and market analysis.",
       images: [
-        "/landing/templates/4/image-9.png",
-        "/landing/templates/4/image-10.png",
+        "/landing/templates/4/Image-9.png",
+        "/landing/templates/4/Image-10.png",
       ],
     },
     slides: {

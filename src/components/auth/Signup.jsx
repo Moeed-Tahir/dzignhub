@@ -149,7 +149,7 @@ const Signup = () => {
         <CustomInput
           label={getFieldConfig("email")?.label || "Email Address"}
           type={getFieldConfig("email")?.type || "email"}
-          placeholder={getFieldConfig("email")?.placeholder || ""}
+          placeholder={getFieldConfig("email")?.placeholder || "Enter your email"}
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -172,7 +172,7 @@ const Signup = () => {
         <CustomInput
           label={getFieldConfig("password")?.label || "Password"}
           type={getFieldConfig("password")?.type || "password"}
-          placeholder={getFieldConfig("password")?.placeholder || ""}
+          placeholder={getFieldConfig("password")?.placeholder || "Enter your password"}
           name="password"
           value={formData.password}
           onChange={handleChange}
@@ -182,7 +182,7 @@ const Signup = () => {
         <CustomInput
           label={getFieldConfig("confirmPassword")?.label || "Confirm Password"}
           type={getFieldConfig("confirmPassword")?.type || "password"}
-          placeholder={getFieldConfig("confirmPassword")?.placeholder || ""}
+          placeholder={getFieldConfig("confirmPassword")?.placeholder || "Confirm your password"}
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}
