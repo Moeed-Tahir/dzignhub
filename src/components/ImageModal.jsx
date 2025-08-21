@@ -14,6 +14,7 @@ const ImageModal = ({
   desc: initialDesc,
   subtitle: initialSubtitle,
   allGenerations, // ✅ Add this prop to get full generation data
+  type
 }) => {
   const router = useRouter();
 
@@ -23,6 +24,7 @@ const ImageModal = ({
   const [currentDesc, setCurrentDesc] = useState(initialDesc);
   const [currentSubtitle, setCurrentSubtitle] = useState(initialSubtitle);
   const [currentTags, setCurrentTags] = useState(initialTags);
+  const [assetType, setAssetType] = useState(type);
 
   useEffect(() => {
     setCurrentMainPic(mainPic);
@@ -30,7 +32,8 @@ const ImageModal = ({
     setCurrentDesc(initialDesc);
     setCurrentSubtitle(initialSubtitle);
     setCurrentTags(initialTags);
-  }, [mainPic, initialTitle, initialDesc, initialSubtitle, initialTags]);
+    setAssetType(type);
+  }, [mainPic, initialTitle, initialDesc, initialSubtitle, initialTags, type]);
 
   if (!isOpen) return null;
 
@@ -66,15 +69,16 @@ const ImageModal = ({
   // ✅ Handle suggestion click with full data update
   const handleSuggestionClick = (suggestionUrl) => {
     console.log("[DEBUG] Suggestion clicked:", suggestionUrl);
-    
+
     // Find the full generation data for this suggestion
     const suggestionGeneration = allGenerations?.find(gen => gen.url === suggestionUrl);
-    
+
     if (suggestionGeneration) {
       console.log("[DEBUG] Found suggestion generation:", suggestionGeneration);
-      
+
       // Update all the modal content
       setCurrentMainPic(suggestionGeneration.url);
+      setAssetType(suggestionGeneration.type);
       setCurrentTitle(suggestionGeneration.title || `Community ${suggestionGeneration.type}`);
       setCurrentDesc(suggestionGeneration.prompt || "No description available");
       setCurrentSubtitle(suggestionGeneration.type === "image" ? "Image Generation" : "Video Generation");
@@ -135,33 +139,33 @@ const ImageModal = ({
             </h1>
             <div className="flex gap-2">
 
-            {suggestions && suggestions.length > 0 ? (
-              suggestions.map((suggestion, index) => (
-                <div
-                  key={index}
-                  className="flex items-start justify-start gap-2 mb-4 cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={() => handleSuggestionClick(suggestion)} // ✅ Use new handler
-                >
-                  <Image
-                    src={suggestion}
-                    alt={"Suggestion"}
-                    width={80}
-                    height={42}
-                    className="rounded-[12px] object-cover"
-                  />
-                </div>
-              ))
-            ) : (
-              <p className="text-[14px] font-medium">
-                No related templates found.
-              </p>
-            )}
+              {suggestions && suggestions.length > 0 ? (
+                suggestions.map((suggestion, index) => (
+                  <div
+                    key={index}
+                    className="flex items-start justify-start gap-2 mb-4 cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => handleSuggestionClick(suggestion)} // ✅ Use new handler
+                  >
+                    <Image
+                      src={suggestion}
+                      alt={"Suggestion"}
+                      width={80}
+                      height={42}
+                      className="rounded-[12px] object-cover"
+                    />
+                  </div>
+                ))
+              ) : (
+                <p className="text-[14px] font-medium">
+                  No related templates found.
+                </p>
+              )}
             </div>
           </div>
 
           <div className="flex justify-between items-center w-full mt-8">
             <button
-                onClick={openAIAgent}
+              onClick={openAIAgent}
               className="w-[48%] bg-[#BDFF00]  hover:bg-[#a8e600] text-[#344054] text-[14px] font-semibold h-[40px] px-6 rounded-full transition-colors"
             >
               Chat with AI agent
@@ -171,13 +175,24 @@ const ImageModal = ({
 
         <div className="hidden lg:flex w-[543px]">
           {/* ✅ Use dynamic main picture */}
-          <Image
-            src={currentMainPic}
-            alt="Preview"
-            width={543}
-            height={686}
-            className="w-full rounded-[20px] h-full object-cover"
-          />
+          {
+            assetType == "image" ? (
+              <Image
+                src={currentMainPic}
+                alt="Preview"
+                width={543}
+                height={686}
+                className="w-full rounded-[20px] h-full object-cover"
+              />
+            ):(
+              <video
+                src={currentMainPic}
+                className="w-full rounded-[20px] h-full object-cover"
+                controls
+              />
+            )
+          }
+
         </div>
       </div>
     </div>

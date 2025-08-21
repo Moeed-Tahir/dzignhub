@@ -42,6 +42,7 @@ function CommunityFeed() {
 
   // Handle opening modal
   const handleImageClick = (generation) => {
+    console.log("Image clicked:", generation);
     setSelectedGeneration(generation);
     setIsModalOpen(true);
   };
@@ -213,12 +214,13 @@ function CommunityFeed() {
       {/* ImageModal */}
       {selectedGeneration && (
         <ImageModal
+        type={selectedGeneration.type}
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           tags={generateTags(selectedGeneration)}
           mainPic={selectedGeneration.url}
           suggestions={generations
-            .filter(gen => gen.type === selectedGeneration.type && gen.url !== selectedGeneration.url)
+            .filter(gen => gen.url !== selectedGeneration.url)
             .slice(0, 4)
             .map(gen => gen.url)
           }
