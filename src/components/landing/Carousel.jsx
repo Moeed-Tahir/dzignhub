@@ -97,7 +97,7 @@ function Carousel({ carouselImages = [] }) {
 
   return (
     <motion.div 
-      className="lg:h-[420px] h-[280px] flex flex-col gap-[20px] lg:mt-[40px]  absolute top-[867px] lg:top-[635px]  w-full overflow-hidden"
+      className="lg:h-[210px] h-[280px] flex flex-col gap-[20px] lg:mt-[40px]  absolute top-[867px] lg:top-[635px]  w-full overflow-hidden"
       variants={carouselContainerVariants}
       initial="hidden"
       animate="visible"

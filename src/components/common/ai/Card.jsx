@@ -15,10 +15,10 @@ function Card({ currentKey, assistantData, loading }) {
   // Fallback static data for different assistant types
   const fallbackImages = {
     brandDesigner: '/ai-assistants/ai-designer.jpg',
-    contentWriter: '/ai-assistants/content-writer.jpg',
-    ui_ux: '/ai-assistants/ui-ux-designer.jpg',
-    seo: '/ai-assistants/seo.jpg',
-    strategyAssistant: '/ai-assistants/strategy-assistant.jpg'
+    contentWriter: '/ai-assistants/ai-designer.jpg',
+    ui_ux: '/ai-assistants/ai-designer.jpg',
+    seo: '/ai-assistants/ai-designer.jpg',
+    strategyAssistant: '/ai-assistants/ai-designer.jpg'
   };
 
   const imageData = {

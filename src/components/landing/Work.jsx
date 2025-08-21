@@ -10,25 +10,24 @@ function Work({ workCards = [] }) {
     {
       title: "Describe your idea",
       description:
-        "Start your project by uploading assets or choosing a template. You control the direction from the very beginning, shaping your vision exactly the way you want.",
+        "Enter your business concept or paste your URL. We build your brand DNA instantly.",
       mobileManualImage: "/landing/work/mobile/manual-1.jpg",
       desktopManualImage: "/landing/work/desktop/manual-1.jpg",
       mobileProImage: "/landing/work/mobile/pro-1.jpg",
       desktopProImage: "/landing/work/desktop/pro-1.jpg",
     },
     {
-      title: "Let the System do your work",
+      title: "AI team builds everything",
       description:
-        "Access powerful manual tools for image editing, video creation, or content design. You guide the process — the platform provides the flexibility and tools you need.",
+        "Our Ai agents create your brand, website, app, UX/UI, and content automatically.",
       mobileManualImage: "/landing/work/mobile/manual-2.jpg",
       desktopManualImage: "/landing/work/desktop/manual-2.jpg",
       mobileProImage: "/landing/work/mobile/pro-2.jpg",
       desktopProImage: "/landing/work/desktop/pro-2.jpg",
     },
     {
-      title: "Customize & download",
-      description:
-        "Make final adjustments to suit your preferences. Once you're done, download your finished files and bring your project to life with confidence.",
+      title: "Launch & own",
+      description: "Download everything. Your business is ready to go live.",
       mobileManualImage: "/landing/work/mobile/manual-3.jpg",
       desktopManualImage: "/landing/work/desktop/manual-3.jpg",
       mobileProImage: "/landing/work/mobile/pro-3.jpg",

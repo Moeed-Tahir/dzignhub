@@ -7,13 +7,14 @@ import {
 import { GoDotFill, GoDot } from "react-icons/go";
 import { AnimatePresence } from "framer-motion";
 import { getStrapiImageUrl } from "@/utils/strapi";
+import Image from "next/image";
 
 function Templates({ templates = [] }) {
   // Default fallback data organized by layout type
   const defaultTemplates = {
     website: {
       title: "Website",
-      description: "Create gorgeous landing pages with a simple prompt.",
+      description: "Complete responsive sites with mobile optimization and hosting.",
       images: [
         "/landing/templates/1/1.png",
         "/landing/templates/1/2.png",
@@ -24,9 +25,9 @@ function Templates({ templates = [] }) {
       ],
     },
     lummi: {
-      title: "Lummi",
+      title: "Mobile Apps",
       description:
-        "Unlock 20,000+ AI-generated images made by global creators.",
+        "Cross-platform apps ready for App Store and Google Play.",
       images: [
         "/landing/templates/2/1.png",
         "/landing/templates/2/2.png",
@@ -45,15 +46,17 @@ function Templates({ templates = [] }) {
       ],
     },
     social: {
-      title: "Social",
+      title: "Business Strategy",
       description:
-        "Streamline your content with our AI social media post generator",
-      images: [        "/landing/templates/4/image-9.png",
-        "/landing/templates/4/image-10.png",],
+        "Plans, pitch decks, financial models, and market analysis.",
+      images: [
+        "/landing/templates/4/image-9.png",
+        "/landing/templates/4/image-10.png",
+      ],
     },
     slides: {
-      title: "Slides",
-      description: "Make convincing presentations and pitches in seconds.",
+      title: "Marketing",
+      description: "Content, SEO, social media, and automated campaigns.",
       slides: [
         "/landing/templates/5/1.png",
         "/landing/templates/5/2.png",
@@ -203,14 +206,14 @@ function Templates({ templates = [] }) {
               transition={{ duration: 0.5, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              150,000
+              10,000+{" "}
             </motion.span>{" "}
-            ready-made templates to choose from
+            ready-made solutions to choose from{" "}
           </motion.div>
           <motion.div className="p-2" variants={headerVariants}>
             <p className="leading-[22px] font-[400] text-[20px] align-middle text-[#3D4050] font-[general-sans]">
-              Discover our curated website design catalog featuring a range of
-              categories <br /> to match your preferences and projects.
+              Discover our curated collection featuring websites, apps, 
+<br />and brands to match your vision and goals.
             </p>
           </motion.div>
         </motion.div>
@@ -397,11 +400,14 @@ function Templates({ templates = [] }) {
                       </div>
                     ))}
                 </div>
-                <div className="w-[335.43px] h-[318.56px] top-[97.57px] left-[433.64px] rounded-[10.88px] absolute">
-                  <img
+                <div className="w-[335.43px]  flex items-start justify-start top-[97.57px] left-[433.64px] rounded-[10.88px] absolute">
+                  <Image
                     src={templateData.brands.images[2]}
                     alt={`${templateData.brands.title} 3`}
-                    className="rounded-[10.88px] w-full h-full object-cover"
+                    // layout="fill"
+                    width={10000}
+                    height={250}
+                    className="!rounded-[10.88px] w-full h-[257px] object-cover"
                   />
                 </div>
               </div>

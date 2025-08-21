@@ -7,25 +7,35 @@ function Download({ downloadSection }) {
   const defaultData = {
     preTitle: "Download the app",
     title: "and start creating with AI — anytime, anywhere.",
-    description: "Our AI-powered creative app gives you access to your personal team of assistants — wherever you are.\nDesign logos, create social media content, generate marketing strategies, and get real-time insights — all in one place. No skills required. Just your ideas.",
+    description:
+      "Your complete AI team in your pocket.      8 specialists ready to launch your brand  — wherever you are.",
     appStoreImage: "/landing/download/app-store.svg",
     appStoreUrl: "#",
-    googlePlayImage: "/landing/download/google-play.svg", 
+    googlePlayImage: "/landing/download/google-play.svg",
     googlePlayUrl: "#",
-    phoneImage: "/landing/download/iphone.svg"
+    phoneImage: "/landing/download/iphone.svg",
   };
 
   // Process Strapi data or use defaults
-  const data = downloadSection ? {
-    preTitle: downloadSection.preTitle || defaultData.preTitle,
-    title: downloadSection.title || defaultData.title,
-    description: downloadSection.description || defaultData.description,
-    appStoreImage: getStrapiImageUrl(downloadSection.appStoreImage) || defaultData.appStoreImage,
-    appStoreUrl: downloadSection.appStoreUrl || defaultData.appStoreUrl,
-    googlePlayImage: getStrapiImageUrl(downloadSection.googlePlayImage) || defaultData.googlePlayImage,
-    googlePlayUrl: downloadSection.googlePlayUrl || defaultData.googlePlayUrl,
-    phoneImage: getStrapiImageUrl(downloadSection.phoneImage) || defaultData.phoneImage
-  } : defaultData;
+  const data = downloadSection
+    ? {
+        preTitle: downloadSection.preTitle || defaultData.preTitle,
+        title: downloadSection.title || defaultData.title,
+        description: downloadSection.description || defaultData.description,
+        appStoreImage:
+          getStrapiImageUrl(downloadSection.appStoreImage) ||
+          defaultData.appStoreImage,
+        appStoreUrl: downloadSection.appStoreUrl || defaultData.appStoreUrl,
+        googlePlayImage:
+          getStrapiImageUrl(downloadSection.googlePlayImage) ||
+          defaultData.googlePlayImage,
+        googlePlayUrl:
+          downloadSection.googlePlayUrl || defaultData.googlePlayUrl,
+        phoneImage:
+          getStrapiImageUrl(downloadSection.phoneImage) ||
+          defaultData.phoneImage,
+      }
+    : defaultData;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -162,12 +172,10 @@ function Download({ downloadSection }) {
                 >
                   {data.preTitle}{" "}
                 </motion.span>
-                <span className="">
-                  {data.title}
-                </span>
+                <span className="">{data.title}</span>
               </motion.div>
               <motion.div
-                className="max-w-[525px] text-[20px]  xl:text-[24px] font-semibold"
+                className="max-w-[450px] text-[20px]  xl:text-[24px] font-semibold"
                 variants={textVariants}
                 dangerouslySetInnerHTML={{ __html: data.description }}
               />
@@ -185,9 +193,9 @@ function Download({ downloadSection }) {
                 whileHover="hover"
                 whileTap="tap"
               >
-                <img 
-                  src={data.appStoreImage} 
-                  alt="App Store" 
+                <img
+                  src={data.appStoreImage}
+                  alt="App Store"
                   className="w-full h-full object-contain"
                 />
               </motion.a>
