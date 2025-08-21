@@ -53,13 +53,14 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
     setStartImage(null);
   };
 
-  const saveGeneration = async (type, url, prompt, isMultiple) => {
+  const saveGeneration = async (type, url, prompt, isMultiple, size) => {
     try {
       let data = {
         type: type,
         url: url,
         prompt: prompt,
         isMultiple: isMultiple,
+        size: size
       };
       const req = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/save-generation`,
@@ -74,7 +75,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       );
 
       const res = await req.json();
-      window.location.reload();
+      
     } catch (error) {
       console.error("Error saving generation:", error);
     }
@@ -229,7 +230,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
           SetGenerateVideo([res.video]);
 
           // Save the generation to the database
-          saveGeneration("video", res.video, textValue);
+          saveGeneration("video", res.video.videoUrl, textValue, false, res.video.fileSize);
         } else {
           setError(`${res.message}`);
           setIsError(true);
