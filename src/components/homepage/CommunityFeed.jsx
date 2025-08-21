@@ -225,6 +225,7 @@ function CommunityFeed() {
           title={selectedGeneration.title || `Community ${selectedGeneration.type}`}
           desc={selectedGeneration.prompt || "No description available"}
           subtitle={selectedGeneration.type === "image" ? "Image Generation" : "Video Generation"}
+          allGenerations={generations} 
         />
       )}
     </div>

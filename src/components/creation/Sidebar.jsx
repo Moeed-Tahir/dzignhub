@@ -74,6 +74,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
       );
 
       const res = await req.json();
+      window.location.reload();
     } catch (error) {
       console.error("Error saving generation:", error);
     }
@@ -145,14 +146,14 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
         console.log(res);
         if (res.type == "success" || res.type == "partial_success") {
           if (onGenerate) onGenerate();
-          SetGenerateImages(res.images);
-
+          
           // Save the generation to the database
           if (selectedQuality > 1) {
             saveGeneration("image", res.images, textValue, true);
           } else {
             saveGeneration("image", res.images[0], textValue, false);
           }
+          SetGenerateImages(res.images);
         }
         setIsLoading(false);
       } catch (error) {
