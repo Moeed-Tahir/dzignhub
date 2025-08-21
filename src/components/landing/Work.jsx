@@ -10,7 +10,7 @@ function Work({ workCards = [] }) {
       title: "Describe your idea",
       description:
         "Start your project by uploading assets or choosing a template. You control the direction from the very beginning, shaping your vision exactly the way you want.",
-      mobileManualImage: "/landing/work/mobile/manual-1.png",
+      mobileManualImage: "/landing/work/mobile/manual-1.jpg",
       desktopManualImage: "/landing/work/desktop/manual-1.jpg",
       mobileProImage: "/landing/work/mobile/pro-1.jpg",
       desktopProImage: "/landing/work/desktop/pro-1.jpg",
@@ -36,16 +36,29 @@ function Work({ workCards = [] }) {
   ];
 
   // Process Strapi work cards data or use defaults
-  const cardData = workCards.length > 0 
-    ? workCards.map((card, index) => ({
-        title: card.title || defaultCardData[index]?.title || `Step ${index + 1}`,
-        description: card.description || defaultCardData[index]?.description || "Default description",
-        mobileManualImage: getStrapiImageUrl(card.mobileManualImage) || defaultCardData[index]?.mobileManualImage,
-        desktopManualImage: getStrapiImageUrl(card.desktopManualImage) || defaultCardData[index]?.desktopManualImage,
-        mobileProImage: getStrapiImageUrl(card.mobileProImage) || defaultCardData[index]?.mobileProImage,
-        desktopProImage: getStrapiImageUrl(card.desktopProImage) || defaultCardData[index]?.desktopProImage,
-      }))
-    : defaultCardData;
+  const cardData =
+    workCards.length > 0
+      ? workCards.map((card, index) => ({
+          title:
+            card.title || defaultCardData[index]?.title || `Step ${index + 1}`,
+          description:
+            card.description ||
+            defaultCardData[index]?.description ||
+            "Default description",
+          mobileManualImage:
+            getStrapiImageUrl(card.mobileManualImage) ||
+            defaultCardData[index]?.mobileManualImage,
+          desktopManualImage:
+            getStrapiImageUrl(card.desktopManualImage) ||
+            defaultCardData[index]?.desktopManualImage,
+          mobileProImage:
+            getStrapiImageUrl(card.mobileProImage) ||
+            defaultCardData[index]?.mobileProImage,
+          desktopProImage:
+            getStrapiImageUrl(card.desktopProImage) ||
+            defaultCardData[index]?.desktopProImage,
+        }))
+      : defaultCardData;
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selected, setSelected] = useState("right");
@@ -57,61 +70,61 @@ function Work({ workCards = [] }) {
       transition: {
         duration: 0.6,
         staggerChildren: 0.2,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   };
 
   const sectionVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 60 
+    hidden: {
+      opacity: 0,
+      y: 60,
     },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const headerVariants = {
-    hidden: { 
-      opacity: 0, 
-      x: -50 
+    hidden: {
+      opacity: 0,
+      x: -50,
     },
     visible: {
       opacity: 1,
       x: 0,
       transition: {
         duration: 0.7,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const toggleVariants = {
-    hidden: { 
-      opacity: 0, 
-      x: 50 
+    hidden: {
+      opacity: 0,
+      x: 50,
     },
     visible: {
       opacity: 1,
       x: 0,
       transition: {
         duration: 0.7,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const cardVariants = {
-    hidden: { 
-      opacity: 0, 
+    hidden: {
+      opacity: 0,
       y: 30,
-      scale: 0.95
+      scale: 0.95,
     },
     visible: {
       opacity: 1,
@@ -119,24 +132,24 @@ function Work({ workCards = [] }) {
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const imageVariants = {
-    hidden: { 
-      opacity: 0, 
-      scale: 0.9 
+    hidden: {
+      opacity: 0,
+      scale: 0.9,
     },
     visible: {
       opacity: 1,
       scale: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const buttonHoverVariants = {
@@ -144,38 +157,38 @@ function Work({ workCards = [] }) {
       scale: 1.05,
       transition: {
         duration: 0.2,
-        ease: "easeInOut"
-      }
+        ease: "easeInOut",
+      },
     },
     tap: {
-      scale: 0.95
-    }
+      scale: 0.95,
+    },
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="max-w-[1280px] py-[64px] xl:px-[40px] px-[20px]  mx-auto"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
     >
-      <motion.div 
+      <motion.div
         className="p-[20px] xl:p-[40px] gap-[64px] rounded-[40px] bg-[#1B1F3B] flex flex-col shadow-md"
         variants={sectionVariants}
       >
-        <motion.div 
+        <motion.div
           className="flex justify-between items-center flex-col xl:flex-row gap-[24px]"
           variants={containerVariants}
         >
-          <motion.h2 
+          <motion.h2
             className=" xl:text-[48px] text-center xl:text-start text-[28px] font-semibold text-white"
             variants={headerVariants}
           >
             How AllMyAI works
           </motion.h2>
 
-          <motion.div 
+          <motion.div
             className="w-[261px] h-[56px] rounded-full px-[8px] py-[6px] bg-[#212e62] flex items-center gap-[4px] text-[14px] "
             variants={toggleVariants}
           >
@@ -218,11 +231,11 @@ function Work({ workCards = [] }) {
           </motion.div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className=" gap-[24px] flex flex-col"
           variants={containerVariants}
         >
-          <motion.div 
+          <motion.div
             className=" flex flex-col xl:flex-row justify-between gap-[10px]  rounded-xl"
             variants={containerVariants}
           >
@@ -265,10 +278,7 @@ function Work({ workCards = [] }) {
             })}
           </motion.div>
 
-          <motion.div 
-            className="mx-auto"
-            variants={imageVariants}
-          >
+          <motion.div className="mx-auto" variants={imageVariants}>
             <motion.img
               src={
                 selected === "right"
@@ -284,10 +294,7 @@ function Work({ workCards = [] }) {
             />
           </motion.div>
 
-          <motion.div 
-            className="mx-auto"
-            variants={imageVariants}
-          >
+          <motion.div className="mx-auto" variants={imageVariants}>
             <motion.img
               src={
                 selected === "right"

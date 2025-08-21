@@ -1,5 +1,5 @@
 // utils/strapi.js
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://rational-growth-935ad59588.strapiapp.com';
 
 export const fetchLandingPageData = async () => {
   try {
@@ -19,8 +19,8 @@ export const fetchLandingPageData = async () => {
       const landingPage = data.data[0];
       
       return {
-        mainHeading: landingPage.MainHeading || "Turn Your Words Into Stunning Visuals",
-        mainDescription: landingPage.MainDescription || "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+        mainHeading: landingPage.MainHeading || "The Ultimate all in one AI Website Creator",
+        mainDescription: landingPage.MainDescription || "Website, app, and brand-one promt does it all.",
         heroSection: landingPage.hero_section || null,
         carouselImages: landingPage.carousal_images || [],
         stackSections: landingPage.stack || [],
@@ -37,8 +37,8 @@ export const fetchLandingPageData = async () => {
     
     // Return fallback data if no data from Strapi
     return {
-      mainHeading: "Turn Your Words Into Stunning Visuals",
-      mainDescription: "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+      mainHeading: "The Ultimate all in one AI Website Creator",
+      mainDescription: "Website, app, and brand-one promt does it all.",
       heroSection: null,
       carouselImages: [],
       stackSections: [],
@@ -57,8 +57,8 @@ export const fetchLandingPageData = async () => {
     
     // Return fallback data in case of error
     return {
-      mainHeading: "Turn Your Words Into Stunning Visuals",
-      mainDescription: "Whether you need concept art, marketing materials, or personal projects, our text-to-image generator brings your imagination to life.",
+      mainHeading: "The Ultimate all in one AI Website Creator",
+      mainDescription: "Website, app, and brand-one promt does it all.",
       heroSection: null,
       carouselImages: [],
       stackSections: [],
