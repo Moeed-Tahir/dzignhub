@@ -19,7 +19,6 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch signup page data
   useEffect(() => {
     const loadSignupData = async () => {
       try {
@@ -37,7 +36,6 @@ const Signup = () => {
     loadSignupData();
   }, []);
 
-  // Get field configuration by label
   const getFieldConfig = (fieldType) => {
     if (!signupData) return null;
     
@@ -142,6 +140,7 @@ const Signup = () => {
       <h2 className="text-[30px] font-medium text-[#2A0856] text-center">
         {processedSignupData.pageTitle}
       </h2>
+      <h1>{process.env.NEXT_PUBLIC_STRAPI_URL}</h1>
       <p className="text-[#44444A] text-[14px] mb-6 text-center">
         {processedSignupData.pageDescription}
       </p>
