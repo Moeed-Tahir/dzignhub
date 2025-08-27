@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 
 const StreamingMessageBubble = ({ message, aiIcon }) => {
-  const { text, toolSteps = [], imageUrl, isLogo } = message;
+  const { text, toolSteps = [], imageUrl, isLogo, thinkingProcess } = message;
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -57,6 +57,99 @@ const StreamingMessageBubble = ({ message, aiIcon }) => {
       <div className="flex-1">
         <div className="bg-gray-100 rounded-lg p-4">
           
+          {/* ✅ REAL THINKING PROCESS DISPLAY */}
+          {thinkingProcess && (
+            <div className="mb-4 p-4 bg-purple-50 rounded-lg border-l-4 border-purple-400">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-purple-700 font-semibold">🧠 Real Model Thinking</span>
+                <div className="w-3 h-3 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              
+              {thinkingProcess.thinking && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">💭 Internal Reasoning:</h5>
+                  <div className="text-sm text-purple-700 bg-white p-3 rounded border-l-4 border-purple-200">
+                    <pre className="whitespace-pre-wrap font-mono text-xs">
+                      {thinkingProcess.thinking}
+                    </pre>
+                  </div>
+                </div>
+              )}
+              
+              {thinkingProcess.reasoning && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">🔍 Analysis:</h5>
+                  <p className="text-sm text-purple-700 bg-white p-2 rounded">
+                    {thinkingProcess.reasoning}
+                  </p>
+                </div>
+              )}
+              
+              {thinkingProcess.analysis && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">🎯 Understanding:</h5>
+                  <p className="text-sm text-purple-700">{thinkingProcess.analysis}</p>
+                </div>
+              )}
+              
+              {thinkingProcess.plan && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">📋 Plan:</h5>
+                  <p className="text-sm text-purple-700">{thinkingProcess.plan}</p>
+                </div>
+              )}
+
+              {thinkingProcess.process && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">⚡ Process:</h5>
+                  <p className="text-sm text-purple-700">{thinkingProcess.process}</p>
+                </div>
+              )}
+
+              {thinkingProcess.findings && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">🔍 Findings:</h5>
+                  <p className="text-sm text-purple-700">{thinkingProcess.findings}</p>
+                </div>
+              )}
+
+              {thinkingProcess.strategy && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">🎯 Strategy:</h5>
+                  <p className="text-sm text-purple-700">{thinkingProcess.strategy}</p>
+                </div>
+              )}
+
+              {thinkingProcess.creative_process && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">🎨 Creative Process:</h5>
+                  <p className="text-sm text-purple-700">{thinkingProcess.creative_process}</p>
+                </div>
+              )}
+
+              {thinkingProcess.design_decisions && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">⚡ Design Decisions:</h5>
+                  <p className="text-sm text-purple-700">{thinkingProcess.design_decisions}</p>
+                </div>
+              )}
+
+              {thinkingProcess.evaluation && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">✨ Evaluation:</h5>
+                  <p className="text-sm text-purple-700">{thinkingProcess.evaluation}</p>
+                </div>
+              )}
+
+              {thinkingProcess.approach && (
+                <div className="mb-3">
+                  <h5 className="font-medium text-purple-800 mb-1">📋 Approach:</h5>
+                  <p className="text-sm text-purple-700">{thinkingProcess.approach}</p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* ✅ SHOW ALL TOOL STEPS */}
           {toolSteps.length > 0 && (
             <div className="mb-4 space-y-3">

@@ -276,6 +276,48 @@ export default function ChatPage({
               console.log('📡 Streaming data:', data);
   
               switch (data.type) {
+                // Add these missing cases to your handleSendWithStreaming switch statement:
+                case 'thinking_start':
+                  // ✅ ADD THINKING START HANDLING
+                  setStreamingMessage({
+                    sender: "ai",
+                    text: data.message,
+                    toolSteps: [...allToolSteps],
+                    thinkingProcess: null, // Reset thinking
+                    status: 'thinking'
+                  });
+                  break;
+
+                case 'thinking_process':
+                  // ✅ ADD THINKING PROCESS HANDLING
+                  console.log('🧠 Received thinking_process:', data);
+                  setStreamingMessage({
+                    sender: "ai",
+                    text: currentText,
+                    toolSteps: [...allToolSteps],
+                    thinkingProcess: {
+                      thinking: data.thinking,
+                      reasoning: data.reasoning,
+                      analysis: data.analysis,
+                      plan: data.plan,
+                      strategy: data.strategy,
+                      creative_process: data.creative_process,
+                      design_decisions: data.design_decisions,
+                      process: data.process,
+                      findings: data.findings,
+                      approach: data.approach,
+                      evaluation: data.evaluation,
+                      quality_check: data.quality_check
+                    },
+                    imageUrl: finalImageUrl,
+                    isLogo: finalIsLogo,
+                    status: data.status
+                  });
+                  console.log('🧠 Set streamingMessage with thinking:', {
+    thinking: data.thinking?.substring(0, 50) + '...',
+    reasoning: data.reasoning?.substring(0, 50) + '...'
+  });
+                  break;
                 case 'conversation_info':
                   if (data.is_new_conversation && data.conversation_id) {
                     setConversationId(data.conversation_id);
@@ -717,7 +759,8 @@ export default function ChatPage({
             toolInfo={msg.toolInfo}
             toolSteps={msg.toolSteps} 
             isStreaming={msg === streamingMessage}
-            isError={msg.isError}    
+            thinkingProcess={msg.thinkingProcess}
+            isError={msg.isError}   
           />
         ))}
       </div>

@@ -18,7 +18,8 @@ export default function MessageBubble({
   status,          // ✅ Add these streaming props
   toolInfo,        // ✅ Add these streaming props
   toolSteps = [],
-  isStreaming
+  isStreaming,
+  thinkingProcess
 }) {
   const { Avatar } = useUserStore();
   const isAI = sender != "user";
@@ -99,7 +100,7 @@ export default function MessageBubble({
   if (isStreaming && sender === 'ai') {
     return (
       <StreamingMessageBubble
-        message={{ text, status, toolInfo, toolSteps, imageUrl, isLogo }}
+        message={{ text, status, toolInfo, toolSteps, imageUrl, isLogo,thinkingProcess}}
         aiIcon={aiIcon}
       />
     );
