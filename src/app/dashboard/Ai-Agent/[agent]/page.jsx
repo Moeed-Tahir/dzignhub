@@ -1,5 +1,6 @@
 "use client";
 import Navbar from "@/components/common/Navbar";
+import InviteModal from "@/components/ai/InviteModal";
 import React, { useState, useEffect } from "react";
 
 import Chatbot from "@/components/ai/Chatbot";
@@ -7,22 +8,27 @@ import { notFound } from "next/navigation";
 import aiBots from "@/data/index";
 import Sidebar from "@/components/ai/Sidebar";
 import { useUserStore } from "@/store/store";
-import { useParams, useSearchParams } from "next/navigation"; 
+import { useParams, useSearchParams } from "next/navigation";
+import { HiArrowLongLeft } from "react-icons/hi2";
+import { IoIosMenu } from "react-icons/io";
+import Image from "next/image";
+import Globe from "@/app/assets/globe";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   const { agent } = useParams();
-  const searchParams = useSearchParams(); 
-  
+  const searchParams = useSearchParams();
+
   const [bot, setBot] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const agents = {
-    "zara": "brand-designer",
-    "sana": "content-creator",
-    "novi": "seo-specialist",
-    "mira": "strategist"
-  }
+    zara: "brand-designer",
+    sana: "content-creator",
+    novi: "seo-specialist",
+    mira: "strategist",
+  };
 
   const [conversations, setConversations] = useState([]);
 
@@ -30,14 +36,15 @@ const page = () => {
   const [activeChat, setActiveChat] = useState("");
   const [messages, setMessages] = useState([]);
   const [showIntro, setShowIntro] = useState(true);
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   useEffect(() => {
-    const conversationId = searchParams.get('conversationId');
+    const conversationId = searchParams.get("conversationId");
     if (conversationId) {
       console.log("Found conversationId in URL:", conversationId);
       setActiveChat(conversationId);
       setShowIntro(false); // Hide intro when loading a specific conversation
-      
+
       // Fetch messages for this conversation if we have conversations loaded
       if (conversations.length > 0) {
         fetchMessages(conversationId);
@@ -45,40 +52,44 @@ const page = () => {
     }
   }, [searchParams, conversations]);
 
-
-
   // Set sidebar open only on desktop screens
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) { // md breakpoint
-        setIsSidebarOpen(true);
+      if (window.innerWidth >= 768) {
+        // md breakpoint
+        setIsSidebarOpen(false);
       } else {
         setIsSidebarOpen(false);
       }
     };
 
     handleResize(); // Set initial state
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const parseAssetGeneratedMessage = (message) => {
-    if (message.sender !== 'user' && message.text && 
-      (message.text.startsWith('ASSET_GENERATED|') || message.text.startsWith('LOGO_GENERATED|'))) {
-      const parts = message.text.split('|');
+    if (
+      message.sender !== "user" &&
+      message.text &&
+      (message.text.startsWith("ASSET_GENERATED|") ||
+        message.text.startsWith("LOGO_GENERATED|"))
+    ) {
+      const parts = message.text.split("|");
       const imageUrl = parts[1];
-      const messageText = parts[2] || '';
+      const messageText = parts[2] || "";
 
       // Determine asset type from URL or message context
-      const isLogo = messageText.toLowerCase().includes('logo') ||
-        imageUrl.includes('logo') ||
-        messageText.toLowerCase().includes('brand');
+      const isLogo =
+        messageText.toLowerCase().includes("logo") ||
+        imageUrl.includes("logo") ||
+        messageText.toLowerCase().includes("brand");
 
       return {
         ...message,
         text: messageText,
         imageUrl: imageUrl,
-        isLogo: isLogo
+        isLogo: isLogo,
       };
     }
     return message;
@@ -96,9 +107,9 @@ const page = () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/${conversationId}/messages?user_id=${userIdToUse}`,
         {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
         }
       );
@@ -108,18 +119,18 @@ const page = () => {
       if (data.success) {
         const parsedMessages = data.messages.map(parseAssetGeneratedMessage);
         setMessages(parsedMessages);
-        console.log(`Loaded ${data.count} messages for conversation ${conversationId}`);
+        console.log(
+          `Loaded ${data.count} messages for conversation ${conversationId}`
+        );
       } else {
-        console.error('Failed to fetch messages:', data.error);
+        console.error("Failed to fetch messages:", data.error);
         setMessages([]);
-
       }
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      console.error("Error fetching messages:", error);
       setMessages([]);
     }
   };
-
 
   const verifyTokenForFetchingMessages = async () => {
     try {
@@ -144,30 +155,31 @@ const page = () => {
     }
   };
 
-
   // Fetch conversations function
   const fetchConversations = async (userId) => {
     try {
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/single-agent/${agents[agent]}/${userId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/single-agent/${agents[agent]}/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const data = await response.json();
-      console.log('Conversations data:', data);
+      console.log("Conversations data:", data);
       if (data.success) {
         console.log(data.conversations);
         setConversations(data.conversations);
         console.log(`Loaded ${data.count} conversations`);
       } else {
-        console.error('Failed to fetch conversations:', data.error);
+        console.error("Failed to fetch conversations:", data.error);
         setConversations([]);
       }
     } catch (error) {
-      console.error('Error fetching conversations:', error);
+      console.error("Error fetching conversations:", error);
       setConversations([]);
     }
   };
@@ -177,24 +189,22 @@ const page = () => {
     console.log("[DEBUG] Handling new conversation:", conversationId);
     setActiveChat(conversationId);
     setShowIntro(false);
-    
-    
+
     fetchMessages(conversationId);
-    
+
     // Refresh conversations list
     if (UserId) {
       fetchConversations(UserId);
     }
   };
 
-const refreshConversationsList = () => {
-  if (UserId) {
-    fetchConversations(UserId);
-  }
-};
+  const refreshConversationsList = () => {
+    if (UserId) {
+      fetchConversations(UserId);
+    }
+  };
 
-// Add these to your page.jsx component before the return statement
-
+  // Add these to your page.jsx component before the return statement
 
   // Load bot and conversations
   useEffect(() => {
@@ -203,7 +213,6 @@ const refreshConversationsList = () => {
       if (!fetchedBot) return notFound();
 
       setBot(fetchedBot);
-
 
       const userId = UserId;
       console.log("User ID:", userId);
@@ -216,7 +225,6 @@ const refreshConversationsList = () => {
       };
 
       checkAuth();
-
 
       setIsLoading(false);
     }, 800);
@@ -239,7 +247,7 @@ const refreshConversationsList = () => {
 
       if (data.type === "success") {
         console.log("Token is valid, user ID:", data.user._id);
-        fetchConversations(data.user._id)
+        fetchConversations(data.user._id);
       }
     } catch (error) {
       console.error("Token verification failed", error);
@@ -259,10 +267,23 @@ const refreshConversationsList = () => {
     return notFound();
   }
 
+  const router = useRouter();
+
   return (
     <div className="bg-[#F7F8F8] px-5 xl:px-0 max-w-[1440px] mx-auto min-h-screen">
-       
-      <Sidebar activeChat={activeChat} setActiveChat={setActiveChat} img={bot.img} aiName={bot.name} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} conversations={conversations} onConversationSelect={fetchMessages} setShowIntro={setShowIntro}  setMessages={setMessages} setConversations={setConversations}  />
+      <Sidebar
+        activeChat={activeChat}
+        setActiveChat={setActiveChat}
+        img={bot.img}
+        aiName={bot.name}
+        isOpen={isSidebarOpen}
+        setIsOpen={setIsSidebarOpen}
+        conversations={conversations}
+        onConversationSelect={fetchMessages}
+        setShowIntro={setShowIntro}
+        setMessages={setMessages}
+        setConversations={setConversations}
+      />
 
       {/* Mobile menu button */}
       {!isSidebarOpen && (
@@ -270,33 +291,75 @@ const refreshConversationsList = () => {
           onClick={() => setIsSidebarOpen(true)}
           className="fixed top-32 left-4 z-50 p-2 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow md:hidden"
         >
-          <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          <svg
+            className="w-5 h-5 text-gray-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       )}
 
-      <div className={`flex relative transition-all duration-300 min-h-screen flex-col
-        ${isSidebarOpen ? 'md:ml-[320px] md:w-[calc(100%-320px)]' : 'md:ml-[64px] md:w-[calc(100%-64px)]'}
-        w-full
-      `}>
-        <Navbar isSettingPage={true} />
-        {/* <div className="relative flex gap-2">
-        <Image
-        src={"/Ai/chat.svg"}
-        alt=""
-        width={44}
-        height={44}
-        className="aboslute top-0 cursor-pointer right-0 "
-        />
-        <Image
-        src={"/Ai/edit.svg"}
-        alt=""
-        width={44}
-        height={44}
-        className="aboslute top-0 cursor-pointer right-0 "
-        />
-        </div> */}
+      <div className="max-w-[1280px] mx-auto">
+        <div className="flex justify-between items-center py-4">
+          <div className="flex relative gap-2">
+            <div className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center">
+              <HiArrowLongLeft
+                onClick={() => {
+                  router.back();
+                }}
+                className="w-[18px] text-[#344054] h-[18px]"
+              />
+            </div>
+            <div className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center">
+              <IoIosMenu className="w-[18px] text-[#344054] h-[18px]" />
+            </div>
+          </div>
+
+          <div className="flex gap-2 items-center ">
+            <Image
+              src={bot.img}
+              alt={bot.name}
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+            <p className="text-[#202126] font-medium text-[14px]">{bot.name}</p>
+          </div>
+
+          <div className="flex relative gap-2">
+            <button
+              className="bg-white rounded-[8px] h-[38px] w-[108px] justify-center flex items-center gap-2 border-[#202126] border"
+              onClick={() => setShowInviteModal(true)}
+            >
+              <Image
+                src={"/profile-add.svg"}
+                alt={bot.name}
+                width={20}
+                height={20}
+                className="rounded-full"
+              />
+              <p className="text-[#202126] text-[14px] font-medium">Invite</p>
+            </button>
+            <button className="bg-[#C209C1] rounded-[8px] h-[38px] w-[108px] justify-center flex items-center gap-2 ">
+              <Globe fill="#ffffff" />
+              <p className="text-white font-medium text-[14px]">Publish</p>
+            </button>
+          <InviteModal
+            open={showInviteModal}
+            onClose={() => setShowInviteModal(false)}
+          />
+          </div>
+
+        </div>
+
         <Chatbot
           aiName={bot.name}
           tagline={bot.tagline}
@@ -308,9 +371,8 @@ const refreshConversationsList = () => {
           setMessages={setMessages}
           showIntro={showIntro}
           setShowIntro={setShowIntro}
-          onNewConversation={handleNewConversation}          // Pass callback
-  onRefreshConversations={refreshConversationsList}  // Pass callback
-
+          onNewConversation={handleNewConversation} // Pass callback
+          onRefreshConversations={refreshConversationsList} // Pass callback
         />
       </div>
     </div>
