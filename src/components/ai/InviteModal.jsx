@@ -1,65 +1,193 @@
-import React from "react";
+"use client";
+
+import { useState } from "react";
+import { ChevronDown, Users, Link, Copy } from "lucide-react";
+import Image from "next/image";
+import { IoLinkSharp } from "react-icons/io5";
 
 export default function InviteModal({ open, onClose }) {
+  const [permission, setPermission] = useState("can view");
+  const [email, setEmail] = useState("");
+
   if (!open) return null;
+
   return (
-    <div className="absolute top-10 right-10 z-50 flex items-center justify-center  bg-opacity-40">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-        <button
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          &times;
-        </button>
-        <h2 className="text-xl font-semibold mb-4">Invite</h2>
-        <div className="mb-6">
-          <input
-            type="text"
-            placeholder="Email, name..."
-            className="w-full border rounded-lg px-3 py-2 mb-2"
-          />
-          <select className="border rounded-lg px-2 py-1 mr-2">
-            <option>can view</option>
-            <option>can edit</option>
-          </select>
-          <button className="bg-purple-600 text-white px-4 py-2 rounded-lg">Invite</button>
+    <div className="absolute top-10 right-10 z-50 flex items-center justify-center !w-[420px]  bg-opacity-40">
+      <div className="bg-white rounded-[28px] shadow-lg border border-[#ECECEC] w-full  overflow-hidden relative">
+        <div className="flex items-center justify-between p-6 pb-4">
+          <h2 className="text-xl font-semibold text-gray-900">Share</h2>
         </div>
-        <div className="mb-4">
-          <div className="font-medium mb-2">General access</div>
-          <div className="flex items-center mb-2">
-            <span className="bg-gray-100 rounded-full p-2 mr-2">🔒</span>
-            <span>Only those invited</span>
-            <span className="ml-auto text-gray-500">4 people</span>
+
+        <div className="px-6 relative pb-20">
+          <div className="flex gap-2 mb-6">
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                placeholder="Email, name..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`w-full pl-[20px] pr-[16px] py-[12px] border rounded-lg text-[14px]  focus:outline-none transition duration-200 border-gray-300 focus:ring-2 focus:ring-[#C209C1] }`}
+              />
+
+              <select
+                value={permission}
+                onChange={(e) => setPermission(e.target.value)}
+                className="appearance-none bg-gray-50 border-0 absolute right-2 rounded-xl px-2 py-2 top-1/2 translate-y-[-50%] pr-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#C209C1] cursor-pointer"
+              >
+                <option value="can view">can view</option>
+                <option value="can edit">can edit</option>
+                <option value="can comment">can comment</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            </div>
+            <button className="bg-[#C209C1]  text-white px-6 py-3 rounded-xl font-medium transition-colors">
+              Invite
+            </button>
           </div>
-          <div className="flex items-center">
-            <span className="bg-gray-100 rounded-full p-2 mr-2">🔗</span>
-            <span>Link access</span>
-            <span className="ml-auto text-gray-500">Only users have shared the link</span>
+
+          <div className="mb-6">
+            <h3 className="text-[12px] font-medium text-[#7B7B7B] mb-3">
+              General access
+            </h3>
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between  rounded-lg cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-[#F8F7F7] rounded-lg shadow-2xl flex items-center justify-center">
+                    <Image src={"/Ai/user.svg"} alt="" height={16} width={16} />
+                  </div>
+                  <div>
+                    <div className="font-medium text-[12px] text-[#121212]">
+                      Only those invited
+                    </div>
+                    <div className="text-[12px] font-medium text-[#7B7B7B]">
+                      4 people
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between  rounded-lg cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-[#F8F7F7] rounded-lg shadow-2xl flex items-center justify-center">
+                    <IoLinkSharp className="w-4 h-4 -rotate-45 text-gray-600" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-[12px] text-[#121212]">
+                      Link Access
+                    </div>
+                    <div className="text-[12px] font-medium text-[#7B7B7B]">
+                      Only users have shared the link
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="mb-4">
-          <div className="font-medium mb-2">People with access</div>
-          <div className="flex items-center mb-2">
-            <img src="/public/avatar.png" alt="avatar" className="w-8 h-8 rounded-full mr-2" />
-            <span>Sam Dy</span>
-            <span className="ml-auto text-gray-500">can edit</span>
+
+          <div className="mb-6">
+            <h3 className="text-[12px] font-medium text-[#7B7B7B] mb-3">
+              People with access
+            </h3>
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Image
+                    src="/Ai/ai-dp.png"
+                    alt="Sam Dy"
+                    height={40}
+                    width={40}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div>
+                    <div className="font-medium text-[#121212] text-[12px]">
+                      Sam Dy
+                    </div>
+                    <div className="text-[12px] font-medium text-[#7B7B7B]">
+                      samual@gmail.com
+                    </div>
+                  </div>
+                </div>
+                <div className="relative">
+                  <select className="appearance-none bg-transparent border-0 text-sm text-gray-600 pr-2 cursor-pointer focus:outline-none">
+                    <option>can edit</option>
+                    <option>can view</option>
+                    <option>can comment</option>
+                  </select>
+                  <ChevronDown className="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Image
+                    src="/Ai/ai-dp.png"
+                    alt="Sam Dy"
+                    height={40}
+                    width={40}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div>
+                    <div className="font-medium text-[#121212] text-[12px]">
+                      Sam Dy
+                    </div>
+                    <div className="text-[12px] font-medium text-[#7B7B7B]">
+                      samual@gmail.com
+                    </div>
+                  </div>
+                </div>
+                <div className="relative">
+                  <select className="appearance-none bg-transparent border-0 text-sm text-gray-600 pr-2 cursor-pointer focus:outline-none">
+                    <option>can edit</option>
+                    <option>can view</option>
+                    <option>can comment</option>
+                  </select>
+                  <ChevronDown className="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Image
+                    src="/Ai/ai-dp.png"
+                    alt="Sam Dy"
+                    height={40}
+                    width={40}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div>
+                    <div className="font-medium text-[#121212] text-[12px]">
+                      Sam Dy
+                    </div>
+                    <div className="text-[12px] font-medium text-[#7B7B7B]">
+                      samual@gmail.com
+                    </div>
+                  </div>
+                </div>
+                <div className="relative">
+                  <select className="appearance-none bg-transparent border-0 text-sm text-gray-600 pr-2 cursor-pointer focus:outline-none">
+                    <option>can edit</option>
+                    <option>can view</option>
+                    <option>can comment</option>
+                  </select>
+                  <ChevronDown className="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center mb-2">
-            <img src="/public/Ai/ellie.png" alt="avatar" className="w-8 h-8 rounded-full mr-2" />
-            <span>Ellie Joy</span>
-            <span className="ml-auto text-gray-500">can edit</span>
+
+          <div className="bg-[#F8F7F7] bottom-0 absolute w-full left-0  p-4 flex items-center justify-between">
+            <span className="text-sm text-gray-600 truncate ">
+              https://Allmyai.com/file/k373nH
+            </span>
+            <button className="flex items-center w-[123px] h-[38px] bg-[#E5E5E5]  rounded-[12px] justify-center  gap-2 text-[#C209C1] hover:text-purple-700 font-medium text-sm transition-colors">
+              <IoLinkSharp className="w-4 h-4 -rotate-45 text-gray-600" />
+              <p className="text-[#121212] text-[14px] font-semibold">
+                Copy Link
+              </p>{" "}
+            </button>
           </div>
-          <div className="flex items-center mb-2">
-            <img src="/public/Ai/sana.png" alt="avatar" className="w-8 h-8 rounded-full mr-2" />
-            <span>Hellen</span>
-            <span className="ml-auto text-gray-500">Owner</span>
-            <span className="ml-2 text-green-500">✔️</span>
-          </div>
-        </div>
-        <div className="flex items-center justify-between bg-gray-100 rounded-lg px-3 py-2">
-          <span className="truncate">https://Allmyai.com/file/k373nH</span>
-          <button className="text-purple-600 font-medium">Copy link</button>
         </div>
       </div>
     </div>

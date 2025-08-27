@@ -1,6 +1,7 @@
 "use client";
 import Navbar from "@/components/common/Navbar";
 import InviteModal from "@/components/ai/InviteModal";
+import PublishModal from "@/components/ai/PublishModal";
 import React, { useState, useEffect } from "react";
 
 import Chatbot from "@/components/ai/Chatbot";
@@ -37,6 +38,48 @@ const page = () => {
   const [messages, setMessages] = useState([]);
   const [showIntro, setShowIntro] = useState(true);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const inviteModalRef = React.useRef(null);
+  const inviteButtonRef = React.useRef(null);
+  const publishModalRef = React.useRef(null);
+  const publishButtonRef = React.useRef(null);
+  // Close InviteModal when clicking outside, but ignore clicks on the button
+  useEffect(() => {
+    if (!showInviteModal) return;
+    function handleClickOutside(event) {
+      if (
+        inviteModalRef.current &&
+        !inviteModalRef.current.contains(event.target) &&
+        inviteButtonRef.current &&
+        !inviteButtonRef.current.contains(event.target)
+      ) {
+        setShowInviteModal(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showInviteModal]);
+
+  // Close PublishModal when clicking outside, but ignore clicks on the button
+  useEffect(() => {
+    if (!showPublishModal) return;
+    function handleClickOutside(event) {
+      if (
+        publishModalRef.current &&
+        !publishModalRef.current.contains(event.target) &&
+        publishButtonRef.current &&
+        !publishButtonRef.current.contains(event.target)
+      ) {
+        setShowPublishModal(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showPublishModal]);
 
   useEffect(() => {
     const conversationId = searchParams.get("conversationId");
@@ -334,10 +377,11 @@ const page = () => {
             <p className="text-[#202126] font-medium text-[14px]">{bot.name}</p>
           </div>
 
-          <div className="flex relative gap-2">
+          <div className="flex relative ">
             <button
+              ref={inviteButtonRef}
               className="bg-white rounded-[8px] h-[38px] w-[108px] justify-center flex items-center gap-2 border-[#202126] border"
-              onClick={() => setShowInviteModal(true)}
+              onClick={() => setShowInviteModal((prev) => !prev)}
             >
               <Image
                 src={"/profile-add.svg"}
@@ -348,16 +392,31 @@ const page = () => {
               />
               <p className="text-[#202126] text-[14px] font-medium">Invite</p>
             </button>
-            <button className="bg-[#C209C1] rounded-[8px] h-[38px] w-[108px] justify-center flex items-center gap-2 ">
+            <button
+              ref={publishButtonRef}
+              className="bg-[#C209C1] ml-2 rounded-[8px] h-[38px] w-[108px] justify-center flex items-center gap-2 "
+              onClick={() => setShowPublishModal((prev) => !prev)}
+            >
               <Globe fill="#ffffff" />
               <p className="text-white font-medium text-[14px]">Publish</p>
             </button>
-          <InviteModal
-            open={showInviteModal}
-            onClose={() => setShowInviteModal(false)}
-          />
+            {showInviteModal && (
+              <div ref={inviteModalRef}>
+                <InviteModal
+                  open={showInviteModal}
+                  onClose={() => setShowInviteModal(false)}
+                />
+              </div>
+            )}
+            {showPublishModal && (
+              <div ref={publishModalRef}>
+                <PublishModal
+                  open={showPublishModal}
+                  onClose={() => setShowPublishModal(false)}
+                />
+              </div>
+            )}
           </div>
-
         </div>
 
         <Chatbot
