@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   MessageSquare,
   Plus,
@@ -32,8 +32,74 @@ const ChatbotSidebar = ({
 }) => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const chatModalRef = useRef(null);
+  const plusButtonRef = useRef(null);
 
   const { UserId } = useUserStore();
+  const ai = [
+    {
+      name: "Image Creation",
+      icon: "/aiAgent/gallery-edit.svg",
+      href: "/dashboard/image-creation",
+      bg: "#F7EEF3",
+    },
+    {
+      name: "Video Creation",
+      icon: "/aiAgent/video.svg",
+      href: "/dashboard/video-creation",
+
+      bg: "#F6F0F8",
+    },
+    {
+      name: "Pitch Deck",
+      icon: "/aiAgent/presention-chart.svg",
+      bg: "#EBF3F8",
+    },
+    {
+      name: "SEO Assistant",
+      icon: "/aiAgent/search-status.svg",
+      href: "/dashboard/Ai-Agent/novi",
+
+      bg: "#EAF4EF",
+    },
+    {
+      name: "UI/UX Design",
+      icon: "/aiAgent/designtools.svg",
+      href: "/dashboard/Ai-Agent/kano",
+
+      bg: "#F7F0EB",
+    },
+    {
+      name: "Software Developer",
+      icon: "/aiAgent/code.svg",
+      bg: "#EBF4F5",
+    },
+    {
+      name: "Content Creation",
+      icon: "/aiAgent/ruler&pen.svg",
+      bg: "#F7EFEF",
+    },
+    {
+      name: "Brand Design",
+      icon: "/aiAgent/color-swatch.svg",
+      href: "/dashboard/Ai-Agent/zara",
+
+      bg: "#FFFDF5",
+    },
+    {
+      name: "Market Assistant",
+      icon: "/aiAgent/market.svg",
+      bg: "#F9F9FE",
+    },
+    {
+      name: "Strategy Assistant",
+      icon: "/aiAgent/status-up.svg",
+      href: "/dashboard/Ai-Agent/mira",
+
+      bg: "#FEFAF7",
+    },
+  ];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -119,6 +185,29 @@ const ChatbotSidebar = ({
       cancelEditingTitle();
     }
   };
+
+  // Toggle chat modal when plus button is clicked
+  const toggleChatModal = () => {
+    setIsChatModalOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (!isChatModalOpen) return;
+    const handleClickOutside = (event) => {
+      if (
+        chatModalRef.current &&
+        !chatModalRef.current.contains(event.target) &&
+        plusButtonRef.current &&
+        !plusButtonRef.current.contains(event.target)
+      ) {
+        setIsChatModalOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isChatModalOpen]);
 
   const searchConversations = async (query) => {
     if (!query.trim()) {
@@ -252,18 +341,57 @@ const ChatbotSidebar = ({
     router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}`);
   };
 
+  const toggleModal = () => {
+    setIsChatModalOpen(!isChatModalOpen);
+  };
+
   return (
     <>
       {isOpen && (
         <div
           className="fixed inset-0 h-screen bg-black/50 bg-opacity-50 z-40 md:hidden"
-          onClick={() => setIsOpen(false)}
+          // onClick={() => setIsOpen(false)}
         />
       )}
 
-      <div className="flex h-screen absolute z-50 top-0 left-0 bg-gray-50">
+      {isChatModalOpen && (
         <div
-          className={`bg-white h-screen border-r border-gray-200 transition-all duration-300 flex flex-col overflow-hidden
+          ref={chatModalRef}
+          className="absolute grid p-4 z-100 grid-cols-3 w-[411px] left-20 h-[536px] top-[70px] bg-white rounded-[20px]"
+        >
+          <div className="absolute text-white top-[30px] left-2 z-100">
+            <Image
+              width={28}
+              height={46}
+              src={"/aiAgent/div.svg"}
+              alt="divider"
+              className="absolute scale-180 right-4"
+            />{" "}
+            a
+          </div>
+          {ai.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => router.push(item.href)}
+              className={`flex flex-col  items-center hover:scale-110 ease-in-out duration-300 transition-all`}
+            >
+              <div
+                className="rounded-full flex justify-center cursor-pointer  items-center w-12 h-12 "
+                style={{
+                  backgroundColor: item.bg,
+                }}
+              >
+                <Image src={item.icon} alt={item.name} width={24} height={24} />
+              </div>
+              <span className=" text-center w-[80%]">{item.name}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="flex h-screen rounded-tr-[20px] overflow-hidden absolute z-50 top-0 left-0 bg-gray-50">
+        <div
+          className={`bg-white h-screen   transition-all duration-300 flex flex-col overflow-hidden
             ${isOpen ? "w-80" : "w-16"}
             md:relative md:translate-x-0
             ${
@@ -273,7 +401,7 @@ const ChatbotSidebar = ({
             }
           `}
         >
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between p-4 ">
             <div className="flex items-center h-[40px] space-x-3">
               <div
                 className={`${
@@ -294,24 +422,30 @@ const ChatbotSidebar = ({
             </div>
             {isOpen && (
               <button
-                onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                // onClick={() => setIsOpen(false)}
+                onClick={() => toggleModal()}
+                className="  bg-[#1B1F3C] flex justify-center items-center  w-8 h-8 rounded-md transition-colors"
                 title="Collapse sidebar"
               >
-                <ChevronLeft className="w-5 h-5 text-gray-500" />
+                <Image
+                  className=" "
+                  src={"/aiAgent/ai.svg"}
+                  height={13}
+                  width={18}
+                />
               </button>
             )}
           </div>
 
           <div className="p-4">
             <button
-              onClick={startNewChat}
-              className={`flex items-center justify-center space-x-3 px-4 py-3 bg-[#c209c1] hover:bg-[#a50b8e] text-white rounded-full transition-colors ${
+              ref={plusButtonRef}
+              onClick={toggleChatModal}
+              className={`flex items-center justify-center space-x-3 px-4 py-3 bg-[#FCF3FC]  text-white rounded-full transition-colors ${
                 isOpen ? "w-full" : "w-8 h-8 !p-0"
               }`}
-              // title={!isOpen ? "New Chat" : ""}
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-5 text-[#c209c1] h-5" />
               {isOpen && <span>New Chat</span>}
             </button>
           </div>
@@ -334,7 +468,7 @@ const ChatbotSidebar = ({
               </div>
             ) : (
               <button
-                onClick={() => setIsOpen(true)}
+                // onClick={() => setIsOpen(true)}
                 className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors mx-auto"
                 title="Search conversations"
               >
@@ -620,13 +754,27 @@ const ChatbotSidebar = ({
 
         <div className="hidden md:block">
           {!isOpen && (
-            <button
-              onClick={() => setIsOpen(true)}
-              className="fixed top-4 left-3 z-50 p-2 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-              title="Expand sidebar"
-            >
-              <ChevronRight className="w-5 h-5 text-gray-500" />
-            </button>
+            <>
+              <button
+                // onClick={() => setIsOpen(true)}
+                className="  bg-[#1B1F3C] fixed top-5 left-4 z-50 flex justify-center items-center  w-8 h-8 rounded-md transition-colors"
+                title="Collapse sidebar"
+              >
+                <Image
+                  className=" "
+                  src={"/aiAgent/ai.svg"}
+                  height={13}
+                  width={18}
+                />
+              </button>
+              {/* <button
+                onClick={() => setIsOpen(true)}
+                className="fixed top-4 left-3 z-50 p-2 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                title="Expand sidebar"
+              >
+                <ChevronRight className="w-5 h-5 text-gray-500" />
+              </button> */}
+            </>
           )}
         </div>
       </div>
@@ -641,7 +789,6 @@ const ChatbotSidebar = ({
           </svg>
         </button>
       )} */}
-
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-lg bg-opacity-50 flex items-center justify-center z-50">

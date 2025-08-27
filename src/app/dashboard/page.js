@@ -42,6 +42,45 @@ function Page() {
       description: "Produce unique content with AI assistance",
     },
   ];
+
+  const ai = [
+    {
+      name: "Image Creation",
+      icon: "/aiAgent/gallery-edit.svg",
+      bg: "#F7EEF3",
+    },
+    {
+      name: "Video Creation",
+      icon: "/aiAgent/video.svg",
+      bg: "#F6F0F8",
+    },
+    {
+      name: "Pitch Deck",
+      icon: "/aiAgent/presention-chart.svg",
+      bg: "#EBF3F8",
+    },
+    {
+      name: "SEO Assistant",
+      icon: "/aiAgent/search-status.svg",
+      bg: "#EAF4EF",
+    },
+    {
+      name: "UI/UX Design",
+      icon: "/aiAgent/designtools.svg",
+      bg: "#F7F0EB",
+    },
+    {
+      name: "Software Developer",
+      icon: "/aiAgent/code.svg",
+      bg: "#EBF4F5",
+    },
+    {
+      name: "Content Creation",
+      icon: "/aiAgent/ruler&pen.svg",
+      bg: "#F7EFEF",
+    },
+  ];
+
   const [cardsPerView, setCardsPerView] = useState(3);
 
   useEffect(() => {
@@ -76,6 +115,22 @@ function Page() {
       <Navbar />
 
       <div className="px-8 mx-auto max-w-[1440px] py-6">
+        <div className="flex justify-between mb-5 items-center">
+          {ai.map((item, index) => (
+            <div key={index} className={`flex flex-col  items-center hover:scale-110 ease-in-out duration-300 transition-all`}>
+              <div
+                className="rounded-full flex justify-center cursor-pointer  items-center w-12 h-12 "
+                style={{
+                  backgroundColor: item.bg,
+                }}
+              >
+                <Image src={item.icon}  alt={item.name} width={24} height={24} />
+              </div>
+              <span className="ml-2">{item.name}</span>
+            </div>
+          ))}
+        </div>
+
         <div
           id="mainContainer"
           className="flex flex-col xl:flex-row h-auto  xl:h-[400px]"
