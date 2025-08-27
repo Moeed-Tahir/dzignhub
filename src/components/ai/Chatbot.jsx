@@ -25,7 +25,12 @@ export default function ChatPage({
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [conversationId, setConversationId] = useState("")
   const searchParams = useSearchParams();
-  
+
+
+  const [streamingMessage, setStreamingMessage] = useState(null);
+  const [isStreaming, setIsStreaming] = useState(false);
+
+
   // ✅ GET CONVERSATION ID FROM URL ON COMPONENT MOUNT
   useEffect(() => {
     const urlConversationId = searchParams.get('conversationId');
@@ -136,7 +141,7 @@ export default function ChatPage({
           isLoading: true
         }
       ]);
-      
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/logo-designer`, {
         method: 'POST',
         headers: {
@@ -197,59 +202,44 @@ export default function ChatPage({
       .trim();
   }
 
-  const handleSend = async (msg) => {
+  const handleSendWithStreaming = async (msg) => {
     const newMessages = [...messages, { sender: "user", text: msg }];
     setMessages(newMessages);
     setShowIntro(false);
-    setStep(0);
-    setSelectedOptions([]);
-    setAiLoading(true);
-    setAiTyping(false);
+    setIsStreaming(true);
+    setStreamingMessage(null);
   
     try {
-      console.log(`🚀 Calling ${aiName} Python API...`);
-      console.log(`🔍 Current conversationId: ${conversationId}`); // ✅ ADD DEBUG LOG
+      console.log(`🚀 Starting streaming with ${aiName} Python API...`);
+      console.log(`🔍 Current conversationId: ${conversationId}`);
   
       const pythonApiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || "http://127.0.0.1:8000";
       const userId = UserId;
   
-      const previousMessages = messages.map(message => ({
-        role: message.sender === "user" ? "user" : "assistant",
-        content: message.text
-      }));
-  
       let endpoint;
       switch (aiName.toLowerCase()) {
         case "zara":
-          endpoint = "brand-designer";
+          endpoint = "brand-designer/stream";
           break;
         case "sana":
-          endpoint = "content-creator";
+          endpoint = "content-creator/stream";
           break;
         case "novi":
-          endpoint = "seo-specialist";
+          endpoint = "seo-specialist/stream";
           break;
         case "mira":
-          endpoint = "strategist";
-          break;
-        case "ellie":
-          endpoint = "ui-ux-designer";
+          endpoint = "strategist/stream";
           break;
         default:
-          endpoint = "brand-designer";
+          endpoint = "brand-designer/stream";
       }
   
-      // ✅ SEND CURRENT CONVERSATION ID (EMPTY STRING OR ACTUAL ID)
       const requestBody = {
         prompt: msg,
         user_id: userId,
-        conversation_id: conversationId || null, // ✅ SEND NULL IF EMPTY
-        previous_messages: previousMessages, 
-        context: `${aiName} AI Assistant`
+        conversation_id: conversationId || null,
       };
-      
-      console.log(`🔍 Request body:`, requestBody); // ✅ ADD DEBUG LOG
-
+  
       const response = await fetch(`${pythonApiUrl}/agents/${endpoint}`, {
         method: 'POST',
         headers: {
@@ -258,88 +248,197 @@ export default function ChatPage({
         body: JSON.stringify(requestBody)
       });
   
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
   
-      if (data.success) {
-        const aiResponse = data.response;
-        console.log('✅ Python Agent API response:', aiResponse);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
   
-        // ✅ HANDLE NEW CONVERSATION CREATION
-        if (data.is_new_conversation && data.conversation_id) {
-          console.log("[DEBUG] New conversation created:", data.conversation_id);
-          
-          // ✅ UPDATE LOCAL STATE IMMEDIATELY
-          setConversationId(data.conversation_id);
-          
-          // ✅ UPDATE URL WITHOUT PAGE RELOAD
-          const newUrl = `${window.location.pathname}?conversationId=${data.conversation_id}`;
-          window.history.pushState({}, '', newUrl);
-          
-          // ✅ NOTIFY PARENT COMPONENTS
-          if (onNewConversation) {
-            onNewConversation(data.conversation_id);
+      // ✅ CHANGED: Track all tools instead of one streaming message
+      let allToolSteps = []; // Array to accumulate all tool steps
+      let currentText = "";
+      let finalImageUrl = null;
+      let finalIsLogo = false;
+  
+      while (true) {
+        const { done, value } = await reader.read();
+        
+        if (done) break;
+  
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n');
+  
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              console.log('📡 Streaming data:', data);
+  
+              switch (data.type) {
+                case 'conversation_info':
+                  if (data.is_new_conversation && data.conversation_id) {
+                    setConversationId(data.conversation_id);
+                    const newUrl = `${window.location.pathname}?conversationId=${data.conversation_id}`;
+                    window.history.pushState({}, '', newUrl);
+                    
+                    if (onNewConversation) {
+                      onNewConversation(data.conversation_id);
+                    }
+                  }
+                  break;
+  
+                case 'status':
+                  // ✅ ADD STATUS AS A TOOL STEP
+                  allToolSteps.push({
+                    type: 'status',
+                    name: 'Analysis',
+                    message: data.message,
+                    status: data.status,
+                    timestamp: Date.now()
+                  });
+                  
+                  setStreamingMessage({
+                    sender: "ai",
+                    text: currentText,
+                    toolSteps: [...allToolSteps], // Show all accumulated steps
+                    imageUrl: finalImageUrl,
+                    isLogo: finalIsLogo
+                  });
+                  break;
+  
+                case 'tool_start':
+                  // ✅ ADD TOOL START AS A STEP
+                  allToolSteps.push({
+                    type: 'tool_start',
+                    name: data.tool_name,
+                    message: data.message,
+                    status: 'running',
+                    timestamp: Date.now()
+                  });
+                  
+                  setStreamingMessage({
+                    sender: "ai",
+                    text: currentText,
+                    toolSteps: [...allToolSteps],
+                    imageUrl: finalImageUrl,
+                    isLogo: finalIsLogo
+                  });
+                  break;
+  
+                case 'tool_result':
+                  // ✅ UPDATE THE LAST TOOL TO COMPLETED
+                  const lastToolIndex = allToolSteps.length - 1;
+                  if (lastToolIndex >= 0 && allToolSteps[lastToolIndex].name === data.tool_name) {
+                    allToolSteps[lastToolIndex] = {
+                      ...allToolSteps[lastToolIndex],
+                      status: 'completed',
+                      resultMessage: data.message,
+                      data: data.data
+                    };
+                  } else {
+                    // Fallback: add as new step if not found
+                    allToolSteps.push({
+                      type: 'tool_result',
+                      name: data.tool_name,
+                      message: data.message,
+                      status: 'completed',
+                      data: data.data,
+                      timestamp: Date.now()
+                    });
+                  }
+                  
+                  setStreamingMessage({
+                    sender: "ai",
+                    text: currentText,
+                    toolSteps: [...allToolSteps],
+                    imageUrl: finalImageUrl,
+                    isLogo: finalIsLogo
+                  });
+                  break;
+  
+                case 'message_chunk':
+                  currentText = data.text;
+                  
+                  setStreamingMessage({
+                    sender: "ai",
+                    text: currentText,
+                    toolSteps: [...allToolSteps],
+                    imageUrl: finalImageUrl,
+                    isLogo: finalIsLogo
+                  });
+                  break;
+  
+                case 'message':
+                  currentText = data.text;
+                  
+                  // Add final message to chat
+                  setMessages(prevMessages => [
+                    ...prevMessages,
+                    {
+                      sender: "ai",
+                      text: currentText,
+                      toolSteps: [...allToolSteps], // Include all tool steps
+                      status: 'complete'
+                    }
+                  ]);
+                  setStreamingMessage(null);
+                  break;
+  
+                case 'asset_generated':
+                  currentText = data.message;
+                  finalImageUrl = data.image_url;
+                  finalIsLogo = true;
+                  
+                  // Add final asset message to chat
+                  setMessages(prevMessages => [
+                    ...prevMessages,
+                    {
+                      sender: "ai",
+                      text: currentText,
+                      imageUrl: finalImageUrl,
+                      isLogo: finalIsLogo,
+                      toolSteps: [...allToolSteps], // Include all tool steps
+                      status: 'complete'
+                    }
+                  ]);
+                  setStreamingMessage(null);
+                  break;
+  
+                case 'error':
+                  currentText = data.message;
+                  
+                  setMessages(prevMessages => [
+                    ...prevMessages,
+                    {
+                      sender: "ai",
+                      text: currentText,
+                      toolSteps: [...allToolSteps],
+                      status: 'error',
+                      isError: true
+                    }
+                  ]);
+                  setStreamingMessage(null);
+                  break;
+  
+                case 'complete':
+                  setIsStreaming(false);
+                  if (onRefreshConversations) {
+                    onRefreshConversations();
+                  }
+                  break;
+              }
+            } catch (e) {
+              console.error('Error parsing streaming data:', e);
+            }
           }
-          
-          if (onRefreshConversations) {
-            onRefreshConversations();
-          }
-
-          console.log("[DEBUG] New conversation - not adding response to state, backend saved it");
-          setAiLoading(false);
-          setAiTyping(false);
-          return;
         }
-  
-        // ✅ FOR EXISTING CONVERSATIONS: Add response to frontend state
-        console.log("[DEBUG] Existing conversation - adding response to frontend state");
-        setAiLoading(false);
-        setAiTyping(true);
-  
-        setTimeout(() => {
-          if (aiResponse.startsWith('ASSET_GENERATED|')) {
-            const parts = aiResponse.split('|');
-            const imageUrl = parts[1];
-            const message = parts[2];
-  
-            setMessages(prevMessages => [
-              ...prevMessages,
-              {
-                sender: "ai",
-                text: message,
-                imageUrl: imageUrl,
-                isLogo: true,
-                typing: true
-              }
-            ]);
-          } else {
-            setMessages(prevMessages => [
-              ...prevMessages,
-              {
-                sender: "ai",
-                text: aiResponse,
-                typing: true
-              }
-            ]);
-          }
-          setAiTyping(false);
-        }, 700);
-  
-      } else {
-        console.error("API Error:", data.error);
-        setAiLoading(false);
-        setMessages(prevMessages => [
-          ...prevMessages,
-          {
-            sender: "ai",
-            text: "Sorry, I encountered an error. Please try again.",
-            isError: true
-          }
-        ]);
       }
   
     } catch (error) {
-      console.error(`❌ Error calling ${aiName} Python API:`, error);
-      setAiLoading(false);
+      console.error(`❌ Error with streaming ${aiName} API:`, error);
+      setIsStreaming(false);
+      setStreamingMessage(null);
       setMessages(prevMessages => [
         ...prevMessages,
         {
@@ -351,6 +450,7 @@ export default function ChatPage({
     }
   };
   
+
   const handleOptionSelect = async (option) => {
     if (selectedOptions.includes(option)) return;
 
@@ -579,9 +679,10 @@ export default function ChatPage({
     }
   }, [messages, aiLoading]);
 
-  const allMessages = aiLoading
-    ? [...messages, { sender: "ai", text: "", isLoading: true }]
-    : messages;
+  const allMessages = [
+    ...messages,
+    ...(streamingMessage ? [streamingMessage] : [])
+  ];
 
   return (
     <div className=" flex flex-col  max-w-[1280px] w-full mx-auto justify-between">
@@ -598,7 +699,7 @@ export default function ChatPage({
             tagline={tagline}
           />
         )}
-        
+
         {allMessages.map((msg, index) => (
           <MessageBubble
             key={index}
@@ -612,10 +713,15 @@ export default function ChatPage({
             typing={msg.typing}
             imageUrl={msg.imageUrl}
             isLogo={msg.isLogo || false}
+            status={msg.status}
+            toolInfo={msg.toolInfo}
+            toolSteps={msg.toolSteps} 
+            isStreaming={msg === streamingMessage}
+            isError={msg.isError}    
           />
         ))}
       </div>
-      <MessageInput placeholder={placeholder} suggestions={suggestions} onSend={handleSend} />
+      <MessageInput placeholder={placeholder} suggestions={suggestions} onSend={handleSendWithStreaming} />
     </div>
   );
 }
