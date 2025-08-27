@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import { useUserStore } from "@/store/store";
+import StreamingMessageBubble from "./StreamingMessageBubble"
 export default function MessageBubble({
   sender,
   text,
@@ -14,6 +15,10 @@ export default function MessageBubble({
   imageUrl = null,
   isLogo = false,
   isError = false,
+  status,          // ✅ Add these streaming props
+  toolInfo,        // ✅ Add these streaming props
+  toolSteps = [],
+  isStreaming
 }) {
   const { Avatar } = useUserStore();
   const isAI = sender != "user";
@@ -90,6 +95,16 @@ export default function MessageBubble({
       </a>
     ),
   };
+
+  if (isStreaming && sender === 'ai') {
+    return (
+      <StreamingMessageBubble
+        message={{ text, status, toolInfo, toolSteps, imageUrl, isLogo }}
+        aiIcon={aiIcon}
+      />
+    );
+  }
+
 
   return (
     <div
