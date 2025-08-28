@@ -8,6 +8,7 @@ import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import Chatbot from "@/components/ChatBot/ChatBot";
 import { useEffect } from "react";
+import Link from "next/link";
 function Page() {
   const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -47,11 +48,14 @@ function Page() {
     {
       name: "Image Creation",
       icon: "/aiAgent/gallery-edit.svg",
+      href: "/dashboard/image-creation",
       bg: "#F7EEF3",
     },
     {
       name: "Video Creation",
       icon: "/aiAgent/video.svg",
+      href: "/dashboard/video-creation",
+
       bg: "#F6F0F8",
     },
     {
@@ -62,11 +66,15 @@ function Page() {
     {
       name: "SEO Assistant",
       icon: "/aiAgent/search-status.svg",
+      href: "/dashboard/Ai-Agent/novi",
+
       bg: "#EAF4EF",
     },
     {
       name: "UI/UX Design",
       icon: "/aiAgent/designtools.svg",
+      href: "/dashboard/Ai-Agent/kano",
+
       bg: "#F7F0EB",
     },
     {
@@ -78,6 +86,25 @@ function Page() {
       name: "Content Creation",
       icon: "/aiAgent/ruler&pen.svg",
       bg: "#F7EFEF",
+    },
+    {
+      name: "Brand Design",
+      icon: "/aiAgent/color-swatch.svg",
+      href: "/dashboard/Ai-Agent/zara",
+
+      bg: "#FFFDF5",
+    },
+    {
+      name: "Market Assistant",
+      icon: "/aiAgent/market.svg",
+      bg: "#F9F9FE",
+    },
+    {
+      name: "Strategy Assistant",
+      icon: "/aiAgent/status-up.svg",
+      href: "/dashboard/Ai-Agent/mira",
+
+      bg: "#FEFAF7",
     },
   ];
 
@@ -162,8 +189,10 @@ function Page() {
       <div className="px-8 mx-auto max-w-[1440px] py-6">
         <div className="flex justify-between mb-5 items-center">
           {ai.map((item, index) => (
-            <div
+            <Link
               key={index}
+              href={item.href || "/dashboard"}
+              // onClick={() => router.push(item.href || "/dashboard")}
               className={`flex flex-col  items-center hover:scale-110 ease-in-out duration-300 transition-all`}
             >
               <div
@@ -175,7 +204,7 @@ function Page() {
                 <Image src={item.icon} alt={item.name} width={24} height={24} />
               </div>
               <span className="ml-2">{item.name}</span>
-            </div>
+            </Link>
           ))}
         </div>
 
