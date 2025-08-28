@@ -283,6 +283,7 @@ const HistoryModal = ({
     setIsChatModalOpen(!isChatModalOpen);
   };
   return (
+    <>
     <div className="absolute -top-12 left-20 p-4 mt-12 ml-2 w-[272px] bg-white overflow-y-scroll  h-screen rounded-[16px]  z-50">
       <div className="flex justify-between items-center mb-6 ">
         <p className="text-[#344054] text-lg font-semibold ">Chat History</p>
@@ -556,6 +557,37 @@ const HistoryModal = ({
         )}
       </div>
     </div>
+{showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-lg bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center mb-4">
+              <Trash2 className="w-6 h-6 text-red-500 mr-3" />
+              <h3 className="text-lg font-semibold text-gray-900">
+                Delete Conversation
+              </h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete this conversation? This action
+              cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={cancelDeleteConversation}
+                className="px-4 py-2 text-gray-500 border rounded-lg hover:text-gray-700 font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteConversation}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
