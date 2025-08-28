@@ -366,7 +366,7 @@ const fetchMessages = async (conversationId, userId = null) => {
   const router = useRouter();
 
   return (
-    <div className="bg-[#F7F8F8] px-5 xl:px-0 max-w-[1440px] mx-auto min-h-screen">
+    <div className="bg-[#F7F8F8] overflow-hidden px-5 xl:px-0 max-w-[1440px] mx-auto min-h-screen">
       <Sidebar
         activeChat={activeChat}
         setActiveChat={setActiveChat}
