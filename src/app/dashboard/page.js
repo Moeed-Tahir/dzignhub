@@ -81,14 +81,14 @@ function Page() {
     },
   ];
 
-  const [cardsPerView, setCardsPerView] = useState(3);
+  const [cardsPerView, setCardsPerView] = useState(5);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1280) {
         setCardsPerView(2);
       } else {
-        setCardsPerView(3);
+        setCardsPerView(5);
       }
     };
 
@@ -100,7 +100,52 @@ function Page() {
     };
   }, []);
 
-  const maxSlide = Math.max(0, aiAssistants.length - cardsPerView);
+  const recet_project = [
+    {
+      name: "Company Logo",
+      img: "/Ai/1.png",
+      resolution: "1600 x 1200",
+      icon: "/Ai/edit copy.svg",
+      edited: "Yesterday",
+    },
+    {
+      name: "Hero Section",
+      img: "/Ai/2.png",
+      resolution: "2400 x 1200",
+      edited: "Edited a week ago",
+      icon: "/Ai/path-square.svg",
+    },
+    {
+      name: "Video in nature",
+      img: "/Ai/3.png",
+      resolution: "1600 x 1200",
+      edited: "Today",
+      icon: "/Ai/video-square.svg",
+    },
+    {
+      name: "Company Logo",
+      img: "/Ai/4.png",
+      resolution: "1600 x 1200",
+      edited: "Edited a week ago",
+      icon: "/Ai/edit copy.svg",
+    },
+    {
+      name: "Pitch Deck",
+      img: "/Ai/5.png",
+      icon: "/Ai/presention-chart.svg",
+
+      resolution: "1920 x 1080",
+      edited: "Edited 2 weeks ago",
+    },
+    {
+      name: "Company Logo",
+      img: "/Ai/1.png",
+      resolution: "1600 x 1200",
+      icon: "/Ai/edit copy.svg",
+      edited: "Yesterday",
+    },
+  ];
+  const maxSlide = Math.max(0, recet_project.length - cardsPerView);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev >= maxSlide ? 0 : prev + 1));
@@ -117,14 +162,17 @@ function Page() {
       <div className="px-8 mx-auto max-w-[1440px] py-6">
         <div className="flex justify-between mb-5 items-center">
           {ai.map((item, index) => (
-            <div key={index} className={`flex flex-col  items-center hover:scale-110 ease-in-out duration-300 transition-all`}>
+            <div
+              key={index}
+              className={`flex flex-col  items-center hover:scale-110 ease-in-out duration-300 transition-all`}
+            >
               <div
                 className="rounded-full flex justify-center cursor-pointer  items-center w-12 h-12 "
                 style={{
                   backgroundColor: item.bg,
                 }}
               >
-                <Image src={item.icon}  alt={item.name} width={24} height={24} />
+                <Image src={item.icon} alt={item.name} width={24} height={24} />
               </div>
               <span className="ml-2">{item.name}</span>
             </div>
@@ -138,38 +186,9 @@ function Page() {
             gap: "32px",
           }}
         >
-          <div
-            className="flex flex-col xl:w-[544px] xl:h-[401px]"
-            style={{
-              gap: "24px",
-            }}
-          >
-            <h1 className="text-2xl font-semibold text-[#000000] ">
-              Manual tools
-            </h1>
-            <div className="flex  gap-4">
-              <ToolCard
-                image={"/homepage/manual-tools-image-creation.png"}
-                icon={"/homepage/image-generation.png"}
-                title="Image creation"
-                description="Create and refine visuals manually"
-                className="flex-1"
-                href="/dashboard/image-creation"
-              />
-              <ToolCard
-                image={"/homepage/manual-tools-video-creation.png"}
-                icon={"/homepage/video-creation.png"}
-                title="Video creation"
-                description="Edit and enhance videos with manual tools"
-                className="flex-1"
-                href="/dashboard/video-creation"
-              />
-            </div>
-          </div>
-
           {/* AI Assistants section with carousel */}
           <div
-            className="flex flex-col xl:w-[784px] xl:h-[401px]"
+            className="flex flex-col xl:w-full xl:h-[401px]"
             style={{
               // width: "784px",
               // height: "401px",
@@ -177,12 +196,10 @@ function Page() {
             }}
           >
             <h1 className="text-2xl font-semibold text-[#000000]">
-              AI assistants
+              Recent Projects
             </h1>
 
-            {/* Carousel container with side controls */}
             <div className="relative flex-1  flex items-center">
-              {/* Left arrow */}
               <button
                 onClick={prevSlide}
                 className="absolute left-0 z-10 p-2 rounded-full bg-white shadow-2xl hover:bg-gray-50 transition-colors border border-gray-200"
@@ -191,7 +208,6 @@ function Page() {
                 <ChevronLeft size={20} />
               </button>
 
-              {/* Slider content */}
               <div className="overflow-hidden flex-1">
                 <div
                   className="flex transition-transform duration-300 ease-in-out"
@@ -202,10 +218,10 @@ function Page() {
                     gap: "8px",
                   }}
                 >
-                  {aiAssistants.map((assistant, index) => (
+                  {recet_project.map((item, index) => (
                     <div
                       key={index}
-                      onClick={() => router.push(assistant.href)}
+                      onClick={() => router.push(item.href)}
                       className="flex-shrink-0"
                       style={{
                         width: `calc(${100 / cardsPerView}% - ${
@@ -214,18 +230,17 @@ function Page() {
                       }}
                     >
                       <ToolCard
-                        image={assistant.image}
-                        icon={assistant.icon}
-                        title={assistant.title}
-                        description={assistant.description}
-                        className="w-full h-full"
+                        image={item.img}
+                        title={item.name}
+                        resolution={item.resolution}
+                        icon={item.icon}
+                        edited={item.edited}
                       />
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Right arrow */}
               <button
                 onClick={nextSlide}
                 className="absolute right-0 z-10 p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-colors border border-gray-200"
@@ -234,21 +249,6 @@ function Page() {
                 <ChevronRight size={20} />
               </button>
             </div>
-
-            {/* Dots indicator */}
-            {/* {maxSlide > 0 && (
-              <div className="flex justify-center space-x-2 mt-6">
-                {Array.from({ length: maxSlide + 1 }).map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      currentSlide === index ? "bg-gray-800" : "bg-gray-300"
-                    }`}
-                  />
-                ))}
-              </div>
-            )} */}
           </div>
         </div>
 
