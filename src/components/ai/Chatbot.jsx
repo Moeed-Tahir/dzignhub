@@ -679,19 +679,26 @@ export default function ChatPage({
                   if (data.status === 'awaiting_input') {
                     console.log('[DEBUG] Complete with awaiting_input - keeping message visible for questions');
 
-                    const questionsText = streamingMessage?.text || currentText || "I need some information to create your logo.";
-    
+                    const questionsText = data.message || currentText || "I need some information to create your logo.";
+                    console.log(data)
                     // Don't move to final messages - keep streaming message visible
                     setIsStreaming(false); // Stop streaming animation
 
                     // Update streaming message status to show it's waiting for input
-                    if (streamingMessage) {
-                      setStreamingMessage({
-                        ...streamingMessage,
-                        status: 'awaiting_input',
-                        isWaitingForInput: true
-                      });
-                    }
+                    // ✅ CRITICAL: Update streaming message with preserved text and awaiting status
+                    setStreamingMessage({
+                      sender: "ai",
+                      text: questionsText, // ✅ Keep the questions text
+                      toolSteps: [...allToolSteps],
+                      thinkingProcess: preservedThinkingProcess,
+                      searchResults: preservedSearchResults || (data.final_data?.search_results ? {
+                        keywords: data.final_data.search_keywords,
+                        results: data.final_data.search_results
+                      } : null),
+                      inspirationImages: preservedInspirationImages || data.final_data?.inspiration_images,
+                      status: 'awaiting_input',
+                      isWaitingForInput: true
+                    });
 
                     // Don't refresh conversations for awaiting_input
                     console.log('[DEBUG] Keeping questions visible, not moving to final messages');
