@@ -1,8 +1,30 @@
 import React from 'react';
-import { X } from 'lucide-react';
 
 const SourcesModal = ({ isOpen, onClose, sources, searchKeywords }) => {
+  // ✅ ADD DEBUG LOGGING
+  console.log('[DEBUG] SourcesModal received sources:', sources);
+  console.log('[DEBUG] SourcesModal received searchKeywords:', searchKeywords);
+  
   if (!isOpen) return null;
+
+  // ✅ HANDLE BOTH FORMATS - sources might be array or object
+  let resultsArray = [];
+  let keywords = searchKeywords;
+  
+  if (Array.isArray(sources)) {
+    // sources is already an array
+    resultsArray = sources;
+  } else if (sources && sources.results) {
+    // sources is an object with results property
+    resultsArray = sources.results;
+    keywords = keywords || sources.keywords;
+  } else if (sources && sources.organic_results) {
+    // Handle raw search API format
+    resultsArray = sources.organic_results;
+  }
+  
+  console.log('[DEBUG] Final resultsArray:', resultsArray);
+  console.log('[DEBUG] Final keywords:', keywords);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -11,9 +33,9 @@ const SourcesModal = ({ isOpen, onClose, sources, searchKeywords }) => {
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div>
             <h2 className="text-xl font-semibold text-gray-900">Research Sources</h2>
-            {searchKeywords && (
+            {keywords && (
               <p className="text-sm text-gray-600 mt-1">
-                Search Keywords: <span className="font-medium">{searchKeywords}</span>
+                Search Keywords: <span className="font-medium">{keywords}</span>
               </p>
             )}
           </div>
@@ -21,15 +43,17 @@ const SourcesModal = ({ isOpen, onClose, sources, searchKeywords }) => {
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[60vh]">
-          {sources && sources.length > 0 ? (
+          {resultsArray && resultsArray.length > 0 ? (
             <div className="space-y-4">
-              {sources.map((source, index) => (
+              {resultsArray.map((source, index) => (
                 <div key={index} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="font-medium text-blue-800 text-sm mb-1 pr-4">
@@ -39,7 +63,7 @@ const SourcesModal = ({ isOpen, onClose, sources, searchKeywords }) => {
                         rel="noopener noreferrer" 
                         className="hover:underline"
                       >
-                        {source.title}
+                        {source.title || 'Untitled'}
                       </a>
                     </h3>
                     <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded whitespace-nowrap">
@@ -96,6 +120,10 @@ const SourcesModal = ({ isOpen, onClose, sources, searchKeywords }) => {
                 </svg>
               </div>
               <p className="text-gray-600">No sources available for this request.</p>
+              {/* ✅ ADD DEBUG INFO */}
+              <div className="text-xs text-gray-400 mt-2">
+                Debug: Received {resultsArray?.length || 0} sources
+              </div>
             </div>
           )}
         </div>
@@ -104,7 +132,7 @@ const SourcesModal = ({ isOpen, onClose, sources, searchKeywords }) => {
         <div className="border-t border-gray-200 px-6 py-4 bg-gray-50">
           <div className="flex items-center justify-between">
             <p className="text-xs text-gray-500">
-              {sources?.length ? `Found ${sources.length} research sources` : 'No sources found'}
+              {resultsArray?.length ? `Found ${resultsArray.length} research sources` : 'No sources found'}
             </p>
             <button
               onClick={onClose}

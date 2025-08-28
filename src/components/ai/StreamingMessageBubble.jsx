@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import SourcesModal from './SourcesModal';
 
 const StreamingMessageBubble = ({ message, aiIcon }) => {
   const { text, toolSteps = [], imageUrl, isLogo, thinkingProcess, searchResults, inspirationImages } = message;
@@ -296,11 +297,11 @@ const StreamingMessageBubble = ({ message, aiIcon }) => {
       </div>
     </div>
     <SourcesModal
-        isOpen={isSourcesModalOpen}
-        onClose={() => setIsSourcesModalOpen(false)}
-        sources={searchResults?.results}
-        searchKeywords={searchResults?.keywords}
-      />
+  isOpen={isSourcesModalOpen}
+  onClose={() => setIsSourcesModalOpen(false)}
+  sources={searchResults?.results}  // ✅ PASS THE RESULTS ARRAY
+  searchKeywords={searchResults?.keywords}  // ✅ ALSO PASS KEYWORDS
+/>
     </>
   );
 };

@@ -24,6 +24,15 @@ const HistoryModal = ({
   setConversations,
   conversations,
   onConversationSelect,
+  aiName,
+  img,
+  isOpen,
+  setIsOpen,
+  activeChat,
+  setActiveChat,
+  setShowIntro,
+  setMessages,
+
 }) => {
   const router = useRouter();
   const plusButtonRef = useRef(null);
@@ -33,6 +42,7 @@ const HistoryModal = ({
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { UserId } = useUserStore();
+  const [searchTerm, setSearchTerm] = useState("");
 
   // states for handelling update title feature
   const [editingConversationId, setEditingConversationId] = useState(null);

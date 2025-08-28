@@ -153,47 +153,79 @@ const page = () => {
         text: messageText,
         imageUrl: imageUrl,
         isLogo: isLogo,
+        searchResults: message.searchResults,     // Direct from DB
+        inspirationImages: message.inspirationImages // Direct from DB
+     
       };
     }
-    return message;
+    return {
+      ...message,
+      // ✅ ADD: Always include these fields (might be undefined for old messages)
+      searchResults: message.searchResults,
+      inspirationImages: message.inspirationImages
+    };
   };
 
-  const fetchMessages = async (conversationId, userId = null) => {
-    try {
-      let verification = await verifyTokenForFetchingMessages();
-      if (verification === null) {
-        console.error("User ID verification failed, cannot fetch messages.");
-        return [];
-      }
-      const userIdToUse = verification;
+// In your page.jsx, update the fetchMessages function:
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/${conversationId}/messages?user_id=${userIdToUse}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+const fetchMessages = async (conversationId, userId = null) => {
+  try {
+    let verification = await verifyTokenForFetchingMessages();
+    if (verification === null) {
+      console.error("User ID verification failed, cannot fetch messages.");
+      return [];
+    }
+    const userIdToUse = verification;
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/${conversationId}/messages?user_id=${userIdToUse}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+      // ✅ ENHANCED: Parse messages and preserve database fields
+      const parsedMessages = data.messages.map(msg => {
+        const parsedMsg = parseAssetGeneratedMessage(msg);
+        
+        // ✅ DEBUG: Log messages with search results
+        if (parsedMsg.searchResults) {
+          console.log(`✅ Message with search results:`, {
+            text: parsedMsg.text.substring(0, 50) + '...',
+            searchResultsCount: parsedMsg.searchResults?.results?.length || 0,
+            keywords: parsedMsg.searchResults?.keywords
+          });
         }
+        
+        if (parsedMsg.inspirationImages) {
+          console.log(`✅ Message with inspiration images:`, {
+            text: parsedMsg.text.substring(0, 50) + '...',
+            inspirationCount: parsedMsg.inspirationImages?.length || 0
+          });
+        }
+        
+        return parsedMsg;
+      });
+      
+      setMessages(parsedMessages);
+      console.log(
+        `Loaded ${data.count} messages for conversation ${conversationId}`
       );
-
-      const data = await response.json();
-
-      if (data.success) {
-        const parsedMessages = data.messages.map(parseAssetGeneratedMessage);
-        setMessages(parsedMessages);
-        console.log(
-          `Loaded ${data.count} messages for conversation ${conversationId}`
-        );
-      } else {
-        console.error("Failed to fetch messages:", data.error);
-        setMessages([]);
-      }
-    } catch (error) {
-      console.error("Error fetching messages:", error);
+    } else {
+      console.error("Failed to fetch messages:", data.error);
       setMessages([]);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    setMessages([]);
+  }
+};
 
   const verifyTokenForFetchingMessages = async () => {
     try {
@@ -373,9 +405,17 @@ const page = () => {
       {isHistoryModalOpen && (
         <div ref={historyModalRef}>
           <HistoryModal
-            setConversations={setConversations}
-            conversations={conversations}
-            onConversationSelect={fetchMessages}
+           activeChat={activeChat}
+           setActiveChat={setActiveChat}
+           img={bot.img}
+           aiName={bot.name}
+           isOpen={isSidebarOpen}
+           setIsOpen={setIsSidebarOpen}
+           conversations={conversations}
+           onConversationSelect={fetchMessages}
+           setShowIntro={setShowIntro}
+           setMessages={setMessages}
+           setConversations={setConversations}
             onClose={() => setIsHistoryModalOpen(false)}
           />
         </div>
