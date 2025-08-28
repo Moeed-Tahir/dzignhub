@@ -232,6 +232,7 @@ export default function ChatPage({
   // ✅ ADD: Generate immediate acknowledgment based on user intent
 const generateImmediateResponse = (userInput) => {
   const input = userInput.toLowerCase();
+  
   // Detect what user wants to create
   if (input.includes('logo')) {
     return "🎨 I'll create a professional logo for you! Let me start by analyzing your requirements...";
@@ -252,7 +253,7 @@ const generateImmediateResponse = (userInput) => {
   } else if (input.includes('create') || input.includes('generate') || input.includes('design') || input.includes('make')) {
     return "🎨 I'll create that design for you! Let me analyze your requirements and start working...";
   } else {
-    return "💭 I'm analyzing your request and will help you create what case you need! Let me start working on this...";
+    return "💭 I'm analyzing your request and will help you create what you need! Let me start working on this...";
   }
 };
 
@@ -714,10 +715,6 @@ const generateImmediateResponse = (userInput) => {
 
                   console.log('[DEBUG] Final search results to use:', finalSearchResults);
                   console.log('[DEBUG] Final search results length:', finalSearchResults?.results?.length);
-
-                  // ✅ CLEAR STREAMING MESSAGE FIRST
-                  setStreamingMessage(null);
-                  setIsStreaming(false);
 
                   // ✅ NOW add the final AI message to messages
                   setMessages(prevMessages => {
