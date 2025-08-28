@@ -15,6 +15,8 @@ import { IoIosMenu } from "react-icons/io";
 import Image from "next/image";
 import Globe from "@/app/assets/globe";
 import { useRouter } from "next/navigation";
+import { HistoryIcon } from "lucide-react";
+import HistoryModal from "@/components/ai/HistoryModal";
 
 const page = () => {
   const { agent } = useParams();
@@ -43,7 +45,25 @@ const page = () => {
   const inviteButtonRef = React.useRef(null);
   const publishModalRef = React.useRef(null);
   const publishButtonRef = React.useRef(null);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const historyModalRef = React.useRef(null);
   // Close InviteModal when clicking outside, but ignore clicks on the button
+  // Close HistoryModal when clicking outside
+  useEffect(() => {
+    if (!isHistoryModalOpen) return;
+    function handleClickOutside(event) {
+      if (
+        historyModalRef.current &&
+        !historyModalRef.current.contains(event.target)
+      ) {
+        setIsHistoryModalOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isHistoryModalOpen]);
   useEffect(() => {
     if (!showInviteModal) return;
     function handleClickOutside(event) {
@@ -349,9 +369,19 @@ const page = () => {
           </svg>
         </button>
       )}
+      {isHistoryModalOpen && (
+        <div ref={historyModalRef}>
+          <HistoryModal
+            setConversations={setConversations}
+            conversations={conversations}
+            onConversationSelect={fetchMessages}
+            onClose={() => setIsHistoryModalOpen(false)}
+          />
+        </div>
+      )}
 
-      <div className="max-w-[1280px] mx-auto">
-        <div className="flex justify-between items-center py-4">
+      <div className="w-full mx-auto">
+        <div className="flex justify-between absolute top-0 w-[80%] left-1/2 -translate-x-1/2 items-center py-4">
           <div className="flex relative gap-2">
             <div className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center">
               <HiArrowLongLeft
@@ -361,8 +391,11 @@ const page = () => {
                 className="w-[18px] text-[#344054] h-[18px]"
               />
             </div>
-            <div className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center">
-              <IoIosMenu className="w-[18px] text-[#344054] h-[18px]" />
+            <div
+              onClick={() => setIsHistoryModalOpen((prev) => !prev)}
+              className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center"
+            >
+              <IoIosMenu  className="w-[18px] text-[#344054] h-[18px]" />
             </div>
           </div>
 

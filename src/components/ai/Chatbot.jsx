@@ -727,7 +727,7 @@ export default function ChatPage({
   ];
 
   return (
-    <div className=" flex flex-col  max-w-[1280px] w-full mx-auto justify-between">
+    <div className=" flex flex-col mt-[80px]  max-w-[1280px] w-full mx-auto justify-between">
       <div
         className="flex-1 max-h-[70vh] scrollbar-hide pb-20 overflow-y-auto"
         ref={chatContainerRef}
