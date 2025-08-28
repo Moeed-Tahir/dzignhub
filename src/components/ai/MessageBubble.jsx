@@ -118,7 +118,7 @@ export default function MessageBubble({
     ),
   };
 
-  if (isStreaming && sender === 'ai') {
+  if (isStreaming && sender === 'ai' && status !== 'complete') {
     return (
       <StreamingMessageBubble
         message={{ text, status, toolInfo, toolSteps, imageUrl, isLogo, thinkingProcess, searchResults, inspirationImages }}

@@ -229,6 +229,33 @@ export default function ChatPage({
       .trim();
   }
 
+  // ✅ ADD: Generate immediate acknowledgment based on user intent
+const generateImmediateResponse = (userInput) => {
+  const input = userInput.toLowerCase();
+  // Detect what user wants to create
+  if (input.includes('logo')) {
+    return "🎨 I'll create a professional logo for you! Let me start by analyzing your requirements...";
+  } else if (input.includes('instagram') && (input.includes('post') || input.includes('poster'))) {
+    return "📱 I'll design an Instagram post for you! Let me gather the information needed...";
+  } else if (input.includes('linkedin') && (input.includes('cover') || input.includes('banner'))) {
+    return "💼 I'll create a LinkedIn cover for you! Let me start working on this...";
+  } else if (input.includes('facebook') && (input.includes('cover') || input.includes('banner'))) {
+    return "📘 I'll design a Facebook cover for you! Let me begin the creative process...";
+  } else if (input.includes('youtube') && input.includes('thumbnail')) {
+    return "🎬 I'll create a YouTube thumbnail for you! Let me start designing...";
+  } else if (input.includes('business card')) {
+    return "💳 I'll design a business card for you! Let me gather the requirements...";
+  } else if (input.includes('poster') || input.includes('flyer')) {
+    return "📄 I'll create a poster design for you! Let me start the design process...";
+  } else if (input.includes('banner')) {
+    return "🎯 I'll design a banner for you! Let me begin working on this...";
+  } else if (input.includes('create') || input.includes('generate') || input.includes('design') || input.includes('make')) {
+    return "🎨 I'll create that design for you! Let me analyze your requirements and start working...";
+  } else {
+    return "💭 I'm analyzing your request and will help you create what case you need! Let me start working on this...";
+  }
+};
+
   const handleSendWithStreaming = async (msg) => {
     // ✅ ADD: Variables to store data outside streaming loop (RELIABLE)
     let preservedSearchResults = null;
@@ -245,6 +272,16 @@ export default function ChatPage({
     setShowIntro(false);
     setIsStreaming(true);
     setStreamingMessage(null);
+    const immediateResponse = generateImmediateResponse(msg);
+    setStreamingMessage({
+      sender: "ai",
+      text: immediateResponse,
+      toolSteps: [],
+      thinkingProcess: null,
+      searchResults: null,
+      inspirationImages: null,
+      status: 'processing'
+    });
 
     try {
       console.log(`🚀 Starting streaming with ${aiName} Python API...`);
@@ -677,6 +714,10 @@ export default function ChatPage({
 
                   console.log('[DEBUG] Final search results to use:', finalSearchResults);
                   console.log('[DEBUG] Final search results length:', finalSearchResults?.results?.length);
+
+                  // ✅ CLEAR STREAMING MESSAGE FIRST
+                  setStreamingMessage(null);
+                  setIsStreaming(false);
 
                   // ✅ NOW add the final AI message to messages
                   setMessages(prevMessages => {
