@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 
 const StreamingMessageBubble = ({ message, aiIcon }) => {
-  const { text, toolSteps = [], imageUrl, isLogo, thinkingProcess } = message;
+  const { text, toolSteps = [], imageUrl, isLogo, thinkingProcess, searchResults, inspirationImages } = message;
+  const [isSourcesModalOpen, setIsSourcesModalOpen] = useState(false);
+
+  // ✅ CHECK IF WE HAVE SEARCH RESULTS
+  const hasSearchResults = searchResults && searchResults.results && searchResults.results.length > 0;
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -43,6 +47,7 @@ const StreamingMessageBubble = ({ message, aiIcon }) => {
   };
 
   return (
+    <>
     <div className="flex items-start gap-3 mb-4">
       <div className="flex-shrink-0">
         <Image
@@ -230,9 +235,73 @@ const StreamingMessageBubble = ({ message, aiIcon }) => {
               )}
             </div>
           )}
+
+{imageUrl && hasSearchResults && (
+              <div className="mt-2 flex gap-2">
+                {/* ... existing download and copy buttons ... */}
+                
+                {/* ✅ ADD SHOW SOURCES BUTTON */}
+                <button
+                  onClick={() => setIsSourcesModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M14 2V8H20"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M16 13H8"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M16 17H8"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M10 9H9H8"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  Show Sources
+                </button>
+              </div>
+            )}
         </div>
       </div>
     </div>
+    <SourcesModal
+        isOpen={isSourcesModalOpen}
+        onClose={() => setIsSourcesModalOpen(false)}
+        sources={searchResults?.results}
+        searchKeywords={searchResults?.keywords}
+      />
+    </>
   );
 };
 

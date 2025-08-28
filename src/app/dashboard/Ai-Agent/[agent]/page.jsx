@@ -32,7 +32,7 @@ const page = () => {
 
   const [conversations, setConversations] = useState([]);
 
-  const { UserId, isAuthChecking } = useUserStore();
+  const { UserId, isAuthChecking, SetUserId } = useUserStore();
   const [activeChat, setActiveChat] = useState("");
   const [messages, setMessages] = useState([]);
   const [showIntro, setShowIntro] = useState(true);
@@ -147,6 +147,7 @@ const page = () => {
 
       if (data.type === "success") {
         console.log("Token is valid, user ID:", data.user._id);
+        SetUserId(data.user._id);
         return data.user._id;
       }
     } catch (error) {

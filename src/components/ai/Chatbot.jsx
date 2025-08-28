@@ -95,7 +95,31 @@ export default function ChatPage({
 
   const [brandDesignData, setBrandDesignData] = useState({})
 
-  const { UserId } = useUserStore();
+  const { UserId,SetUserId } = useUserStore();
+
+  const verifyTokenForFetchingMessages = async () => {
+    try {
+      console.log("Token verification started");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await res.json();
+      console.log("Token verification response:", data);
+
+      if (data.type === "success") {
+        console.log("Token is valid, user ID:", data.user._id);
+        SetUserId(data.user._id);
+        return data.user._id;
+      }
+    } catch (error) {
+      console.error("Token verification failed", error);
+      return null;
+    }
+  };
 
   const getBrandDesignData = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agents/get-brand-designer-data`, {
@@ -239,6 +263,7 @@ export default function ChatPage({
         user_id: userId,
         conversation_id: conversationId || null,
       };
+      console.log(requestBody)
   
       const response = await fetch(`${pythonApiUrl}/agents/${endpoint}`, {
         method: 'POST',
@@ -426,7 +451,27 @@ export default function ChatPage({
                   ]);
                   setStreamingMessage(null);
                   break;
-  
+
+                case 'web_search_complete':
+                    // ✅ STORE SEARCH RESULTS IN STREAMING MESSAGE
+                  setStreamingMessage({
+                    sender: "ai",
+                    text: currentText,
+                    toolSteps: [...allToolSteps, {
+                    name: data.tool_name,
+                    message: data.message,
+                    status: 'completed',
+                    timestamp: Date.now(),
+                      data: data.data
+                    }],
+                    thinkingProcess: currentThinkingProcess,
+                    searchResults: data.data,  // ✅ STORE SEARCH RESULTS
+                    imageUrl: finalImageUrl,
+                    isLogo: finalIsLogo,
+                    status: data.status
+                  });
+                  break;
+
                 case 'asset_generated':
                   currentText = data.message;
                   finalImageUrl = data.image_url;
@@ -441,6 +486,7 @@ export default function ChatPage({
                       imageUrl: finalImageUrl,
                       isLogo: finalIsLogo,
                       toolSteps: [...allToolSteps], // Include all tool steps
+                      searchResults: currentSearchResults, // ✅ MAKE SURE TO PRESERVE SEARCH RESULTS
                       status: 'complete'
                     }
                   ]);
@@ -709,6 +755,7 @@ export default function ChatPage({
   }, [aiTyping, pendingAiMsg]);
 
   useEffect(() => {
+    verifyTokenForFetchingMessages();
     getBrandDesignData();
   }, []);
 
