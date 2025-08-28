@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React from "react";
 
-export default function AIIntro({ name, description,img,  tagline }) {
+export default function AIIntro({ name, description, img, tagline }) {
   return (
-    <div className="text-center absolute top-1/2 translate-y-[-50%] left-1/2 translate-x-[-50%] w-[90%] max-w-[1280px] px-4 py-10">
+    <div className="text-center flex justify-center items-center flex-col  w-[90%] sm:w-full mt-[20vh] max-w-[1280px] px-4 py-10">
       <Image
         src={img}
         alt="AI Avatar"
@@ -14,7 +14,9 @@ export default function AIIntro({ name, description,img,  tagline }) {
       <h1 className="text-[20px] md:text-[32px] font-semibold text-[#C209C1]">
         Hi, I am {name} 👋🏻
       </h1>
-      <p className="text-[#1B1F3B] px-4 md:px-10 lg:px-52 text-[14px] md:text-[18px] font-semibold">{tagline} </p>
+      <p className="text-[#1B1F3B] px-4 md:px-10 lg:px-52 text-[14px] md:text-[18px] font-semibold">
+        {tagline}{" "}
+      </p>
       <p className="text-[12px] sm:text-[16px] font-normal text-[#68686B]  mt-1">
         {description}{" "}
       </p>

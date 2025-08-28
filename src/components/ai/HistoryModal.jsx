@@ -32,7 +32,6 @@ const HistoryModal = ({
   setActiveChat,
   setShowIntro,
   setMessages,
-
 }) => {
   const router = useRouter();
   const plusButtonRef = useRef(null);
@@ -284,7 +283,7 @@ const HistoryModal = ({
     setIsChatModalOpen(!isChatModalOpen);
   };
   return (
-    <div className="absolute -top-12 left-20 p-4 mt-12 ml-2 w-[272px] bg-white  h-screen rounded-[16px]  z-50">
+    <div className="absolute -top-12 left-20 p-4 mt-12 ml-2 w-[272px] bg-white overflow-y-scroll  h-screen rounded-[16px]  z-50">
       <div className="flex justify-between items-center mb-6 ">
         <p className="text-[#344054] text-lg font-semibold ">Chat History</p>
         <div
@@ -332,6 +331,7 @@ const HistoryModal = ({
                 onClick={() => {
                   setActiveChat(result._id);
                   setShowIntro(false);
+                  onClose();
                   onConversationSelect && onConversationSelect(result._id);
                   router.push(
                     `/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${
