@@ -230,32 +230,32 @@ export default function ChatPage({
   }
 
   // ✅ ADD: Generate immediate acknowledgment based on user intent
-const generateImmediateResponse = (userInput) => {
-  const input = userInput.toLowerCase();
-  
-  // Detect what user wants to create
-  if (input.includes('logo')) {
-    return "🎨 I'll create a professional logo for you! Let me start by analyzing your requirements...";
-  } else if (input.includes('instagram') && (input.includes('post') || input.includes('poster'))) {
-    return "📱 I'll design an Instagram post for you! Let me gather the information needed...";
-  } else if (input.includes('linkedin') && (input.includes('cover') || input.includes('banner'))) {
-    return "💼 I'll create a LinkedIn cover for you! Let me start working on this...";
-  } else if (input.includes('facebook') && (input.includes('cover') || input.includes('banner'))) {
-    return "📘 I'll design a Facebook cover for you! Let me begin the creative process...";
-  } else if (input.includes('youtube') && input.includes('thumbnail')) {
-    return "🎬 I'll create a YouTube thumbnail for you! Let me start designing...";
-  } else if (input.includes('business card')) {
-    return "💳 I'll design a business card for you! Let me gather the requirements...";
-  } else if (input.includes('poster') || input.includes('flyer')) {
-    return "📄 I'll create a poster design for you! Let me start the design process...";
-  } else if (input.includes('banner')) {
-    return "🎯 I'll design a banner for you! Let me begin working on this...";
-  } else if (input.includes('create') || input.includes('generate') || input.includes('design') || input.includes('make')) {
-    return "🎨 I'll create that design for you! Let me analyze your requirements and start working...";
-  } else {
-    return "💭 I'm analyzing your request and will help you create what you need! Let me start working on this...";
-  }
-};
+  const generateImmediateResponse = (userInput) => {
+    const input = userInput.toLowerCase();
+
+    // Detect what user wants to create
+    if (input.includes('logo')) {
+      return "🎨 I'll create a professional logo for you! Let me start by analyzing your requirements...";
+    } else if (input.includes('instagram') && (input.includes('post') || input.includes('poster'))) {
+      return "📱 I'll design an Instagram post for you! Let me gather the information needed...";
+    } else if (input.includes('linkedin') && (input.includes('cover') || input.includes('banner'))) {
+      return "💼 I'll create a LinkedIn cover for you! Let me start working on this...";
+    } else if (input.includes('facebook') && (input.includes('cover') || input.includes('banner'))) {
+      return "📘 I'll design a Facebook cover for you! Let me begin the creative process...";
+    } else if (input.includes('youtube') && input.includes('thumbnail')) {
+      return "🎬 I'll create a YouTube thumbnail for you! Let me start designing...";
+    } else if (input.includes('business card')) {
+      return "💳 I'll design a business card for you! Let me gather the requirements...";
+    } else if (input.includes('poster') || input.includes('flyer')) {
+      return "📄 I'll create a poster design for you! Let me start the design process...";
+    } else if (input.includes('banner')) {
+      return "🎯 I'll design a banner for you! Let me begin working on this...";
+    } else if (input.includes('create') || input.includes('generate') || input.includes('design') || input.includes('make')) {
+      return "🎨 I'll create that design for you! Let me analyze your requirements and start working...";
+    } else {
+      return "💭 I'm analyzing your request and will help you create what you need! Let me start working on this...";
+    }
+  };
 
   const handleSendWithStreaming = async (msg) => {
     // ✅ ADD: Variables to store data outside streaming loop (RELIABLE)
@@ -273,14 +273,23 @@ const generateImmediateResponse = (userInput) => {
     setShowIntro(false);
     setIsStreaming(true);
     setStreamingMessage(null);
-    const immediateResponse = generateImmediateResponse(msg);
+
+    // ✅ CRITICAL: Initialize accumulation variables
+    let allToolSteps = []; // This will accumulate ALL tool steps
+    let currentText = generateImmediateResponse(msg);
+    let finalImageUrl = null;
+    let finalIsLogo = false;
+
+    // ✅ SET INITIAL STREAMING MESSAGE
     setStreamingMessage({
       sender: "ai",
-      text: immediateResponse,
+      text: currentText,
       toolSteps: [],
       thinkingProcess: null,
       searchResults: null,
       inspirationImages: null,
+      imageUrl: null,
+      isLogo: false,
       status: 'processing'
     });
 
@@ -314,7 +323,7 @@ const generateImmediateResponse = (userInput) => {
         user_id: userId,
         conversation_id: conversationId || null,
       };
-      console.log(requestBody)
+      console.log(requestBody);
 
       const response = await fetch(`${pythonApiUrl}/agents/${endpoint}`, {
         method: 'POST',
@@ -330,12 +339,6 @@ const generateImmediateResponse = (userInput) => {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-
-      // ✅ CHANGED: Track all tools instead of one streaming message
-      let allToolSteps = []; // Array to accumulate all tool steps
-      let currentText = "";
-      let finalImageUrl = null;
-      let finalIsLogo = false;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -353,14 +356,16 @@ const generateImmediateResponse = (userInput) => {
 
               switch (data.type) {
                 case 'thinking_start':
-                  // ✅ ADD THINKING START HANDLING
+                  // ✅ UPDATE: Only update text, keep all previous tools
+                  currentText = data.message;
+
                   setStreamingMessage({
                     sender: "ai",
-                    text: data.message,
-                    toolSteps: [...allToolSteps],
-                    thinkingProcess: null, // Reset thinking
-                    searchResults: currentSearchResults,
-                    inspirationImages: currentInspirationImages,
+                    text: currentText,
+                    toolSteps: [...allToolSteps], // ✅ PRESERVE all previous tools
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: 'thinking'
@@ -368,9 +373,10 @@ const generateImmediateResponse = (userInput) => {
                   break;
 
                 case 'thinking_process':
-                  // ✅ ADD THINKING PROCESS HANDLING
                   console.log('🧠 Received thinking_process:', data);
-                  let thinkingData = {
+
+                  // ✅ PRESERVE: Store thinking data
+                  const thinkingData = {
                     thinking: data.thinking,
                     reasoning: data.reasoning,
                     analysis: data.analysis,
@@ -385,23 +391,19 @@ const generateImmediateResponse = (userInput) => {
                     quality_check: data.quality_check
                   };
 
-                  // ✅ STORE THINKING PROCESS IN STATE
+                  preservedThinkingProcess = thinkingData;
                   setCurrentThinkingProcess(thinkingData);
 
                   setStreamingMessage({
                     sender: "ai",
                     text: currentText,
-                    toolSteps: [...allToolSteps],
-                    thinkingProcess: thinkingData,
-                    searchResults: currentSearchResults,
-                    inspirationImages: currentInspirationImages,
+                    toolSteps: [...allToolSteps], // ✅ PRESERVE all tools
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status
-                  });
-                  console.log('🧠 Set streamingMessage with thinking:', {
-                    thinking: data.thinking?.substring(0, 50) + '...',
-                    reasoning: data.reasoning?.substring(0, 50) + '...'
                   });
                   break;
 
@@ -418,7 +420,7 @@ const generateImmediateResponse = (userInput) => {
                   break;
 
                 case 'status':
-                  // ✅ ADD STATUS AS A TOOL STEP
+                  // ✅ ACCUMULATE: Add status as a tool step
                   allToolSteps.push({
                     type: 'status',
                     name: 'Analysis',
@@ -430,10 +432,10 @@ const generateImmediateResponse = (userInput) => {
                   setStreamingMessage({
                     sender: "ai",
                     text: currentText,
-                    toolSteps: [...allToolSteps], // Show all accumulated steps
-                    thinkingProcess: currentThinkingProcess,
-                    searchResults: currentSearchResults,
-                    inspirationImages: currentInspirationImages,
+                    toolSteps: [...allToolSteps], // ✅ SHOW accumulated tools
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status
@@ -441,7 +443,7 @@ const generateImmediateResponse = (userInput) => {
                   break;
 
                 case 'tool_start':
-                  // ✅ ADD TOOL START AS A STEP
+                  // ✅ ACCUMULATE: Add new tool to the array
                   allToolSteps.push({
                     type: 'tool_start',
                     name: data.tool_name,
@@ -453,10 +455,10 @@ const generateImmediateResponse = (userInput) => {
                   setStreamingMessage({
                     sender: "ai",
                     text: currentText,
-                    toolSteps: [...allToolSteps],
-                    thinkingProcess: currentThinkingProcess,
-                    searchResults: currentSearchResults,
-                    inspirationImages: currentInspirationImages,
+                    toolSteps: [...allToolSteps], // ✅ SHOW accumulated tools
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status
@@ -464,17 +466,19 @@ const generateImmediateResponse = (userInput) => {
                   break;
 
                 case 'tool_result':
-                  // ✅ UPDATE THE LAST TOOL TO COMPLETED
-                  const lastToolIndex = allToolSteps.length - 1;
-                  if (lastToolIndex >= 0 && allToolSteps[lastToolIndex].name === data.tool_name) {
-                    allToolSteps[lastToolIndex] = {
-                      ...allToolSteps[lastToolIndex],
+                  // ✅ ACCUMULATE: Update corresponding tool or add new one
+                  const toolIndex = allToolSteps.findIndex(
+                    tool => tool.name === data.tool_name && tool.status === 'running'
+                  );
+
+                  if (toolIndex >= 0) {
+                    allToolSteps[toolIndex] = {
+                      ...allToolSteps[toolIndex],
                       status: 'completed',
                       resultMessage: data.message,
                       data: data.data
                     };
                   } else {
-                    // Fallback: add as new step if not found
                     allToolSteps.push({
                       type: 'tool_result',
                       name: data.tool_name,
@@ -488,10 +492,10 @@ const generateImmediateResponse = (userInput) => {
                   setStreamingMessage({
                     sender: "ai",
                     text: currentText,
-                    toolSteps: [...allToolSteps],
-                    thinkingProcess: currentThinkingProcess,
-                    searchResults: currentSearchResults,
-                    inspirationImages: currentInspirationImages,
+                    toolSteps: [...allToolSteps], // ✅ SHOW all accumulated tools
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status
@@ -505,9 +509,9 @@ const generateImmediateResponse = (userInput) => {
                     sender: "ai",
                     text: currentText,
                     toolSteps: [...allToolSteps],
-                    thinkingProcess: currentThinkingProcess,
-                    searchResults: currentSearchResults,
-                    inspirationImages: currentInspirationImages,
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status
@@ -519,31 +523,44 @@ const generateImmediateResponse = (userInput) => {
                   console.log('[DEBUG] Received data.data:', data.data);
                   console.log('[DEBUG] data.data.results length:', data.data?.results?.length);
 
-                  // ✅ STORE IN BOTH STATE AND PRESERVED VARIABLE
+                  // ✅ PRESERVE: Store search results
                   preservedSearchResults = data.data;
                   setCurrentSearchResults(data.data);
 
                   console.log('[DEBUG] Preserved search results in variable:', preservedSearchResults);
                   console.log('[DEBUG] Preserved results length:', preservedSearchResults?.results?.length);
 
-                  // Update the last tool step to completed
-                  const searchToolIndex = allToolSteps.length - 1;
-                  if (searchToolIndex >= 0 && allToolSteps[searchToolIndex].name === data.tool_name) {
+                  // ✅ ACCUMULATE: Update the corresponding tool to completed
+                  const searchToolIndex = allToolSteps.findIndex(
+                    tool => tool.name === data.tool_name && tool.status === 'running'
+                  );
+
+                  if (searchToolIndex >= 0) {
                     allToolSteps[searchToolIndex] = {
                       ...allToolSteps[searchToolIndex],
                       status: 'completed',
                       resultMessage: data.message,
                       data: data.data
                     };
+                  } else {
+                    // Fallback: add as new tool if not found
+                    allToolSteps.push({
+                      type: 'tool_result',
+                      name: data.tool_name,
+                      message: data.message,
+                      status: 'completed',
+                      data: data.data,
+                      timestamp: Date.now()
+                    });
                   }
 
                   setStreamingMessage({
                     sender: "ai",
                     text: currentText,
-                    toolSteps: [...allToolSteps],
-                    thinkingProcess: currentThinkingProcess,
-                    searchResults: preservedSearchResults,  // ✅ USE PRESERVED VARIABLE
-                    inspirationImages: currentInspirationImages,
+                    toolSteps: [...allToolSteps], // ✅ SHOW all accumulated tools
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults, // ✅ ADD search results
+                    inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status
@@ -551,57 +568,27 @@ const generateImmediateResponse = (userInput) => {
                   break;
 
                 case 'inspiration_images':
-                  // ✅ STORE IN BOTH STATE AND PRESERVED VARIABLE
+                  // ✅ PRESERVE: Store inspiration images
                   preservedInspirationImages = data.images;
                   setCurrentInspirationImages(data.images);
 
-                  setStreamingMessage({
-                    sender: "ai",
-                    text: currentText,
-                    toolSteps: [...allToolSteps, {
-                      name: data.tool_name,
-                      message: data.message,
-                      status: 'completed',
-                      timestamp: Date.now(),
-                      data: data.images
-                    }],
-                    thinkingProcess: currentThinkingProcess,
-                    searchResults: preservedSearchResults,  // ✅ USE PRESERVED VARIABLE
-                    inspirationImages: preservedInspirationImages,  // ✅ USE PRESERVED VARIABLE
-                    imageUrl: finalImageUrl,
-                    isLogo: finalIsLogo,
-                    status: data.status
+                  // ✅ ACCUMULATE: Add inspiration tool
+                  allToolSteps.push({
+                    type: 'tool_result',
+                    name: data.tool_name,
+                    message: data.message,
+                    status: 'completed',
+                    timestamp: Date.now(),
+                    data: data.images
                   });
-                  break;
-
-                case 'thinking_process':
-                  console.log('🧠 Received thinking_process:', data);
-                  thinkingData = {
-                    thinking: data.thinking,
-                    reasoning: data.reasoning,
-                    analysis: data.analysis,
-                    plan: data.plan,
-                    strategy: data.strategy,
-                    creative_process: data.creative_process,
-                    design_decisions: data.design_decisions,
-                    process: data.process,
-                    findings: data.findings,
-                    approach: data.approach,
-                    evaluation: data.evaluation,
-                    quality_check: data.quality_check
-                  };
-
-                  // ✅ STORE IN BOTH STATE AND PRESERVED VARIABLE
-                  preservedThinkingProcess = thinkingData;
-                  setCurrentThinkingProcess(thinkingData);
 
                   setStreamingMessage({
                     sender: "ai",
                     text: currentText,
-                    toolSteps: [...allToolSteps],
-                    thinkingProcess: preservedThinkingProcess,  // ✅ USE PRESERVED VARIABLE
-                    searchResults: preservedSearchResults,  // ✅ USE PRESERVED VARIABLE
-                    inspirationImages: preservedInspirationImages,  // ✅ USE PRESERVED VARIABLE
+                    toolSteps: [...allToolSteps], // ✅ SHOW all accumulated tools
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages, // ✅ ADD inspiration images
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status
@@ -609,19 +596,26 @@ const generateImmediateResponse = (userInput) => {
                   break;
 
                 case 'message':
+                  console.log('[DEBUG] === MESSAGE CASE RECEIVED ===');
+                  console.log('[DEBUG] Message data:', data);
+                  console.log('[DEBUG] Message text:', data.text);
+                  console.log('[DEBUG] Current allToolSteps length:', allToolSteps.length);
                   currentText = data.text;
 
-                  setStreamingMessage({
+                  const messageUpdate = {
                     sender: "ai",
                     text: currentText,
                     toolSteps: [...allToolSteps],
-                    thinkingProcess: currentThinkingProcess,
-                    searchResults: currentSearchResults,
-                    inspirationImages: currentInspirationImages,
-                    status: 'complete'
-                  });
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages,
+                    imageUrl: finalImageUrl,
+                    isLogo: finalIsLogo,
+                    status: data.status || 'awaiting_input'
+                  };
 
-                  // ✅ DON'T call setMessages here - wait for 'complete' event
+                  console.log('[DEBUG] Setting streaming message with:', messageUpdate);
+                  setStreamingMessage(messageUpdate);
                   break;
 
                 case 'asset_generated':
@@ -631,20 +625,18 @@ const generateImmediateResponse = (userInput) => {
                   finalImageUrl = data.image_url;
                   finalIsLogo = true;
 
-                  // ✅ FIX: Only update streamingMessage, don't update messages yet
+                  // ✅ ACCUMULATE: Keep all tools and add image
                   setStreamingMessage({
                     sender: "ai",
                     text: currentText,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
-                    toolSteps: [...allToolSteps],
+                    toolSteps: [...allToolSteps], // ✅ PRESERVE all tools
                     thinkingProcess: preservedThinkingProcess,
                     searchResults: preservedSearchResults,
                     inspirationImages: preservedInspirationImages,
                     status: 'asset_generated'
                   });
-
-                  // ✅ DON'T call setMessages here - wait for 'complete' event
                   break;
 
                 case 'error':
@@ -654,9 +646,9 @@ const generateImmediateResponse = (userInput) => {
                     sender: "ai",
                     text: currentText,
                     toolSteps: [...allToolSteps],
-                    thinkingProcess: currentThinkingProcess,
-                    searchResults: currentSearchResults,
-                    inspirationImages: currentInspirationImages,
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages,
                     status: 'error',
                     isError: true
                   });
@@ -665,23 +657,49 @@ const generateImmediateResponse = (userInput) => {
                 case 'awaiting_input':
                   currentText = data.message;
 
-                  // ✅ FIX: Preserve user message
                   setStreamingMessage({
                     sender: "ai",
                     text: currentText,
                     toolSteps: [...allToolSteps],
-                    thinkingProcess: currentThinkingProcess,
-                    searchResults: currentSearchResults,
-                    inspirationImages: currentInspirationImages,
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages,
                     status: 'awaiting_input'
                   });
                   break;
 
                 case 'complete':
-                  console.log('[DEBUG] Stream complete - adding final message');
+                  console.log('[DEBUG] === COMPLETE CASE RECEIVED ===');
+                  console.log('[DEBUG] Complete data:', data);
+                  console.log('[DEBUG] Complete status:', data.status);
                   console.log('[DEBUG] Final data received:', data.final_data);
                   console.log('[DEBUG] Preserved search results:', preservedSearchResults);
-                  console.log('[DEBUG] Current search results state:', currentSearchResults);
+
+                  // ✅ CRITICAL: Handle awaiting_input status differently
+                  if (data.status === 'awaiting_input') {
+                    console.log('[DEBUG] Complete with awaiting_input - keeping message visible for questions');
+
+                    const questionsText = streamingMessage?.text || currentText || "I need some information to create your logo.";
+    
+                    // Don't move to final messages - keep streaming message visible
+                    setIsStreaming(false); // Stop streaming animation
+
+                    // Update streaming message status to show it's waiting for input
+                    if (streamingMessage) {
+                      setStreamingMessage({
+                        ...streamingMessage,
+                        status: 'awaiting_input',
+                        isWaitingForInput: true
+                      });
+                    }
+
+                    // Don't refresh conversations for awaiting_input
+                    console.log('[DEBUG] Keeping questions visible, not moving to final messages');
+                    return; // Exit early - don't process as normal completion
+                  }
+
+                  // ✅ NORMAL COMPLETION: Process as usual for complete assets
+                  console.log('[DEBUG] Normal completion - moving to final messages');
 
                   // ✅ USE PRESERVED VARIABLES OR BACKEND DATA (MOST RELIABLE)
                   let finalSearchResults = null;
@@ -716,16 +734,16 @@ const generateImmediateResponse = (userInput) => {
                   console.log('[DEBUG] Final search results to use:', finalSearchResults);
                   console.log('[DEBUG] Final search results length:', finalSearchResults?.results?.length);
 
-                  // ✅ NOW add the final AI message to messages
+                  // ✅ FIRST: Add the final AI message to messages
                   setMessages(prevMessages => {
                     console.log('[DEBUG] Final setMessages - prevMessages:', prevMessages);
 
                     const finalAIMessage = {
                       sender: "ai",
                       text: currentText,
-                      toolSteps: [...allToolSteps],
+                      toolSteps: [...allToolSteps], // ✅ ALL accumulated tools
                       thinkingProcess: finalThinkingProcess,
-                      searchResults: finalSearchResults,  // ✅ USE PRESERVED/BACKEND DATA
+                      searchResults: finalSearchResults,
                       inspirationImages: finalInspirationImages,
                       status: 'complete'
                     };
@@ -742,8 +760,14 @@ const generateImmediateResponse = (userInput) => {
                       finalAIMessage.status = 'error';
                     }
 
-                    console.log('[DEBUG] Final AI message with preserved search results:', finalAIMessage.searchResults);
-                    console.log('[DEBUG] Final message search results length:', finalAIMessage.searchResults?.results?.length);
+                    console.log('[DEBUG] Final AI message created:', {
+                      text: finalAIMessage.text?.substring(0, 50),
+                      hasImage: !!finalAIMessage.imageUrl,
+                      imageUrl: finalAIMessage.imageUrl,
+                      isLogo: finalAIMessage.isLogo,
+                      searchResultsCount: finalAIMessage.searchResults?.results?.length || 0,
+                      toolStepsCount: finalAIMessage.toolSteps?.length || 0
+                    });
 
                     return [
                       ...prevMessages,
@@ -751,24 +775,18 @@ const generateImmediateResponse = (userInput) => {
                     ];
                   });
 
-                  setStreamingMessage(null);
-                  setIsStreaming(false);
+                  // ✅ THEN: Clear streaming message and state (with small delay)
+                  setTimeout(() => {
+                    setStreamingMessage(null);
+                    setIsStreaming(false);
+                  }, 50);
 
                   if (onRefreshConversations) {
                     onRefreshConversations();
                   }
                   break;
-
                 default:
-                  // ✅ FOR ALL OTHER CASES, MAINTAIN PRESERVED DATA
-                  if (data.type !== 'status' && data.type !== 'tool_start') {
-                    setStreamingMessage(prevState => ({
-                      ...prevState,
-                      thinkingProcess: preservedThinkingProcess,
-                      searchResults: preservedSearchResults,
-                      inspirationImages: preservedInspirationImages
-                    }));
-                  }
+                  console.log('[DEBUG] Unhandled event type:', data.type);
                   break;
               }
             } catch (e) {
@@ -1038,6 +1056,12 @@ const generateImmediateResponse = (userInput) => {
 
   const allMessages = React.useMemo(() => {
     // Always include the base messages
+    console.log('[DEBUG] === COMPUTING allMessages ===');
+    console.log('[DEBUG] - Base messages count:', messages.length);
+    console.log('[DEBUG] - Has streaming message:', !!streamingMessage);
+    console.log('[DEBUG] - Streaming message text:', streamingMessage?.text?.substring(0, 50));
+    console.log('[DEBUG] - Is streaming active:', isStreaming);
+
     let combinedMessages = [...messages];
 
     // If we're streaming, add the streaming message
