@@ -148,8 +148,8 @@ export default function MessageBubble({
 
         <div
           className={`p-3 text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] max-w-[70%] font-normal bg-white ${isAI
-              ? "text-left rounded-tl-[4px] rounded-tr-[12px]"
-              : "text-right rounded-tl-[12px] rounded-tr-[4px]"
+            ? "text-left rounded-tl-[4px] rounded-tr-[12px]"
+            : "text-right rounded-tl-[12px] rounded-tr-[4px]"
             } ${isError ? "border border-red-200 bg-red-50" : ""}`}
         >
           {isLoading ? (
@@ -325,35 +325,87 @@ export default function MessageBubble({
           )}
 
           {isAI && inspirationImages && inspirationImages.length > 0 && (
-            <div className="mt-4">
-              <h5 className="font-medium text-gray-800 mb-2">🎨 Design Inspiration</h5>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                {inspirationImages.slice(0, 8).map((image, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={image.thumbnail || image.original}
-                      alt={image.title || 'Design inspiration'}
-                      className="w-full h-20 object-cover rounded-lg border border-gray-200 group-hover:border-blue-400 transition-colors cursor-pointer"
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-between mb-3">
+                <h5 className="font-medium text-gray-800 flex items-center gap-2">
+                  🎨 Design Inspiration
+                  <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
+                    {inspirationImages.length} found
+                  </span>
+                </h5>
+                <div className="text-xs text-gray-500">
+                  From Behance & Dribbble
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                {inspirationImages.map((image, index) => {
+                  console.log(image)
+                  return (
+                    <div
+                      key={index}
+                      className="relative group cursor-pointer hover:transform hover:scale-105 transition-all duration-200"
                       onClick={() => window.open(image.link, '_blank')}
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 rounded-lg transition-all duration-200 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </div>
-                    <div className="absolute bottom-1 left-1 right-1">
-                      <div className="bg-black bg-opacity-70 text-white text-xs px-1 py-0.5 rounded text-center truncate">
-                        {image.source}
+                    >
+                      {/* Main image */}
+                      <div className="aspect-square overflow-hidden rounded-lg border-2 border-gray-200 group-hover:border-blue-400">
+                        <img
+                          src={image.original || image.thumbnail} // ✅ USE DIRECT URLs
+                          alt={image.title || 'Design inspiration'}
+                          className="w-full h-full object-cover"
+                          crossOrigin="anonymous"
+                          referrerPolicy="no-referrer"
+                          onLoad={() => console.log('✅ Image loaded:', image.original)}
+                          onError={(e) => {
+                            console.log('❌ Original failed, trying thumbnail:', image.thumbnail);
+                            // Fallback to thumbnail if original fails
+                            if (e.target.src !== image.thumbnail) {
+                              e.target.src = image.thumbnail;
+                            } else {
+                              console.log('❌ Both original and thumbnail failed');
+                              // Show placeholder if both fail
+                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBhdmFpbGFibGU8L3RleHQ+PC9zdmc+';
+                            }
+                          }}
+                        />
+                      </div>
+
+                      {/* Source badge */}
+                      <div className="absolute top-2 right-2">
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${image.source === 'Behance'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-pink-600 text-white'
+                          }`}>
+                          {image.source}
+                        </span>
+                      </div>
+
+                      {/* Hover overlay with external link icon */}
+                      <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-40 rounded-lg transition-all duration-200 flex items-center justify-center">
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* Title tooltip */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                        <p className="text-white text-xs truncate">
+                          {image.title || 'Design inspiration'}
+                        </p>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
-              {inspirationImages.length > 8 && (
-                <button className="mt-2 text-sm text-blue-600 hover:text-blue-800">
-                  View all {inspirationImages.length} inspirations →
-                </button>
-              )}
+
+              <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+                <span>Click any image to view source</span>
+                {inspirationImages.length > 10 && (
+                  <span>{inspirationImages.length - 10} more available</span>
+                )}
+              </div>
             </div>
           )}
 
@@ -368,8 +420,8 @@ export default function MessageBubble({
                   onClick={() => handleClick(opt)}
                   disabled={selectedOptions.includes(opt)}
                   className={`py-[12px] cursor-pointer text-[14px] font-normal px-[16px] bg-white border rounded-full hover:bg-gray-50 transition-colors ${selected === opt
-                      ? "border-[#C209C1] bg-purple-50"
-                      : "border-[#E8ECEF]"
+                    ? "border-[#C209C1] bg-purple-50"
+                    : "border-[#E8ECEF]"
                     } ${selectedOptions.includes(opt)
                       ? "opacity-50 cursor-not-allowed"
                       : ""

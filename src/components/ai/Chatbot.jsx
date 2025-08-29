@@ -119,6 +119,7 @@ export default function ChatPage({
         return data.user._id;
       }
     } catch (error) {
+      alert("Session expired. Please log in again.");
       console.error("Token verification failed", error);
       return null;
     }
