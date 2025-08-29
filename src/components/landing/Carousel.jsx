@@ -143,9 +143,9 @@ function Carousel({ carouselImages = [] }) {
   const loopDuration = 12;
 
   return (
-    <div className="overflow-hidden w-full my-[50px]">
+    <div className="overflow-hidden w-full mb-[50px]">
       <motion.div
-        className="sm:flex sm:max-w-[1140px] w-full mx-auto sm:flex-wrap grid grid-cols-4 justify-center items-center"
+        className="sm:flex sm:max-w-[1140px] w-full mx-auto sm:flex-wrap grid  grid-cols-4 justify-center items-center"
         variants={containerVariants}
         initial="hidden"
         animate="visible"

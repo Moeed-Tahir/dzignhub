@@ -132,7 +132,7 @@ export default function Hero({
         animate="visible"
       >
         {/* Top section (announcement + heading + paragraph) */}
-        <div className="flex flex-col lg:gap-[16px] mx-auto gap-[32px]">
+        <div className="flex flex-col lg:gap-[16px] mx-auto gap-5 sm:gap-[32px]">
           {/* Announcement */}
           {processedHeroData.showAnnouncement && (
             <motion.div
@@ -177,7 +177,7 @@ export default function Hero({
               {processedHeroData.mainHeading}
             </motion.h1>
             <motion.p
-              className={`lg:text-[18px] text-[16px] text-[#F0F0F3] text-center leading-[28px] lg:w-[727px] lg:h-[56px] h-[96px] w-[335px]  mx-auto `}
+              className={`lg:text-[18px] text-[16px] text-[#F0F0F3] text-center leading-[28px] lg:w-[727px] lg:h-[56px] h-auto w-[335px]  mx-auto `}
               variants={itemVariants}
             >
               {processedHeroData.mainDescription}
