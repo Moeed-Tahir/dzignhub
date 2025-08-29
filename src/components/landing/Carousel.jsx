@@ -145,7 +145,7 @@ function Carousel({ carouselImages = [] }) {
   return (
     <div className="overflow-hidden w-full my-[50px]">
       <motion.div
-        className="flex sm:max-w-[1140px] w-[90%] xl:w-full mx-auto flex-wrap justify-center items-center"
+        className="sm:flex sm:max-w-[1140px] w-full mx-auto sm:flex-wrap grid grid-cols-4 justify-center items-center"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
