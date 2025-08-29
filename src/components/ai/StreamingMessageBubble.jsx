@@ -218,6 +218,90 @@ const StreamingMessageBubble = ({ message, aiIcon }) => {
               </div>
             )}
 
+            {/* ✅ ADD: INSPIRATION IMAGES DISPLAY DURING STREAMING */}
+            {inspirationImages && inspirationImages.length > 0 && (
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="font-medium text-gray-800 flex items-center gap-2">
+                    🎨 Design Inspiration
+                    <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
+                      {inspirationImages.length} found
+                    </span>
+                    {/* ✅ Show streaming indicator during streaming */}
+                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                      Live
+                    </span>
+                  </h5>
+                  <div className="text-xs text-gray-500">
+                    From Behance & Dribbble
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                  {inspirationImages.map((image, index) => {
+                    console.log('🖼️ Streaming inspiration image:', index, image);
+                    return (
+                      <div
+                        key={index}
+                        className="relative group cursor-pointer hover:transform hover:scale-105 transition-all duration-200 animate-fade-in"
+                        onClick={() => window.open(image.link, '_blank')}
+                      >
+                        {/* Main image */}
+                        <div className="aspect-square overflow-hidden rounded-lg border-2 border-gray-200 group-hover:border-blue-400">
+                        <img
+                          src={`/api/proxy-image?url=${encodeURIComponent(image.original)}`}
+                          alt={image.title || 'Design inspiration'}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Fallback to thumbnail via proxy
+                            if (image.thumbnail && !e.target.src.includes(encodeURIComponent(image.thumbnail))) {
+                              e.target.src = `/api/proxy-image?url=${encodeURIComponent(image.thumbnail)}`;
+                            }
+                          }}
+                        />
+                        </div>
+
+                        {/* Source badge */}
+                        <div className="absolute top-2 right-2">
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                            image.source === 'Behance' 
+                              ? 'bg-blue-600 text-white' 
+                              : 'bg-pink-600 text-white'
+                          }`}>
+                            {image.source}
+                          </span>
+                        </div>
+
+                        {/* Hover overlay with external link icon */}
+                        <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-40 rounded-lg transition-all duration-200 flex items-center justify-center">
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        {/* Title tooltip */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                          <p className="text-white text-xs truncate">
+                            {image.title || 'Design inspiration'}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+                  <span>Click any image to view source</span>
+                  {inspirationImages.length > 10 && (
+                    <span>{inspirationImages.length - 10} more available</span>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Generated Asset */}
             {imageUrl && (
               <div className="mt-3">
@@ -236,7 +320,8 @@ const StreamingMessageBubble = ({ message, aiIcon }) => {
               </div>
             )}
 
-            {imageUrl && hasSearchResults && (
+            {/* Action buttons */}
+            {imageUrl && (
               <div className="mt-2 flex gap-2">
                 {/* Download button */}
                 <a
@@ -309,8 +394,12 @@ const StreamingMessageBubble = ({ message, aiIcon }) => {
                   </svg>
                   Copy Link
                 </button>
+              </div>
+            )}
 
-                {/* ✅ ADD SHOW SOURCES BUTTON */}
+            {/* ✅ SHOW SOURCES BUTTON WHEN WE HAVE SEARCH RESULTS */}
+            {hasSearchResults && (
+              <div className="mt-2">
                 <button
                   onClick={() => setIsSourcesModalOpen(true)}
                   className="inline-flex items-center gap-2 px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
@@ -358,18 +447,20 @@ const StreamingMessageBubble = ({ message, aiIcon }) => {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  Show Sources
+                  Show Sources ({searchResults.results.length})
                 </button>
               </div>
             )}
           </div>
         </div>
       </div>
+      
+      {/* ✅ SOURCES MODAL */}
       <SourcesModal
         isOpen={isSourcesModalOpen}
         onClose={() => setIsSourcesModalOpen(false)}
-        sources={searchResults?.results}  // ✅ PASS THE RESULTS ARRAY
-        searchKeywords={searchResults?.keywords}  // ✅ ALSO PASS KEYWORDS
+        sources={searchResults?.results}
+        searchKeywords={searchResults?.keywords}
       />
     </>
   );

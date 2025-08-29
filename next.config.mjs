@@ -16,14 +16,8 @@ const nextConfig = {
                 hostname: 'localhost',
                 port: '1337',
                 pathname: '/uploads/**',
-            },
-            {
-                protocol: 'https',
-                hostname: '**',
             }
-        ],
-        // ✅ DISABLE IMAGE OPTIMIZATION FOR EXTERNAL SOURCES
-        unoptimized: true,
+        ]
     },
     compiler: {
         // This removes all console.* statements in production

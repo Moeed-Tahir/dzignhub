@@ -573,15 +573,32 @@ export default function ChatPage({
                   preservedInspirationImages = data.images;
                   setCurrentInspirationImages(data.images);
 
-                  // ✅ ACCUMULATE: Add inspiration tool
-                  allToolSteps.push({
-                    type: 'tool_result',
-                    name: data.tool_name,
-                    message: data.message,
-                    status: 'completed',
-                    timestamp: Date.now(),
-                    data: data.images
-                  });
+                  // ✅ UPDATE: Don't include images in the text message
+                  currentText = data.message; // Just the message, not the images data
+
+                  // ✅ ACCUMULATE: Update the corresponding tool to completed
+                  const inspirationToolIndex = allToolSteps.findIndex(
+                    tool => tool.name === data.tool_name && tool.status === 'running'
+                  );
+
+                  if (inspirationToolIndex >= 0) {
+                    allToolSteps[inspirationToolIndex] = {
+                      ...allToolSteps[inspirationToolIndex],
+                      status: 'completed',
+                      resultMessage: data.message,
+                      data: data.images 
+                    };
+                  } else {
+                    // Fallback: add as new tool if not found
+                    allToolSteps.push({
+                      type: 'tool_result',
+                      name: data.tool_name,
+                      message: data.message,
+                      status: 'completed',
+                      data: data.images,
+                      timestamp: Date.now()
+                    });
+                  }
 
                   setStreamingMessage({
                     sender: "ai",

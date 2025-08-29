@@ -350,21 +350,13 @@ export default function MessageBubble({
                       {/* Main image */}
                       <div className="aspect-square overflow-hidden rounded-lg border-2 border-gray-200 group-hover:border-blue-400">
                         <img
-                          src={image.original || image.thumbnail} // ✅ USE DIRECT URLs
+                          src={`/api/proxy-image?url=${encodeURIComponent(image.original)}`}
                           alt={image.title || 'Design inspiration'}
                           className="w-full h-full object-cover"
-                          crossOrigin="anonymous"
-                          referrerPolicy="no-referrer"
-                          onLoad={() => console.log('✅ Image loaded:', image.original)}
                           onError={(e) => {
-                            console.log('❌ Original failed, trying thumbnail:', image.thumbnail);
-                            // Fallback to thumbnail if original fails
-                            if (e.target.src !== image.thumbnail) {
-                              e.target.src = image.thumbnail;
-                            } else {
-                              console.log('❌ Both original and thumbnail failed');
-                              // Show placeholder if both fail
-                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBhdmFpbGFibGU8L3RleHQ+PC9zdmc+';
+                            // Fallback to thumbnail via proxy
+                            if (image.thumbnail && !e.target.src.includes(encodeURIComponent(image.thumbnail))) {
+                              e.target.src = `/api/proxy-image?url=${encodeURIComponent(image.thumbnail)}`;
                             }
                           }}
                         />
@@ -373,8 +365,8 @@ export default function MessageBubble({
                       {/* Source badge */}
                       <div className="absolute top-2 right-2">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${image.source === 'Behance'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-pink-600 text-white'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-pink-600 text-white'
                           }`}>
                           {image.source}
                         </span>
