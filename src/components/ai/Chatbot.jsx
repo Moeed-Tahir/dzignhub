@@ -291,7 +291,8 @@ export default function ChatPage({
       inspirationImages: null,
       imageUrl: null,
       isLogo: false,
-      status: 'processing'
+      status: 'processing',
+      shouldTypeText: true
     });
 
     try {
@@ -369,7 +370,9 @@ export default function ChatPage({
                     inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
-                    status: 'thinking'
+                    status: 'thinking',
+                    shouldTypeText: false
+
                   });
                   break;
 
@@ -404,7 +407,9 @@ export default function ChatPage({
                     inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
-                    status: data.status
+                    status: data.status,
+                    shouldTypeText:false
+
                   });
                   break;
 
@@ -439,7 +444,8 @@ export default function ChatPage({
                     inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
-                    status: data.status
+                    status: data.status,
+                    shouldTypeText:false
                   });
                   break;
 
@@ -462,7 +468,8 @@ export default function ChatPage({
                     inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
-                    status: data.status
+                    status: data.status,
+                    shouldTypeText:false
                   });
                   break;
 
@@ -499,7 +506,8 @@ export default function ChatPage({
                     inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
-                    status: data.status
+                    status: data.status,
+                    shouldTypeText:false
                   });
                   break;
 
@@ -515,7 +523,8 @@ export default function ChatPage({
                     inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
-                    status: data.status
+                    status: data.status,
+                    shouldTypeText:false
                   });
                   break;
 
@@ -564,7 +573,8 @@ export default function ChatPage({
                     inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
-                    status: data.status
+                    status: data.status,
+                    shouldTypeText:false
                   });
                   break;
 
@@ -609,7 +619,8 @@ export default function ChatPage({
                     inspirationImages: preservedInspirationImages, // ✅ ADD inspiration images
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
-                    status: data.status
+                    status: data.status,
+                    shouldTypeText:false
                   });
                   break;
 
@@ -629,7 +640,8 @@ export default function ChatPage({
                     inspirationImages: preservedInspirationImages,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
-                    status: data.status || 'awaiting_input'
+                    status: data.status || 'awaiting_input',
+                    shouldTypeText:false
                   };
 
                   console.log('[DEBUG] Setting streaming message with:', messageUpdate);
@@ -653,7 +665,8 @@ export default function ChatPage({
                     thinkingProcess: preservedThinkingProcess,
                     searchResults: preservedSearchResults,
                     inspirationImages: preservedInspirationImages,
-                    status: 'asset_generated'
+                    status: 'asset_generated',
+                    shouldTypeText:false
                   });
                   break;
 
@@ -668,7 +681,8 @@ export default function ChatPage({
                     searchResults: preservedSearchResults,
                     inspirationImages: preservedInspirationImages,
                     status: 'error',
-                    isError: true
+                    isError: true,
+                    shouldTypeText:false
                   });
                   break;
 
@@ -682,7 +696,8 @@ export default function ChatPage({
                     thinkingProcess: preservedThinkingProcess,
                     searchResults: preservedSearchResults,
                     inspirationImages: preservedInspirationImages,
-                    status: 'awaiting_input'
+                    status: 'awaiting_input',
+                    shouldTypeText:false
                   });
                   break;
 
@@ -715,7 +730,8 @@ export default function ChatPage({
                       } : null),
                       inspirationImages: preservedInspirationImages || data.final_data?.inspiration_images,
                       status: 'awaiting_input',
-                      isWaitingForInput: true
+                      isWaitingForInput: true,
+                      shouldTypeText:false
                     });
 
                     // Don't refresh conversations for awaiting_input
@@ -770,7 +786,8 @@ export default function ChatPage({
                       thinkingProcess: finalThinkingProcess,
                       searchResults: finalSearchResults,
                       inspirationImages: finalInspirationImages,
-                      status: 'complete'
+                      status: 'complete',
+                      shouldTypeText:false
                     };
 
                     // Add image properties if they exist
@@ -833,7 +850,8 @@ export default function ChatPage({
           {
             sender: "ai",
             text: "I'm experiencing some technical difficulties. Please try again in a moment.",
-            isError: true
+            isError: true,
+            shouldTypeText:false
           }
         ];
       });
@@ -1146,6 +1164,8 @@ export default function ChatPage({
             searchResults={msg.searchResults}  // ✅ PASS SEARCH RESULTS
             inspirationImages={msg.inspirationImages} // ✅ PASS INSPIRATION IMAGES
             isError={msg.isError}
+            shouldTypeText={msg.shouldTypeText || false} // ✅ ADD: Pass typing flag
+
           />
         ))}
       </div>

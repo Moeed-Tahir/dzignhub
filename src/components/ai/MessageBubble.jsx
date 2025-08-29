@@ -3,7 +3,42 @@ import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import { useUserStore } from "@/store/store";
 import StreamingMessageBubble from "./StreamingMessageBubble"
-import SourcesModal from "./SourcesModal"; // ✅ ADD THIS IMPORT
+import SourcesModal from "./SourcesModal";
+
+// ✅ ADD: Simple typing effect hook - ONLY THIS IS NEW
+const useTypingEffect = (text, speed = 25, enabled = true) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    if (!text || !enabled) {
+      setDisplayedText(text || '');
+      setIsTyping(false);
+      return;
+    }
+
+    setIsTyping(true);
+    setDisplayedText('');
+
+    let currentIndex = 0;
+    const timer = setInterval(() => {
+      if (currentIndex < text.length) {
+        setDisplayedText(text.substring(0, currentIndex + 1));
+        currentIndex++;
+      } else {
+        setIsTyping(false);
+        clearInterval(timer);
+      }
+    }, speed);
+
+    return () => {
+      clearInterval(timer);
+      setIsTyping(false);
+    };
+  }, [text, speed, enabled]);
+
+  return { displayedText, isTyping };
+};
 
 export default function MessageBubble({
   sender,
@@ -17,13 +52,14 @@ export default function MessageBubble({
   imageUrl = null,
   isLogo = false,
   isError = false,
-  status,          // ✅ Add these streaming props
-  toolInfo,        // ✅ Add these streaming props
+  status,
+  toolInfo,
   toolSteps = [],
   isStreaming,
   thinkingProcess,
   searchResults,
-  inspirationImages
+  inspirationImages,
+  shouldTypeText = false // ✅ ADD: New prop - ONLY THIS IS NEW
 }) {
   const { Avatar } = useUserStore();
   console.log('[DEBUG MessageBubble] Received props:');
@@ -35,19 +71,26 @@ export default function MessageBubble({
   console.log('- inspirationImages:', inspirationImages);
   console.log('- inspirationImages length:', inspirationImages?.length);
 
-
   const isAI = sender != "user";
   const userIcon = Avatar || "/avatar.png";
-  // const aiIcon = "/Ai/ai-dp.png";
   const [selected, setSelected] = useState(null);
+
+  // ✅ ADD: Typing effect for initial text - ONLY THIS IS NEW
+  const shouldUseTyping = shouldTypeText && text && sender !== "user" && isStreaming;
+  const { displayedText: typedText, isTyping } = useTypingEffect(
+    text, 
+    25, // Speed: 25ms per character
+    shouldUseTyping
+  );
+
+  // ✅ KEEP: Original typing effect for existing functionality - UNCHANGED
   const [displayedText, setDisplayedText] = useState(typing ? "" : text || "");
 
-  // ✅ ADD SOURCES MODAL STATE
+  // ✅ ADD SOURCES MODAL STATE - UNCHANGED
   const [isSourcesModalOpen, setIsSourcesModalOpen] = useState(false);
 
-  // ✅ CHECK IF WE HAVE SEARCH RESULTS TO SHOW SOURCES BUTTON
+  // ✅ CHECK IF WE HAVE SEARCH RESULTS TO SHOW SOURCES BUTTON - UNCHANGED
   const hasSearchResults = searchResults && searchResults.results && searchResults.results.length > 0;
-
 
   useEffect(() => {
     if (typing && text) {
@@ -68,7 +111,7 @@ export default function MessageBubble({
     if (onOptionSelect) onOptionSelect(opt);
   };
 
-  // Custom markdown components for styling
+  // Custom markdown components for styling - UNCHANGED
   const markdownComponents = {
     h1: ({ children }) => (
       <h1 className="text-xl font-bold mb-2">{children}</h1>
@@ -118,16 +161,31 @@ export default function MessageBubble({
     ),
   };
 
+  // ✅ KEEP: StreamingMessageBubble logic - UNCHANGED
   if (isStreaming && sender === 'ai' && status !== 'complete') {
     return (
       <StreamingMessageBubble
-        message={{ text, status, toolInfo, toolSteps, imageUrl, isLogo, thinkingProcess, searchResults, inspirationImages }}
+        message={{ 
+          text: shouldUseTyping ? typedText : text, // ✅ ONLY CHANGE: Use typed text if typing enabled
+          status, 
+          toolInfo, 
+          toolSteps, 
+          imageUrl, 
+          isLogo, 
+          thinkingProcess, 
+          searchResults, 
+          inspirationImages,
+          isTyping: shouldUseTyping ? isTyping : false // ✅ PASS typing state
+        }}
         aiIcon={aiIcon}
       />
     );
   }
 
+  // ✅ DECIDE: Which text to show - ONLY THIS IS NEW
+  const finalTextToShow = shouldUseTyping ? typedText : displayedText;
 
+  // ✅ EVERYTHING BELOW IS EXACTLY THE SAME - NO CHANGES
   return (
     <>
       <div
@@ -159,18 +217,24 @@ export default function MessageBubble({
             </div>
           ) : (
             <>
-              {/* Text content with markdown support */}
-              {displayedText && (
+              {/* ✅ ONLY CHANGE: Use finalTextToShow and add typing cursor */}
+              {finalTextToShow && (
                 <div
                   className={`prose prose-sm max-w-none ${isError ? "text-red-600" : ""
                     }`}
                 >
                   <ReactMarkdown components={markdownComponents}>
-                    {displayedText.replace(/\\n/g, "\n")}
+                    {finalTextToShow.replace(/\\n/g, "\n")}
                   </ReactMarkdown>
+                  
+                  {/* ✅ ADD: Typing cursor only when typing initial text */}
+                  {shouldTypeText && isTyping && (
+                    <span className="inline-block w-2 h-5 bg-gray-400 ml-1 animate-pulse"></span>
+                  )}
                 </div>
               )}
 
+              {/* ✅ EVERYTHING BELOW IS EXACTLY THE SAME - NO CHANGES */}
               {/* Logo/Image display */}
               {imageUrl && (
                 <div className={`mt-3 ${text ? "mt-3" : ""}`}>
@@ -400,8 +464,6 @@ export default function MessageBubble({
               </div>
             </div>
           )}
-
-
 
           {/* Options buttons */}
           {options.length > 0 && !isLoading && (
