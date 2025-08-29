@@ -19,7 +19,7 @@ export const fetchLandingPageData = async () => {
       const landingPage = data.data[0];
       
       return {
-        mainHeading: landingPage.MainHeading || "The Ultimate all in one AI Website Creator",
+        mainHeading: landingPage.MainHeading || "The All-in-one AI Workflow",
         mainDescription: landingPage.MainDescription || "Website, app, and brand-one promt does it all.",
         heroSection: landingPage.hero_section || null,
         carouselImages: landingPage.carousal_images || [],
@@ -37,7 +37,7 @@ export const fetchLandingPageData = async () => {
     
     // Return fallback data if no data from Strapi
     return {
-      mainHeading: "The Ultimate all in one AI Website Creator",
+      mainHeading: "The All-in-one AI Workflow",
       mainDescription: "Website, app, and brand-one promt does it all.",
       heroSection: null,
       carouselImages: [],
@@ -57,7 +57,7 @@ export const fetchLandingPageData = async () => {
     
     // Return fallback data in case of error
     return {
-      mainHeading: "The Ultimate all in one AI Website Creator",
+      mainHeading: "The All-in-one AI Workflow",
       mainDescription: "Website, app, and brand-one promt does it all.",
       heroSection: null,
       carouselImages: [],

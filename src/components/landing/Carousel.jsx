@@ -1,9 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { getStrapiImageUrl } from "@/utils/strapi";
+import Image from "next/image";
 
 function Carousel({ carouselImages = [] }) {
-  // Fallback images if no Strapi data
   const defaultImages1 = [
     "/Latest/1.png",
     "/Latest/2.png",
@@ -13,12 +13,6 @@ function Carousel({ carouselImages = [] }) {
     "/Latest/6.png",
     "/Latest/7.png",
     "/Latest/8.png",
-    // "/landing/carousel-1/2.webp",
-    // "/landing/carousel-1/3.jpg",
-    // "/landing/carousel-1/4.webp",
-    // "/landing/carousel-1/5.webp",
-    // "/landing/carousel-1/6.webp",
-    // "/landing/carousel-1/7.webp",
   ];
 
   const defaultImages2 = [
@@ -32,112 +26,146 @@ function Carousel({ carouselImages = [] }) {
     "/landing/carousel-2/8.webp",
   ];
 
-  // Process Strapi carousel data or use defaults
   let images1 = defaultImages1;
   let images2 = defaultImages2;
 
   if (carouselImages.length > 0) {
-    // Get first carousel component for images1
-    if (carouselImages[0]?.images1?.length > 0) {
-      images1 = carouselImages[0].images1.map(img => getStrapiImageUrl(img)).filter(Boolean);
+  if (carouselImages[0]?.images1?.length > 0) {
+      images1 = carouselImages[0].images1
+        .map((img) => getStrapiImageUrl(img))
+        .filter(Boolean);
     }
-    
-    // Get images2 from first carousel component or second component
-    if (carouselImages[0]?.images2?.length > 0) {
-      images2 = carouselImages[0].images2.map(img => getStrapiImageUrl(img)).filter(Boolean);
+
+  if (carouselImages[0]?.images2?.length > 0) {
+      images2 = carouselImages[0].images2
+        .map((img) => getStrapiImageUrl(img))
+        .filter(Boolean);
     } else if (carouselImages[1]?.images1?.length > 0) {
-      images2 = carouselImages[1].images1.map(img => getStrapiImageUrl(img)).filter(Boolean);
+      images2 = carouselImages[1].images1
+        .map((img) => getStrapiImageUrl(img))
+        .filter(Boolean);
     }
   }
 
-
-  const carouselContainerVariants = {
-    hidden: { opacity: 0 },
+  // Animation variants for a great initial effect
+  const containerVariants = {
+    hidden: { opacity: 0, scale: 0.8, y: 100 },
     visible: {
       opacity: 1,
-      transition: {
-        duration: 0.3,
-        staggerChildren: 0.3,
-        // delayChildren: 1.2 
-      }
-    }
-  };
-
-  const carouselRowVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 50,
-      scale: 0.9
-    },
-    visible: {
-      opacity: 1,
+      scale: 1,
       y: 0,
-      scale: 1,
       transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const imageVariants = {
-    hidden: { 
-      opacity: 0, 
-      scale: 0.8 
+        duration: 1.2,
+        ease: "easeOut",
+        staggerChildren: 0.15,
+      },
     },
+  };
+  const itemVariants = {
+    hidden: { opacity: 0, scale: 0.7, y: 60 },
     visible: {
       opacity: 1,
       scale: 1,
+      y: 0,
       transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
+        duration: 0.7,
+        ease: "easeOut",
+      },
+    },
   };
+
+  const ai = [
+    {
+      name: "Image Creation",
+      icon: "/aiAgent/gallery-edit.svg",
+      href: "/dashboard/image-creation",
+      bg: "#F7EEF3",
+    },
+    {
+      name: "Video Creation",
+      icon: "/aiAgent/video.svg",
+      href: "/dashboard/video-creation",
+
+      bg: "#F6F0F8",
+    },
+    {
+      name: "Pitch Deck",
+      icon: "/aiAgent/presention-chart.svg",
+      bg: "#EBF3F8",
+    },
+    {
+      name: "SEO Assistant",
+      icon: "/aiAgent/search-status.svg",
+      href: "/dashboard/Ai-Agent/novi",
+
+      bg: "#EAF4EF",
+    },
+    {
+      name: "UI/UX Design",
+      icon: "/aiAgent/designtools.svg",
+      href: "/dashboard/Ai-Agent/kano",
+
+      bg: "#F7F0EB",
+    },
+    {
+      name: "Software Developer",
+      icon: "/aiAgent/code.svg",
+      bg: "#EBF4F5",
+    },
+    {
+      name: "Content Creation",
+      icon: "/aiAgent/ruler&pen.svg",
+      bg: "#F7EFEF",
+    },
+    {
+      name: "Brand Design",
+      icon: "/aiAgent/color-swatch.svg",
+      href: "/dashboard/Ai-Agent/zara",
+
+      bg: "#FFFDF5",
+    },
+    {
+      name: "Market Assistant",
+      icon: "/aiAgent/market.svg",
+      bg: "#F9F9FE",
+    },
+    {
+      name: "Strategy Assistant",
+      icon: "/aiAgent/status-up.svg",
+      href: "/dashboard/Ai-Agent/mira",
+
+      bg: "#FEFAF7",
+    },
+  ];
+
+  const itemWidth = 120;
+  const totalWidth = ai.length * itemWidth;
+  const loopDuration = 12;
 
   return (
-    <motion.div 
-      className="lg:h-[210px] h-[280px] flex flex-col gap-[20px] lg:mt-[40px]  absolute top-[867px] lg:top-[635px]  w-full overflow-hidden"
-      variants={carouselContainerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <motion.div 
-        className="lg:h-[200px] h-[130px] relative overflow-hidden"
-        variants={carouselRowVariants}
+    <div className="overflow-hidden w-full my-[50px]">
+      <motion.div
+        className="flex sm:max-w-[1140px] w-[90%] xl:w-full mx-auto flex-wrap justify-center items-center"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
       >
-        <div className="flex max-w-[3000px] animate-scroll-left gap-[20px]">
-          {[...images1, ...images1].map((url, index) => (
-            <motion.img
-              key={index}
-              src={url}
-              alt={`Slide ${index + 1}`}
-              className="lg:w-[200px] lg:h-[200px] h-[130px] w-[130px] object-cover rounded-[16px]  flex-shrink-0"
-              variants={imageVariants}
-              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-            />
-          ))}
-        </div>
+        {ai.map((item, index) => (
+          <motion.div
+            key={index}
+            variants={itemVariants}
+            // whileHover={{ scale: 1.12, y: -10, boxShadow: "0 8px 32px rgba(0,0,0,0.18)" }}
+            className="flex flex-col items-center h-[142px] w-[100px] duration-300 transition-all cursor-pointer"
+            onClick={() => item.href && router.push(item.href)}
+          >
+            <div className="rounded-full bg-transparent backdrop-blur-lg flex justify-center items-center w-20 h-20">
+              <Image src={item.icon} alt={item.name} width={44} height={44} />
+            </div>
+            <span className="text-center text-white w-[80%]">{item.name}</span>
+          </motion.div>
+        ))}
       </motion.div>
-
-      {/* <motion.div 
-        className="lg:h-[200px] h-[130px]  relative overflow-hidden"
-        variants={carouselRowVariants}
-      >
-        <div className="flex max-w-[3400px] animate-scroll-right gap-[20px]">
-          {[...images2, ...images2].map((url, index) => (
-            <motion.img
-              key={index}
-              src={url}
-              alt={`Slide ${index + 1}`}
-              className="lg:w-[200px] lg:h-[200px] h-[130px] w-[120px] rounded-[16px] object-cover rounded-box flex-shrink-0"
-              variants={imageVariants}
-              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-            />
-          ))}
-        </div>
-      </motion.div> */}
-    </motion.div>
+    </div>
   );
 }
 
