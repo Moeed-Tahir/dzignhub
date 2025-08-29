@@ -30,7 +30,7 @@ export default function MessageInput({ onSend,suggestions, placeholder }) {
   };
 
   return (
-    <div className="absolute bottom-[24px] px-5 xl:px-0 left-1/2 translate-x-[-50%] max-w-[1280px] w-full">
+    <div className="absolute bottom-[24px] px-5 xl:px-0 left-1/2 translate-x-[-50%] max-w-[1280px] w-[90%]">
       <form
         onSubmit={handleSubmit}
         className="w-full flex shadow-xs h-[40px]  sm:h-[80px] max-w-[1440px] rounded-[20px] items-center gap-2 p-4 bg-white relative"

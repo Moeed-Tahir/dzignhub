@@ -23,7 +23,7 @@ export default function Landing() {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [landingData, setLandingData] = useState({
-    mainHeading: "The Ultimate all in one AI Website Creator",
+    mainHeading: "The All-in-one AI Workflow",
     mainDescription:
       "Website, app, and brand-one promt does it all.",
     heroSection: null,
@@ -109,7 +109,7 @@ export default function Landing() {
   return (
     <>
       <div
-        className={`overflow-hidden w-full lg:h-[950px] h-[1146px]  ${
+        className={`overflow-hidden w-full h-auto  ${
           sidebarOpen ? "" : ""
         }`}
         style={{
@@ -133,7 +133,8 @@ export default function Landing() {
         </div>
       </div>
 
-      <Carousel carouselImages={landingData.carouselImages} />
+      {/* <Carousel carouselImages={landingData.carouselImages} /> */}
+
 
       {/* <StackingImages stackSections={landingData.stackSections} /> */}
       <Work workCards={landingData.workCards} />
