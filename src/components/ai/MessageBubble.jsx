@@ -272,364 +272,116 @@ export default function MessageBubble({
   // ✅ EVERYTHING BELOW IS EXACTLY THE SAME - NO CHANGES
   return (
     <>
+    <div
+      className={`flex max-w-[1280px] items-start ${isAI ? "justify-start " : "justify-end "
+        } px-4 py-2`}
+    >
+      {isAI && (
+        <div className="flex items-end mr-2">
+          <Image
+            src={aiIcon}
+            alt="AI"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
+        </div>
+      )}
+
       <div
-        className={`flex max-w-[1280px] items-start ${isAI ? "justify-start " : "justify-end "
-          } px-4 py-2`}
+        className={`p-3 text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] max-w-[70%] font-normal bg-white ${isAI
+          ? "text-left rounded-tl-[4px] rounded-tr-[12px]"
+          : "text-right rounded-tl-[12px] rounded-tr-[4px]"
+          } ${isError ? "border border-red-200 bg-red-50" : ""}`}
       >
-        {isAI && (
-          <div className="flex items-end mr-2">
-            <Image
-              src={aiIcon}
-              alt="AI"
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
+        {isLoading ? (
+          <div className="flex items-center gap-2">
+            <span className="loader inline-block w-5 h-5 border-2 border-gray-300 border-t-[#BDFF00] rounded-full animate-spin"></span>
+            <span className="text-gray-400 text-sm">Thinking...</span>
           </div>
-        )}
-
-        <div
-          className={`p-3 text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] max-w-[70%] font-normal bg-white ${isAI
-            ? "text-left rounded-tl-[4px] rounded-tr-[12px]"
-            : "text-right rounded-tl-[12px] rounded-tr-[4px]"
-            } ${isError ? "border border-red-200 bg-red-50" : ""}`}
-        >
-          {isLoading ? (
-            <div className="flex items-center gap-2">
-              <span className="loader inline-block w-5 h-5 border-2 border-gray-300 border-t-[#BDFF00] rounded-full animate-spin"></span>
-              <span className="text-gray-400 text-sm">Thinking...</span>
-            </div>
-          ) : (
-            <>
-
-              {/* ✅ ONLY CHANGE: Use finalTextToShow and add typing cursor */}
-              {finalTextToShow && (
-                <div
-                  className={`prose prose-sm max-w-none ${isError ? "text-red-600" : ""
-                    }`}
-                >
-                  {/* ✅ FIXED: Render text for both user and AI messages */}
-                  {finalTextToShow && (
-                    <div className={`prose prose-sm max-w-none ${isError ? "text-red-600" : ""}`}>
-                      <ReactMarkdown components={markdownComponents}>
-                        {finalTextToShow.replace(/\\n/g, "\n")}
-                      </ReactMarkdown>
-
-                      {/* ✅ ADD: Typing cursor only when typing initial text */}
-                      {shouldTypeText && isTyping && (
-                        <span className="inline-block w-2 h-5 bg-gray-400 ml-1 animate-pulse"></span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* ✅ ADD: Typing cursor only when typing initial text */}
-                  {shouldTypeText && isTyping && (
-                    <span className="inline-block w-2 h-5 bg-gray-400 ml-1 animate-pulse"></span>
-                  )}
-                </div>
-              )}
-
-              {/* ✅ ADD: TOOL STEPS DISPLAY (AFTER STREAMING COMPLETES) */}
-              {isAI && toolSteps && toolSteps.length > 0 && (
-                <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center justify-between mb-3">
-                    <h5 className="font-medium text-gray-800 flex items-center gap-2">
-                      🔧 Processing Steps
-                      <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
-                        {toolSteps.length}
-                      </span>
-                    </h5>
-                  </div>
-
-                  <div className="space-y-2">
-                    {toolSteps.map((step, index) => (
-                      <div
-                        key={index}
-                        className={`p-3 rounded-lg border-l-4 transition-all duration-200 ${step.status === 'completed'
-                            ? 'bg-green-50 border-green-400'
-                            : step.status === 'error'
-                              ? 'bg-red-50 border-red-400'
-                              : 'bg-blue-50 border-blue-400'
-                          }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2 flex-1">
-                            <span className={`font-medium ${getStatusColor(step.status)}`}>
-                              {getStatusIcon(step.status)} {step.name}
-                            </span>
-
-                            {step.status === 'running' && (
-                              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                            )}
-                          </div>
-
-                          {/* ✅ VIEW DETAILS BUTTON - Only show if tool has detailed info */}
-                          {hasDetailedInfo(step) && (
-                            <button
-                              onClick={() => setSelectedTool({ ...step, thinkingProcess: step.name === 'Real Model Thinking' ? thinkingProcess : null })}
-                              className="ml-2 px-2 py-1 bg-white text-gray-600 rounded text-xs font-medium hover:bg-gray-50 hover:text-blue-600 transition-colors flex items-center gap-1"
-                            >
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" strokeWidth="2" />
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z" stroke="currentColor" strokeWidth="2" />
-                              </svg>
-                              View
-                            </button>
+        ) : (
+          <>
+            {/* ✅ REORDERED: Tool steps display FIRST */}
+            {isAI && toolSteps && toolSteps.length > 0 && (
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <div className="space-y-2">
+                  {toolSteps.map((step, index) => (
+                    <>
+                    <div
+                      key={index}
+                      className={`p-3 rounded-lg border-l-4 transition-all duration-200 ${
+                        step.status === 'completed'
+                          ? 'bg-green-50 border-green-400'
+                          : step.status === 'error'
+                            ? 'bg-red-50 border-red-400'
+                            : 'bg-blue-50 border-blue-400'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 flex-1">
+                          <span className={`font-medium ${getStatusColor(step.status)}`}>
+                            {getStatusIcon(step.status)} Using Tool: {step.name}
+                          </span>
+                          {step.status === 'running' && (
+                            <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                           )}
                         </div>
-
-                        {/* ✅ ESSENTIAL INFO ONLY */}
-                        <p className="text-sm text-gray-700 mt-1">
-                          {getToolEssentialInfo(step)}
-                        </p>
-
-                        {/* ✅ SIMPLE STATUS INDICATOR */}
-                        {step.timestamp && (
-                          <div className="text-xs text-gray-400 mt-2 flex items-center gap-2">
-                            <span>{new Date(step.timestamp).toLocaleTimeString()}</span>
-                            {step.status === 'completed' && (
-                              <span className="text-green-600">• Completed</span>
-                            )}
-                            {step.status === 'running' && (
-                              <span className="text-blue-600">• Processing...</span>
-                            )}
-                            {step.status === 'error' && (
-                              <span className="text-red-600">• Error occurred</span>
-                            )}
-                          </div>
+                        {hasDetailedInfo(step) && (
+                          <button
+                            onClick={() => setSelectedTool({...step, thinkingProcess: step.name === 'Real Model Thinking' ? thinkingProcess : null})}
+                            className="ml-2 px-2 py-1 bg-white text-gray-600 rounded text-xs font-medium hover:bg-gray-50 hover:text-blue-600 transition-colors flex items-center gap-1"
+                          >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" strokeWidth="2"/>
+                              <path d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z" stroke="currentColor" strokeWidth="2"/>
+                            </svg>
+                            View
+                          </button>
                         )}
                       </div>
-                    ))}
-                  </div>
-
-
-                </div>
-              )}
-
-              {/* ✅ EVERYTHING BELOW IS EXACTLY THE SAME - NO CHANGES */}
-              {/* Logo/Image display */}
-              {imageUrl && (
-                <div className={`mt-3 ${text ? "mt-3" : ""}`}>
-                  <div className="relative">
-                    <Image
-                      src={imageUrl}
-                      alt={isLogo ? "Generated Logo" : "Generated Image"}
-                      width={isLogo ? 300 : 400}
-                      height={isLogo ? 300 : 400}
-                      className="rounded-lg shadow-lg object-cover"
-                      style={{
-                        maxWidth: "100%",
-                        height: "auto",
-                      }}
-                    />
-                  </div>
-
-                  {/* Action buttons for logos/images */}
-                  {(isLogo || imageUrl) && (
-                    <div className="mt-2 flex gap-2 flex-wrap">
-                      {/* Download button */}
-                      <a
-                        href={imageUrl}
-                        download="generated-asset.png"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-3 py-2 bg-[#BDFF00] text-black rounded-lg text-sm font-medium hover:bg-[#a8e600] transition-colors"
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M7 10L12 15L17 10"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M12 15V3"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        Download
-                      </a>
-
-                      {/* Copy Link button */}
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(imageUrl);
-                        }}
-                        className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M14 2V8H20"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M16 13H8"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M16 17H8"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M10 9H9H8"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        Copy Link
-                      </button>
+                      {/* Optional: Add essential info or status here if needed */}
                     </div>
-                  )}
+                    {/* ✅ REORDERED: Inspiration images SECOND (immediately after tool steps, before text) */}
+            {step.name == "Design Inspiration Finder" && isAI && inspirationImages && inspirationImages.length > 0 && (
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="font-medium text-gray-800 flex items-center gap-2">
+                    🎨 Design Inspiration
+                    <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
+                      {inspirationImages.length} found
+                    </span>
+                  </h5>
+                  <div className="text-xs text-gray-500">
+                    From Behance & Dribbble
+                  </div>
                 </div>
-              )}
-
-              {/* ✅ SOURCES BUTTON - SHOW FOR ALL AI RESPONSES (NOT JUST WITH IMAGES) */}
-              {isAI && searchResults && searchResults.results && searchResults.results.length > 0 && (
-                <div className="mt-3 flex gap-2">
-                  <button
-                    onClick={() => setIsSourcesModalOpen(true)}
-                    className="inline-flex items-center gap-2 px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M14 2V8H20"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M16 13H8"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M16 17H8"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M10 9H9H8"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    Show Sources ({searchResults.results.length})
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-
-          {isAI && inspirationImages && inspirationImages.length > 0 && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-              <div className="flex items-center justify-between mb-3">
-                <h5 className="font-medium text-gray-800 flex items-center gap-2">
-                  🎨 Design Inspiration
-                  <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
-                    {inspirationImages.length} found
-                  </span>
-                </h5>
-                <div className="text-xs text-gray-500">
-                  From Behance & Dribbble
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                {inspirationImages.map((image, index) => {
-                  console.log(image)
-                  return (
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                  {inspirationImages.map((image, index) => (
                     <div
                       key={index}
                       className="relative group cursor-pointer hover:transform hover:scale-105 transition-all duration-200"
                       onClick={() => window.open(image.link, '_blank')}
                     >
-                      {/* Main image */}
                       <div className="aspect-square overflow-hidden rounded-lg border-2 border-gray-200 group-hover:border-blue-400">
                         <img
                           src={`/api/proxy-image?url=${encodeURIComponent(image.original)}`}
                           alt={image.title || 'Design inspiration'}
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            // Fallback to thumbnail via proxy
                             if (image.thumbnail && !e.target.src.includes(encodeURIComponent(image.thumbnail))) {
                               e.target.src = `/api/proxy-image?url=${encodeURIComponent(image.thumbnail)}`;
                             }
                           }}
                         />
                       </div>
-
-                      {/* Source badge */}
                       <div className="absolute top-2 right-2">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${image.source === 'Behance'
                           ? 'bg-blue-600 text-white'
                           : 'bg-pink-600 text-white'
-                          }`}>
+                        }`}>
                           {image.source}
                         </span>
                       </div>
-
-                      {/* Hover overlay with external link icon */}
                       <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-40 rounded-lg transition-all duration-200 flex items-center justify-center">
                         <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                           <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -637,74 +389,155 @@ export default function MessageBubble({
                           </svg>
                         </div>
                       </div>
-
-                      {/* Title tooltip */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
                         <p className="text-white text-xs truncate">
                           {image.title || 'Design inspiration'}
                         </p>
                       </div>
                     </div>
-                  )
-                })}
+                  ))}
+                </div>
+                <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+                  <span>Click any image to view source</span>
+                  {inspirationImages.length > 10 && (
+                    <span>{inspirationImages.length - 10} more available</span>
+                  )}
+                </div>
               </div>
+            )}
+                    </>
+                  ))}
+                </div>
+              </div>
+            )}
 
-              <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
-                <span>Click any image to view source</span>
-                {inspirationImages.length > 10 && (
-                  <span>{inspirationImages.length - 10} more available</span>
+           
+
+            {/* ✅ REORDERED: Text rendering THIRD (after inspiration images) */}
+            {finalTextToShow && (
+              <div className={`prose prose-sm max-w-none ${isError ? "text-red-600" : ""}`}>
+                <ReactMarkdown components={markdownComponents}>
+                  {finalTextToShow.replace(/\\n/g, "\n")}
+                </ReactMarkdown>
+                {shouldTypeText && isTyping && (
+                  <span className="inline-block w-2 h-5 bg-gray-400 ml-1 animate-pulse"></span>
                 )}
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Options buttons */}
-          {options.length > 0 && !isLoading && (
-            <div className="mt-2 flex gap-2 flex-wrap">
-              {options.map((opt, i) => (
+            {/* ✅ REORDERED: Image display FOURTH (after text) */}
+            {imageUrl && (
+              <div className={`mt-3 ${text ? "mt-3" : ""}`}>
+                <div className="relative">
+                  <Image
+                    src={imageUrl}
+                    alt={isLogo ? "Generated Logo" : "Generated Image"}
+                    width={isLogo ? 300 : 400}
+                    height={isLogo ? 300 : 400}
+                    className="rounded-lg shadow-lg object-cover"
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto",
+                    }}
+                  />
+                </div>
+                {(isLogo || imageUrl) && (
+                  <div className="mt-2 flex gap-2 flex-wrap">
+                    <a
+                      href={imageUrl}
+                      download="generated-asset.png"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-[#BDFF00] text-black rounded-lg text-sm font-medium hover:bg-[#a8e600] transition-colors"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Download
+                    </a>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(imageUrl);
+                      }}
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M16 13H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M16 17H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M10 9H9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Copy Link
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ✅ UNCHANGED: Sources button */}
+            {isAI && searchResults && searchResults.results && searchResults.results.length > 0 && (
+              <div className="mt-3 flex gap-2">
                 <button
-                  key={i}
-                  onClick={() => handleClick(opt)}
-                  disabled={selectedOptions.includes(opt)}
-                  className={`py-[12px] cursor-pointer text-[14px] font-normal px-[16px] bg-white border rounded-full hover:bg-gray-50 transition-colors ${selected === opt
-                    ? "border-[#C209C1] bg-purple-50"
-                    : "border-[#E8ECEF]"
-                    } ${selectedOptions.includes(opt)
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                    }`}
+                  onClick={() => setIsSourcesModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors"
                 >
-                  {opt}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M16 13H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M16 17H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M10 9H9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Show Sources ({searchResults.results.length})
                 </button>
-              ))}
-            </div>
-          )}
-        </div>
+              </div>
+            )}
 
-        {!isAI && (
-          <div className="flex items-end ml-2">
-            <Image
-              src={userIcon}
-              alt="User"
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
-          </div>
+            {/* ✅ UNCHANGED: Options buttons */}
+            {options.length > 0 && !isLoading && (
+              <div className="mt-2 flex gap-2 flex-wrap">
+                {options.map((opt, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleClick(opt)}
+                    disabled={selectedOptions.includes(opt)}
+                    className={`py-[12px] cursor-pointer text-[14px] font-normal px-[16px] bg-white border rounded-full hover:bg-gray-50 transition-colors ${selected === opt
+                      ? "border-[#C209C1] bg-purple-50"
+                      : "border-[#E8ECEF]"
+                      } ${selectedOptions.includes(opt)
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                      }`}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
-      <SourcesModal isOpen={isSourcesModalOpen} onClose={() => {
-        setIsSourcesModalOpen(false);
-      }} sources={searchResults?.results}
-        searchKeywords={searchResults?.keywords} />
 
-      {/* ✅ ADD: TOOL DETAILS MODAL */}
-      <ToolDetailsModal
-        isOpen={!!selectedTool}
-        onClose={() => setSelectedTool(null)}
-        tool={selectedTool}
-      />
-    </>
+      {!isAI && (
+        <div className="flex items-end ml-2">
+          <Image
+            src={userIcon}
+            alt="User"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
+        </div>
+      )}
+    </div>
+
+    {/* ✅ UNCHANGED: Modals */}
+    <SourcesModal isOpen={isSourcesModalOpen} onClose={() => setIsSourcesModalOpen(false)} sources={searchResults?.results} searchKeywords={searchResults?.keywords} />
+    <ToolDetailsModal isOpen={!!selectedTool} onClose={() => setSelectedTool(null)} tool={selectedTool} />
+  </>
   );
 }
 
