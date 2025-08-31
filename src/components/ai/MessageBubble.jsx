@@ -2,9 +2,41 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import { useUserStore } from "@/store/store";
-import StreamingMessageBubble from "./StreamingMessageBubble"
+import StreamingMessageBubble from "./StreamingMessageBubble";
 import SourcesModal from "./SourcesModal";
+import ToolDetailsModal from "./ToolDetailsModal"; // ✅ ADD: Import for tool details modal
 
+
+export default function MessageBubble({
+  sender,
+  text,
+  options = [],
+  onOptionSelect,
+  selectedOptions = [],
+  isLoading = false,
+  typing = false,
+  aiIcon,
+  imageUrl = null,
+  isLogo = false,
+  isError = false,
+  status,
+  toolInfo,
+  toolSteps = [],
+  isStreaming,
+  thinkingProcess,
+  searchResults,
+  inspirationImages,
+  shouldTypeText = false // ✅ ADD: New prop - ONLY THIS IS NEW
+}) {
+  const { Avatar } = useUserStore();
+  console.log('[DEBUG MessageBubble] Received props:');
+  console.log('- sender:', sender);
+  console.log('- searchResults:', searchResults);
+  console.log('- searchResults type:', typeof searchResults);
+  console.log('- searchResults.results:', searchResults?.results);
+  console.log('- searchResults.keywords:', searchResults?.keywords);
+  console.log('- inspirationImages:', inspirationImages);
+  console.log('- inspirationImages length:', inspirationImages?.length);
 // ✅ ADD: Simple typing effect hook - ONLY THIS IS NEW
 const useTypingEffect = (text, speed = 25, enabled = true) => {
   const [displayedText, setDisplayedText] = useState('');
@@ -40,40 +72,12 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
   return { displayedText, isTyping };
 };
 
-export default function MessageBubble({
-  sender,
-  text,
-  options = [],
-  onOptionSelect,
-  selectedOptions = [],
-  isLoading = false,
-  typing = false,
-  aiIcon,
-  imageUrl = null,
-  isLogo = false,
-  isError = false,
-  status,
-  toolInfo,
-  toolSteps = [],
-  isStreaming,
-  thinkingProcess,
-  searchResults,
-  inspirationImages,
-  shouldTypeText = false // ✅ ADD: New prop - ONLY THIS IS NEW
-}) {
-  const { Avatar } = useUserStore();
-  console.log('[DEBUG MessageBubble] Received props:');
-  console.log('- sender:', sender);
-  console.log('- searchResults:', searchResults);
-  console.log('- searchResults type:', typeof searchResults);
-  console.log('- searchResults.results:', searchResults?.results);
-  console.log('- searchResults.keywords:', searchResults?.keywords);
-  console.log('- inspirationImages:', inspirationImages);
-  console.log('- inspirationImages length:', inspirationImages?.length);
-
   const isAI = sender != "user";
   const userIcon = Avatar || "/avatar.png";
   const [selected, setSelected] = useState(null);
+
+  // ✅ ADD: State for tool details modal
+  const [selectedTool, setSelectedTool] = useState(null);
 
   // ✅ ADD: Typing effect for initial text - ONLY THIS IS NEW
   const shouldUseTyping = shouldTypeText && text && sender !== "user" && isStreaming;
@@ -91,6 +95,86 @@ export default function MessageBubble({
 
   // ✅ CHECK IF WE HAVE SEARCH RESULTS TO SHOW SOURCES BUTTON - UNCHANGED
   const hasSearchResults = searchResults && searchResults.results && searchResults.results.length > 0;
+
+  // ✅ ADD: Helper functions for tool steps display
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'thinking':
+        return '🤔';
+      case 'extracting_info':
+        return '🔍';
+      case 'auto_completing':
+        return '🧠';
+      case 'generating_asset':
+        return '🎨';
+      case 'running':
+        return '⚡';
+      case 'completed':
+        return '✅';
+      case 'error':
+        return '❌';
+      default:
+        return '⚡';
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'thinking':
+      case 'extracting_info':
+      case 'auto_completing':
+      case 'generating_asset':
+      case 'running':
+        return 'text-blue-600';
+      case 'completed':
+        return 'text-green-600';
+      case 'error':
+        return 'text-red-600';
+      default:
+        return 'text-gray-600';
+    }
+  };
+
+  // ✅ Function to get essential info for tool display
+  const getToolEssentialInfo = (step) => {
+    // Return only the most important info for each tool type
+    if (step.name === 'Real Model Thinking') {
+      return step.message || 'AI is thinking about your request...';
+    }
+    
+    if (step.name === 'Brand Information Extraction') {
+      return step.resultMessage || step.message || 'Extracting brand information...';
+    }
+    
+    if (step.name === 'Auto-complete Missing Info') {
+      return step.resultMessage || step.message || 'Completing missing brand details...';
+    }
+    
+    if (step.name === 'Generating Asset') {
+      return step.resultMessage || step.message || 'Creating your design...';
+    }
+    
+    // Default for other tools
+    return step.resultMessage || step.message || 'Processing...';
+  };
+
+  // ✅ Function to check if tool has detailed info
+  const hasDetailedInfo = (step) => {
+    // Check if tool has additional info worth showing in modal
+    if (step.name === 'Real Model Thinking' && thinkingProcess) {
+      return !!(thinkingProcess.thinking || thinkingProcess.reasoning || thinkingProcess.analysis || thinkingProcess.plan);
+    }
+    
+    if (step.data && Object.keys(step.data).length > 0) {
+      return true;
+    }
+    
+    if (step.resultMessage && step.resultMessage !== step.message) {
+      return true;
+    }
+    
+    return false;
+  };
 
   useEffect(() => {
     if (typing && text) {
@@ -217,6 +301,7 @@ export default function MessageBubble({
             </div>
           ) : (
             <>
+            
               {/* ✅ ONLY CHANGE: Use finalTextToShow and add typing cursor */}
               {finalTextToShow && (
                 <div
@@ -231,6 +316,82 @@ export default function MessageBubble({
                   {shouldTypeText && isTyping && (
                     <span className="inline-block w-2 h-5 bg-gray-400 ml-1 animate-pulse"></span>
                   )}
+                </div>
+              )}
+
+              {/* ✅ ADD: TOOL STEPS DISPLAY (AFTER STREAMING COMPLETES) */}
+              {isAI && toolSteps && toolSteps.length > 0 && (
+                <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center justify-between mb-3">
+                    <h5 className="font-medium text-gray-800 flex items-center gap-2">
+                      🔧 Processing Steps
+                      <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
+                        {toolSteps.length}
+                      </span>
+                    </h5>
+                  </div>
+
+                  <div className="space-y-2">
+                    {toolSteps.map((step, index) => (
+                      <div
+                        key={index}
+                        className={`p-3 rounded-lg border-l-4 transition-all duration-200 ${
+                          step.status === 'completed'
+                            ? 'bg-green-50 border-green-400'
+                            : step.status === 'error'
+                              ? 'bg-red-50 border-red-400'
+                              : 'bg-blue-50 border-blue-400'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 flex-1">
+                            <span className={`font-medium ${getStatusColor(step.status)}`}>
+                              {getStatusIcon(step.status)} {step.name}
+                            </span>
+
+                            {step.status === 'running' && (
+                              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                            )}
+                          </div>
+
+                          {/* ✅ VIEW DETAILS BUTTON - Only show if tool has detailed info */}
+                          {hasDetailedInfo(step) && (
+                            <button
+                              onClick={() => setSelectedTool({...step, thinkingProcess: step.name === 'Real Model Thinking' ? thinkingProcess : null})}
+                              className="ml-2 px-2 py-1 bg-white text-gray-600 rounded text-xs font-medium hover:bg-gray-50 hover:text-blue-600 transition-colors flex items-center gap-1"
+                            >
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                              View
+                            </button>
+                          )}
+                        </div>
+
+                        {/* ✅ ESSENTIAL INFO ONLY */}
+                        <p className="text-sm text-gray-700 mt-1">
+                          {getToolEssentialInfo(step)}
+                        </p>
+
+                        {/* ✅ SIMPLE STATUS INDICATOR */}
+                        {step.timestamp && (
+                          <div className="text-xs text-gray-400 mt-2 flex items-center gap-2">
+                            <span>{new Date(step.timestamp).toLocaleTimeString()}</span>
+                            {step.status === 'completed' && (
+                              <span className="text-green-600">• Completed</span>
+                            )}
+                            {step.status === 'running' && (
+                              <span className="text-blue-600">• Processing...</span>
+                            )}
+                            {step.status === 'error' && (
+                              <span className="text-red-600">• Error occurred</span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -310,14 +471,35 @@ export default function MessageBubble({
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4H8"
+                            d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
                             stroke="currentColor"
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                           />
                           <path
-                            d="M15 2H9C8.44772 2 8 2.44772 8 3V5C8 5.55228 8.44772 6 9 6H15C15.5523 6 16 5.55228 16 5V3C16 2.44772 15.5523 2 15 2Z"
+                            d="M14 2V8H20"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="M16 13H8"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="M16 17H8"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="M10 9H9H8"
                             stroke="currentColor"
                             strokeWidth="2"
                             strokeLinecap="round"
@@ -504,6 +686,13 @@ export default function MessageBubble({
         setIsSourcesModalOpen(false);
       }} sources={searchResults?.results}
         searchKeywords={searchResults?.keywords} />
+      
+      {/* ✅ ADD: TOOL DETAILS MODAL */}
+      <ToolDetailsModal
+        isOpen={!!selectedTool}
+        onClose={() => setSelectedTool(null)}
+        tool={selectedTool}
+      />
     </>
   );
 }

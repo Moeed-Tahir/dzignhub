@@ -19,7 +19,9 @@ export default function ChatPage({
   showIntro,
   setShowIntro,
   onNewConversation,
-  onRefreshConversations
+  onRefreshConversations,
+  onStreamComplete,
+  fetchMessages
 }) {
   console.log("Rendering ChatPage with name:", description);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -258,6 +260,7 @@ export default function ChatPage({
     }
   };
 
+
   const handleSendWithStreaming = async (msg) => {
     // ✅ ADD: Variables to store data outside streaming loop (RELIABLE)
     let preservedSearchResults = null;
@@ -275,7 +278,7 @@ export default function ChatPage({
     setIsStreaming(true);
     setStreamingMessage(null);
 
-    // ✅ CRITICAL: Initialize accumulation variables
+    // ✅ CRITICAL: Initialize accumulation variables PROPERLY
     let allToolSteps = []; // This will accumulate ALL tool steps
     let currentText = generateImmediateResponse(msg);
     let finalImageUrl = null;
@@ -285,7 +288,7 @@ export default function ChatPage({
     setStreamingMessage({
       sender: "ai",
       text: currentText,
-      toolSteps: [],
+      toolSteps: [], // Start empty, will accumulate
       thinkingProcess: null,
       searchResults: null,
       inspirationImages: null,
@@ -361,8 +364,8 @@ export default function ChatPage({
                   // ✅ UPDATE: Only update text, keep all previous tools
                   currentText = data.message;
 
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     toolSteps: [...allToolSteps], // ✅ PRESERVE all previous tools
                     thinkingProcess: preservedThinkingProcess,
@@ -372,8 +375,7 @@ export default function ChatPage({
                     isLogo: finalIsLogo,
                     status: 'thinking',
                     shouldTypeText: false
-
-                  });
+                  }));
                   break;
 
                 case 'thinking_process':
@@ -398,8 +400,8 @@ export default function ChatPage({
                   preservedThinkingProcess = thinkingData;
                   setCurrentThinkingProcess(thinkingData);
 
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     toolSteps: [...allToolSteps], // ✅ PRESERVE all tools
                     thinkingProcess: preservedThinkingProcess,
@@ -408,9 +410,8 @@ export default function ChatPage({
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status,
-                    shouldTypeText:false
-
-                  });
+                    shouldTypeText: false
+                  }));
                   break;
 
                 case 'conversation_info':
@@ -435,8 +436,8 @@ export default function ChatPage({
                     timestamp: Date.now()
                   });
 
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     toolSteps: [...allToolSteps], // ✅ SHOW accumulated tools
                     thinkingProcess: preservedThinkingProcess,
@@ -445,8 +446,8 @@ export default function ChatPage({
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status,
-                    shouldTypeText:false
-                  });
+                    shouldTypeText: false
+                  }));
                   break;
 
                 case 'tool_start':
@@ -459,8 +460,8 @@ export default function ChatPage({
                     timestamp: Date.now()
                   });
 
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     toolSteps: [...allToolSteps], // ✅ SHOW accumulated tools
                     thinkingProcess: preservedThinkingProcess,
@@ -469,8 +470,8 @@ export default function ChatPage({
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status,
-                    shouldTypeText:false
-                  });
+                    shouldTypeText: false
+                  }));
                   break;
 
                 case 'tool_result':
@@ -497,8 +498,8 @@ export default function ChatPage({
                     });
                   }
 
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     toolSteps: [...allToolSteps], // ✅ SHOW all accumulated tools
                     thinkingProcess: preservedThinkingProcess,
@@ -507,15 +508,15 @@ export default function ChatPage({
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status,
-                    shouldTypeText:false
-                  });
+                    shouldTypeText: false
+                  }));
                   break;
 
                 case 'message_chunk':
                   currentText = data.text;
 
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     toolSteps: [...allToolSteps],
                     thinkingProcess: preservedThinkingProcess,
@@ -524,8 +525,8 @@ export default function ChatPage({
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status,
-                    shouldTypeText:false
-                  });
+                    shouldTypeText: false
+                  }));
                   break;
 
                 case 'web_search_complete':
@@ -564,8 +565,8 @@ export default function ChatPage({
                     });
                   }
 
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     toolSteps: [...allToolSteps], // ✅ SHOW all accumulated tools
                     thinkingProcess: preservedThinkingProcess,
@@ -574,8 +575,8 @@ export default function ChatPage({
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status,
-                    shouldTypeText:false
-                  });
+                    shouldTypeText: false
+                  }));
                   break;
 
                 case 'inspiration_images':
@@ -596,7 +597,7 @@ export default function ChatPage({
                       ...allToolSteps[inspirationToolIndex],
                       status: 'completed',
                       resultMessage: data.message,
-                      data: data.images 
+                      data: data.images
                     };
                   } else {
                     // Fallback: add as new tool if not found
@@ -610,8 +611,8 @@ export default function ChatPage({
                     });
                   }
 
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     toolSteps: [...allToolSteps], // ✅ SHOW all accumulated tools
                     thinkingProcess: preservedThinkingProcess,
@@ -620,8 +621,8 @@ export default function ChatPage({
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status,
-                    shouldTypeText:false
-                  });
+                    shouldTypeText: false
+                  }));
                   break;
 
                 case 'message':
@@ -641,7 +642,7 @@ export default function ChatPage({
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
                     status: data.status || 'awaiting_input',
-                    shouldTypeText:false
+                    shouldTypeText: false
                   };
 
                   console.log('[DEBUG] Setting streaming message with:', messageUpdate);
@@ -656,8 +657,8 @@ export default function ChatPage({
                   finalIsLogo = true;
 
                   // ✅ ACCUMULATE: Keep all tools and add image
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     imageUrl: finalImageUrl,
                     isLogo: finalIsLogo,
@@ -666,15 +667,15 @@ export default function ChatPage({
                     searchResults: preservedSearchResults,
                     inspirationImages: preservedInspirationImages,
                     status: 'asset_generated',
-                    shouldTypeText:false
-                  });
+                    shouldTypeText: false
+                  }));
                   break;
 
                 case 'error':
                   currentText = data.message;
 
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     toolSteps: [...allToolSteps],
                     thinkingProcess: preservedThinkingProcess,
@@ -682,150 +683,62 @@ export default function ChatPage({
                     inspirationImages: preservedInspirationImages,
                     status: 'error',
                     isError: true,
-                    shouldTypeText:false
-                  });
+                    shouldTypeText: false
+                  }));
                   break;
 
                 case 'awaiting_input':
                   currentText = data.message;
 
-                  setStreamingMessage({
-                    sender: "ai",
+                  setStreamingMessage(prevMessage => ({
+                    ...prevMessage,
                     text: currentText,
                     toolSteps: [...allToolSteps],
                     thinkingProcess: preservedThinkingProcess,
                     searchResults: preservedSearchResults,
                     inspirationImages: preservedInspirationImages,
                     status: 'awaiting_input',
-                    shouldTypeText:false
-                  });
+                    shouldTypeText: false
+                  }));
                   break;
+
 
                 case 'complete':
                   console.log('[DEBUG] === COMPLETE CASE RECEIVED ===');
-                  console.log('[DEBUG] Complete data:', data);
-                  console.log('[DEBUG] Complete status:', data.status);
-                  console.log('[DEBUG] Final data received:', data.final_data);
-                  console.log('[DEBUG] Preserved search results:', preservedSearchResults);
 
-                  // ✅ CRITICAL: Handle awaiting_input status differently
-                  if (data.status === 'awaiting_input') {
-                    console.log('[DEBUG] Complete with awaiting_input - keeping message visible for questions');
-
-                    const questionsText = data.message || currentText || "I need some information to create your logo.";
-                    console.log(data)
-                    // Don't move to final messages - keep streaming message visible
-                    setIsStreaming(false); // Stop streaming animation
-
-                    // Update streaming message status to show it's waiting for input
-                    // ✅ CRITICAL: Update streaming message with preserved text and awaiting status
-                    setStreamingMessage({
-                      sender: "ai",
-                      text: questionsText, // ✅ Keep the questions text
-                      toolSteps: [...allToolSteps],
-                      thinkingProcess: preservedThinkingProcess,
-                      searchResults: preservedSearchResults || (data.final_data?.search_results ? {
-                        keywords: data.final_data.search_keywords,
-                        results: data.final_data.search_results
-                      } : null),
-                      inspirationImages: preservedInspirationImages || data.final_data?.inspiration_images,
-                      status: 'awaiting_input',
-                      isWaitingForInput: true,
-                      shouldTypeText:false
-                    });
-
-                    // Don't refresh conversations for awaiting_input
-                    console.log('[DEBUG] Keeping questions visible, not moving to final messages');
-                    return; // Exit early - don't process as normal completion
+                  if (data.message) {
+                    currentText = data.message;
                   }
 
-                  // ✅ NORMAL COMPLETION: Process as usual for complete assets
-                  console.log('[DEBUG] Normal completion - moving to final messages');
+                  // ✅ UPDATE STREAMING MESSAGE WITH FINAL DATA
+                  const finalAIMessage = {
+                    sender: "ai",
+                    text: currentText,
+                    toolSteps: [...allToolSteps],
+                    thinkingProcess: preservedThinkingProcess || currentThinkingProcess,
+                    searchResults: data.final_data?.search_results
+                      ? { keywords: data.final_data.search_keywords, results: data.final_data.search_results }
+                      : preservedSearchResults,
+                    inspirationImages: data.final_data?.inspiration_images || preservedInspirationImages,
+                    imageUrl: data.final_data?.image_url || finalImageUrl,
+                    isLogo: (data.final_data?.image_url || finalImageUrl) ? true : false,
+                    status: 'complete',
+                    shouldTypeText: false
+                  };
 
-                  // ✅ USE PRESERVED VARIABLES OR BACKEND DATA (MOST RELIABLE)
-                  let finalSearchResults = null;
-                  let finalInspirationImages = null;
-                  let finalThinkingProcess = null;
+                  // ✅ UPDATE STREAMING MESSAGE (NO LONGER SAVING HERE)
+                  setStreamingMessage(finalAIMessage);
 
-                  // Priority: Backend data > Preserved variables > State
-                  if (data.final_data?.search_results && data.final_data?.search_keywords) {
-                    finalSearchResults = {
-                      keywords: data.final_data.search_keywords,
-                      results: data.final_data.search_results
-                    };
-                    console.log('[DEBUG] Using backend final_data search results');
-                  } else if (preservedSearchResults) {
-                    finalSearchResults = preservedSearchResults;
-                    console.log('[DEBUG] Using preserved search results variable');
-                  } else if (currentSearchResults) {
-                    finalSearchResults = currentSearchResults;
-                    console.log('[DEBUG] Using currentSearchResults state (fallback)');
+                  // ✅ CLEAR STREAMING STATE
+                  setIsStreaming(false);
+                  setStreamingMessage(null);
+
+                  // ✅ RELOAD MESSAGES FROM DB (BACKEND HAS SAVED THE MESSAGE)
+                  if (fetchMessages && conversationId) {
+                    await fetchMessages(conversationId);
                   }
 
-                  if (data.final_data?.inspiration_images) {
-                    finalInspirationImages = data.final_data.inspiration_images;
-                  } else if (preservedInspirationImages) {
-                    finalInspirationImages = preservedInspirationImages;
-                  } else {
-                    finalInspirationImages = currentInspirationImages;
-                  }
-
-                  finalThinkingProcess = preservedThinkingProcess || currentThinkingProcess;
-
-                  console.log('[DEBUG] Final search results to use:', finalSearchResults);
-                  console.log('[DEBUG] Final search results length:', finalSearchResults?.results?.length);
-
-                  // ✅ FIRST: Add the final AI message to messages
-                  setMessages(prevMessages => {
-                    console.log('[DEBUG] Final setMessages - prevMessages:', prevMessages);
-
-                    const finalAIMessage = {
-                      sender: "ai",
-                      text: currentText,
-                      toolSteps: [...allToolSteps], // ✅ ALL accumulated tools
-                      thinkingProcess: finalThinkingProcess,
-                      searchResults: finalSearchResults,
-                      inspirationImages: finalInspirationImages,
-                      status: 'complete',
-                      shouldTypeText:false
-                    };
-
-                    // Add image properties if they exist
-                    if (finalImageUrl) {
-                      finalAIMessage.imageUrl = finalImageUrl;
-                      finalAIMessage.isLogo = finalIsLogo;
-                    }
-
-                    // Add error properties if it's an error
-                    if (streamingMessage?.isError) {
-                      finalAIMessage.isError = true;
-                      finalAIMessage.status = 'error';
-                    }
-
-                    console.log('[DEBUG] Final AI message created:', {
-                      text: finalAIMessage.text?.substring(0, 50),
-                      hasImage: !!finalAIMessage.imageUrl,
-                      imageUrl: finalAIMessage.imageUrl,
-                      isLogo: finalAIMessage.isLogo,
-                      searchResultsCount: finalAIMessage.searchResults?.results?.length || 0,
-                      toolStepsCount: finalAIMessage.toolSteps?.length || 0
-                    });
-
-                    return [
-                      ...prevMessages,
-                      finalAIMessage
-                    ];
-                  });
-
-                  // ✅ THEN: Clear streaming message and state (with small delay)
-                  setTimeout(() => {
-                    setStreamingMessage(null);
-                    setIsStreaming(false);
-                  }, 50);
-
-                  if (onRefreshConversations) {
-                    onRefreshConversations();
-                  }
+                  // ❌ REMOVED: Save API call and fallback logic (handled by backend)
                   break;
                 default:
                   console.log('[DEBUG] Unhandled event type:', data.type);
@@ -851,7 +764,7 @@ export default function ChatPage({
             sender: "ai",
             text: "I'm experiencing some technical difficulties. Please try again in a moment.",
             isError: true,
-            shouldTypeText:false
+            shouldTypeText: false
           }
         ];
       });
@@ -1098,7 +1011,6 @@ export default function ChatPage({
   };
 
   const allMessages = React.useMemo(() => {
-    // Always include the base messages
     console.log('[DEBUG] === COMPUTING allMessages ===');
     console.log('[DEBUG] - Base messages count:', messages.length);
     console.log('[DEBUG] - Has streaming message:', !!streamingMessage);
@@ -1107,17 +1019,35 @@ export default function ChatPage({
 
     let combinedMessages = [...messages];
 
-    // If we're streaming, add the streaming message
-    if (streamingMessage) {
+    // ✅ ENHANCED: Only add streaming message if it's actually streaming
+    // During completion transition, rely on the final message in `messages`
+    if (streamingMessage && isStreaming) {
       combinedMessages = [...combinedMessages, streamingMessage];
+      console.log('[DEBUG] Added streaming message to combined messages');
+    } else if (streamingMessage && !isStreaming) {
+      // ✅ During transition period, still show streaming message until final message is added
+      const lastMessage = messages[messages.length - 1];
+      if (!lastMessage || lastMessage.sender !== 'ai' || lastMessage.status !== 'complete') {
+        combinedMessages = [...combinedMessages, streamingMessage];
+        console.log('[DEBUG] Added transitional streaming message');
+      }
     }
 
-    console.log('[DEBUG] Combined messages:', combinedMessages);
-    console.log('[DEBUG] Messages length:', messages.length);
-    console.log('[DEBUG] Has streaming message:', !!streamingMessage);
+    console.log('[DEBUG] Combined messages count:', combinedMessages.length);
+    console.log('[DEBUG] Final combined messages:', combinedMessages.map((m, i) => ({
+      index: i,
+      sender: m.sender,
+      text: m.text?.substring(0, 30) + '...',
+      hasImage: !!m.imageUrl,
+      hasToolSteps: !!(m.toolSteps?.length),
+      hasSearchResults: !!(m.searchResults?.results?.length),
+      hasInspirationImages: !!(m.inspirationImages?.length),
+      isStreaming: m === streamingMessage,
+      status: m.status
+    })));
 
     return combinedMessages;
-  }, [messages, streamingMessage]);
+  }, [messages, streamingMessage, isStreaming]);
 
   return (
     <div className=" flex flex-col mt-[80px] w-[90%]  max-w-[1280px]  mx-auto justify-between">

@@ -131,40 +131,44 @@ const page = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const parseAssetGeneratedMessage = (message) => {
-    if (
-      message.sender !== "user" &&
-      message.text &&
-      (message.text.startsWith("ASSET_GENERATED|") ||
-        message.text.startsWith("LOGO_GENERATED|"))
-    ) {
+
+const parseAssetGeneratedMessage = (message) => {
+  // ✅ ONLY PARSE AI MESSAGES (skip user messages)
+  if (message.sender !== "user") {
+    // ✅ CHECK FOR RICH DATA FIELDS (new DB structure)
+    if (message.toolSteps || message.thinkingProcess || message.searchResults || message.inspirationImages || message.imageUrl) {
+      return {
+        ...message,  // Include all fields from DB
+        // ✅ ENSURE RICH FIELDS ARE SET (with fallbacks)
+        toolSteps: message.toolSteps || [],
+        thinkingProcess: message.thinkingProcess || {},
+        searchResults: message.searchResults || null,
+        inspirationImages: message.inspirationImages || [],
+        imageUrl: message.imageUrl || null,
+        isLogo: message.isLogo || false,
+        status: message.status || 'complete'
+      };
+    }
+    
+    // ✅ FALLBACK: Handle old parsing for legacy AI messages
+    if (message.text && (message.text.startsWith("ASSET_GENERATED|") || message.text.startsWith("LOGO_GENERATED|"))) {
       const parts = message.text.split("|");
       const imageUrl = parts[1];
       const messageText = parts[2] || "";
-
-      // Determine asset type from URL or message context
-      const isLogo =
-        messageText.toLowerCase().includes("logo") ||
-        imageUrl.includes("logo") ||
-        messageText.toLowerCase().includes("brand");
-
+      const isLogo = message.text.startsWith("LOGO_GENERATED|") || messageText.toLowerCase().includes("logo");
+      
       return {
         ...message,
         text: messageText,
         imageUrl: imageUrl,
-        isLogo: isLogo,
-        searchResults: message.searchResults,     // Direct from DB
-        inspirationImages: message.inspirationImages // Direct from DB
-     
+        isLogo: isLogo
       };
     }
-    return {
-      ...message,
-      // ✅ ADD: Always include these fields (might be undefined for old messages)
-      searchResults: message.searchResults,
-      inspirationImages: message.inspirationImages
-    };
-  };
+  }
+  
+  // ✅ RETURN USER MESSAGES OR NON-PARSED AI MESSAGES AS-IS
+  return message;
+};
 
 // In your page.jsx, update the fetchMessages function:
 
@@ -300,7 +304,6 @@ const fetchMessages = async (conversationId, userId = null) => {
     }
   };
 
-  // Add these to your page.jsx component before the return statement
 
   // Load bot and conversations
   useEffect(() => {
@@ -506,6 +509,7 @@ const fetchMessages = async (conversationId, userId = null) => {
           setShowIntro={setShowIntro}
           onNewConversation={handleNewConversation} // Pass callback
           onRefreshConversations={refreshConversationsList} // Pass callback
+          fetchMessages={fetchMessages}
         />
       </div>
     </div>
