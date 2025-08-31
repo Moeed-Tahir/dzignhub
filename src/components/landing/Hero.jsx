@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import HeroCTA from "./HeroCTA";
 import HeroCTAMobile from "./HeroCTAMobile";
 import Link from "next/link";
+import { ModernInput } from "./MessageInput";
+import Carousel from "./Carousel";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -85,10 +87,9 @@ export default function Hero({
 }) {
   // Use dynamic hero section data if available, otherwise use props or fallback
   const heroData = heroSection || {
-    mainHeading: mainHeading || "The Ultimate all in one AI Website Creator",
+    mainHeading: mainHeading || "The All-in-one AI Workflow",
     mainDescription:
-      mainDescription ||
-      "Website, app, and brand-one promt does it all.",
+      mainDescription || "Website, app, and brand-one promt does it all.",
     announcementIcon: null,
     announcementText: "New Agent Release",
     earlyAccessText: "Get early access",
@@ -104,9 +105,7 @@ export default function Hero({
   // Process dynamic data with fallbacks
   const processedHeroData = {
     mainHeading:
-      heroData.mainHeading ||
-      mainHeading ||
-      "The Ultimate all in one AI Website Creator",
+      heroData.mainHeading || mainHeading || "The All-in-one AI Workflow",
     mainDescription:
       heroData.mainDescription ||
       mainDescription ||
@@ -133,7 +132,7 @@ export default function Hero({
         animate="visible"
       >
         {/* Top section (announcement + heading + paragraph) */}
-        <div className="flex flex-col lg:gap-[16px] mx-auto gap-[32px]">
+        <div className="flex flex-col lg:gap-[16px] mx-auto gap-5 sm:gap-[32px]">
           {/* Announcement */}
           {processedHeroData.showAnnouncement && (
             <motion.div
@@ -164,42 +163,9 @@ export default function Hero({
                 src="/landing/Announcement-separator.png"
                 className="w-[4px] h-[4px] lg:block hidden"
               />
-              {/* <p className="text-[#BDFF00] text-[18px] lg:block hidden font-medium">
-                {processedHeroData.earlyAccessText}
-              </p> */}
-              {/* <Link href={processedHeroData.earlyAccessLink}> */}
-              {/* <motion.button 
-                className="lg:flex hidden w-[38px] h-[26px] rounded-full bg-[#060606] border border-[#BDFF00] items-center justify-center"
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
-                >
-                <FaArrowRight className="text-white  lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
-              </motion.button>
-                </Link> */}
             </motion.div>
           )}
-          {/* {processedHeroData.showAnnouncement && (
-            <motion.div
-              className="lg:hidden flex mx-auto gap-[10px] h-[28px] w-[191px]"
-              variants={itemVariants}
-            >
-              <p className="text-[#BDFF00] lg:text-[18px] text-[16px] font-medium ">
-                {processedHeroData.earlyAccessText}
-              </p>
-              <Link href={processedHeroData.earlyAccessLink}>
-                <motion.button
-                  className="flex  w-[38px] h-[26px] rounded-[100px] bg-[#060606] border border-[#BDFF00] items-center justify-center"
-                  variants={buttonVariants}
-                  whileHover="hover"
-                  whileTap="tap"
-                >
-                  <FaArrowRight className="text-white lg:w-[18px] w-[16px] h-[16px] lg:h-[18px]" />
-                </motion.button>
-              </Link>
-            </motion.div>
-          )} */}
-          {/* Heading + Paragraph */}
+
           <motion.div
             className="flex flex-col lg:gap-[32px] gap-[18px]"
             variants={itemVariants}
@@ -211,27 +177,16 @@ export default function Hero({
               {processedHeroData.mainHeading}
             </motion.h1>
             <motion.p
-              className={`lg:text-[18px] text-[16px] text-[#F0F0F3] text-center leading-[28px] lg:w-[727px] lg:h-[56px] h-[96px] w-[335px]  mx-auto `}
+              className={`lg:text-[18px] text-[16px] text-[#F0F0F3] text-center leading-[28px] lg:w-[727px] lg:h-[56px] h-auto w-[335px]  mx-auto `}
               variants={itemVariants}
             >
               {processedHeroData.mainDescription}
             </motion.p>
           </motion.div>
+          <ModernInput />
 
-          <motion.div variants={itemVariants}>
-            <HeroCTA
-              placeholder={processedHeroData.ctaInputPlaceholder}
-              buttonText={processedHeroData.ctaButtonText}
-            />
-          </motion.div>
+          <Carousel />
         </div>
-
-        <motion.div variants={itemVariants}>
-          <HeroCTAMobile
-            placeholder={processedHeroData.ctaInputPlaceholder}
-            buttonText={processedHeroData.ctaButtonText}
-          />
-        </motion.div>
       </motion.div>
     </>
   );

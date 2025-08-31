@@ -16,9 +16,8 @@ const nextConfig = {
                 hostname: 'localhost',
                 port: '1337',
                 pathname: '/uploads/**',
-            },
-           
-        ],
+            }
+        ]
     },
     compiler: {
         // This removes all console.* statements in production

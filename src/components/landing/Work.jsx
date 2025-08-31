@@ -192,7 +192,7 @@ function Work({ workCards = [] }) {
                 alt="Logo"
                 width={215}
                 height={54}
-                // className="mt-1"
+                className="h-[30px] mt-[-10px] xl:-mt-1 w-auto xl:w-[215px] xl:h-[54px]"
               />
             </span>
             works

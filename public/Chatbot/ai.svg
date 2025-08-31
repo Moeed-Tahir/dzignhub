@@ -2,7 +2,7 @@
 <g clip-path="url(#clip0_8958_23307)">
 <rect width="64" height="64" rx="32" fill="url(#pattern0_8958_23307)"/>
 </g>
-<rect x="1" y="1" width="62" height="62" rx="31" stroke="#C209C1" stroke-width="2"/>
+<rect x="1" y="1" width="62" height="62" rx="31" stroke="#C209C1" strokeWidth="2"/>
 <defs>
 <pattern id="pattern0_8958_23307" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image0_8958_23307" transform="translate(-0.392375) scale(0.00043573)"/>

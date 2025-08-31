@@ -115,7 +115,20 @@ function Navbar({ onOpenSidebar }) {
         />
       </Link>
       <motion.div className="flex gap-[10px]" variants={buttonVariants}>
-        <Link href="/auth/login">
+        {
+          IsLogin?(
+            <Link href="/dashboard">
+          <motion.button
+            className={` bg-[#BDFF00] w-[100px] h-[47px] text-[#000000]  rounded-full   cursor-pointer`}
+            whileHover="hover"
+            whileTap="tap"
+            variants={buttonVariants}
+          >
+            Dashboard
+          </motion.button>
+        </Link>
+          ):(
+            <Link href="/auth/login">
           <motion.button
             className={` bg-[#BDFF00] w-[100px] h-[47px] text-[#000000]  rounded-full   cursor-pointer`}
             whileHover="hover"
@@ -125,6 +138,8 @@ function Navbar({ onOpenSidebar }) {
             Sign In
           </motion.button>
         </Link>
+          )
+        }
         {/* Conditionally show the button */}
 
         <motion.button
