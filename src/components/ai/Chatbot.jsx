@@ -28,6 +28,8 @@ export default function ChatPage({
   const [conversationId, setConversationId] = useState("")
   const searchParams = useSearchParams();
 
+  const [isCompleting, setIsCompleting] = useState(false);
+
   // ✅ ADD: State variables for preserving data across streaming
   const [currentSearchResults, setCurrentSearchResults] = useState(null);
   const [currentInspirationImages, setCurrentInspirationImages] = useState(null);
@@ -726,12 +728,18 @@ export default function ChatPage({
                     shouldTypeText: false
                   };
 
-                  // ✅ ADD FINAL MESSAGE TO MESSAGES ARRAY IMMEDIATELY (FOR UI UPDATE)
-                  setMessages(prevMessages => [...prevMessages, finalAIMessage]);
+                  // ✅ SET COMPLETING FLAG TO PREVENT DUPLICATION
+                  setIsCompleting(true);
 
-                  // ✅ CLEAR STREAMING STATE
+                  // ✅ CLEAR STREAMING STATE FIRST
                   setIsStreaming(false);
                   setStreamingMessage(null);
+
+                  // ✅ THEN ADD FINAL MESSAGE TO MESSAGES ARRAY
+                  setMessages(prevMessages => [...prevMessages, finalAIMessage]);
+
+                  // ✅ RESET COMPLETING FLAG AFTER A SHORT DELAY
+                  setTimeout(() => setIsCompleting(false), 100);
 
                   // ✅ OPTIONAL: STILL RELOAD FROM DB TO ENSURE CONSISTENCY (NO DELAY IMPACT)
                   // if (fetchMessages && conversationId) {
@@ -1010,45 +1018,44 @@ export default function ChatPage({
     console.log('Current thinking process:', currentThinkingProcess);
   };
 
-  const allMessages = React.useMemo(() => {
-    console.log('[DEBUG] === COMPUTING allMessages ===');
-    console.log('[DEBUG] - Base messages count:', messages.length);
-    console.log('[DEBUG] - Has streaming message:', !!streamingMessage);
-    console.log('[DEBUG] - Streaming message text:', streamingMessage?.text?.substring(0, 50));
-    console.log('[DEBUG] - Is streaming active:', isStreaming);
+ const allMessages = React.useMemo(() => {
+  console.log('[DEBUG] === COMPUTING allMessages ===');
+  console.log('[DEBUG] - Base messages count:', messages.length);
+  console.log('[DEBUG] - Has streaming message:', !!streamingMessage);
+  console.log('[DEBUG] - Streaming message text:', streamingMessage?.text?.substring(0, 50));
+  console.log('[DEBUG] - Is streaming active:', isStreaming);
+  console.log('[DEBUG] - Is completing:', isCompleting);
 
-    let combinedMessages = [...messages];
+  let combinedMessages = [...messages];
 
-    // ✅ ENHANCED: Only add streaming message if it's actually streaming
-    // During completion transition, rely on the final message in `messages`
-    if (streamingMessage && isStreaming) {
+  // ✅ ENHANCED: Only add streaming message if NOT completing
+  if (streamingMessage && isStreaming && !isCompleting) {
+    combinedMessages = [...combinedMessages, streamingMessage];
+    console.log('[DEBUG] Added streaming message to combined messages');
+  } else if (streamingMessage && !isStreaming && !isCompleting) {
+    // ✅ During transition period, still show streaming message until final message is added
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage || lastMessage.sender !== 'ai' || lastMessage.status !== 'complete') {
       combinedMessages = [...combinedMessages, streamingMessage];
-      console.log('[DEBUG] Added streaming message to combined messages');
-    } else if (streamingMessage && !isStreaming) {
-      // ✅ During transition period, still show streaming message until final message is added
-      const lastMessage = messages[messages.length - 1];
-      if (!lastMessage || lastMessage.sender !== 'ai' || lastMessage.status !== 'complete') {
-        combinedMessages = [...combinedMessages, streamingMessage];
-        console.log('[DEBUG] Added transitional streaming message');
-      }
+      console.log('[DEBUG] Added transitional streaming message');
     }
+  }
 
-    console.log('[DEBUG] Combined messages count:', combinedMessages.length);
-    console.log('[DEBUG] Final combined messages:', combinedMessages.map((m, i) => ({
-      index: i,
-      sender: m.sender,
-      text: m.text?.substring(0, 30) + '...',
-      hasImage: !!m.imageUrl,
-      hasToolSteps: !!(m.toolSteps?.length),
-      hasSearchResults: !!(m.searchResults?.results?.length),
-      hasInspirationImages: !!(m.inspirationImages?.length),
-      isStreaming: m === streamingMessage,
-      status: m.status
-    })));
+  console.log('[DEBUG] Combined messages count:', combinedMessages.length);
+  console.log('[DEBUG] Final combined messages:', combinedMessages.map((m, i) => ({
+    index: i,
+    sender: m.sender,
+    text: m.text?.substring(0, 30) + '...',
+    hasImage: !!m.imageUrl,
+    hasToolSteps: !!(m.toolSteps?.length),
+    hasSearchResults: !!(m.searchResults?.results?.length),
+    hasInspirationImages: !!(m.inspirationImages?.length),
+    isStreaming: m === streamingMessage,
+    status: m.status
+  })));
 
-    return combinedMessages;
-  }, [messages, streamingMessage, isStreaming]);
-
+  return combinedMessages;
+}, [messages, streamingMessage, isStreaming, isCompleting]);  // ✅ ADD isCompleting TO DEPENDENCIES
   return (
     <div className=" flex flex-col mt-[80px] w-[90%]  max-w-[1280px]  mx-auto justify-between">
       <div

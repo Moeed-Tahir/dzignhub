@@ -288,6 +288,7 @@ const HistoryModal = ({
       <div className="flex justify-between items-center mb-6 ">
         <p className="text-[#344054] text-lg font-semibold ">Chat History</p>
         <div
+        id="closeHistoryModal"
           onClick={onClose}
           className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center"
         >
@@ -332,13 +333,13 @@ const HistoryModal = ({
                 onClick={() => {
                   setActiveChat(result._id);
                   setShowIntro(false);
-                  onClose();
                   onConversationSelect && onConversationSelect(result._id);
                   router.push(
                     `/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${
                       result._id
                     }`
                   );
+                  onClose();
                   setSearchQuery(""); // Clear search
                   setSearchResults([]);
                 }}
