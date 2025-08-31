@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 
+
 export default function AIIntro({ name, description, img, tagline }) {
   return (
     <div className="text-center flex justify-center items-center flex-col  w-[90%] sm:w-full mt-[20vh] max-w-[1280px] px-4 py-10">
