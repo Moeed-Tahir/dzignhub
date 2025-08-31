@@ -37,40 +37,40 @@ export default function MessageBubble({
   console.log('- searchResults.keywords:', searchResults?.keywords);
   console.log('- inspirationImages:', inspirationImages);
   console.log('- inspirationImages length:', inspirationImages?.length);
-// ✅ ADD: Simple typing effect hook - ONLY THIS IS NEW
-const useTypingEffect = (text, speed = 25, enabled = true) => {
-  const [displayedText, setDisplayedText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  // ✅ ADD: Simple typing effect hook - ONLY THIS IS NEW
+  const useTypingEffect = (text, speed = 25, enabled = true) => {
+    const [displayedText, setDisplayedText] = useState('');
+    const [isTyping, setIsTyping] = useState(false);
 
-  useEffect(() => {
-    if (!text || !enabled) {
-      setDisplayedText(text || '');
-      setIsTyping(false);
-      return;
-    }
-
-    setIsTyping(true);
-    setDisplayedText('');
-
-    let currentIndex = 0;
-    const timer = setInterval(() => {
-      if (currentIndex < text.length) {
-        setDisplayedText(text.substring(0, currentIndex + 1));
-        currentIndex++;
-      } else {
+    useEffect(() => {
+      if (!text || !enabled) {
+        setDisplayedText(text || '');
         setIsTyping(false);
-        clearInterval(timer);
+        return;
       }
-    }, speed);
 
-    return () => {
-      clearInterval(timer);
-      setIsTyping(false);
-    };
-  }, [text, speed, enabled]);
+      setIsTyping(true);
+      setDisplayedText('');
 
-  return { displayedText, isTyping };
-};
+      let currentIndex = 0;
+      const timer = setInterval(() => {
+        if (currentIndex < text.length) {
+          setDisplayedText(text.substring(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          setIsTyping(false);
+          clearInterval(timer);
+        }
+      }, speed);
+
+      return () => {
+        clearInterval(timer);
+        setIsTyping(false);
+      };
+    }, [text, speed, enabled]);
+
+    return { displayedText, isTyping };
+  };
 
   const isAI = sender != "user";
   const userIcon = Avatar || "/avatar.png";
@@ -82,7 +82,7 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
   // ✅ ADD: Typing effect for initial text - ONLY THIS IS NEW
   const shouldUseTyping = shouldTypeText && text && sender !== "user" && isStreaming;
   const { displayedText: typedText, isTyping } = useTypingEffect(
-    text, 
+    text,
     25, // Speed: 25ms per character
     shouldUseTyping
   );
@@ -141,19 +141,19 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
     if (step.name === 'Real Model Thinking') {
       return step.message || 'AI is thinking about your request...';
     }
-    
+
     if (step.name === 'Brand Information Extraction') {
       return step.resultMessage || step.message || 'Extracting brand information...';
     }
-    
+
     if (step.name === 'Auto-complete Missing Info') {
       return step.resultMessage || step.message || 'Completing missing brand details...';
     }
-    
+
     if (step.name === 'Generating Asset') {
       return step.resultMessage || step.message || 'Creating your design...';
     }
-    
+
     // Default for other tools
     return step.resultMessage || step.message || 'Processing...';
   };
@@ -164,15 +164,15 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
     if (step.name === 'Real Model Thinking' && thinkingProcess) {
       return !!(thinkingProcess.thinking || thinkingProcess.reasoning || thinkingProcess.analysis || thinkingProcess.plan);
     }
-    
+
     if (step.data && Object.keys(step.data).length > 0) {
       return true;
     }
-    
+
     if (step.resultMessage && step.resultMessage !== step.message) {
       return true;
     }
-    
+
     return false;
   };
 
@@ -249,15 +249,15 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
   if (isStreaming && sender === 'ai' && status !== 'complete') {
     return (
       <StreamingMessageBubble
-        message={{ 
+        message={{
           text: shouldUseTyping ? typedText : text, // ✅ ONLY CHANGE: Use typed text if typing enabled
-          status, 
-          toolInfo, 
-          toolSteps, 
-          imageUrl, 
-          isLogo, 
-          thinkingProcess, 
-          searchResults, 
+          status,
+          toolInfo,
+          toolSteps,
+          imageUrl,
+          isLogo,
+          thinkingProcess,
+          searchResults,
           inspirationImages,
           isTyping: shouldUseTyping ? isTyping : false // ✅ PASS typing state
         }}
@@ -301,17 +301,27 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
             </div>
           ) : (
             <>
-            
+
               {/* ✅ ONLY CHANGE: Use finalTextToShow and add typing cursor */}
               {finalTextToShow && (
                 <div
                   className={`prose prose-sm max-w-none ${isError ? "text-red-600" : ""
                     }`}
                 >
-                  <ReactMarkdown components={markdownComponents}>
-                    {finalTextToShow.replace(/\\n/g, "\n")}
-                  </ReactMarkdown>
-                  
+                  {/* ✅ FIXED: Render text for both user and AI messages */}
+                  {finalTextToShow && (
+                    <div className={`prose prose-sm max-w-none ${isError ? "text-red-600" : ""}`}>
+                      <ReactMarkdown components={markdownComponents}>
+                        {finalTextToShow.replace(/\\n/g, "\n")}
+                      </ReactMarkdown>
+
+                      {/* ✅ ADD: Typing cursor only when typing initial text */}
+                      {shouldTypeText && isTyping && (
+                        <span className="inline-block w-2 h-5 bg-gray-400 ml-1 animate-pulse"></span>
+                      )}
+                    </div>
+                  )}
+
                   {/* ✅ ADD: Typing cursor only when typing initial text */}
                   {shouldTypeText && isTyping && (
                     <span className="inline-block w-2 h-5 bg-gray-400 ml-1 animate-pulse"></span>
@@ -335,13 +345,12 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
                     {toolSteps.map((step, index) => (
                       <div
                         key={index}
-                        className={`p-3 rounded-lg border-l-4 transition-all duration-200 ${
-                          step.status === 'completed'
+                        className={`p-3 rounded-lg border-l-4 transition-all duration-200 ${step.status === 'completed'
                             ? 'bg-green-50 border-green-400'
                             : step.status === 'error'
                               ? 'bg-red-50 border-red-400'
                               : 'bg-blue-50 border-blue-400'
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2 flex-1">
@@ -357,12 +366,12 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
                           {/* ✅ VIEW DETAILS BUTTON - Only show if tool has detailed info */}
                           {hasDetailedInfo(step) && (
                             <button
-                              onClick={() => setSelectedTool({...step, thinkingProcess: step.name === 'Real Model Thinking' ? thinkingProcess : null})}
+                              onClick={() => setSelectedTool({ ...step, thinkingProcess: step.name === 'Real Model Thinking' ? thinkingProcess : null })}
                               className="ml-2 px-2 py-1 bg-white text-gray-600 rounded text-xs font-medium hover:bg-gray-50 hover:text-blue-600 transition-colors flex items-center gap-1"
                             >
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" strokeWidth="2" />
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z" stroke="currentColor" strokeWidth="2" />
                               </svg>
                               View
                             </button>
@@ -392,6 +401,8 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
                       </div>
                     ))}
                   </div>
+
+
                 </div>
               )}
 
@@ -611,8 +622,8 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
                       {/* Source badge */}
                       <div className="absolute top-2 right-2">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${image.source === 'Behance'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-pink-600 text-white'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-pink-600 text-white'
                           }`}>
                           {image.source}
                         </span>
@@ -686,7 +697,7 @@ const useTypingEffect = (text, speed = 25, enabled = true) => {
         setIsSourcesModalOpen(false);
       }} sources={searchResults?.results}
         searchKeywords={searchResults?.keywords} />
-      
+
       {/* ✅ ADD: TOOL DETAILS MODAL */}
       <ToolDetailsModal
         isOpen={!!selectedTool}

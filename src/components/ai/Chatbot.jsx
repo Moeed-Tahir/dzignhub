@@ -166,7 +166,7 @@ export default function ChatPage({
       setMessages(prevMessages => [
         ...prevMessages,
         {
-          sender: "ai",
+          sender: "agent",
           text: `✨ Generating your ${type} now... This might take a moment!`,
           isLoading: true
         }
@@ -710,7 +710,7 @@ export default function ChatPage({
                     currentText = data.message;
                   }
 
-                  // ✅ UPDATE STREAMING MESSAGE WITH FINAL DATA
+                  // ✅ CONSTRUCT FINAL AI MESSAGE
                   const finalAIMessage = {
                     sender: "ai",
                     text: currentText,
@@ -726,20 +726,20 @@ export default function ChatPage({
                     shouldTypeText: false
                   };
 
-                  // ✅ UPDATE STREAMING MESSAGE (NO LONGER SAVING HERE)
-                  setStreamingMessage(finalAIMessage);
+                  // ✅ ADD FINAL MESSAGE TO MESSAGES ARRAY IMMEDIATELY (FOR UI UPDATE)
+                  setMessages(prevMessages => [...prevMessages, finalAIMessage]);
 
                   // ✅ CLEAR STREAMING STATE
                   setIsStreaming(false);
                   setStreamingMessage(null);
 
-                  // ✅ RELOAD MESSAGES FROM DB (BACKEND HAS SAVED THE MESSAGE)
-                  if (fetchMessages && conversationId) {
-                    await fetchMessages(conversationId);
-                  }
+                  // ✅ OPTIONAL: STILL RELOAD FROM DB TO ENSURE CONSISTENCY (NO DELAY IMPACT)
+                  // if (fetchMessages && conversationId) {
+                  //   await fetchMessages(conversationId);
+                  // }
 
-                  // ❌ REMOVED: Save API call and fallback logic (handled by backend)
                   break;
+
                 default:
                   console.log('[DEBUG] Unhandled event type:', data.type);
                   break;
