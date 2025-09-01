@@ -79,10 +79,10 @@ export function ModernInput() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full max-w-[929px] mx-auto p-6"
+      className="w-full max-w-[929px] mb-5 sm:mb-10 mx-auto p-6"
     >
       <form onSubmit={handleSubmit} className="relative">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
           <div className="px-4 py-3">
             <input
               type="text"
@@ -95,19 +95,19 @@ export function ModernInput() {
           </div>
 
           {/* Options section on bottom with justify-between */}
-          <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
             {/* Left side icons */}
             <div className="flex items-center gap-2">
               {/* <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-gray-100 dark:bg-gray-700">
-                  <User className="w-[18px] h-[18px]  text-gray-600 dark:text-gray-400" />
+                <AvatarFallback className="bg-gray-100">
+                  <User className="w-[18px] h-[18px]  text-gray-600" />
                 </AvatarFallback>
               </Avatar> */}
               <button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] border border-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] border border-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
               >
                 <LuUserRound className="w-[18px] h-[18px] " />
               </button>
@@ -115,7 +115,7 @@ export function ModernInput() {
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] border border-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] border border-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
               >
                 <Settings className="w-[18px] h-[18px] " />
               </button>
@@ -128,7 +128,7 @@ export function ModernInput() {
                 variant="ghost"
                 size="sm"
                 onClick={handleFileAttach}
-                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
               >
                 <Image src={"/clip.svg"} height={18} width={18} alt="" />
               </button>
@@ -140,7 +140,7 @@ export function ModernInput() {
                 className={`h-[34px] w-[34px] flex justify-center items-center rounded-full p-0 ${
                   isRecording
                     ? "text-red-500 hover:text-red-600"
-                    : "text-[#1C1C1E] hover:text-gray-700 dark:text-gray-400 bg-[#F3F3F3] dark:hover:text-gray-200"
+                    : "text-[#1C1C1E] hover:text-gray-700 bg-[#F3F3F3]"
                 }`}
               >
                 {isRecording ? (
@@ -153,7 +153,7 @@ export function ModernInput() {
                 type="submit"
                 variant="ghost"
                 size="sm"
-                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
                 disabled={!message.trim()}
               >
                 {/* <Send className="w-[18px] h-[18px] " /> */}
