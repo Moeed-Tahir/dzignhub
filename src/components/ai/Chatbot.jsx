@@ -254,31 +254,53 @@ export default function ChatPage({
       .trim();
   }
 
-  // ✅ ADD: Generate immediate acknowledgment based on user intent
-  const generateImmediateResponse = (userInput) => {
-    const input = userInput.toLowerCase();
+// ✅ UPDATED: Make it async and use Groq for dynamic responses
+const generateImmediateResponse = async (userInput) => {
+  try {
+ 
 
-    // Detect what user wants to create
+  const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/generate-immediate-response`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_input: userInput }),
+  });
+
+
+  if (!response.ok) throw new Error('API request failed');
+
+  const data = await response.json();
+  return data.success ? data.response : generateImmediateResponseFallback(userInput);
+} catch (error) {
+  console.warn('[DEBUG] Groq response failed, using fallback:', error.message);
+  return generateImmediateResponseFallback(userInput);
+}
+};
+
+
+  const generateImmediateResponseFallback = (userInput) => {
+    const input = userInput.toLowerCase();
     if (input.includes('logo')) {
-      return "🎨 I'll create a professional logo for you! Let me start by analyzing your requirements...";
+      return "🎨 I'll create a professional logo for you! Let's start by analyzing your requirements...";
     } else if (input.includes('instagram') && (input.includes('post') || input.includes('poster'))) {
-      return "📱 I'll design an Instagram post for you! Let me gather the information needed...";
+      return "📱 I'll design an Instagram post for you! Let's gather the details...";
     } else if (input.includes('linkedin') && (input.includes('cover') || input.includes('banner'))) {
-      return "💼 I'll create a LinkedIn cover for you! Let me start working on this...";
+      return "💼 I'll create a LinkedIn cover for you! Let's start working on this...";
     } else if (input.includes('facebook') && (input.includes('cover') || input.includes('banner'))) {
-      return "📘 I'll design a Facebook cover for you! Let me begin the creative process...";
+      return "📘 I'll design a Facebook cover for you! Let's begin the creative process...";
     } else if (input.includes('youtube') && input.includes('thumbnail')) {
-      return "🎬 I'll create a YouTube thumbnail for you! Let me start designing...";
+      return "🎬 I'll create a YouTube thumbnail for you! Let's start designing...";
     } else if (input.includes('business card')) {
-      return "💳 I'll design a business card for you! Let me gather the requirements...";
+      return "💳 I'll design a business card for you! Let's gather the requirements...";
     } else if (input.includes('poster') || input.includes('flyer')) {
-      return "📄 I'll create a poster design for you! Let me start the design process...";
+      return "📄 I'll create a poster design for you! Let's start the design process...";
     } else if (input.includes('banner')) {
-      return "🎯 I'll design a banner for you! Let me begin working on this...";
+      return "🎯 I'll design a banner for you! Let's begin working on this...";
     } else if (input.includes('create') || input.includes('generate') || input.includes('design') || input.includes('make')) {
-      return "🎨 I'll create that design for you! Let me analyze your requirements and start working...";
+      return "🎨 I'll create that design for you! Let's analyze your requirements and start working...";
     } else {
-      return "💭 I'm analyzing your request and will help you create what you need! Let me start working on this...";
+      return "💭 I'm analyzing your request and will help you create what you need! Let's get started...";
     }
   };
 
@@ -302,7 +324,7 @@ export default function ChatPage({
 
     // ✅ CRITICAL: Initialize accumulation variables PROPERLY
     let allToolSteps = []; // This will accumulate ALL tool steps
-    let currentText = generateImmediateResponse(msg);
+    let currentText = await generateImmediateResponse(msg);
     let finalImageUrl = null;
     let finalIsLogo = false;
 
