@@ -26,6 +26,7 @@ export default function ChatPage({
   console.log("Rendering ChatPage with name:", description);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [conversationId, setConversationId] = useState("")
+  const [finalMessageQueue, setFinalMessageQueue] = useState(null);
   const searchParams = useSearchParams();
 
   const [isCompleting, setIsCompleting] = useState(false);
@@ -49,6 +50,25 @@ export default function ChatPage({
       setConversationId("");
     }
   }, [searchParams]);
+
+  // ✅ NEW: Handle completion logic in useEffect to avoid race conditions
+  useEffect(() => {
+    if (isCompleting && finalMessageQueue) {
+      console.log('[DEBUG] Processing final message in useEffect');
+
+      // ✅ Add the final message to messages
+      setMessages(prevMessages => [...prevMessages, finalMessageQueue]);
+
+      // ✅ Clear the queue and reset flags
+      setFinalMessageQueue(null);
+      setTimeout(() => setIsCompleting(false), 100);
+
+      // ✅ Optional: Reload from DB
+      if (fetchMessages && conversationId) {
+        fetchMessages(conversationId);
+      }
+    }
+  }, [isCompleting, finalMessageQueue, conversationId, fetchMessages]);
 
   // ✅ UPDATE CONVERSATION ID WHEN MESSAGES ARE LOADED FOR EXISTING CONVERSATION
   useEffect(() => {
@@ -704,7 +724,6 @@ export default function ChatPage({
                   }));
                   break;
 
-
                 case 'complete':
                   console.log('[DEBUG] === COMPLETE CASE RECEIVED ===');
 
@@ -728,26 +747,15 @@ export default function ChatPage({
                     shouldTypeText: false
                   };
 
-                  // ✅ SET COMPLETING FLAG TO PREVENT DUPLICATION
+                  // ✅ SET COMPLETING FLAG AND CLEAR STREAMING STATE FIRST
                   setIsCompleting(true);
-
-                  // ✅ CLEAR STREAMING STATE FIRST
                   setIsStreaming(false);
                   setStreamingMessage(null);
 
-                  // ✅ THEN ADD FINAL MESSAGE TO MESSAGES ARRAY
-                  setMessages(prevMessages => [...prevMessages, finalAIMessage]);
-
-                  // ✅ RESET COMPLETING FLAG AFTER A SHORT DELAY
-                  setTimeout(() => setIsCompleting(false), 100);
-
-                  // ✅ OPTIONAL: STILL RELOAD FROM DB TO ENSURE CONSISTENCY (NO DELAY IMPACT)
-                  // if (fetchMessages && conversationId) {
-                  //   await fetchMessages(conversationId);
-                  // }
+                  // ✅ QUEUE THE FINAL MESSAGE (useEffect will handle adding it)
+                  setFinalMessageQueue(finalAIMessage);
 
                   break;
-
                 default:
                   console.log('[DEBUG] Unhandled event type:', data.type);
                   break;
@@ -1018,44 +1026,33 @@ export default function ChatPage({
     console.log('Current thinking process:', currentThinkingProcess);
   };
 
- const allMessages = React.useMemo(() => {
-  console.log('[DEBUG] === COMPUTING allMessages ===');
-  console.log('[DEBUG] - Base messages count:', messages.length);
-  console.log('[DEBUG] - Has streaming message:', !!streamingMessage);
-  console.log('[DEBUG] - Streaming message text:', streamingMessage?.text?.substring(0, 50));
-  console.log('[DEBUG] - Is streaming active:', isStreaming);
-  console.log('[DEBUG] - Is completing:', isCompleting);
-
-  let combinedMessages = [...messages];
-
-  // ✅ ENHANCED: Only add streaming message if NOT completing
-  if (streamingMessage && isStreaming && !isCompleting) {
-    combinedMessages = [...combinedMessages, streamingMessage];
-    console.log('[DEBUG] Added streaming message to combined messages');
-  } else if (streamingMessage && !isStreaming && !isCompleting) {
-    // ✅ During transition period, still show streaming message until final message is added
-    const lastMessage = messages[messages.length - 1];
-    if (!lastMessage || lastMessage.sender !== 'ai' || lastMessage.status !== 'complete') {
+  const allMessages = React.useMemo(() => {
+    console.log('[DEBUG] === COMPUTING allMessages ===');
+    console.log('[DEBUG] - Base messages count:', messages.length);
+    console.log('[DEBUG] - Has streaming message:', !!streamingMessage);
+    console.log('[DEBUG] - Streaming message text:', streamingMessage?.text?.substring(0, 50));
+    console.log('[DEBUG] - Is streaming active:', isStreaming);
+    console.log('[DEBUG] - Is completing:', isCompleting);
+  
+    let combinedMessages = [...messages];
+  
+    // ✅ ENHANCED: Only add streaming message if NOT completing AND streamingMessage exists
+    if (streamingMessage && isStreaming && !isCompleting) {
       combinedMessages = [...combinedMessages, streamingMessage];
-      console.log('[DEBUG] Added transitional streaming message');
+      console.log('[DEBUG] Added streaming message to combined messages');
+    } else if (streamingMessage && !isStreaming && !isCompleting) {
+      // ✅ During transition, only add if no recent AI message
+      const lastMessage = messages[messages.length - 1];
+      if (!lastMessage || lastMessage.sender !== 'ai' || lastMessage.status !== 'complete') {
+        combinedMessages = [...combinedMessages, streamingMessage];
+        console.log('[DEBUG] Added transitional streaming message');
+      }
     }
-  }
-
-  console.log('[DEBUG] Combined messages count:', combinedMessages.length);
-  console.log('[DEBUG] Final combined messages:', combinedMessages.map((m, i) => ({
-    index: i,
-    sender: m.sender,
-    text: m.text?.substring(0, 30) + '...',
-    hasImage: !!m.imageUrl,
-    hasToolSteps: !!(m.toolSteps?.length),
-    hasSearchResults: !!(m.searchResults?.results?.length),
-    hasInspirationImages: !!(m.inspirationImages?.length),
-    isStreaming: m === streamingMessage,
-    status: m.status
-  })));
-
-  return combinedMessages;
-}, [messages, streamingMessage, isStreaming, isCompleting]);  // ✅ ADD isCompleting TO DEPENDENCIES
+  
+    console.log('[DEBUG] Combined messages count:', combinedMessages.length);
+    return combinedMessages;
+  }, [messages, streamingMessage, isStreaming, isCompleting]);
+  
   return (
     <div className=" flex flex-col mt-[80px] w-[90%]  max-w-[1280px]  mx-auto justify-between">
       <div
