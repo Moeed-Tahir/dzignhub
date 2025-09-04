@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 
 import HistoryModal from "@/components/ai/HistoryModal";
 import { ModernInput } from "@/components/landing/MessageInput";
+import Template from "@/components/ai/Template";
 
 const page = () => {
   const { agent } = useParams();
@@ -524,12 +525,14 @@ const page = () => {
           />
         ) : (
           <div>
-            <div className="flex justify-center items-center flex-col gap-6 mt-80">
+            <div className="flex justify-center items-center flex-col gap-6 mt-40">
               <p className="text-[34px] font-semibold">
                 Ready to create your slides?
               </p>
               <ModernInput isAi={true} />
             </div>
+
+            <Template />
           </div>
         )}
       </div>
