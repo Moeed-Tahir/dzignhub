@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { getStrapiImageUrl } from "@/utils/strapi";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 function Carousel({ carouselImages = [] }) {
   const defaultImages1 = [
@@ -28,15 +29,15 @@ function Carousel({ carouselImages = [] }) {
 
   let images1 = defaultImages1;
   let images2 = defaultImages2;
-
+  const router = useRouter();
   if (carouselImages.length > 0) {
-  if (carouselImages[0]?.images1?.length > 0) {
+    if (carouselImages[0]?.images1?.length > 0) {
       images1 = carouselImages[0].images1
         .map((img) => getStrapiImageUrl(img))
         .filter(Boolean);
     }
 
-  if (carouselImages[0]?.images2?.length > 0) {
+    if (carouselImages[0]?.images2?.length > 0) {
       images2 = carouselImages[0].images2
         .map((img) => getStrapiImageUrl(img))
         .filter(Boolean);
@@ -57,7 +58,7 @@ function Carousel({ carouselImages = [] }) {
       transition: {
         duration: 1.2,
         ease: "easeOut",
-        staggerChildren: 0.15,
+        staggerChildren: 0.05,
       },
     },
   };
@@ -91,6 +92,7 @@ function Carousel({ carouselImages = [] }) {
     {
       name: "Pitch Deck",
       icon: "/aiAgent/presention-chart.svg",
+      href: "/dashboard/Ai-Agent/pitch-deck",
       bg: "#EBF3F8",
     },
     {

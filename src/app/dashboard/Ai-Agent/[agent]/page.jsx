@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "@/components/common/Navbar";
+
 import InviteModal from "@/components/ai/InviteModal";
 import PublishModal from "@/components/ai/PublishModal";
 import React, { useState, useEffect } from "react";
@@ -15,8 +15,9 @@ import { IoIosMenu } from "react-icons/io";
 import Image from "next/image";
 import Globe from "@/app/assets/globe";
 import { useRouter } from "next/navigation";
-import { HistoryIcon } from "lucide-react";
+
 import HistoryModal from "@/components/ai/HistoryModal";
+import { ModernInput } from "@/components/landing/MessageInput";
 
 const page = () => {
   const { agent } = useParams();
@@ -131,105 +132,116 @@ const page = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
-const parseAssetGeneratedMessage = (message) => {
-  // ✅ ONLY PARSE AI MESSAGES (skip user messages)
-  if (message.sender !== "user") {
-    // ✅ CHECK FOR RICH DATA FIELDS (new DB structure)
-    if (message.toolSteps || message.thinkingProcess || message.searchResults || message.inspirationImages || message.imageUrl) {
-      return {
-        ...message,  // Include all fields from DB
-        // ✅ ENSURE RICH FIELDS ARE SET (with fallbacks)
-        toolSteps: message.toolSteps || [],
-        thinkingProcess: message.thinkingProcess || {},
-        searchResults: message.searchResults || null,
-        inspirationImages: message.inspirationImages || [],
-        imageUrl: message.imageUrl || null,
-        isLogo: message.isLogo || false,
-        status: message.status || 'complete'
-      };
-    }
-    
-    // ✅ FALLBACK: Handle old parsing for legacy AI messages
-    if (message.text && (message.text.startsWith("ASSET_GENERATED|") || message.text.startsWith("LOGO_GENERATED|"))) {
-      const parts = message.text.split("|");
-      const imageUrl = parts[1];
-      const messageText = parts[2] || "";
-      const isLogo = message.text.startsWith("LOGO_GENERATED|") || messageText.toLowerCase().includes("logo");
-      
-      return {
-        ...message,
-        text: messageText,
-        imageUrl: imageUrl,
-        isLogo: isLogo
-      };
-    }
-  }
-  
-  // ✅ RETURN USER MESSAGES OR NON-PARSED AI MESSAGES AS-IS
-  return message;
-};
-
-// In your page.jsx, update the fetchMessages function:
-
-const fetchMessages = async (conversationId, userId = null) => {
-  try {
-    let verification = await verifyTokenForFetchingMessages();
-    if (verification === null) {
-      console.error("User ID verification failed, cannot fetch messages.");
-      return [];
-    }
-    const userIdToUse = verification;
-
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/${conversationId}/messages?user_id=${userIdToUse}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+  const parseAssetGeneratedMessage = (message) => {
+    // ✅ ONLY PARSE AI MESSAGES (skip user messages)
+    if (message.sender !== "user") {
+      // ✅ CHECK FOR RICH DATA FIELDS (new DB structure)
+      if (
+        message.toolSteps ||
+        message.thinkingProcess ||
+        message.searchResults ||
+        message.inspirationImages ||
+        message.imageUrl
+      ) {
+        return {
+          ...message, // Include all fields from DB
+          // ✅ ENSURE RICH FIELDS ARE SET (with fallbacks)
+          toolSteps: message.toolSteps || [],
+          thinkingProcess: message.thinkingProcess || {},
+          searchResults: message.searchResults || null,
+          inspirationImages: message.inspirationImages || [],
+          imageUrl: message.imageUrl || null,
+          isLogo: message.isLogo || false,
+          status: message.status || "complete",
+        };
       }
-    );
 
-    const data = await response.json();
+      // ✅ FALLBACK: Handle old parsing for legacy AI messages
+      if (
+        message.text &&
+        (message.text.startsWith("ASSET_GENERATED|") ||
+          message.text.startsWith("LOGO_GENERATED|"))
+      ) {
+        const parts = message.text.split("|");
+        const imageUrl = parts[1];
+        const messageText = parts[2] || "";
+        const isLogo =
+          message.text.startsWith("LOGO_GENERATED|") ||
+          messageText.toLowerCase().includes("logo");
 
-    if (data.success) {
-      // ✅ ENHANCED: Parse messages and preserve database fields
-      const parsedMessages = data.messages.map(msg => {
-        const parsedMsg = parseAssetGeneratedMessage(msg);
-        
-        // ✅ DEBUG: Log messages with search results
-        if (parsedMsg.searchResults) {
-          console.log(`✅ Message with search results:`, {
-            text: parsedMsg.text.substring(0, 50) + '...',
-            searchResultsCount: parsedMsg.searchResults?.results?.length || 0,
-            keywords: parsedMsg.searchResults?.keywords
-          });
+        return {
+          ...message,
+          text: messageText,
+          imageUrl: imageUrl,
+          isLogo: isLogo,
+        };
+      }
+    }
+
+    // ✅ RETURN USER MESSAGES OR NON-PARSED AI MESSAGES AS-IS
+    return message;
+  };
+
+  // In your page.jsx, update the fetchMessages function:
+
+  const fetchMessages = async (conversationId, userId = null) => {
+    try {
+      let verification = await verifyTokenForFetchingMessages();
+      if (verification === null) {
+        console.error("User ID verification failed, cannot fetch messages.");
+        return [];
+      }
+      const userIdToUse = verification;
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/conversations/${conversationId}/messages?user_id=${userIdToUse}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-        
-        if (parsedMsg.inspirationImages) {
-          console.log(`✅ Message with inspiration images:`, {
-            text: parsedMsg.text.substring(0, 50) + '...',
-            inspirationCount: parsedMsg.inspirationImages?.length || 0
-          });
-        }
-        
-        return parsedMsg;
-      });
-      
-      setMessages(parsedMessages);
-      console.log(
-        `Loaded ${data.count} messages for conversation ${conversationId}`
       );
-    } else {
-      console.error("Failed to fetch messages:", data.error);
+
+      const data = await response.json();
+
+      if (data.success) {
+        // ✅ ENHANCED: Parse messages and preserve database fields
+        const parsedMessages = data.messages.map((msg) => {
+          const parsedMsg = parseAssetGeneratedMessage(msg);
+
+          // ✅ DEBUG: Log messages with search results
+          if (parsedMsg.searchResults) {
+            console.log(`✅ Message with search results:`, {
+              text: parsedMsg.text.substring(0, 50) + "...",
+              searchResultsCount: parsedMsg.searchResults?.results?.length || 0,
+              keywords: parsedMsg.searchResults?.keywords,
+            });
+          }
+
+          if (parsedMsg.inspirationImages) {
+            console.log(`✅ Message with inspiration images:`, {
+              text: parsedMsg.text.substring(0, 50) + "...",
+              inspirationCount: parsedMsg.inspirationImages?.length || 0,
+            });
+          }
+
+          return parsedMsg;
+        });
+
+        setMessages(parsedMessages);
+        console.log(
+          `Loaded ${data.count} messages for conversation ${conversationId}`
+        );
+      } else {
+        console.error("Failed to fetch messages:", data.error);
+        setMessages([]);
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
       setMessages([]);
     }
-  } catch (error) {
-    console.error("Error fetching messages:", error);
-    setMessages([]);
-  }
-};
+  };
 
   const verifyTokenForFetchingMessages = async () => {
     try {
@@ -303,7 +315,6 @@ const fetchMessages = async (conversationId, userId = null) => {
       fetchConversations(UserId);
     }
   };
-
 
   // Load bot and conversations
   useEffect(() => {
@@ -408,17 +419,17 @@ const fetchMessages = async (conversationId, userId = null) => {
       {isHistoryModalOpen && (
         <div ref={historyModalRef}>
           <HistoryModal
-           activeChat={activeChat}
-           setActiveChat={setActiveChat}
-           img={bot.img}
-           aiName={bot.name}
-           isOpen={isSidebarOpen}
-           setIsOpen={setIsSidebarOpen}
-           conversations={conversations}
-           onConversationSelect={fetchMessages}
-           setShowIntro={setShowIntro}
-           setMessages={setMessages}
-           setConversations={setConversations}
+            activeChat={activeChat}
+            setActiveChat={setActiveChat}
+            img={bot.img}
+            aiName={bot.name}
+            isOpen={isSidebarOpen}
+            setIsOpen={setIsSidebarOpen}
+            conversations={conversations}
+            onConversationSelect={fetchMessages}
+            setShowIntro={setShowIntro}
+            setMessages={setMessages}
+            setConversations={setConversations}
             onClose={() => setIsHistoryModalOpen(false)}
           />
         </div>
@@ -439,7 +450,7 @@ const fetchMessages = async (conversationId, userId = null) => {
               onClick={() => setIsHistoryModalOpen((prev) => !prev)}
               className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center"
             >
-              <IoIosMenu  className="w-[18px] text-[#344054] h-[18px]" />
+              <IoIosMenu className="w-[18px] text-[#344054] h-[18px]" />
             </div>
           </div>
 
@@ -495,22 +506,32 @@ const fetchMessages = async (conversationId, userId = null) => {
             )}
           </div>
         </div>
-
-        <Chatbot
-          aiName={bot.name}
-          tagline={bot.tagline}
-          description={bot.description}
-          suggestions={bot.suggestions}
-          placeholder={bot.placeholder}
-          img={bot.img}
-          messages={messages}
-          setMessages={setMessages}
-          showIntro={showIntro}
-          setShowIntro={setShowIntro}
-          onNewConversation={handleNewConversation} // Pass callback
-          onRefreshConversations={refreshConversationsList} // Pass callback
-          fetchMessages={fetchMessages}
-        />
+        {bot.name != "Pitch Deck" ? (
+          <Chatbot
+            aiName={bot.name}
+            tagline={bot.tagline}
+            description={bot.description}
+            suggestions={bot.suggestions}
+            placeholder={bot.placeholder}
+            img={bot.img}
+            messages={messages}
+            setMessages={setMessages}
+            showIntro={showIntro}
+            setShowIntro={setShowIntro}
+            onNewConversation={handleNewConversation} // Pass callback
+            onRefreshConversations={refreshConversationsList} // Pass callback
+            fetchMessages={fetchMessages}
+          />
+        ) : (
+          <div>
+            <div className="flex justify-center items-center flex-col gap-6 mt-80">
+              <p className="text-[34px] font-semibold">
+                Ready to create your slides?
+              </p>
+              <ModernInput isAi={true} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

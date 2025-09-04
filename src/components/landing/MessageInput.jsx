@@ -10,7 +10,7 @@ import { LuUserRound } from "react-icons/lu";
 import { Settings, Paperclip, Mic, Send, User, MicOff } from "lucide-react";
 import Image from "next/image";
 
-export function ModernInput() {
+export function ModernInput({ isAi }) {
   const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -84,20 +84,22 @@ export function ModernInput() {
       <form onSubmit={handleSubmit} className="relative">
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
           <div className="px-4 py-3">
-            <input
+            <textarea
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Ask anything, create anything"
-              className="w-full border-0 bg-transparent text-base placeholder:text-gray-400 
-             focus:outline-none focus:ring-0 focus:ring-offset-0 px-0"
+              className={` ${
+                isAi ? "h-[100px] resize-none" : "resize-none"
+              }   w-full border-0 bg-transparent text-base placeholder:text-gray-400 
+             focus:outline-none focus:ring-0 focus:ring-offset-0 px-0`}
             />
           </div>
 
           {/* Options section on bottom with justify-between */}
-          <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+          <div className={`flex items-center ${isAi?"justify-end":"justify-between"} px-4 py-3 border-t border-gray-100`}>
             {/* Left side icons */}
-            <div className="flex items-center gap-2">
+            <div className={` ${isAi?"hidden":"flex"}  items-center gap-2`}>
               {/* <Avatar className="h-8 w-8">
                 <AvatarFallback className="bg-gray-100">
                   <User className="w-[18px] h-[18px]  text-gray-600" />

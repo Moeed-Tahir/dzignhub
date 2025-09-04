@@ -54,6 +54,8 @@ const ChatbotSidebar = ({
     {
       name: "Pitch Deck",
       icon: "/aiAgent/presention-chart.svg",
+      href: "/dashboard/Ai-Agent/pitch",
+
       bg: "#EBF3F8",
     },
     {
@@ -450,7 +452,6 @@ const ChatbotSidebar = ({
             </button>
           </div>
 
-          
           <div className="px-4 pb-4">
             {isOpen ? (
               <div className="relative">
@@ -480,6 +481,7 @@ const ChatbotSidebar = ({
           <div className="flex-1 overflow-y-auto">
             {isOpen ? (
               <></>
+            ) : (
               // <div className="px-2">
               //   {/* Show search results when searching */}
               //   {searchQuery && searchResults.length > 0 ? (
@@ -725,7 +727,6 @@ const ChatbotSidebar = ({
               //     </>
               //   )}
               // </div>
-            ) : (
               // Collapsed sidebar view
               <div className="px-2 space-y-1">
                 {conversations.slice(0, 8).map((conversation) => (
