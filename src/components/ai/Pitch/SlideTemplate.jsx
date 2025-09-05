@@ -1,11 +1,23 @@
 import Image from "next/image";
 import React from "react";
 import { PiCheckCircleBold } from "react-icons/pi";
+import { motion } from "framer-motion";
+
+const animationVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { opacity: 1, scale: 1 },
+};
 
 const SlideTemplate = ({ img }) => {
   const [tab, setTab] = React.useState("Preview");
   return (
-    <div className="h-[500px] w-full flex flex-col overflow-hidden rounded-[15px] border border-[#F5F5F5] ">
+    <motion.div
+      className="h-[500px] w-full flex mb-4 flex-col overflow-hidden rounded-[15px] border border-[#F5F5F5]"
+      initial="hidden"
+      animate="visible"
+      variants={animationVariants}
+      transition={{ duration: 0.5 }}
+    >
       <div className="flex justify-between items-center  bg-[#F5F5F5] p-1">
         <div className="flex bg-white p-1 gap-2 rounded-[15px] ">
           {["Preview", "Edit", "Notes"].map((btn, index) => (
@@ -58,7 +70,7 @@ const SlideTemplate = ({ img }) => {
         height={400}
         className="w-full h-full object-cover"
       />
-    </div>
+    </motion.div>
   );
 };
 

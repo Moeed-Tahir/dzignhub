@@ -2,7 +2,13 @@
 
 import Image from "next/image";
 import React from "react";
+import { motion } from "framer-motion";
 import SlideTemplate from "./SlideTemplate";
+
+const animationVariants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: { opacity: 1, y: 0 },
+};
 
 const PitchDeckPreview = ({ slides = [], currentSlide = 0, onSlideChange }) => {
   // Dummy slide data for demonstration
@@ -30,7 +36,13 @@ const PitchDeckPreview = ({ slides = [], currentSlide = 0, onSlideChange }) => {
   const displaySlides = slides.length > 0 ? slides : dummySlides;
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col">
+    <motion.div
+      className="w-full bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col"
+      initial="hidden"
+      animate="visible"
+      variants={animationVariants}
+      transition={{ duration: 0.5 }}
+    >
       <div className="p-4 border-b border-gray-100 flex justify-between items-center">
         <h3 className="text-lg font-medium text-gray-800">
           <Image
@@ -96,13 +108,13 @@ const PitchDeckPreview = ({ slides = [], currentSlide = 0, onSlideChange }) => {
         </div>
       </div>
 
-      <div className="flex-1 p-4 overflow-y-auto">
+      <div className="flex-1 p-4 scrollbar-hide overflow-y-auto">
         <div className="h-full ">
           <SlideTemplate img={"/pitch/slide.jpg"} />
           <SlideTemplate img={"/pitch/slide2.jpg"} />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
