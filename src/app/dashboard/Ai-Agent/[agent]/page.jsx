@@ -15,10 +15,12 @@ import { IoIosMenu } from "react-icons/io";
 import Image from "next/image";
 import Globe from "@/app/assets/globe";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 import HistoryModal from "@/components/ai/HistoryModal";
 import { ModernInput } from "@/components/landing/MessageInput";
 import Template from "@/components/ai/Template";
+import PitchDeckLayout from "@/components/ai/Pitch/PitchDeckLayout";
 
 const page = () => {
   const { agent } = useParams();
@@ -50,6 +52,19 @@ const page = () => {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const historyModalRef = React.useRef(null);
   const [selectedTemplateImage, setSelectedTemplateImage] = useState(null);
+  const [showTemplate, setShowTemplate] = useState(true);
+  const [hasPromptEntered, setHasPromptEntered] = useState(false);
+  const [initialPrompt, setInitialPrompt] = useState("");
+
+  // Handle prompt submission to hide template with animation
+  const handlePromptSubmit = (prompt) => {
+    if (prompt.trim()) {
+      setHasPromptEntered(true);
+      setShowTemplate(false);
+      setInitialPrompt(prompt);
+    }
+  };
+
   // Close InviteModal when clicking outside, but ignore clicks on the button
   // Close HistoryModal when clicking outside
   useEffect(() => {
@@ -526,18 +541,42 @@ const page = () => {
           />
         ) : (
           <div>
-            <div className="flex justify-center items-center flex-col gap-6 mt-40">
-              <p className="text-[34px] font-semibold">
-                Ready to create your slides?
-              </p>
-              <ModernInput 
-                isAi={true} 
-                selectedTemplateImage={selectedTemplateImage} 
-                onTemplateRemove={() => setSelectedTemplateImage(null)}
-              />
-            </div>
-
-            <Template onTemplateSelect={setSelectedTemplateImage} />
+            {showTemplate && (
+              <div className="flex justify-center items-center flex-col gap-6 mt-40">
+                <p className="text-[34px] font-semibold">
+                  Ready to create your slides?
+                </p>
+                <ModernInput
+                  isAi={true}
+                  selectedTemplateImage={selectedTemplateImage}
+                  onTemplateRemove={() => setSelectedTemplateImage(null)}
+                  onPromptSubmit={handlePromptSubmit}
+                />
+              </div>
+            )}
+            <AnimatePresence mode="wait">
+              {showTemplate && (
+                <motion.div
+                  key="template"
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 1 }}
+                  exit={{
+                    opacity: 0,
+                    transition: {
+                      duration: 0.3,
+                      ease: "easeOut",
+                    },
+                  }}
+                >
+                  <Template onTemplateSelect={setSelectedTemplateImage} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+            
+            {/* 30% Chat / 70% Preview Layout - shows when template is hidden */}
+            {!showTemplate && hasPromptEntered && (
+              <PitchDeckLayout initialPrompt={initialPrompt} />
+            )}
           </div>
         )}
       </div>

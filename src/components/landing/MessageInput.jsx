@@ -10,7 +10,7 @@ import { LuUserRound } from "react-icons/lu";
 import { Settings, Paperclip, Mic, Send, User, MicOff } from "lucide-react";
 import Image from "next/image";
 
-export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove }) {
+export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove, onPromptSubmit }) {
   const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -20,6 +20,12 @@ export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove }) {
     e.preventDefault();
     if (message.trim()) {
       console.log("Sending message:", message);
+      
+      // Call the callback to hide template if provided
+      if (onPromptSubmit) {
+        onPromptSubmit(message);
+      }
+      
       setMessage("");
     }
   };
