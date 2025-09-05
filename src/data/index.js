@@ -87,7 +87,7 @@ const aiBots = {
       "🧭 Define your colors, and typography styles.",
     ],
   },
-  pitch: {
+  "pitch-deck": {
     name: "Pitch Deck",
     img: "/Ai/ellie.png",
     tagline:

@@ -54,7 +54,7 @@ const ChatbotSidebar = ({
     {
       name: "Pitch Deck",
       icon: "/aiAgent/presention-chart.svg",
-      href: "/dashboard/Ai-Agent/pitch",
+      href: "/dashboard/Ai-Agent/pitch-deck",
 
       bg: "#EBF3F8",
     },

@@ -152,7 +152,7 @@ export default function Template() {
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 pl-[70px] bg-transparent  h-[400px]">
+      <div className="fixed bottom-0 left-0 right-0 pl-[70px] bg-transparent  h-[300px]">
         <div className="h-full flex flex-col">
           {/* Tabs */}
           <div className="flex border-b border-border">
