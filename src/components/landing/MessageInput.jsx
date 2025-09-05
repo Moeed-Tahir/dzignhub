@@ -10,7 +10,7 @@ import { LuUserRound } from "react-icons/lu";
 import { Settings, Paperclip, Mic, Send, User, MicOff } from "lucide-react";
 import Image from "next/image";
 
-export function ModernInput({ isAi }) {
+export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove }) {
   const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -83,6 +83,31 @@ export function ModernInput({ isAi }) {
     >
       <form onSubmit={handleSubmit} className="relative">
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+            {/* Selected template image */}
+            {selectedTemplateImage && (
+              <div className="px-4  py-3">
+                <div className="relative inline-block">
+                  <Image
+                    src={selectedTemplateImage}
+                    alt="Selected template"
+                    width={120}
+                    height={80}
+                    className="rounded-lg border border-gray-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onTemplateRemove) {
+                        onTemplateRemove();
+                      }
+                    }}
+                    className="absolute -top-2 -right-2 bg-gray-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-gray-600"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            )}
           <div className="px-4 py-3">
             <textarea
               type="text"
@@ -95,6 +120,7 @@ export function ModernInput({ isAi }) {
              focus:outline-none focus:ring-0 focus:ring-offset-0 px-0`}
             />
           </div>
+
 
           {/* Options section on bottom with justify-between */}
           <div className={`flex items-center ${isAi?"justify-end":"justify-between"} px-4 py-3 border-t border-gray-100`}>

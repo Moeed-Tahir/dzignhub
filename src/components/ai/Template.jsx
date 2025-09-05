@@ -112,7 +112,7 @@ const templates = [
   },
 ];
 
-export default function Template() {
+export default function Template({ onTemplateSelect }) {
   const scrollRef = useRef(null);
 
   const handleScrollToEnd = () => {
@@ -303,12 +303,12 @@ export default function Template() {
         open={!!selectedTemplate}
         onOpenChange={() => setSelectedTemplate(null)}
       >
-        <DialogContent className="max-w-[1200px] py-6 px-8 !rounded-[20px] max-h-[620px]">
+        <DialogContent className="max-w-[1200px] py-6 px-8 !rounded-[20px] h-[620px]">
           <DialogHeader>
             <DialogTitle>Template Details</DialogTitle>
           </DialogHeader>
           {selectedTemplate && (
-            <div className="space-y-4 flex">
+            <div className=" flex">
               <div className="!w-[740px] flex flex-col gap-2">
                 <Image
                   src={selectedTemplate.image || "/placeholder.svg"}
@@ -321,7 +321,7 @@ export default function Template() {
                   {/* Scrollable Thumbnails */}
                   <div
                     ref={scrollRef}
-                    className="flex w-[740px] overflow-x-scroll gap-4 scroll-smooth"
+                    className="flex w-[740px] scrollbar-hide overflow-x-scroll gap-4 scroll-smooth"
                   >
                     {[1, 2, 3, 4, 5].map((_, i) => (
                       <Image
@@ -369,7 +369,12 @@ export default function Template() {
                 </div>
                 <Button
                   size="sm"
-                  //   onClick={() => setSelectedTemplate(template)}
+                  onClick={() => {
+                    if (onTemplateSelect) {
+                      onTemplateSelect(selectedTemplate.image);
+                    }
+                    setSelectedTemplate(null);
+                  }}
                   className="bg-[#BDFF00] hover:bg-[#BDFF00] py-[20px] px-[14px] !cursor-pointer rounded-full text-black text-[16px] "
                 >
                   Use This Template

@@ -49,6 +49,7 @@ const page = () => {
   const publishButtonRef = React.useRef(null);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const historyModalRef = React.useRef(null);
+  const [selectedTemplateImage, setSelectedTemplateImage] = useState(null);
   // Close InviteModal when clicking outside, but ignore clicks on the button
   // Close HistoryModal when clicking outside
   useEffect(() => {
@@ -529,10 +530,14 @@ const page = () => {
               <p className="text-[34px] font-semibold">
                 Ready to create your slides?
               </p>
-              <ModernInput isAi={true} />
+              <ModernInput 
+                isAi={true} 
+                selectedTemplateImage={selectedTemplateImage} 
+                onTemplateRemove={() => setSelectedTemplateImage(null)}
+              />
             </div>
 
-            <Template />
+            <Template onTemplateSelect={setSelectedTemplateImage} />
           </div>
         )}
       </div>
