@@ -35,6 +35,7 @@ const page = () => {
     sana: "content-creator",
     novi: "seo-specialist",
     mira: "strategist",
+    "pitch-deck": "pitch-deck",
   };
 
   const [conversations, setConversations] = useState([]);
@@ -572,10 +573,16 @@ const page = () => {
                 </motion.div>
               )}
             </AnimatePresence>
-            
+
             {/* 30% Chat / 70% Preview Layout - shows when template is hidden */}
             {!showTemplate && hasPromptEntered && (
-              <PitchDeckLayout initialPrompt={initialPrompt} />
+              <PitchDeckLayout
+                messages={messages}
+                setMessages={setMessages}
+                onNewConversation={handleNewConversation}
+                onRefreshConversations={refreshConversationsList}
+                fetchMessages={fetchMessages}
+                initialPrompt={initialPrompt} />
             )}
           </div>
         )}

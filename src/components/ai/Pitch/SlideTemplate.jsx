@@ -42,6 +42,7 @@ const SlideTemplate = ({ img }) => {
           </button>
           <button className="px-4 py-1  text-[14px] font-medium bg-white rounded-[6px] flex justify-center items-center text-[#68686B]">
             <Image
+            alt="ai edit"
               src={"/pitch/ai.svg"}
               width={21}
               height={21}
