@@ -53,8 +53,8 @@ const page = () => {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const historyModalRef = React.useRef(null);
   const [selectedTemplateImage, setSelectedTemplateImage] = useState(null);
-  const [showTemplate, setShowTemplate] = useState(true);
-  const [hasPromptEntered, setHasPromptEntered] = useState(false);
+  const [showTemplate, setShowTemplate] = useState(false);
+  const [hasPromptEntered, setHasPromptEntered] = useState(true);
   const [initialPrompt, setInitialPrompt] = useState("");
 
   // Handle prompt submission to hide template with animation
