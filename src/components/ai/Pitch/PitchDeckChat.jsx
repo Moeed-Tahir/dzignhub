@@ -2,9 +2,14 @@ import React from "react";
 import MessageInput from "../MessageInput";
 import MessageBubble from "../MessageBubble";
 
-const PitchDeckChat = ({ messages = [], onSendMessage, isStreaming, chatContainerRef }) => {
+const PitchDeckChat = ({
+  messages = [],
+  onSendMessage,
+  isStreaming,
+  chatContainerRef,
+}) => {
   // Filter out empty messages
-  const validMessages = messages.filter(msg => msg && msg.text);
+  const validMessages = messages.filter((msg) => msg && msg.text);
 
   const handleSend = (text) => {
     if (onSendMessage) {
@@ -17,11 +22,7 @@ const PitchDeckChat = ({ messages = [], onSendMessage, isStreaming, chatContaine
   };
 
   return (
-    <div className="w-1/3 flex flex-col bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="p-4 bg-white border-b">
-        <h2 className="text-lg font-medium text-gray-800">Pitch Deck Assistant</h2>
-      </div>
-
+    <div className="w-1/3 flex flex-col  justify-between  overflow-hidden">
       <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide"
@@ -49,14 +50,15 @@ const PitchDeckChat = ({ messages = [], onSendMessage, isStreaming, chatContaine
         ))}
       </div>
 
-      <div className="p-4 border-t bg-white">
+      <div className="px-4 ">
         <MessageInput
+          isPitch={true}
           placeholder="Ask about your pitch deck..."
           onSend={handleSend}
           suggestions={[
             "Create a startup investor pitch",
             "Design a product launch presentation",
-            "Make a business plan pitch deck"
+            "Make a business plan pitch deck",
           ]}
           disabled={isStreaming}
         />
