@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import {DocumentEditor} from "@onlyoffice/document-editor-react";
 import { useSearchParams } from 'next/navigation';
 import React from 'react'
-export default function page() {
+
+export default function Page() {
   const [config, setConfig] = useState(null);
   const searchParams = useSearchParams();
   const slideUrl = searchParams.get("slideUrl");

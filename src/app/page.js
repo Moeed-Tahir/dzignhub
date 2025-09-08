@@ -141,7 +141,7 @@ export default function Landing() {
       <Templates templates={landingData.templates} />
       <Download downloadSection={landingData.downloadSection} />
       {/* <FeatureSection /> */}
-      {/* <CardsAnimation cards={landingData.cards} /> */}
+      <CardsAnimation cards={landingData.cards} />
       {/* <div className=" mt-[-800px] sm:mt-[-400px] z-1000 relative "> */}
       <div className="  relative ">
         <Pricing pricingPlans={landingData.pricingPlans} />
