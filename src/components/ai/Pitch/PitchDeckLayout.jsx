@@ -7,7 +7,7 @@ import PitchDeckPreview from "./PitchDeckPreview";
 import { useUserStore } from "@/store/store";
 import { useSearchParams } from "next/navigation";
 
-const PitchDeckLayout = ({ initialPrompt }) => {
+const PitchDeckLayout = ({ initialPrompt, selectedTemplate }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -211,6 +211,7 @@ const PitchDeckLayout = ({ initialPrompt }) => {
         prompt: msg,
         user_id: userId,
         conversation_id: conversationId || null,
+        selectedTemplate: selectedTemplate || "oasis"
       };
       console.log('[DEBUG] Request body:', requestBody);
 

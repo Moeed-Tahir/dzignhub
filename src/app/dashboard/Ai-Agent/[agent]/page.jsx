@@ -30,6 +30,8 @@ const page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const [selectedTemplate, setSelectedTemplateName] = useState("");
+
   const agents = {
     zara: "brand-designer",
     sana: "content-creator",
@@ -53,8 +55,8 @@ const page = () => {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const historyModalRef = React.useRef(null);
   const [selectedTemplateImage, setSelectedTemplateImage] = useState(null);
-  const [showTemplate, setShowTemplate] = useState(false);
-  const [hasPromptEntered, setHasPromptEntered] = useState(true);
+  const [showTemplate, setShowTemplate] = useState(true);
+  const [hasPromptEntered, setHasPromptEntered] = useState(false);
   const [initialPrompt, setInitialPrompt] = useState("");
 
   // Handle prompt submission to hide template with animation
@@ -569,7 +571,7 @@ const page = () => {
                     },
                   }}
                 >
-                  <Template onTemplateSelect={setSelectedTemplateImage} />
+                  <Template setSelectedTemplateName={setSelectedTemplateName} onTemplateSelect={setSelectedTemplateImage} />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -577,6 +579,7 @@ const page = () => {
             {/* 30% Chat / 70% Preview Layout - shows when template is hidden */}
             {!showTemplate && hasPromptEntered && (
               <PitchDeckLayout
+              selectedTemplate={selectedTemplate}
                 messages={messages}
                 setMessages={setMessages}
                 onNewConversation={handleNewConversation}
