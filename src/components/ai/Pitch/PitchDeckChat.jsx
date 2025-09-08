@@ -33,7 +33,9 @@ const PitchDeckChat = ({
             key={index}
             sender={msg.sender}
             text={msg.text}
-            aiIcon="/pitch-deck-icon.png" // Update with your icon
+            isPitch={true}
+            aiIcon="/aiAgent/presention-chart.svg"
+            bgColor={"EBF3F8"}
             options={msg.options || []}
             isLoading={msg.isLoading}
             isStreaming={msg === messages[messages.length - 1] && isStreaming}
