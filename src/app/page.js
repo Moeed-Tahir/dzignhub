@@ -23,9 +23,9 @@ export default function Landing() {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [landingData, setLandingData] = useState({
-    mainHeading: "The All-in-one AI Workflow",
+    mainHeading: "AMAI SuperAI",
     mainDescription:
-      "Website, app, and brand-one promt does it all.",
+      "Your All In One AI Co-Creator ",
     heroSection: null,
     carouselImages: [],
     stackSections: [],
@@ -113,7 +113,11 @@ export default function Landing() {
           sidebarOpen ? "" : ""
         }`}
         style={{
-          background: "linear-gradient(to bottom, #1B1F3B 56%, #c209c1 100%)",
+          // background: "linear-gradient(to bottom, #1B1F3B 66%, #c209c1 100%)",
+          backgroundImage: `url('/Frame.svg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "bottom",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
@@ -154,7 +158,7 @@ export default function Landing() {
         subtitle={landingData.faqSection?.subtitle}
       />
 
-      <Assistants assistantSection={landingData.assistantSection} />
+      {/* <Assistants assistantSection={landingData.assistantSection} /> */}
       <Footer />
     </>
   );

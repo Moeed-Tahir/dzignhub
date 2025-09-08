@@ -26,7 +26,10 @@ export default function ChatPage({
   console.log("Rendering ChatPage with name:", description);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [conversationId, setConversationId] = useState("")
+  const [finalMessageQueue, setFinalMessageQueue] = useState(null);
   const searchParams = useSearchParams();
+
+  const [isCompleting, setIsCompleting] = useState(false);
 
   // ✅ ADD: State variables for preserving data across streaming
   const [currentSearchResults, setCurrentSearchResults] = useState(null);
@@ -47,6 +50,25 @@ export default function ChatPage({
       setConversationId("");
     }
   }, [searchParams]);
+
+  // ✅ NEW: Handle completion logic in useEffect to avoid race conditions
+  useEffect(() => {
+    if (isCompleting && finalMessageQueue) {
+      console.log('[DEBUG] Processing final message in useEffect');
+
+      // ✅ Add the final message to messages
+      setMessages(prevMessages => [...prevMessages, finalMessageQueue]);
+
+      // ✅ Clear the queue and reset flags
+      setFinalMessageQueue(null);
+      setTimeout(() => setIsCompleting(false), 100);
+
+      // ✅ Optional: Reload from DB
+      if (fetchMessages && conversationId) {
+        fetchMessages(conversationId);
+      }
+    }
+  }, [isCompleting, finalMessageQueue, conversationId, fetchMessages]);
 
   // ✅ UPDATE CONVERSATION ID WHEN MESSAGES ARE LOADED FOR EXISTING CONVERSATION
   useEffect(() => {
@@ -232,31 +254,53 @@ export default function ChatPage({
       .trim();
   }
 
-  // ✅ ADD: Generate immediate acknowledgment based on user intent
-  const generateImmediateResponse = (userInput) => {
-    const input = userInput.toLowerCase();
+// ✅ UPDATED: Make it async and use Groq for dynamic responses
+const generateImmediateResponse = async (userInput) => {
+  try {
+ 
 
-    // Detect what user wants to create
+  const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_API_URL}/agents/generate-immediate-response`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_input: userInput }),
+  });
+
+
+  if (!response.ok) throw new Error('API request failed');
+
+  const data = await response.json();
+  return data.success ? data.response : generateImmediateResponseFallback(userInput);
+} catch (error) {
+  console.warn('[DEBUG] Groq response failed, using fallback:', error.message);
+  return generateImmediateResponseFallback(userInput);
+}
+};
+
+
+  const generateImmediateResponseFallback = (userInput) => {
+    const input = userInput.toLowerCase();
     if (input.includes('logo')) {
-      return "🎨 I'll create a professional logo for you! Let me start by analyzing your requirements...";
+      return "🎨 I'll create a professional logo for you! Let's start by analyzing your requirements...";
     } else if (input.includes('instagram') && (input.includes('post') || input.includes('poster'))) {
-      return "📱 I'll design an Instagram post for you! Let me gather the information needed...";
+      return "📱 I'll design an Instagram post for you! Let's gather the details...";
     } else if (input.includes('linkedin') && (input.includes('cover') || input.includes('banner'))) {
-      return "💼 I'll create a LinkedIn cover for you! Let me start working on this...";
+      return "💼 I'll create a LinkedIn cover for you! Let's start working on this...";
     } else if (input.includes('facebook') && (input.includes('cover') || input.includes('banner'))) {
-      return "📘 I'll design a Facebook cover for you! Let me begin the creative process...";
+      return "📘 I'll design a Facebook cover for you! Let's begin the creative process...";
     } else if (input.includes('youtube') && input.includes('thumbnail')) {
-      return "🎬 I'll create a YouTube thumbnail for you! Let me start designing...";
+      return "🎬 I'll create a YouTube thumbnail for you! Let's start designing...";
     } else if (input.includes('business card')) {
-      return "💳 I'll design a business card for you! Let me gather the requirements...";
+      return "💳 I'll design a business card for you! Let's gather the requirements...";
     } else if (input.includes('poster') || input.includes('flyer')) {
-      return "📄 I'll create a poster design for you! Let me start the design process...";
+      return "📄 I'll create a poster design for you! Let's start the design process...";
     } else if (input.includes('banner')) {
-      return "🎯 I'll design a banner for you! Let me begin working on this...";
+      return "🎯 I'll design a banner for you! Let's begin working on this...";
     } else if (input.includes('create') || input.includes('generate') || input.includes('design') || input.includes('make')) {
-      return "🎨 I'll create that design for you! Let me analyze your requirements and start working...";
+      return "🎨 I'll create that design for you! Let's analyze your requirements and start working...";
     } else {
-      return "💭 I'm analyzing your request and will help you create what you need! Let me start working on this...";
+      return "💭 I'm analyzing your request and will help you create what you need! Let's get started...";
     }
   };
 
@@ -280,7 +324,7 @@ export default function ChatPage({
 
     // ✅ CRITICAL: Initialize accumulation variables PROPERLY
     let allToolSteps = []; // This will accumulate ALL tool steps
-    let currentText = generateImmediateResponse(msg);
+    let currentText = await generateImmediateResponse(msg);
     let finalImageUrl = null;
     let finalIsLogo = false;
 
@@ -702,7 +746,6 @@ export default function ChatPage({
                   }));
                   break;
 
-
                 case 'complete':
                   console.log('[DEBUG] === COMPLETE CASE RECEIVED ===');
 
@@ -726,20 +769,15 @@ export default function ChatPage({
                     shouldTypeText: false
                   };
 
-                  // ✅ ADD FINAL MESSAGE TO MESSAGES ARRAY IMMEDIATELY (FOR UI UPDATE)
-                  setMessages(prevMessages => [...prevMessages, finalAIMessage]);
-
-                  // ✅ CLEAR STREAMING STATE
+                  // ✅ SET COMPLETING FLAG AND CLEAR STREAMING STATE FIRST
+                  setIsCompleting(true);
                   setIsStreaming(false);
                   setStreamingMessage(null);
 
-                  // ✅ OPTIONAL: STILL RELOAD FROM DB TO ENSURE CONSISTENCY (NO DELAY IMPACT)
-                  // if (fetchMessages && conversationId) {
-                  //   await fetchMessages(conversationId);
-                  // }
+                  // ✅ QUEUE THE FINAL MESSAGE (useEffect will handle adding it)
+                  setFinalMessageQueue(finalAIMessage);
 
                   break;
-
                 default:
                   console.log('[DEBUG] Unhandled event type:', data.type);
                   break;
@@ -1016,39 +1054,27 @@ export default function ChatPage({
     console.log('[DEBUG] - Has streaming message:', !!streamingMessage);
     console.log('[DEBUG] - Streaming message text:', streamingMessage?.text?.substring(0, 50));
     console.log('[DEBUG] - Is streaming active:', isStreaming);
-
+    console.log('[DEBUG] - Is completing:', isCompleting);
+  
     let combinedMessages = [...messages];
-
-    // ✅ ENHANCED: Only add streaming message if it's actually streaming
-    // During completion transition, rely on the final message in `messages`
-    if (streamingMessage && isStreaming) {
+  
+    // ✅ ENHANCED: Only add streaming message if NOT completing AND streamingMessage exists
+    if (streamingMessage && isStreaming && !isCompleting) {
       combinedMessages = [...combinedMessages, streamingMessage];
       console.log('[DEBUG] Added streaming message to combined messages');
-    } else if (streamingMessage && !isStreaming) {
-      // ✅ During transition period, still show streaming message until final message is added
+    } else if (streamingMessage && !isStreaming && !isCompleting) {
+      // ✅ During transition, only add if no recent AI message
       const lastMessage = messages[messages.length - 1];
       if (!lastMessage || lastMessage.sender !== 'ai' || lastMessage.status !== 'complete') {
         combinedMessages = [...combinedMessages, streamingMessage];
         console.log('[DEBUG] Added transitional streaming message');
       }
     }
-
+  
     console.log('[DEBUG] Combined messages count:', combinedMessages.length);
-    console.log('[DEBUG] Final combined messages:', combinedMessages.map((m, i) => ({
-      index: i,
-      sender: m.sender,
-      text: m.text?.substring(0, 30) + '...',
-      hasImage: !!m.imageUrl,
-      hasToolSteps: !!(m.toolSteps?.length),
-      hasSearchResults: !!(m.searchResults?.results?.length),
-      hasInspirationImages: !!(m.inspirationImages?.length),
-      isStreaming: m === streamingMessage,
-      status: m.status
-    })));
-
     return combinedMessages;
-  }, [messages, streamingMessage, isStreaming]);
-
+  }, [messages, streamingMessage, isStreaming, isCompleting]);
+  
   return (
     <div className=" flex flex-col mt-[80px] w-[90%]  max-w-[1280px]  mx-auto justify-between">
       <div

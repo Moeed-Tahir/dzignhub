@@ -14,7 +14,6 @@ function CommunityFeed() {
   const [selectedGeneration, setSelectedGeneration] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-
   const getCommunityFeed = async () => {
     const req = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/get-generations`,
@@ -86,13 +85,14 @@ function CommunityFeed() {
             console.log("Changing filter to all");
             setFilter("all");
           }}
-          className={`rounded-full px-4 gap-2 whitespace-nowrap border py-2 flex items-center font-medium text-sm ${filter === "all"
+          className={`rounded-full px-4 gap-2 whitespace-nowrap border py-2 flex items-center font-medium text-sm ${
+            filter === "all"
               ? "bg-white text-[#68686B] border-[#68686B]"
               : "bg-[#1B1F3B] border-[#1B1F3B] text-white"
-            }`}
+          }`}
         >
           <Globe
-            fill={filter === "all" ? "#68686B"  :  "#fff"}
+            fill={filter === "all" ? "#68686B" : "#fff"}
             width={24}
             height={24}
           />
@@ -103,13 +103,14 @@ function CommunityFeed() {
             console.log("Changing filter to image");
             setFilter("image");
           }}
-          className={`rounded-full px-4 py-2 flex items-center  whitespace-nowrap gap-2 font-medium border text-sm ${filter === "image"
+          className={`rounded-full px-4 py-2 flex items-center  whitespace-nowrap gap-2 font-medium border text-sm ${
+            filter === "image"
               ? "bg-white text-[#68686B] border-[#68686B]"
               : "bg-[#1B1F3B] border-[#1B1F3B] text-white"
-            }`}
+          }`}
         >
           <Gallery
-            fill={filter === "image" ? "#68686B"  :  "#fff"}
+            fill={filter === "image" ? "#68686B" : "#fff"}
             width={24}
             height={24}
           />
@@ -120,13 +121,14 @@ function CommunityFeed() {
             console.log("Changing filter to video");
             setFilter("video");
           }}
-          className={`rounded-full px-4 py-2 flex items-center gap-2 font-medium border text-sm ${filter === "video"
+          className={`rounded-full px-4 py-2 flex items-center gap-2 font-medium border text-sm ${
+            filter === "video"
               ? "bg-white text-[#68686B] border-[#68686B]"
               : "bg-[#1B1F3B] border-[#1B1F3B] text-white"
-            }`}
+          }`}
         >
           <Video
-            fill={filter === "video"  ? "#68686B"  :  "#fff"}
+            fill={filter === "video" ? "#68686B" : "#fff"}
             width={24}
             height={24}
           />
@@ -153,7 +155,6 @@ function CommunityFeed() {
                   gridRowEnd: `span ${randomHeight}`,
                 }}
                 onClick={() => handleImageClick(generation)} // Add click handler
-
               >
                 <div className="relative w-full h-full rounded-[12px] overflow-hidden bg-gray-200">
                   {generation.type === "video" ? (
@@ -214,20 +215,25 @@ function CommunityFeed() {
       {/* ImageModal */}
       {selectedGeneration && (
         <ImageModal
-        type={selectedGeneration.type}
+          type={selectedGeneration.type}
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           tags={generateTags(selectedGeneration)}
           mainPic={selectedGeneration.url}
           suggestions={generations
-            .filter(gen => gen.url !== selectedGeneration.url)
+            .filter((gen) => gen.url !== selectedGeneration.url)
             .slice(0, 4)
-            .map(gen => gen.url)
+            .map((gen) => gen.url)}
+          title={
+            selectedGeneration.title || `Community ${selectedGeneration.type}`
           }
-          title={selectedGeneration.title || `Community ${selectedGeneration.type}`}
           desc={selectedGeneration.prompt || "No description available"}
-          subtitle={selectedGeneration.type === "image" ? "Image Generation" : "Video Generation"}
-          allGenerations={generations} 
+          subtitle={
+            selectedGeneration.type === "image"
+              ? "Image Generation"
+              : "Video Generation"
+          }
+          allGenerations={generations}
         />
       )}
     </div>

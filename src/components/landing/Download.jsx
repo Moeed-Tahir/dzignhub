@@ -13,7 +13,7 @@ function Download({ downloadSection }) {
     appStoreUrl: "#",
     googlePlayImage: "/landing/download/google-play.svg",
     googlePlayUrl: "#",
-    phoneImage: "/landing/download/iphone.svg",
+    phoneImage: "/landing/download/iphone-12.svg",
   };
 
   // Process Strapi data or use defaults

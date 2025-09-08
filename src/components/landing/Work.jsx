@@ -13,8 +13,8 @@ function Work({ workCards = [] }) {
         "Enter your business concept or paste your URL. We build your brand DNA instantly.",
       mobileManualImage: "/landing/work/mobile/manual-1.jpg",
       desktopManualImage: "/landing/work/desktop/manual-1.jpg",
-      mobileProImage: "/landing/work/mobile/pro-1.jpg",
-      desktopProImage: "/landing/work/desktop/pro-1.jpg",
+      mobileProImage: "/landing/work/mobile/pro-1.svg",
+      desktopProImage: "/landing/work/desktop/pro-1.svg",
     },
     {
       title: "AI team builds everything",

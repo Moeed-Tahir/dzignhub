@@ -14,7 +14,7 @@ const ImageModal = ({
   desc: initialDesc,
   subtitle: initialSubtitle,
   allGenerations, // ✅ Add this prop to get full generation data
-  type
+  type,
 }) => {
   const router = useRouter();
 
@@ -38,8 +38,8 @@ const ImageModal = ({
   if (!isOpen) return null;
 
   const openAIAgent = () => {
-    router.push("/dashboard/Ai-Agent/zara")
-  }
+    router.push("/dashboard/Ai-Agent/zara");
+  };
 
   // ✅ Function to generate tags for any generation
   const generateTags = (generation) => {
@@ -71,7 +71,9 @@ const ImageModal = ({
     console.log("[DEBUG] Suggestion clicked:", suggestionUrl);
 
     // Find the full generation data for this suggestion
-    const suggestionGeneration = allGenerations?.find(gen => gen.url === suggestionUrl);
+    const suggestionGeneration = allGenerations?.find(
+      (gen) => gen.url === suggestionUrl
+    );
 
     if (suggestionGeneration) {
       console.log("[DEBUG] Found suggestion generation:", suggestionGeneration);
@@ -79,12 +81,20 @@ const ImageModal = ({
       // Update all the modal content
       setCurrentMainPic(suggestionGeneration.url);
       setAssetType(suggestionGeneration.type);
-      setCurrentTitle(suggestionGeneration.title || `Community ${suggestionGeneration.type}`);
+      setCurrentTitle(
+        suggestionGeneration.title || `Community ${suggestionGeneration.type}`
+      );
       setCurrentDesc(suggestionGeneration.prompt || "No description available");
-      setCurrentSubtitle(suggestionGeneration.type === "image" ? "Image Generation" : "Video Generation");
+      setCurrentSubtitle(
+        suggestionGeneration.type === "image"
+          ? "Image Generation"
+          : "Video Generation"
+      );
       setCurrentTags(generateTags(suggestionGeneration));
     } else {
-      console.log("[DEBUG] Suggestion generation not found, updating image only");
+      console.log(
+        "[DEBUG] Suggestion generation not found, updating image only"
+      );
       // Fallback: just update the image
       setCurrentMainPic(suggestionUrl);
     }
@@ -138,7 +148,6 @@ const ImageModal = ({
               Related templates
             </h1>
             <div className="flex gap-2">
-
               {suggestions && suggestions.length > 0 ? (
                 suggestions.map((suggestion, index) => (
                   <div
@@ -175,24 +184,21 @@ const ImageModal = ({
 
         <div className="hidden lg:flex w-[543px]">
           {/* ✅ Use dynamic main picture */}
-          {
-            assetType == "image" ? (
-              <Image
-                src={currentMainPic}
-                alt="Preview"
-                width={543}
-                height={686}
-                className="w-full rounded-[20px] h-full object-cover"
-              />
-            ):(
-              <video
-                src={currentMainPic}
-                className="w-full rounded-[20px] h-full object-cover"
-                controls
-              />
-            )
-          }
-
+          {assetType == "image" ? (
+            <Image
+              src={currentMainPic}
+              alt="Preview"
+              width={543}
+              height={686}
+              className="w-full rounded-[20px] h-full object-cover"
+            />
+          ) : (
+            <video
+              src={currentMainPic}
+              className="w-full rounded-[20px] h-full object-cover"
+              controls
+            />
+          )}
         </div>
       </div>
     </div>

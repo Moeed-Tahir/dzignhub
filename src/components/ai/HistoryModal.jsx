@@ -32,6 +32,8 @@ const HistoryModal = ({
   setActiveChat,
   setShowIntro,
   setMessages,
+  setShowTemplate,
+  setHasPromptEntered
 }) => {
   const router = useRouter();
   const plusButtonRef = useRef(null);
@@ -158,6 +160,7 @@ const HistoryModal = ({
       sana: "content-creator",
       novi: "seo-specialist",
       mira: "strategist",
+      "pitch-deck":"pitch-deck"
     };
 
     setIsSearching(true);
@@ -169,7 +172,7 @@ const HistoryModal = ({
           process.env.NEXT_PUBLIC_PYTHON_API_URL
         }/agents/conversations/search?query=${encodeURIComponent(
           query
-        )}&user_id=${userId}&agent=${agents[aiName.toLowerCase()]}&limit=10`,
+        )}&user_id=${userId}&agent=${agents[aiName.toLowerCase().replace(/\s+/g, "-")]}&limit=10`,
         {
           method: "GET",
           headers: {
@@ -244,7 +247,7 @@ const HistoryModal = ({
             setActiveChat(updatedConversations[0]._id);
             // Navigate to the new conversation
             router.push(
-              `/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${
+              `/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}?conversationId=${
                 updatedConversations[0]._id
               }`
             );
@@ -253,7 +256,7 @@ const HistoryModal = ({
             setActiveChat(null);
             setShowIntro(true);
             setMessages([]);
-            router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}`);
+            router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}`);
           }
         }
       } else {
@@ -276,7 +279,7 @@ const HistoryModal = ({
   const startNewChat = () => {
     setMessages([]);
     setShowIntro(true);
-    router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase()}`);
+    router.push(`/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}`);
   };
 
   const toggleModal = () => {
@@ -288,6 +291,7 @@ const HistoryModal = ({
       <div className="flex justify-between items-center mb-6 ">
         <p className="text-[#344054] text-lg font-semibold ">Chat History</p>
         <div
+        id="closeHistoryModal"
           onClick={onClose}
           className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center"
         >
@@ -332,13 +336,15 @@ const HistoryModal = ({
                 onClick={() => {
                   setActiveChat(result._id);
                   setShowIntro(false);
-                  onClose();
+                  setShowTemplate(false)
+                  setHasPromptEntered(true)
                   onConversationSelect && onConversationSelect(result._id);
                   router.push(
-                    `/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${
+                    `/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}?conversationId=${
                       result._id
                     }`
                   );
+                  onClose();
                   setSearchQuery(""); // Clear search
                   setSearchResults([]);
                 }}
@@ -412,16 +418,18 @@ const HistoryModal = ({
                   onClick={() => {
                     // Don't navigate if we're editing the title
                     if (editingConversationId === conversation._id) return;
-
+                    setShowTemplate(false)
+                    setHasPromptEntered(true)
                     setActiveChat(conversation._id);
                     setShowIntro(false);
                     onConversationSelect &&
                       onConversationSelect(conversation._id);
                     router.push(
-                      `/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${
+                      `/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}?conversationId=${
                         conversation._id
                       }`
                     );
+                    onClose();
                   }}
                   className={`group relative p-3 mx-2 my-1 rounded-lg cursor-pointer transition-all ${
                     activeChat === conversation._id

@@ -10,7 +10,7 @@ import { LuUserRound } from "react-icons/lu";
 import { Settings, Paperclip, Mic, Send, User, MicOff } from "lucide-react";
 import Image from "next/image";
 
-export function ModernInput() {
+export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove, onPromptSubmit }) {
   const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -20,6 +20,12 @@ export function ModernInput() {
     e.preventDefault();
     if (message.trim()) {
       console.log("Sending message:", message);
+      
+      // Call the callback to hide template if provided
+      if (onPromptSubmit) {
+        onPromptSubmit(message);
+      }
+      
       setMessage("");
     }
   };
@@ -79,35 +85,63 @@ export function ModernInput() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full max-w-[929px] mx-auto p-6"
+      className="w-full max-w-[929px] mb-5 sm:mb-10 mx-auto p-6"
     >
       <form onSubmit={handleSubmit} className="relative">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+            {/* Selected template image */}
+            {selectedTemplateImage && (
+              <div className="px-4  py-3">
+                <div className="relative inline-block">
+                  <Image
+                    src={selectedTemplateImage}
+                    alt="Selected template"
+                    width={120}
+                    height={80}
+                    className="rounded-lg border border-gray-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onTemplateRemove) {
+                        onTemplateRemove();
+                      }
+                    }}
+                    className="absolute -top-2 -right-2 bg-gray-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-gray-600"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            )}
           <div className="px-4 py-3">
-            <input
+            <textarea
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Ask anything, create anything"
-              className="w-full border-0 bg-transparent text-base placeholder:text-gray-400 
-             focus:outline-none focus:ring-0 focus:ring-offset-0 px-0"
+              className={` ${
+                isAi ? "h-[80px] resize-none" : "resize-none"
+              }   w-full border-0 bg-transparent text-base placeholder:text-gray-400 
+             focus:outline-none focus:ring-0 focus:ring-offset-0 px-0`}
             />
           </div>
 
+
           {/* Options section on bottom with justify-between */}
-          <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-gray-700">
+          <div className={`flex items-center ${isAi?"justify-end":"justify-between"} px-4 py-3 border-t border-gray-100`}>
             {/* Left side icons */}
-            <div className="flex items-center gap-2">
+            <div className={` ${isAi?"hidden":"flex"}  items-center gap-2`}>
               {/* <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-gray-100 dark:bg-gray-700">
-                  <User className="w-[18px] h-[18px]  text-gray-600 dark:text-gray-400" />
+                <AvatarFallback className="bg-gray-100">
+                  <User className="w-[18px] h-[18px]  text-gray-600" />
                 </AvatarFallback>
               </Avatar> */}
               <button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] border border-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] border border-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
               >
                 <LuUserRound className="w-[18px] h-[18px] " />
               </button>
@@ -115,7 +149,7 @@ export function ModernInput() {
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] border border-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] border border-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
               >
                 <Settings className="w-[18px] h-[18px] " />
               </button>
@@ -128,7 +162,7 @@ export function ModernInput() {
                 variant="ghost"
                 size="sm"
                 onClick={handleFileAttach}
-                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
               >
                 <Image src={"/clip.svg"} height={18} width={18} alt="" />
               </button>
@@ -140,7 +174,7 @@ export function ModernInput() {
                 className={`h-[34px] w-[34px] flex justify-center items-center rounded-full p-0 ${
                   isRecording
                     ? "text-red-500 hover:text-red-600"
-                    : "text-[#1C1C1E] hover:text-gray-700 dark:text-gray-400 bg-[#F3F3F3] dark:hover:text-gray-200"
+                    : "text-[#1C1C1E] hover:text-gray-700 bg-[#F3F3F3]"
                 }`}
               >
                 {isRecording ? (
@@ -153,7 +187,7 @@ export function ModernInput() {
                 type="submit"
                 variant="ghost"
                 size="sm"
-                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
                 disabled={!message.trim()}
               >
                 {/* <Send className="w-[18px] h-[18px] " /> */}

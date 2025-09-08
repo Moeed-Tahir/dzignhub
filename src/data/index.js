@@ -87,6 +87,19 @@ const aiBots = {
       "🧭 Define your colors, and typography styles.",
     ],
   },
+  "pitch-deck": {
+    name: "Pitch Deck",
+    img: "/Ai/ellie.png",
+    tagline:
+      "I’m your UI/UX design companion — here to help you create intuitive flows, wireframes, design systems, and pixel-perfect interfaces.",
+    description:
+      "Tell me about your product or select one of the prompts below to start designing faster and smarter.",
+    suggestions: [
+      "🧭 Map out navigation for your product.",
+      "📝 Quickly sketch the structure of your app",
+      "🧭 Define your colors, and typography styles.",
+    ],
+  },
 };
 
 export default aiBots;
