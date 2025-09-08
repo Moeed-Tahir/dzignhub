@@ -74,16 +74,16 @@ function Page() {
     },
     {
       name: "UI/UX Design",
-      icon: "/aiAgent/designtools.svg",
+      icon: "/aiAgent/code.svg",
       href: "/dashboard/Ai-Agent/kano",
 
-      bg: "#F7F0EB",
+      bg: "#12A3B50D",
     },
-    {
-      name: "Software Developer",
-      icon: "/aiAgent/code.svg",
-      bg: "#EBF4F5",
-    },
+    // {
+    //   name: "Software Developer",
+    //   icon: "/aiAgent/code.svg",
+    //   bg: "#EBF4F5",
+    // },
     {
       name: "Content Creation",
       icon: "/aiAgent/ruler&pen.svg",

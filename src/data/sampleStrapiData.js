@@ -134,6 +134,6 @@ export const sampleLandingPageData = {
     appStoreUrl: "https://apps.apple.com/app/your-app",
     googlePlayImage: { url: "/landing/download/google-play.svg" },
     googlePlayUrl: "https://play.google.com/store/apps/details?id=your.app",
-    phoneImage: { url: "/landing/download/iphone.svg" }
+    phoneImage: { url: "/landing/download/iphone-12.svg" }
   }
 };

@@ -87,9 +87,8 @@ export default function Hero({
 }) {
   // Use dynamic hero section data if available, otherwise use props or fallback
   const heroData = heroSection || {
-    mainHeading: mainHeading || "The All-in-one AI Workflow",
-    mainDescription:
-      mainDescription || "Website, app, and brand-one promt does it all.",
+    mainHeading: mainHeading || "AMAI SuperAI",
+    mainDescription: mainDescription || "Your All In One AI Co-Creator ",
     announcementIcon: null,
     announcementText: "New Agent Release",
     earlyAccessText: "Get early access",
@@ -104,12 +103,11 @@ export default function Hero({
 
   // Process dynamic data with fallbacks
   const processedHeroData = {
-    mainHeading:
-      heroData.mainHeading || mainHeading || "The All-in-one AI Workflow",
+    mainHeading: heroData.mainHeading || mainHeading || "AMAI SuperAI",
     mainDescription:
       heroData.mainDescription ||
       mainDescription ||
-      "Website, app, and brand-one promt does it all.",
+      "Your All In One AI Co-Creator ",
     announcementIcon: heroData.announcementIcon,
     announcementText: heroData.announcementText || "New Agent Release!",
     earlyAccessText: heroData.earlyAccessText || "Get early access",
@@ -171,7 +169,7 @@ export default function Hero({
             variants={itemVariants}
           >
             <motion.h1
-              className={`lg:text-[68px] px-2 lg:px-0 max-w-[929px] w-full text-[46px] text-white  text-center leading-tight  font-bold`}
+              className={`lg:text-[68px] px-2 lg:px-0  w-full text-[46px] text-white  text-center leading-tight  font-bold`}
               variants={itemVariants}
             >
               {processedHeroData.mainHeading}
@@ -183,9 +181,11 @@ export default function Hero({
               {processedHeroData.mainDescription}
             </motion.p>
           </motion.div>
-          <ModernInput />
+          <div className="flex flex-col-reverse sm:flex-col">
+            <ModernInput />
 
-          <Carousel />
+            <Carousel />
+          </div>
         </div>
       </motion.div>
     </>

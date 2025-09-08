@@ -14,7 +14,8 @@ function Templates({ templates = [] }) {
   const defaultTemplates = {
     website: {
       title: "Website",
-      description: "Complete responsive sites with mobile optimization and hosting.",
+      description:
+        "Complete responsive sites with mobile optimization and hosting.",
       images: [
         "/landing/templates/1/1.png",
         "/landing/templates/1/2.png",
@@ -26,8 +27,7 @@ function Templates({ templates = [] }) {
     },
     lummi: {
       title: "Mobile Apps",
-      description:
-        "Cross-platform apps ready for App Store and Google Play.",
+      description: "Cross-platform apps ready for App Store and Google Play.",
       images: [
         "/landing/templates/2/1.png",
         "/landing/templates/2/2.png",
@@ -47,8 +47,7 @@ function Templates({ templates = [] }) {
     },
     social: {
       title: "Business Strategy",
-      description:
-        "Plans, pitch decks, financial models, and market analysis.",
+      description: "Plans, pitch decks, financial models, and market analysis.",
       images: [
         "/landing/templates/4/Image-9.png",
         "/landing/templates/4/Image-10.png",
@@ -212,8 +211,9 @@ function Templates({ templates = [] }) {
           </motion.div>
           <motion.div className="p-2" variants={headerVariants}>
             <p className="leading-[22px] font-[400] text-[20px] align-middle text-[#3D4050] font-[general-sans]">
-              Discover our curated collection featuring websites, apps, 
-<br />and brands to match your vision and goals.
+              Discover our curated collection featuring websites, apps,
+              <br />
+              and brands to match your vision and goals.
             </p>
           </motion.div>
         </motion.div>
@@ -240,25 +240,25 @@ function Templates({ templates = [] }) {
 
             {/* Mobile Layout - Show only first 3 images */}
             <motion.div
-              className="md:hidden w-full h-[309px] absolute top-[180px] left-[20px] right-[20px]"
+              className="md:hidden w-[110%] h-[309px] absolute top-[180px] left-[-10px] right-[0px]"
               variants={containerVariants}
             >
               {templateData.website.images.slice(0, 3).map((image, index) => {
                 const positions = [
-                  "left-[10px] top-[60px] z-2",
-                  "left-[90px] top-[40px] z-1",
-                  "left-[170px] top-[20px]",
+                  "left-[10px] top-[40px] z-2",
+                  "left-[90px] top-[20px] z-1",
+                  "left-[190px] top-[0px]",
                 ];
                 return (
                   <motion.div
                     key={index}
-                    className={`w-[100px] h-[140px] absolute ${positions[index]} overflow-hidden rounded-[10.64px] rotate-[-2deg]`}
+                    className={`w-[236px] h-[236px] absolute ${positions[index]} overflow-hidden rounded-[10.64px] rotate-[-2deg]`}
                     variants={imageVariants}
-                    whileHover={{
-                      scale: 1.1,
-                      rotate: 0,
-                      transition: { duration: 0.3 },
-                    }}
+                    // whileHover={{
+                    //   scale: 1.1,
+                    //   rotate: 0,
+                    //   transition: { duration: 0.3 },
+                    // }}
                   >
                     <img
                       src={image}

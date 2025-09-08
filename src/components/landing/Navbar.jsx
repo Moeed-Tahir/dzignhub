@@ -86,7 +86,6 @@ function Navbar({ onOpenSidebar }) {
         SetEmail(data.user.email);
         SetUserId(data.user.userId);
         SetAvatar(data.user.avatar);
-        
       } else {
         SetIsLogin(false);
       }
@@ -101,7 +100,7 @@ function Navbar({ onOpenSidebar }) {
   }, []);
   return (
     <motion.div
-      className=" h-[48px] py-10 md:px-10 w-full px-5 xl:px-0 justify-between  mx-auto flex"
+      className=" h-[48px] py-10 md:px-10 w-full px-5 xl:px-0 justify-between items-center mt-3  mx-auto flex"
       variants={navbarVariants}
       initial="hidden"
       animate="visible"
@@ -110,36 +109,46 @@ function Navbar({ onOpenSidebar }) {
         <motion.img
           src="/GreenLogo.svg"
           alt="logo"
-          className="w-[160px] h-[40px] object-contain"
+          className=" w-[90px] h-[22px] sm:w-[160px] sm:h-[40px] object-contain"
           variants={logoVariants}
         />
       </Link>
       <motion.div className="flex gap-[10px]" variants={buttonVariants}>
-        {
-          IsLogin?(
-            <Link href="/dashboard">
-          <motion.button
-            className={` bg-[#BDFF00] w-[100px] h-[47px] text-[#000000]  rounded-full   cursor-pointer`}
-            whileHover="hover"
-            whileTap="tap"
-            variants={buttonVariants}
-          >
-            Dashboard
-          </motion.button>
-        </Link>
-          ):(
+        {IsLogin ? (
+          <Link href="/dashboard">
+            <motion.button
+              className={` bg-[#BDFF00] w-[100px] h-[47px] text-[#000000]  rounded-full   cursor-pointer`}
+              whileHover="hover"
+              whileTap="tap"
+              variants={buttonVariants}
+            >
+              Dashboard
+            </motion.button>
+          </Link>
+        ) : (
+          <>
             <Link href="/auth/login">
-          <motion.button
-            className={` bg-[#BDFF00] w-[100px] h-[47px] text-[#000000]  rounded-full   cursor-pointer`}
-            whileHover="hover"
-            whileTap="tap"
-            variants={buttonVariants}
-          >
-            Sign In
-          </motion.button>
-        </Link>
-          )
-        }
+              <motion.button
+                className={` bg-[#212E62] text-[#BDFF00] px-5  h-[47px] border-[#BDFF00] border  rounded-full   cursor-pointer`}
+                whileHover="hover"
+                whileTap="tap"
+                variants={buttonVariants}
+              >
+                Book a demo{" "}
+              </motion.button>
+            </Link>
+            <Link href="/auth/login">
+              <motion.button
+                className={` bg-[#BDFF00] w-[100px] h-[47px] text-[#000000]  rounded-full   cursor-pointer`}
+                whileHover="hover"
+                whileTap="tap"
+                variants={buttonVariants}
+              >
+                Sign In
+              </motion.button>
+            </Link>
+          </>
+        )}
         {/* Conditionally show the button */}
 
         <motion.button

@@ -80,63 +80,63 @@ function Carousel({ carouselImages = [] }) {
       name: "Image Creation",
       icon: "/aiAgent/gallery-edit.svg",
       href: "/dashboard/image-creation",
-      bg: "#F7EEF3",
+      bg: "#FF339C0D",
     },
     {
       name: "Video Creation",
       icon: "/aiAgent/video.svg",
       href: "/dashboard/video-creation",
 
-      bg: "#F6F0F8",
+      bg: "#E950F70D",
     },
     {
       name: "Pitch Deck",
       icon: "/aiAgent/presention-chart.svg",
       href: "/dashboard/Ai-Agent/pitch-deck",
-      bg: "#EBF3F8",
+      bg: "#118EFF0D",
     },
     {
       name: "SEO Assistant",
       icon: "/aiAgent/search-status.svg",
       href: "/dashboard/Ai-Agent/novi",
 
-      bg: "#EAF4EF",
+      bg: "#0DA84A0D",
     },
     {
       name: "UI/UX Design",
-      icon: "/aiAgent/designtools.svg",
+      icon: "/aiAgent/code.svg",
       href: "/dashboard/Ai-Agent/kano",
 
-      bg: "#F7F0EB",
+      bg: "#12A3B50D",
     },
-    {
-      name: "Software Developer",
-      icon: "/aiAgent/code.svg",
-      bg: "#EBF4F5",
-    },
+    // {
+    //   name: "Software Developer",
+    //   icon: "/aiAgent/code.svg",
+    //   bg: "#FF3B4B0D",
+    // },
     {
       name: "Content Creation",
       icon: "/aiAgent/ruler&pen.svg",
-      bg: "#F7EFEF",
+      bg: "#FF3B4B0D",
     },
     {
       name: "Brand Design",
       icon: "/aiAgent/color-swatch.svg",
       href: "/dashboard/Ai-Agent/zara",
 
-      bg: "#FFFDF5",
+      bg: "#FAD0390D",
     },
     {
       name: "Market Assistant",
       icon: "/aiAgent/market.svg",
-      bg: "#F9F9FE",
+      bg: "#7D84F90D",
     },
     {
       name: "Strategy Assistant",
       icon: "/aiAgent/status-up.svg",
       href: "/dashboard/Ai-Agent/mira",
 
-      bg: "#FEFAF7",
+      bg: "#F0925C0D",
     },
   ];
 
@@ -145,7 +145,7 @@ function Carousel({ carouselImages = [] }) {
   const loopDuration = 12;
 
   return (
-    <div className="overflow-hidden w-full mb-[50px]">
+    <div className="overflow-hidden w-full sm:mb-[50px]">
       <motion.div
         className="sm:flex sm:max-w-[1140px] w-full mx-auto sm:flex-wrap grid  grid-cols-4 justify-center items-center"
         variants={containerVariants}
@@ -156,14 +156,20 @@ function Carousel({ carouselImages = [] }) {
           <motion.div
             key={index}
             variants={itemVariants}
-            // whileHover={{ scale: 1.12, y: -10, boxShadow: "0 8px 32px rgba(0,0,0,0.18)" }}
-            className="flex flex-col items-center h-[142px] w-[100px] duration-300 transition-all cursor-pointer"
+            className={` ${
+              index === ai.length - 1 ? "hidden sm:flex" : ""
+            } flex flex-col items-center h-[142px] w-[100px] duration-300 transition-all cursor-pointer`}
             onClick={() => item.href && router.push(item.href)}
           >
-            <div className="rounded-full bg-transparent backdrop-blur-lg flex justify-center items-center w-20 h-20">
-              <Image src={item.icon} alt={item.name} width={44} height={44} />
+            <div
+              style={{ backgroundColor: item.bg }}
+              className={`   rounded-full  flex justify-center items-center w-[54px] h-[54px]`}
+            >
+              <Image src={item.icon} alt={item.name} width={27} height={27} />
             </div>
-            <span className="text-center text-white w-[80%]">{item.name}</span>
+            <span className="text-center text-white w-[70%] mt-1">
+              {item.name}
+            </span>
           </motion.div>
         ))}
       </motion.div>

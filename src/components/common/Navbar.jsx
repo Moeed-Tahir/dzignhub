@@ -132,6 +132,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
 
   const getActiveMenu = (pathname) => {
     if (pathname === "/dashboard") return "Home";
+    if (pathname === "/dashboard/templates") return "Templates";
     if (pathname.startsWith("/workspace") || pathname.startsWith("/dashboard"))
       return "Manual workspace";
     if (pathname.startsWith("/assistants")) return "Assistants";
@@ -142,6 +143,7 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
 
   const menuItems = [
     { name: "Home", href: "/dashboard", type: "link" },
+    { name: "Templates", href: "/dashboard/templates", type: "link" },
     {
       name: "Manual workspace",
       href: "/workspace",
