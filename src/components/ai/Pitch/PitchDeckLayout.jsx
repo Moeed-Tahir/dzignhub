@@ -23,6 +23,8 @@ const PitchDeckLayout = ({ initialPrompt }) => {
   const [currentInspirationImages, setCurrentInspirationImages] = useState(null);
   const [currentThinkingProcess, setCurrentThinkingProcess] = useState(null);
   const [currentSlidesUrl, setCurrentSlidesUrl] = useState(null);
+
+  const [slidesUrl, setSlidesUrl] = useState("https://assets.api.gamma.app/export/pptx/ys1yds84h2jj5ch/1f4cb29b0c50577e5cf38f5af5d8e536/EnKodex.pptx");
   
   const searchParams = useSearchParams();
   const { UserId, SetUserId } = useUserStore();
@@ -581,6 +583,8 @@ const PitchDeckLayout = ({ initialPrompt }) => {
                     currentText = data.message;
                   }
 
+                  setSlidesUrl(data.final_data?.slides_url || finalSlidesUrl);
+
                   // CONSTRUCT FINAL AI MESSAGE
                   const finalAIMessage = {
                     sender: "ai",
@@ -678,6 +682,7 @@ const PitchDeckLayout = ({ initialPrompt }) => {
 
       <PitchDeckPreview
         slides={slides}
+        slideUrl={slidesUrl}
         currentSlide={currentSlide}
         onSlideChange={handleSlideChange}
       />

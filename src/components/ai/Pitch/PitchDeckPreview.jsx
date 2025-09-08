@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 
-const PitchDeckPreview = ({ slides = [], currentSlide = 0, onSlideChange }) => {
-  if (slides.length === 0) {
+const PitchDeckPreview = ({ slideUrl }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // If no slideUrl provided, show empty state
+  if (!slideUrl) {
     return (
       <div className="w-2/3 bg-gray-50 rounded-lg shadow-md flex flex-col items-center justify-center">
         <div className="text-center p-6">
@@ -30,52 +33,103 @@ const PitchDeckPreview = ({ slides = [], currentSlide = 0, onSlideChange }) => {
     );
   }
 
-  const currentSlideData = slides[currentSlide];
-
+  // Extract Gamma document ID
+  const extractGammaId = (url) => {
+    // Handle various URL formats
+    if (url.includes('/export/pptx/')) {
+      return url.split('/export/pptx/')[1].split('/')[0];
+    } else if (url.includes('gamma.app/view/')) {
+      return url.split('gamma.app/view/')[1].split('?')[0]; // Remove query params if any
+    } else if (url.includes('gamma.app/docs/')) {
+      return url.split('gamma.app/docs/')[1].split('?')[0]; // Remove query params if any
+    }
+    return null;
+  };
+  
+  const gammaId = extractGammaId(slideUrl);
+  
+  // Always use the Gamma viewer URL (more reliable and no PowerPoint logo)
+  const gammaViewUrl = gammaId 
+    ? `https://gamma.app/embed/${gammaId}?mode=doc` // Use embed mode for cleaner UI
+    : slideUrl;
+  
+  // Public share URL for "Open in Gamma" link
+  const publicShareUrl = gammaId 
+    ? `https://gamma.app/view/${gammaId}`
+    : slideUrl;
+  
   return (
     <div className="w-2/3 bg-white rounded-lg shadow-md flex flex-col">
       <div className="p-4 border-b flex justify-between items-center">
         <h2 className="text-lg font-medium text-gray-800">
-          {currentSlideData.title || "Pitch Deck"}
+          Generated Pitch Deck
         </h2>
-        <div className="text-sm text-gray-500">
-          Slide {currentSlide + 1} of {slides.length}
+        
+        <div className="flex space-x-2">
+          {/* <a
+            href={publicShareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Open in Gamma
+          </a> */}
+          <a
+            href={"/edit-slides?slideUrl=" + encodeURIComponent(slideUrl)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Open In Edit Mode
+          </a>
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden p-4 flex flex-col">
-        {currentSlideData.type === "gamma" ? (
-          <div className="flex-1 w-full">
-            <iframe
-              src={currentSlideData.url}
-              className="w-full h-full rounded border"
-              title="Gamma Presentation"
-              allow="fullscreen"
-            ></iframe>
-          </div>
-        ) : (
-          <div className="flex-1 flex items-center justify-center bg-gray-50 rounded p-4">
-            <div className="text-center">
-              <h3 className="text-xl font-bold mb-4">{currentSlideData.title}</h3>
-              <p className="text-gray-700">{currentSlideData.content}</p>
+      <div className="flex-1 overflow-hidden">
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-75 z-10">
+            <div className="flex flex-col items-center">
+              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
+              <p className="mt-2 text-gray-600">Loading presentation...</p>
             </div>
           </div>
         )}
+        
+        <div className="flex-1" style={{ height: "70vh" }}>
+          {/* Always use Gamma's viewer */}
+          <iframe
+            src={gammaViewUrl}
+            className="w-full h-full rounded border"
+            title="Gamma Presentation"
+            allow="fullscreen"
+            loading="lazy"
+            onLoad={() => setIsLoading(false)}
+          ></iframe>
+        </div>
       </div>
 
-      <div className="p-4 border-t flex justify-center">
-        <div className="flex space-x-2">
-          {slides.map((slide, index) => (
-            <button
-              key={slide.id}
-              onClick={() => onSlideChange(index)}
-              className={`w-3 h-3 rounded-full ${
-                index === currentSlide ? "bg-purple-600" : "bg-gray-300"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            ></button>
-          ))}
-        </div>
+      {/* Action buttons */}
+      <div className="p-3 border-t flex justify-center space-x-4">
+        {slideUrl.includes('/export/pptx/') && (
+          <a 
+            href={slideUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+            download
+          >
+            Download PPTX
+          </a>
+        )}
+        
+        <a 
+          href={publicShareUrl} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+        >
+          View Full Screen
+        </a>
       </div>
     </div>
   );

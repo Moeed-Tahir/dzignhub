@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cyntler/react-doc-viewer": "^1.17.0",
     "@gsap/react": "^2.1.1",
     "@nanostores/react": "github:ai/react",
     "@radix-ui/react-dialog": "^1.1.15",
