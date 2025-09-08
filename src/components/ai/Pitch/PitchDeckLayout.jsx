@@ -7,28 +7,94 @@ import PitchDeckPreview from "./PitchDeckPreview";
 import { useUserStore } from "@/store/store";
 import { useSearchParams } from "next/navigation";
 
-const PitchDeckLayout = ({ initialPrompt, selectedTemplate }) => {
+const PitchDeckLayout = ({ initialPrompt,
+  selectedTemplate,
+  messages: propMessages, // Accept messages as props
+  setMessages: propSetMessages, // Accept setMessages as props
+  onConversationLoad,
+ }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState([]);
-  const [messages, setMessages] = useState([]);
+  const [localMessages, setLocalMessages] = useState([]);
   const [conversationId, setConversationId] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingMessage, setStreamingMessage] = useState(null);
   const [isCompleting, setIsCompleting] = useState(false);
   const [finalMessageQueue, setFinalMessageQueue] = useState(null);
   const chatContainerRef = useRef(null);
-  
+
+  const messages = propMessages || localMessages;
+  const setMessages = propSetMessages || setLocalMessages;
+
+
   // State for preserving data across streaming
   const [currentSearchResults, setCurrentSearchResults] = useState(null);
   const [currentInspirationImages, setCurrentInspirationImages] = useState(null);
   const [currentThinkingProcess, setCurrentThinkingProcess] = useState(null);
   const [currentSlidesUrl, setCurrentSlidesUrl] = useState(null);
 
-  const [slidesUrl, setSlidesUrl] = useState("https://assets.api.gamma.app/export/pptx/ys1yds84h2jj5ch/1f4cb29b0c50577e5cf38f5af5d8e536/EnKodex.pptx");
-  
+  const [slidesUrl, setSlidesUrl] = useState("");
+
   const searchParams = useSearchParams();
   const { UserId, SetUserId } = useUserStore();
 
+  // Add this effect to load conversation data when conversationId changes:
+
+  useEffect(() => {
+    const loadConversationData = async () => {
+      const urlConversationId = searchParams.get('conversationId');
+      if (urlConversationId && urlConversationId !== conversationId) {
+        console.log("[DEBUG] Loading conversation:", urlConversationId);
+        setConversationId(urlConversationId);
+        // Reset slides URL when loading new conversation
+        setSlidesUrl("");
+        setCurrentSlidesUrl("")
+        // Call the parent's fetchMessages function if provided
+        if (onConversationLoad) {
+          await onConversationLoad(urlConversationId);
+        }
+      }
+    };
+
+    loadConversationData();
+  }, [searchParams, conversationId, onConversationLoad]);
+
+  // Add this effect to extract slides URL from loaded messages:
+  // Replace the useEffect that extracts slides URL:
+
+  useEffect(() => {
+    if (messages && messages.length > 0) {
+      console.log("[DEBUG] Messages loaded:", messages.length);
+      console.log("[DEBUG] Full messages data:", messages);
+
+      // Find the last AI message with slidesUrl
+      const lastAIMessage = [...messages]
+        .reverse()
+        .find(msg => {
+          console.log("[DEBUG] Checking message:", msg.sender, msg.slidesUrl, msg.text);
+          return msg.sender === 'agent' && (msg.slidesUrl || msg.slideUrl);
+        });
+
+      console.log("[DEBUG] Last AI Message found:", lastAIMessage);
+
+      if (lastAIMessage) {
+        // Check for slidesUrl in different possible properties
+        const slidesUrl = lastAIMessage.slidesUrl || lastAIMessage.slideUrl;
+
+        if (slidesUrl) {
+          console.log("[DEBUG] Found slides URL in conversation:", slidesUrl);
+          setSlidesUrl(slidesUrl);
+          setCurrentSlidesUrl(slidesUrl);
+        } else {
+          console.log("[DEBUG] No slides URL found in last AI message");
+        }
+      } else {
+        console.log("[DEBUG] No AI message with slides URL found");
+      }
+    } else {
+      console.log("[DEBUG] No messages loaded yet");
+    }
+  }, [messages]);
   // Initialize messages with the prompt
   useEffect(() => {
     if (initialPrompt) {
@@ -46,7 +112,7 @@ const PitchDeckLayout = ({ initialPrompt, selectedTemplate }) => {
           timestamp: new Date().toLocaleTimeString(),
         },
       ]);
-      
+
       // If we have an initial prompt, trigger the streaming process automatically
       if (initialPrompt.trim()) {
         handleSendWithStreaming(initialPrompt);
@@ -61,19 +127,6 @@ const PitchDeckLayout = ({ initialPrompt, selectedTemplate }) => {
 
       // Add the final message to messages
       setMessages(prevMessages => [...prevMessages, finalMessageQueue]);
-
-      // If there's a slides URL in the message, update slides
-      if (finalMessageQueue.slidesUrl) {
-        const newSlide = {
-          id: slides.length + 1,
-          title: `Generated Pitch Deck`,
-          content: finalMessageQueue.slidesUrl,
-          type: "gamma",
-          url: finalMessageQueue.slidesUrl
-        };
-        setSlides(prev => [...prev, newSlide]);
-        setCurrentSlide(slides.length);
-      }
 
       // Clear the queue and reset flags
       setFinalMessageQueue(null);
@@ -518,7 +571,12 @@ const PitchDeckLayout = ({ initialPrompt, selectedTemplate }) => {
                   finalSlidesUrl = data.slides_url;
                   preservedSlidesUrl = data.slides_url;
                   setCurrentSlidesUrl(data.slides_url);
+
+                  // Directly set the slidesUrl here to prevent double generation
+                  setSlidesUrl(data.slides_url);
+
                   businessInfo = data.business_info || {};
+
 
                   // ACCUMULATE: Keep all tools and add slides
                   setStreamingMessage(prevMessage => ({
@@ -533,17 +591,24 @@ const PitchDeckLayout = ({ initialPrompt, selectedTemplate }) => {
                     status: 'slides_generated',
                     timestamp: new Date().toLocaleTimeString()
                   }));
-                  
-                  // Add a new slide with the generated URL
-                  const newSlide = {
-                    id: slides.length + 1,
-                    title: `Generated Pitch Deck`,
-                    content: finalSlidesUrl,
-                    type: "gamma", 
-                    url: finalSlidesUrl
-                  };
-                  setSlides(prev => [...prev, newSlide]);
-                  setCurrentSlide(slides.length); // Navigate to the new slide
+
+                  reader.cancel();
+                  // Add these 3 crucial lines:
+                  setIsStreaming(false);
+                  setIsCompleting(true);
+                  setFinalMessageQueue({
+                    sender: "ai",
+                    text: currentText,
+                    toolSteps: [...allToolSteps],
+                    thinkingProcess: preservedThinkingProcess,
+                    searchResults: preservedSearchResults,
+                    inspirationImages: preservedInspirationImages,
+                    slidesUrl: finalSlidesUrl,
+                    businessInfo: businessInfo,
+                    status: 'complete',
+                    timestamp: new Date().toLocaleTimeString()
+                  });
+
                   break;
 
                 case 'error':
@@ -584,7 +649,8 @@ const PitchDeckLayout = ({ initialPrompt, selectedTemplate }) => {
                     currentText = data.message;
                   }
 
-                  setSlidesUrl(data.final_data?.slides_url || finalSlidesUrl);
+                  setSlidesUrl(data.final_data.slides_url);
+
 
                   // CONSTRUCT FINAL AI MESSAGE
                   const finalAIMessage = {
@@ -654,7 +720,7 @@ const PitchDeckLayout = ({ initialPrompt, selectedTemplate }) => {
   // Combine normal messages with streaming message
   const allMessages = React.useMemo(() => {
     let combinedMessages = [...messages];
-  
+
     if (streamingMessage && isStreaming && !isCompleting) {
       combinedMessages = [...combinedMessages, streamingMessage];
     } else if (streamingMessage && !isStreaming && !isCompleting) {
@@ -663,7 +729,7 @@ const PitchDeckLayout = ({ initialPrompt, selectedTemplate }) => {
         combinedMessages = [...combinedMessages, streamingMessage];
       }
     }
-  
+
     return combinedMessages;
   }, [messages, streamingMessage, isStreaming, isCompleting]);
 

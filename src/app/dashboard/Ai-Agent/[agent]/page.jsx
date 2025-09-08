@@ -226,40 +226,26 @@ const page = () => {
       const data = await response.json();
 
       if (data.success) {
-        // ✅ ENHANCED: Parse messages and preserve database fields
         const parsedMessages = data.messages.map((msg) => {
           const parsedMsg = parseAssetGeneratedMessage(msg);
-
-          // ✅ DEBUG: Log messages with search results
-          if (parsedMsg.searchResults) {
-            console.log(`✅ Message with search results:`, {
-              text: parsedMsg.text.substring(0, 50) + "...",
-              searchResultsCount: parsedMsg.searchResults?.results?.length || 0,
-              keywords: parsedMsg.searchResults?.keywords,
-            });
-          }
-
-          if (parsedMsg.inspirationImages) {
-            console.log(`✅ Message with inspiration images:`, {
-              text: parsedMsg.text.substring(0, 50) + "...",
-              inspirationCount: parsedMsg.inspirationImages?.length || 0,
-            });
-          }
-
           return parsedMsg;
         });
-
+  
+        // Update the messages state
         setMessages(parsedMessages);
-        console.log(
-          `Loaded ${data.count} messages for conversation ${conversationId}`
-        );
+        console.log(`Loaded ${data.count} messages for conversation ${conversationId}`);
+        
+        // Return the messages for the callback
+        return parsedMessages;
       } else {
         console.error("Failed to fetch messages:", data.error);
         setMessages([]);
+        return [];
       }
     } catch (error) {
       console.error("Error fetching messages:", error);
       setMessages([]);
+      return [];
     }
   };
 
@@ -439,6 +425,8 @@ const page = () => {
       {isHistoryModalOpen && (
         <div ref={historyModalRef}>
           <HistoryModal
+          setShowTemplate={setShowTemplate}
+          setHasPromptEntered={setHasPromptEntered}
             activeChat={activeChat}
             setActiveChat={setActiveChat}
             img={bot.img}
@@ -579,13 +567,18 @@ const page = () => {
             {/* 30% Chat / 70% Preview Layout - shows when template is hidden */}
             {!showTemplate && hasPromptEntered && (
               <PitchDeckLayout
-              selectedTemplate={selectedTemplate}
+                
+                selectedTemplate={selectedTemplate}
                 messages={messages}
                 setMessages={setMessages}
                 onNewConversation={handleNewConversation}
                 onRefreshConversations={refreshConversationsList}
                 fetchMessages={fetchMessages}
-                initialPrompt={initialPrompt} />
+                initialPrompt={initialPrompt}
+                onConversationLoad={async (conversationId) => {
+                  await fetchMessages(conversationId);
+                }}
+              />
             )}
           </div>
         )}
