@@ -192,7 +192,7 @@ function Download() {
               variants={glowVariants}
             ></motion.div>
             <motion.img
-              src="/landing/download/iphone.svg"
+              src="/landing/download/iphone-12.svg"
               className="relative z-10 w-[355px] h-[739px]"
               alt="iPhone preview"
               variants={phoneVariants}
