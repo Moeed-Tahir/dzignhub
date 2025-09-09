@@ -410,6 +410,7 @@ const PitchDeckLayout = ({ initialPrompt,
                       ...allToolSteps[toolIndex],
                       status: 'completed',
                       resultMessage: data.message,
+                      conversationalText: data.conversationalText,
                       data: data.data
                     };
                   } else {
@@ -418,6 +419,7 @@ const PitchDeckLayout = ({ initialPrompt,
                       name: data.tool_name,
                       message: data.message,
                       status: 'completed',
+                      conversationalText: data.conversationalText,
                       data: data.data,
                       timestamp: Date.now()
                     });
@@ -432,9 +434,12 @@ const PitchDeckLayout = ({ initialPrompt,
                     inspirationImages: preservedInspirationImages,
                     slidesUrl: preservedSlidesUrl,
                     status: data.status,
-                    timestamp: new Date().toLocaleTimeString()
+                    timestamp: new Date().toLocaleTimeString(),
+                    isTyping: true
                   }));
                   break;
+
+                
 
                 case 'message_chunk':
                   currentText = data.text;
@@ -471,6 +476,7 @@ const PitchDeckLayout = ({ initialPrompt,
                       ...allToolSteps[searchToolIndex],
                       status: 'completed',
                       resultMessage: data.message,
+                      conversationalText: data.conversationalText,
                       data: data.data
                     };
                   } else {
@@ -480,6 +486,7 @@ const PitchDeckLayout = ({ initialPrompt,
                       name: data.tool_name,
                       message: data.message,
                       status: 'completed',
+                      conversationalText: data.conversationalText,
                       data: data.data,
                       timestamp: Date.now()
                     });
@@ -494,7 +501,9 @@ const PitchDeckLayout = ({ initialPrompt,
                     inspirationImages: preservedInspirationImages,
                     slidesUrl: preservedSlidesUrl,
                     status: data.status,
-                    timestamp: new Date().toLocaleTimeString()
+                    timestamp: new Date().toLocaleTimeString(),
+                    isTyping: true
+
                   }));
                   break;
 
@@ -516,6 +525,7 @@ const PitchDeckLayout = ({ initialPrompt,
                       ...allToolSteps[inspirationToolIndex],
                       status: 'completed',
                       resultMessage: data.message,
+                      conversationalText: data.conversationalText,
                       data: data.images
                     };
                   } else {
@@ -525,8 +535,9 @@ const PitchDeckLayout = ({ initialPrompt,
                       name: data.tool_name,
                       message: data.message,
                       status: 'completed',
+                      conversationalText: data.conversationalText,
                       data: data.images,
-                      timestamp: Date.now()
+                      timestamp: Date.now(),
                     });
                   }
 
@@ -539,7 +550,8 @@ const PitchDeckLayout = ({ initialPrompt,
                     inspirationImages: preservedInspirationImages, // ADD inspiration images
                     slidesUrl: preservedSlidesUrl,
                     status: data.status,
-                    timestamp: new Date().toLocaleTimeString()
+                    timestamp: new Date().toLocaleTimeString(),
+                    isTyping: true
                   }));
                   break;
 
@@ -557,7 +569,8 @@ const PitchDeckLayout = ({ initialPrompt,
                     inspirationImages: preservedInspirationImages,
                     slidesUrl: preservedSlidesUrl,
                     status: data.status || 'awaiting_input',
-                    timestamp: new Date().toLocaleTimeString()
+                    timestamp: new Date().toLocaleTimeString(),
+                    isTyping: true
                   };
 
                   console.log('[DEBUG] Setting streaming message with:', messageUpdate);
