@@ -2,11 +2,14 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
-export default function MessageInput({ onSend,suggestions, placeholder }) {
+export default function MessageInput({
+  onSend,
+  suggestions,
+  placeholder,
+  isPitch,
+}) {
   const [message, setMessage] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(true);
-
-
 
   const handleSuggestionClick = (suggestion) => {
     setMessage(suggestion);
@@ -30,12 +33,18 @@ export default function MessageInput({ onSend,suggestions, placeholder }) {
   };
 
   return (
-    <div className="absolute bottom-[24px] px-5 xl:px-0 left-1/2 translate-x-[-50%] max-w-[1280px] w-[90%]">
+    <div
+      className={`${
+        isPitch
+          ? ""
+          : "absolute bottom-[24px] left-1/2 translate-x-[-50%] max-w-[1280px] w-[90%]"
+      } px-5 xl:px-0 `}
+    >
       <form
         onSubmit={handleSubmit}
         className="w-full flex shadow-xs h-[40px]  sm:h-[80px] max-w-[1440px] rounded-[20px] items-center gap-2 p-4 bg-white relative"
       >
-        {showSuggestions && (
+        {showSuggestions && !isPitch && (
           <div className="absolute lg:top-[-55px] top-[-65px] left-1/2 translate-x-[-50%] justify-center items-center w-full flex gap-2 z-10">
             {suggestions.map((s, i) => (
               <button
@@ -64,14 +73,15 @@ export default function MessageInput({ onSend,suggestions, placeholder }) {
           type="submit"
           className="text-white bg-[#BDFF00] sm:w-[40px] w-[30px] h-[30px] sm:h-[40px] rounded-full p-2"
         >
-          <Image src="/Ai/direct-right.svg"  width={40} height={40} alt="Send" />
+          <Image src="/Ai/direct-right.svg" width={40} height={40} alt="Send" />
         </button>
       </form>
-
-      <p className="text-[12px] text-[#68686B] text-normal text-center mt-2">
-        Allmyai may display inaccurate info, including about people, so
-        double-check its responses. Your privacy & Gemini Apps
-      </p>
+      {!isPitch && (
+        <p className="text-[12px] text-[#68686B] text-normal text-center mt-2">
+          Allmyai may display inaccurate info, including about people, so
+          double-check its responses. Your privacy & Gemini Apps
+        </p>
+      )}
     </div>
   );
 }

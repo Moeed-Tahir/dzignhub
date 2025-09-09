@@ -533,7 +533,7 @@ const page = () => {
         ) : (
           <div>
             {showTemplate && (
-              <div className="flex justify-center items-center flex-col gap-6 mt-40">
+              <div className="flex justify-center items-center  flex-col gap-6 mt-20">
                 <p className="text-[34px] font-semibold">
                   Ready to create your slides?
                 </p>

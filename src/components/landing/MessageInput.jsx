@@ -121,7 +121,7 @@ export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove, onP
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Ask anything, create anything"
               className={` ${
-                isAi ? "h-[100px] resize-none" : "resize-none"
+                isAi ? "h-[80px] resize-none" : "resize-none"
               }   w-full border-0 bg-transparent text-base placeholder:text-gray-400 
              focus:outline-none focus:ring-0 focus:ring-offset-0 px-0`}
             />
