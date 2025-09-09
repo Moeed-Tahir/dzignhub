@@ -287,7 +287,7 @@ export default function MessageBubble({
   return (
     <>
       <div
-        className={`flex max-w-[1280px] items-start ${
+        className={`flex max-w-[1280px] w-full items-start ${
           isAI ? "justify-start " : "justify-end "
         } px-4 py-2`}
       >
@@ -301,7 +301,7 @@ export default function MessageBubble({
               className="rounded-full object-contain"
             />
           </div>
-        ) : (
+        ) : isAI ? (
           <div
             className="   w-10 h-10 flex justify-center items-center rounded-full mr-2"
             style={{
@@ -316,10 +316,12 @@ export default function MessageBubble({
               // className="rounded-full object-contain"
             />
           </div>
-        )}
+        ) : null}
 
         <div
-          className={`p-3 text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] max-w-[70%] font-normal bg-white ${
+          className={`p-3 flex-1 w-full text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] ${
+            !isPitch ? "max-w-[70%]" : "max-w-[100%]"
+          } font-normal bg-white ${
             isAI
               ? "text-left rounded-tl-[4px] rounded-tr-[12px]"
               : "text-right rounded-tl-[12px] rounded-tr-[4px]"
@@ -340,7 +342,7 @@ export default function MessageBubble({
                       <>
                         <div
                           key={index}
-                          className={`p-3 rounded-lg border-l-4 font-medium text-[12px] transition-all duration-200 ${
+                          className={`flex-1 rounded-lg  font-medium text-[12px] transition-all duration-200 ${
                             step.status === "completed"
                               ? "bg-white border-[#ececec]"
                               : step.status === "error"
