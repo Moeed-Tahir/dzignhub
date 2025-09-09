@@ -287,9 +287,8 @@ export default function MessageBubble({
   return (
     <>
       <div
-        className={`flex max-w-[1280px] items-start ${
-          isAI ? "justify-start " : "justify-end "
-        } px-4 py-2`}
+        className={`flex max-w-[1280px] items-start ${isAI ? "justify-start " : "justify-end "
+          } px-4 py-2`}
       >
         {!isPitch ? (
           <div className="flex items-end mr-2">
@@ -313,17 +312,16 @@ export default function MessageBubble({
               alt="AI"
               width={28}
               height={28}
-              // className="rounded-full object-contain"
+            // className="rounded-full object-contain"
             />
           </div>
         )}
 
         <div
-          className={`p-3 text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] max-w-[70%] font-normal bg-white ${
-            isAI
+          className={`p-3 text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] max-w-[70%] font-normal bg-white ${isAI
               ? "text-left rounded-tl-[4px] rounded-tr-[12px]"
               : "text-right rounded-tl-[12px] rounded-tr-[4px]"
-          } ${isError ? "border border-red-200 bg-red-50" : ""}`}
+            } ${isError ? "border border-red-200 bg-red-50" : ""}`}
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
@@ -340,13 +338,12 @@ export default function MessageBubble({
                       <>
                         <div
                           key={index}
-                          className={`p-3 rounded-lg border-l-4 text-[14px] transition-all duration-200 ${
-                            step.status === "completed"
+                          className={`p-3 rounded-lg border-l-4 text-[14px] transition-all duration-200 ${step.status === "completed"
                               ? "bg-green-50 border-green-400"
                               : step.status === "error"
-                              ? "bg-red-50 border-red-400"
-                              : "bg-blue-50 border-blue-400"
-                          }`}
+                                ? "bg-red-50 border-red-400"
+                                : "bg-blue-50 border-blue-400"
+                            }`}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 flex-1">
@@ -452,11 +449,10 @@ export default function MessageBubble({
                                     </div>
                                     <div className="absolute top-2 right-2">
                                       <span
-                                        className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                          image.source === "Behance"
+                                        className={`px-2 py-1 text-xs font-medium rounded-full ${image.source === "Behance"
                                             ? "bg-blue-600 text-white"
                                             : "bg-pink-600 text-white"
-                                        }`}
+                                          }`}
                                       >
                                         {image.source}
                                       </span>
@@ -497,27 +493,32 @@ export default function MessageBubble({
                               </div>
                             </div>
                           )}
+
+                        {step.conversationalText && (
+                          <div className="conversational-response">
+                            <p>{step.conversationalText}</p>
+                          </div>
+                        )}
                       </>
                     ))}
                   </div>
                 </div>
               )}
 
-                {/* ✅ REORDERED: Text rendering THIRD (after inspiration images) */}
-                {finalTextToShow && (
-                  <div
-                  className={`prose prose-sm max-w-none ${
-                    isError ? "text-red-600" : ""
-                  }`}
+              {/* ✅ REORDERED: Text rendering THIRD (after inspiration images) */}
+              {finalTextToShow && (
+                <div
+                  className={`prose prose-sm max-w-none ${isError ? "text-red-600" : ""
+                    }`}
                 >
-                    <ReactMarkdown components={markdownComponents}>
-                      {finalTextToShow.replace(/\\n/g, "\n")}
-                    </ReactMarkdown>
-                    {shouldTypeText && isTyping && (
-                      <span className="inline-block w-2 h-5 bg-gray-400 ml-1 animate-pulse"></span>
-                    )}
-                  </div>
-                )}
+                  <ReactMarkdown components={markdownComponents}>
+                    {finalTextToShow.replace(/\\n/g, "\n")}
+                  </ReactMarkdown>
+                  {shouldTypeText && isTyping && (
+                    <span className="inline-block w-2 h-5 bg-gray-400 ml-1 animate-pulse"></span>
+                  )}
+                </div>
+              )}
 
               {/* ✅ REORDERED: Image display FOURTH (after text) */}
               {imageUrl && (
@@ -637,15 +638,13 @@ export default function MessageBubble({
                       key={i}
                       onClick={() => handleClick(opt)}
                       disabled={selectedOptions.includes(opt)}
-                      className={`py-[12px] cursor-pointer text-[14px] font-normal px-[16px] bg-white border rounded-full hover:bg-gray-50 transition-colors ${
-                        selected === opt
+                      className={`py-[12px] cursor-pointer text-[14px] font-normal px-[16px] bg-white border rounded-full hover:bg-gray-50 transition-colors ${selected === opt
                           ? "border-[#C209C1] bg-purple-50"
                           : "border-[#E8ECEF]"
-                      } ${
-                        selectedOptions.includes(opt)
+                        } ${selectedOptions.includes(opt)
                           ? "opacity-50 cursor-not-allowed"
                           : ""
-                      }`}
+                        }`}
                     >
                       {opt}
                     </button>
