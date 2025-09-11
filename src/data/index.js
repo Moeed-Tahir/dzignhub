@@ -100,6 +100,16 @@ const aiBots = {
       "🧭 Define your colors, and typography styles.",
     ],
   },
+  "super-agent": {
+    name: "Super Agent",
+    img: "/Ai/ellie.png",
+    tagline:
+      "I'm Super AI, your versatile assistant ready to help with a wide range of tasks and inquiries.",
+    description:
+      "Whether you need assistance with writing, brainstorming, coding, or general questions, I'm here to make your life easier.",
+    suggestions: [
+    ],
+  },
 };
 
 export default aiBots;

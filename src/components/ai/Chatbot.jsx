@@ -363,6 +363,9 @@ const generateImmediateResponse = async (userInput) => {
         case "mira":
           endpoint = "strategist/stream";
           break;
+        case "super agent":
+          endpoint = "super-agent/stream";
+          break;
         default:
           endpoint = "brand-designer/stream";
       }

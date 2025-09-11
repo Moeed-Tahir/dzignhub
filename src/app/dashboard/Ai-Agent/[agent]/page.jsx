@@ -38,6 +38,7 @@ const page = () => {
     novi: "seo-specialist",
     mira: "strategist",
     "pitch-deck": "pitch-deck",
+    "super-agent": "super-agent"
   };
 
   const [conversations, setConversations] = useState([]);
