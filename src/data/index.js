@@ -110,6 +110,16 @@ const aiBots = {
     suggestions: [
     ],
   },
+  "fashion-ai": {
+    name: "Fashion Ai",
+    img: "/aiAgent/fashion.svg",
+    tagline:
+      "I'm Super AI, your versatile assistant ready to help with a wide range of tasks and inquiries.",
+    description:
+      "Whether you need assistance with writing, brainstorming, coding, or general questions, I'm here to make your life easier.",
+    suggestions: [
+    ],
+  },
 };
 
 export default aiBots;

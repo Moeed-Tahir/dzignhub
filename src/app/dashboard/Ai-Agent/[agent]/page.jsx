@@ -21,6 +21,8 @@ import HistoryModal from "@/components/ai/HistoryModal";
 import { ModernInput } from "@/components/landing/MessageInput";
 import Template from "@/components/ai/Template";
 import PitchDeckLayout from "@/components/ai/Pitch/PitchDeckLayout";
+import { FashioAiSidebar } from "@/components/ai/FashionAiSidebar";
+import FashionPreview from "@/components/ai/FashionPreview";
 
 const page = () => {
   const { agent } = useParams();
@@ -38,7 +40,7 @@ const page = () => {
     novi: "seo-specialist",
     mira: "strategist",
     "pitch-deck": "pitch-deck",
-    "super-agent": "super-agent"
+    "super-agent": "super-agent",
   };
 
   const [conversations, setConversations] = useState([]);
@@ -125,7 +127,6 @@ const page = () => {
 
   useEffect(() => {
     const conversationId = searchParams.get("conversationId");
-    
 
     if (conversationId) {
       console.log("Found conversationId in URL:", conversationId);
@@ -233,11 +234,13 @@ const page = () => {
           const parsedMsg = parseAssetGeneratedMessage(msg);
           return parsedMsg;
         });
-  
+
         // Update the messages state
         setMessages(parsedMessages);
-        console.log(`Loaded ${data.count} messages for conversation ${conversationId}`);
-        
+        console.log(
+          `Loaded ${data.count} messages for conversation ${conversationId}`
+        );
+
         // Return the messages for the callback
         return parsedMessages;
       } else {
@@ -351,9 +354,6 @@ const page = () => {
     return () => clearTimeout(timer);
   }, [agent]);
 
-
-
-
   const verifyToken = async () => {
     try {
       console.log("Token verification started");
@@ -390,6 +390,93 @@ const page = () => {
   }
 
   const router = useRouter();
+
+  const renderContent = () => {
+    if (bot.name !== "Pitch Deck" && bot.name !== "Fashion Ai") {
+      return (
+        <Chatbot
+          aiName={bot.name}
+          tagline={bot.tagline}
+          description={bot.description}
+          suggestions={bot.suggestions}
+          placeholder={bot.placeholder}
+          img={bot.img}
+          messages={messages}
+          setMessages={setMessages}
+          showIntro={showIntro}
+          setShowIntro={setShowIntro}
+          onNewConversation={handleNewConversation}
+          onRefreshConversations={refreshConversationsList}
+          fetchMessages={fetchMessages}
+        />
+      );
+    }
+
+    if (bot.name === "Fashion Ai") {
+      return (
+        <div className="flex  pl-[70px] gap-6 pt-20">
+          <FashioAiSidebar />
+          <div className="flex-1 h-full">
+            <FashionPreview />
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {showTemplate && (
+          <div className="flex justify-center items-center flex-col gap-6 mt-20">
+            <p className="text-[34px] font-semibold">
+              Ready to create your slides?
+            </p>
+            <ModernInput
+              isAi={true}
+              selectedTemplateImage={selectedTemplateImage}
+              onTemplateRemove={() => setSelectedTemplateImage(null)}
+              onPromptSubmit={handlePromptSubmit}
+            />
+          </div>
+        )}
+        <AnimatePresence mode="wait">
+          {showTemplate && (
+            <motion.div
+              key="template"
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              exit={{
+                opacity: 0,
+                transition: {
+                  duration: 0.3,
+                  ease: "easeOut",
+                },
+              }}
+            >
+              <Template
+                setSelectedTemplateName={setSelectedTemplateName}
+                onTemplateSelect={setSelectedTemplateImage}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {!showTemplate && hasPromptEntered && (
+          <PitchDeckLayout
+            selectedTemplate={selectedTemplate}
+            messages={messages}
+            setMessages={setMessages}
+            onNewConversation={handleNewConversation}
+            onRefreshConversations={refreshConversationsList}
+            fetchMessages={fetchMessages}
+            initialPrompt={initialPrompt}
+            onConversationLoad={async (conversationId) => {
+              await fetchMessages(conversationId);
+            }}
+          />
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="bg-[#F7F8F8] overflow-hidden px-5 xl:px-0 max-w-[1440px] mx-auto min-h-screen">
@@ -431,8 +518,8 @@ const page = () => {
       {isHistoryModalOpen && (
         <div ref={historyModalRef}>
           <HistoryModal
-          setShowTemplate={setShowTemplate}
-          setHasPromptEntered={setHasPromptEntered}
+            setShowTemplate={setShowTemplate}
+            setHasPromptEntered={setHasPromptEntered}
             activeChat={activeChat}
             setActiveChat={setActiveChat}
             img={bot.img}
@@ -520,74 +607,7 @@ const page = () => {
             )}
           </div>
         </div>
-        {bot.name != "Pitch Deck" ? (
-          <Chatbot
-            aiName={bot.name}
-            tagline={bot.tagline}
-            description={bot.description}
-            suggestions={bot.suggestions}
-            placeholder={bot.placeholder}
-            img={bot.img}
-            messages={messages}
-            setMessages={setMessages}
-            showIntro={showIntro}
-            setShowIntro={setShowIntro}
-            onNewConversation={handleNewConversation} // Pass callback
-            onRefreshConversations={refreshConversationsList} // Pass callback
-            fetchMessages={fetchMessages}
-          />
-        ) : (
-          <div>
-            {showTemplate && (
-              <div className="flex justify-center items-center  flex-col gap-6 mt-20">
-                <p className="text-[34px] font-semibold">
-                  Ready to create your slides?
-                </p>
-                <ModernInput
-                  isAi={true}
-                  selectedTemplateImage={selectedTemplateImage}
-                  onTemplateRemove={() => setSelectedTemplateImage(null)}
-                  onPromptSubmit={handlePromptSubmit}
-                />
-              </div>
-            )}
-            <AnimatePresence mode="wait">
-              {showTemplate && (
-                <motion.div
-                  key="template"
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                  exit={{
-                    opacity: 0,
-                    transition: {
-                      duration: 0.3,
-                      ease: "easeOut",
-                    },
-                  }}
-                >
-                  <Template setSelectedTemplateName={setSelectedTemplateName} onTemplateSelect={setSelectedTemplateImage} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* 30% Chat / 70% Preview Layout - shows when template is hidden */}
-            {!showTemplate && hasPromptEntered && (
-              <PitchDeckLayout
-                
-                selectedTemplate={selectedTemplate}
-                messages={messages}
-                setMessages={setMessages}
-                onNewConversation={handleNewConversation}
-                onRefreshConversations={refreshConversationsList}
-                fetchMessages={fetchMessages}
-                initialPrompt={initialPrompt}
-                onConversationLoad={async (conversationId) => {
-                  await fetchMessages(conversationId);
-                }}
-              />
-            )}
-          </div>
-        )}
+        {renderContent()}
       </div>
     </div>
   );
