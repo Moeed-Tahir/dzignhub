@@ -138,6 +138,13 @@ function Carousel({ carouselImages = [] }) {
 
       bg: "#F0925C0D",
     },
+    {
+      name: "Fashion Designer",
+      icon: "/aiAgent/fashion.svg",
+      href: "/dashboard/Ai-Agent/fashion-ai",
+
+      bg: "#2416E40D",
+    },
   ];
 
   const itemWidth = 120;
@@ -157,7 +164,9 @@ function Carousel({ carouselImages = [] }) {
             key={index}
             variants={itemVariants}
             className={` ${
-              index === ai.length - 1 ? "hidden sm:flex" : ""
+              index === ai.length - 1 || index === ai.length - 2
+                ? "hidden sm:flex"
+                : ""
             } flex flex-col items-center h-[142px] w-[100px] duration-300 transition-all cursor-pointer`}
             onClick={() => item.href && router.push(item.href)}
           >

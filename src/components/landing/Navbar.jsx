@@ -129,7 +129,7 @@ function Navbar({ onOpenSidebar }) {
           <>
             <Link href="/auth/login">
               <motion.button
-                className={` bg-[#212E62] text-[#BDFF00] px-5  h-[47px] border-[#BDFF00] border  rounded-full   cursor-pointer`}
+                className={` bg-[#212E62] hidden sm:flex items-center justify-center text-[#BDFF00] px-5  h-[47px] border-[#BDFF00] border  rounded-full   cursor-pointer`}
                 whileHover="hover"
                 whileTap="tap"
                 variants={buttonVariants}
