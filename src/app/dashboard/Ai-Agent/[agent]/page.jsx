@@ -125,6 +125,8 @@ const page = () => {
 
   useEffect(() => {
     const conversationId = searchParams.get("conversationId");
+    
+
     if (conversationId) {
       console.log("Found conversationId in URL:", conversationId);
       setActiveChat(conversationId);
@@ -348,6 +350,9 @@ const page = () => {
 
     return () => clearTimeout(timer);
   }, [agent]);
+
+
+
 
   const verifyToken = async () => {
     try {

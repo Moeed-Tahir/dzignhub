@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { useUserStore } from "@/store/store";
 import StreamingMessageBubble from "./StreamingMessageBubble";
 import SourcesModal from "./SourcesModal";
-import ToolDetailsModal from "./ToolDetailsModal"; // ✅ ADD: Import for tool details modal
+import ToolDetailsModal from "./ToolDetailsModal";
 
 export default function MessageBubble({
   sender,
@@ -27,7 +27,7 @@ export default function MessageBubble({
   thinkingProcess,
   searchResults,
   inspirationImages,
-  shouldTypeText = false, // ✅ ADD: New prop - ONLY THIS IS NEW
+  shouldTypeText = false, 
 }) {
   const { Avatar } = useUserStore();
   console.log("[DEBUG MessageBubble] Received props:");
@@ -291,7 +291,7 @@ export default function MessageBubble({
           isAI ? "justify-start " : "justify-end "
         } px-4 py-2`}
       >
-        {!isPitch ? (
+        {!isPitch && isAI  ? (
           <div className="flex items-end mr-2">
             <Image
               src={aiIcon}
@@ -301,7 +301,7 @@ export default function MessageBubble({
               className="rounded-full object-contain"
             />
           </div>
-        ) : isAI ? (
+        ) : isPitch && isAI ? (
           <div
             className="   w-10 h-10 flex justify-center items-center rounded-full mr-2"
             style={{
