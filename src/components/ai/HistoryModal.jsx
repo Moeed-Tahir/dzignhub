@@ -160,7 +160,9 @@ const HistoryModal = ({
       sana: "content-creator",
       novi: "seo-specialist",
       mira: "strategist",
-      "pitch-deck":"pitch-deck"
+      "pitch-deck": "pitch-deck",
+      "super-agent": "super-agent"
+
     };
 
     setIsSearching(true);
@@ -168,8 +170,7 @@ const HistoryModal = ({
       const userId = UserId;
 
       const response = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_PYTHON_API_URL
+        `${process.env.NEXT_PUBLIC_PYTHON_API_URL
         }/agents/conversations/search?query=${encodeURIComponent(
           query
         )}&user_id=${userId}&agent=${agents[aiName.toLowerCase().replace(/\s+/g, "-")]}&limit=10`,
@@ -247,8 +248,7 @@ const HistoryModal = ({
             setActiveChat(updatedConversations[0]._id);
             // Navigate to the new conversation
             router.push(
-              `/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}?conversationId=${
-                updatedConversations[0]._id
+              `/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}?conversationId=${updatedConversations[0]._id
               }`
             );
           } else {
@@ -287,18 +287,18 @@ const HistoryModal = ({
   };
   return (
     <>
-    <div className="absolute -top-12 left-20 p-4 mt-12 ml-2 w-[272px] bg-white overflow-y-scroll  h-screen rounded-[16px]  z-50">
-      <div className="flex justify-between items-center mb-6 ">
-        <p className="text-[#344054] text-lg font-semibold ">Chat History</p>
-        <div
-        id="closeHistoryModal"
-          onClick={onClose}
-          className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center"
-        >
-          <IoIosMenu className="w-[18px] text-[#344054] h-[18px]" />
+      <div className="absolute -top-12 left-20 p-4 mt-12 ml-2 w-[272px] bg-white overflow-y-scroll  h-screen rounded-[16px]  z-50">
+        <div className="flex justify-between items-center mb-6 ">
+          <p className="text-[#344054] text-lg font-semibold ">Chat History</p>
+          <div
+            id="closeHistoryModal"
+            onClick={onClose}
+            className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center"
+          >
+            <IoIosMenu className="w-[18px] text-[#344054] h-[18px]" />
+          </div>
         </div>
-      </div>
-      {/* <div className="p-4">
+        {/* <div className="p-4">
         <button
           ref={plusButtonRef}
           onClick={toggleChatModal}
@@ -308,264 +308,260 @@ const HistoryModal = ({
           New Chat
         </button>
       </div> */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search chats"
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            searchConversations(e.target.value); // Real-time search
-          }}
-          className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c209c1] focus:border-transparent"
-        />
-      </div>
-      <div className="px-2">
-        {/* Show search results when searching */}
-        {searchQuery && searchResults.length > 0 ? (
-          <>
-            <div className="px-2 py-2 border-b border-gray-200 mb-2">
-              <h4 className="text-xs font-medium text-gray-500">
-                Search Results ({searchResults.length})
-              </h4>
-            </div>
-            {searchResults.map((result) => (
-              <div
-                key={result._id}
-                onClick={() => {
-                  setActiveChat(result._id);
-                  setShowIntro(false);
-                  setShowTemplate(false)
-                  setHasPromptEntered(true)
-                  onConversationSelect && onConversationSelect(result._id);
-                  router.push(
-                    `/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}?conversationId=${
-                      result._id
-                    }`
-                  );
-                  onClose();
-                  setSearchQuery(""); // Clear search
-                  setSearchResults([]);
-                }}
-                className="group relative p-3 mx-2 my-1 rounded-lg cursor-pointer transition-all bg-blue-50 border border-blue-200 hover:bg-blue-100"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-medium truncate text-blue-900">
-                      {result.title}
-                    </h3>
-                    <p className="text-xs text-blue-600 mt-1">
-                      {(result.similarity_score * 100).toFixed(1)}% match
-                    </p>
-                    <span className="text-xs text-gray-400 mt-1 block">
-                      {format(result.createdAt)}
-                    </span>
-                  </div>
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1 ml-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                      className="p-1 hover:bg-blue-200 rounded text-blue-400 hover:text-blue-600"
-                    >
-                      <Edit3 className="w-3 h-3" />
-                    </button>
-                    <button
-                      onClick={(e) => deleteConversation(result._id, e)}
-                      className="p-1 hover:bg-red-100 rounded text-blue-400 hover:text-red-600"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search chats"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              searchConversations(e.target.value); // Real-time search
+            }}
+            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c209c1] focus:border-transparent"
+          />
+        </div>
+        <div className="px-2">
+          {/* Show search results when searching */}
+          {searchQuery && searchResults.length > 0 ? (
+            <>
+              <div className="px-2 py-2 border-b border-gray-200 mb-2">
+                <h4 className="text-xs font-medium text-gray-500">
+                  Search Results ({searchResults.length})
+                </h4>
               </div>
-            ))}
-          </>
-        ) : searchQuery && searchResults.length === 0 && !isSearching ? (
-          // Show no results found
-          <div className="text-center py-8 text-gray-500">
-            <Search className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-            <p>No conversations found for "{searchQuery}"</p>
-            <button
-              onClick={() => {
-                setSearchQuery("");
-                setSearchResults([]);
-              }}
-              className="text-xs text-blue-600 hover:text-blue-800 mt-2"
-            >
-              Clear search
-            </button>
-          </div>
-        ) : searchQuery && isSearching ? (
-          // Show loading state
-          <div className="text-center py-8 text-gray-500">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3"></div>
-            <p>Searching...</p>
-          </div>
-        ) : (
-          // Show regular conversations when not searching
-          <>
-            {filteredConversations.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                <p>No conversations found</p>
-              </div>
-            ) : (
-              filteredConversations.map((conversation) => (
+              {searchResults.map((result) => (
                 <div
-                  key={conversation._id}
+                  key={result._id}
                   onClick={() => {
-                    // Don't navigate if we're editing the title
-                    if (editingConversationId === conversation._id) return;
+                    setActiveChat(result._id);
+                    setShowIntro(false);
                     setShowTemplate(false)
                     setHasPromptEntered(true)
-                    setActiveChat(conversation._id);
-                    setShowIntro(false);
-                    onConversationSelect &&
-                      onConversationSelect(conversation._id);
+                    onConversationSelect && onConversationSelect(result._id);
                     router.push(
-                      `/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}?conversationId=${
-                        conversation._id
+                      `/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}?conversationId=${result._id
                       }`
                     );
                     onClose();
+                    setSearchQuery(""); // Clear search
+                    setSearchResults([]);
                   }}
-                  className={`group relative p-3 mx-2 my-1 rounded-lg cursor-pointer transition-all ${
-                    activeChat === conversation._id
-                      ? "bg-blue-50 border border-blue-200"
-                      : "hover:bg-gray-50"
-                  }`}
+                  className="group relative p-3 mx-2 my-1 rounded-lg cursor-pointer transition-all bg-blue-50 border border-blue-200 hover:bg-blue-100"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
-                      {/* UPDATED TITLE SECTION WITH EDITING CAPABILITY */}
-                      {editingConversationId === conversation._id ? (
-                        <div className="flex items-center space-x-2">
-                          <input
-                            type="text"
-                            value={editingTitle}
-                            onChange={(e) => setEditingTitle(e.target.value)}
-                            onKeyPress={(e) =>
-                              handleTitleKeyPress(e, conversation._id)
-                            }
-                            onBlur={() =>
-                              saveConversationTitle(conversation._id)
-                            }
-                            className="text-sm font-medium bg-white border border-blue-300 rounded px-2 py-1 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            autoFocus
-                            disabled={isUpdatingTitle}
-                          />
-                          {isUpdatingTitle && (
-                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
-                          )}
-                        </div>
-                      ) : (
-                        <h3
-                          className={`text-sm font-medium truncate ${
-                            activeChat === conversation._id
-                              ? "text-blue-900"
-                              : "text-gray-900"
-                          }`}
-                        >
-                          {conversation.title}
-                        </h3>
-                      )}
-
-                      <span className="text-xs text-gray-400 mt-2 block">
-                        {format(conversation.createdAt)}
+                      <h3 className="text-sm font-medium truncate text-blue-900">
+                        {result.title}
+                      </h3>
+                      <p className="text-xs text-blue-600 mt-1">
+                        {(result.similarity_score * 100).toFixed(1)}% match
+                      </p>
+                      <span className="text-xs text-gray-400 mt-1 block">
+                        {format(result.createdAt)}
                       </span>
                     </div>
-
-                    {/* UPDATED ACTION BUTTONS */}
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1 ml-2">
-                      {editingConversationId === conversation._id ? (
-                        // Show save/cancel buttons when editing
-                        <>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              saveConversationTitle(conversation._id);
-                            }}
-                            disabled={isUpdatingTitle}
-                            className="p-1 hover:bg-green-100 rounded text-gray-400 hover:text-green-600"
-                            title="Save title"
-                          >
-                            <svg
-                              className="w-3 h-3"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              cancelEditingTitle();
-                            }}
-                            disabled={isUpdatingTitle}
-                            className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
-                            title="Cancel"
-                          >
-                            <svg
-                              className="w-3 h-3"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </button>
-                        </>
-                      ) : (
-                        // Show edit/delete buttons when not editing
-                        <>
-                          <button
-                            onClick={(e) =>
-                              startEditingTitle(
-                                conversation._id,
-                                conversation.title,
-                                e
-                              )
-                            }
-                            className="p-1 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600"
-                            title="Edit title"
-                          >
-                            <Edit3 className="w-3 h-3" />
-                          </button>
-                          <button
-                            onClick={(e) =>
-                              deleteConversation(conversation._id, e)
-                            }
-                            className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
-                            title="Delete conversation"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
-                        </>
-                      )}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        className="p-1 hover:bg-blue-200 rounded text-blue-400 hover:text-blue-600"
+                      >
+                        <Edit3 className="w-3 h-3" />
+                      </button>
+                      <button
+                        onClick={(e) => deleteConversation(result._id, e)}
+                        className="p-1 hover:bg-red-100 rounded text-blue-400 hover:text-red-600"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
                     </div>
                   </div>
                 </div>
-              ))
-            )}
-          </>
-        )}
+              ))}
+            </>
+          ) : searchQuery && searchResults.length === 0 && !isSearching ? (
+            // Show no results found
+            <div className="text-center py-8 text-gray-500">
+              <Search className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+              <p>No conversations found for "{searchQuery}"</p>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSearchResults([]);
+                }}
+                className="text-xs text-blue-600 hover:text-blue-800 mt-2"
+              >
+                Clear search
+              </button>
+            </div>
+          ) : searchQuery && isSearching ? (
+            // Show loading state
+            <div className="text-center py-8 text-gray-500">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3"></div>
+              <p>Searching...</p>
+            </div>
+          ) : (
+            // Show regular conversations when not searching
+            <>
+              {filteredConversations.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                  <p>No conversations found</p>
+                </div>
+              ) : (
+                filteredConversations.map((conversation) => (
+                  <div
+                    key={conversation._id}
+                    onClick={() => {
+                      // Don't navigate if we're editing the title
+                      if (editingConversationId === conversation._id) return;
+                      setShowTemplate(false)
+                      setHasPromptEntered(true)
+                      setActiveChat(conversation._id);
+                      setShowIntro(false);
+                      onConversationSelect &&
+                        onConversationSelect(conversation._id);
+                      router.push(
+                        `/dashboard/Ai-Agent/${aiName.toLowerCase().replace(/\s+/g, "-")}?conversationId=${conversation._id
+                        }`
+                      );
+                      onClose();
+                    }}
+                    className={`group relative p-3 mx-2 my-1 rounded-lg cursor-pointer transition-all ${activeChat === conversation._id
+                        ? "bg-blue-50 border border-blue-200"
+                        : "hover:bg-gray-50"
+                      }`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1 min-w-0">
+                        {/* UPDATED TITLE SECTION WITH EDITING CAPABILITY */}
+                        {editingConversationId === conversation._id ? (
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="text"
+                              value={editingTitle}
+                              onChange={(e) => setEditingTitle(e.target.value)}
+                              onKeyPress={(e) =>
+                                handleTitleKeyPress(e, conversation._id)
+                              }
+                              onBlur={() =>
+                                saveConversationTitle(conversation._id)
+                              }
+                              className="text-sm font-medium bg-white border border-blue-300 rounded px-2 py-1 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              autoFocus
+                              disabled={isUpdatingTitle}
+                            />
+                            {isUpdatingTitle && (
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
+                            )}
+                          </div>
+                        ) : (
+                          <h3
+                            className={`text-sm font-medium truncate ${activeChat === conversation._id
+                                ? "text-blue-900"
+                                : "text-gray-900"
+                              }`}
+                          >
+                            {conversation.title}
+                          </h3>
+                        )}
+
+                        <span className="text-xs text-gray-400 mt-2 block">
+                          {format(conversation.createdAt)}
+                        </span>
+                      </div>
+
+                      {/* UPDATED ACTION BUTTONS */}
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1 ml-2">
+                        {editingConversationId === conversation._id ? (
+                          // Show save/cancel buttons when editing
+                          <>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                saveConversationTitle(conversation._id);
+                              }}
+                              disabled={isUpdatingTitle}
+                              className="p-1 hover:bg-green-100 rounded text-gray-400 hover:text-green-600"
+                              title="Save title"
+                            >
+                              <svg
+                                className="w-3 h-3"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                cancelEditingTitle();
+                              }}
+                              disabled={isUpdatingTitle}
+                              className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
+                              title="Cancel"
+                            >
+                              <svg
+                                className="w-3 h-3"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            </button>
+                          </>
+                        ) : (
+                          // Show edit/delete buttons when not editing
+                          <>
+                            <button
+                              onClick={(e) =>
+                                startEditingTitle(
+                                  conversation._id,
+                                  conversation.title,
+                                  e
+                                )
+                              }
+                              className="p-1 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600"
+                              title="Edit title"
+                            >
+                              <Edit3 className="w-3 h-3" />
+                            </button>
+                            <button
+                              onClick={(e) =>
+                                deleteConversation(conversation._id, e)
+                              }
+                              className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
+                              title="Delete conversation"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
-{showDeleteModal && (
+      {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-lg bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <div className="flex items-center mb-4">

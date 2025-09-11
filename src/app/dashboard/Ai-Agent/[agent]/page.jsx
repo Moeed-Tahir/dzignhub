@@ -38,6 +38,7 @@ const page = () => {
     novi: "seo-specialist",
     mira: "strategist",
     "pitch-deck": "pitch-deck",
+    "super-agent": "super-agent"
   };
 
   const [conversations, setConversations] = useState([]);
@@ -124,6 +125,8 @@ const page = () => {
 
   useEffect(() => {
     const conversationId = searchParams.get("conversationId");
+    
+
     if (conversationId) {
       console.log("Found conversationId in URL:", conversationId);
       setActiveChat(conversationId);
@@ -347,6 +350,9 @@ const page = () => {
 
     return () => clearTimeout(timer);
   }, [agent]);
+
+
+
 
   const verifyToken = async () => {
     try {

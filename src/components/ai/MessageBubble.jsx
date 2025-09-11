@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { useUserStore } from "@/store/store";
 import StreamingMessageBubble from "./StreamingMessageBubble";
 import SourcesModal from "./SourcesModal";
-import ToolDetailsModal from "./ToolDetailsModal"; // ✅ ADD: Import for tool details modal
+import ToolDetailsModal from "./ToolDetailsModal";
 
 export default function MessageBubble({
   sender,
@@ -27,7 +27,7 @@ export default function MessageBubble({
   thinkingProcess,
   searchResults,
   inspirationImages,
-  shouldTypeText = false, // ✅ ADD: New prop - ONLY THIS IS NEW
+  shouldTypeText = false, 
 }) {
   const { Avatar } = useUserStore();
   console.log("[DEBUG MessageBubble] Received props:");
@@ -128,13 +128,13 @@ export default function MessageBubble({
       case "auto_completing":
       case "generating_asset":
       case "running":
-        return "text-blue-600";
+        return "text-gray-300";
       case "completed":
-        return "text-green-600";
+        return "text-gray-600";
       case "error":
         return "text-red-600";
       default:
-        return "text-gray-600";
+        return "text-gray-700";
     }
   };
 
@@ -287,11 +287,11 @@ export default function MessageBubble({
   return (
     <>
       <div
-        className={`flex max-w-[1280px] items-start ${
+        className={`flex w-[100%] items-start ${
           isAI ? "justify-start " : "justify-end "
         } px-4 py-2`}
       >
-        {!isPitch ? (
+        {!isPitch && isAI  ? (
           <div className="flex items-end mr-2">
             <Image
               src={aiIcon}
@@ -301,7 +301,7 @@ export default function MessageBubble({
               className="rounded-full object-contain"
             />
           </div>
-        ) : (
+        ) : isPitch && isAI ? (
           <div
             className="   w-10 h-10 flex justify-center items-center rounded-full mr-2"
             style={{
@@ -316,10 +316,12 @@ export default function MessageBubble({
               // className="rounded-full object-contain"
             />
           </div>
-        )}
+        ) : null}
 
         <div
-          className={`p-3 text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] max-w-[70%] font-normal bg-white ${
+          className={`p-3 flex-1 w-full text-[#393E44] shadow-xs text-[16px] rounded-b-[12px] ${
+            !isPitch ? "max-w-[70%]" : "max-w-[100%]"
+          } font-normal bg-white ${
             isAI
               ? "text-left rounded-tl-[4px] rounded-tr-[12px]"
               : "text-right rounded-tl-[12px] rounded-tr-[4px]"
@@ -332,183 +334,198 @@ export default function MessageBubble({
             </div>
           ) : (
             <>
-              {/* ✅ REORDERED: Tool steps display FIRST */}
+              {/* ✅ REORDERED: Tool steps display FIRST
+              /* ✅ UPDATED: Tool steps display with full width */}
               {isAI && toolSteps && toolSteps.length > 0 && (
-                <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                  <div className="space-y-2">
-                    {toolSteps.map((step, index) => (
-                      <>
-                        <div
-                          key={index}
-                          className={`p-3 rounded-lg border-l-4 text-[14px] transition-all duration-200 ${
-                            step.status === "completed"
-                              ? "bg-green-50 border-green-400"
-                              : step.status === "error"
-                              ? "bg-red-50 border-red-400"
-                              : "bg-blue-50 border-blue-400"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 flex-1">
-                              <span
-                                className={`font-medium ${getStatusColor(
-                                  step.status
-                                )}`}
-                              >
-                                {getStatusIcon(step.status)} Using Tool:{" "}
-                                {step.name}
-                              </span>
-                              {step.status === "running" && (
-                                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                              )}
-                            </div>
-                            {hasDetailedInfo(step) && (
-                              <button
-                                onClick={() =>
-                                  setSelectedTool({
-                                    ...step,
-                                    thinkingProcess:
-                                      step.name === "Real Model Thinking"
-                                        ? thinkingProcess
-                                        : null,
-                                  })
-                                }
-                                className="ml-2 px-2 py-1 bg-white text-gray-600 rounded text-xs font-medium hover:bg-gray-50 hover:text-blue-600 transition-colors flex items-center gap-1"
-                              >
-                                <svg
-                                  width="12"
-                                  height="12"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
+                <div className="mt-2 -mx-3 -mb-3"> {/* Negative margins to extend full width */}
+                  <div className="bg-gray-50 rounded-b-[12px] p-4 min-h-[60px]"> {/* Full width background */}
+                    <div className="space-y-3">
+                      {toolSteps.map((step, index) => (
+                        <>
+                          <div
+                            key={index}
+                            className={`w-[100%] rounded-lg border font-medium text-[14px] transition-all duration-200 ${
+                              step.status === "completed"
+                                ? "bg-white border-[#ececec] shadow-sm"
+                                : step.status === "error"
+                                ? "bg-red-50 border-red-400"
+                                : "bg-white border-[#ececec] shadow-sm"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between p-3">
+                              <div className="flex items-center gap-3 flex-1">
+                                <span
+                                  className={`font-xl ${getStatusColor(
+                                    step.status
+                                  )}`}
                                 >
-                                  <path
-                                    d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                  />
-                                  <path
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                  />
-                                </svg>
-                                View
-                              </button>
-                            )}
-                          </div>
-                          {/* Optional: Add essential info or status here if needed */}
-                        </div>
-                        {/* ✅ REORDERED: Inspiration images SECOND (immediately after tool steps, before text) */}
-                        {step.name == "Design Inspiration Finder" &&
-                          isAI &&
-                          inspirationImages &&
-                          inspirationImages.length > 0 && (
-                            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                              <div className="flex items-center justify-between mb-3">
-                                <h5 className="font-medium text-gray-800 flex items-center gap-2">
-                                  🎨 Design Inspiration
-                                  <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
-                                    {inspirationImages.length} found
-                                  </span>
-                                </h5>
-                                <div className="text-xs text-gray-500">
-                                  From Behance & Dribbble
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                                {inspirationImages.map((image, index) => (
-                                  <div
-                                    key={index}
-                                    className="relative group cursor-pointer hover:transform hover:scale-105 transition-all duration-200"
-                                    onClick={() =>
-                                      window.open(image.link, "_blank")
-                                    }
-                                  >
-                                    <div className="aspect-square overflow-hidden rounded-lg border-2 border-gray-200 group-hover:border-blue-400">
-                                      <img
-                                        src={`/api/proxy-image?url=${encodeURIComponent(
-                                          image.original
-                                        )}`}
-                                        alt={
-                                          image.title || "Design inspiration"
-                                        }
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => {
-                                          if (
-                                            image.thumbnail &&
-                                            !e.target.src.includes(
-                                              encodeURIComponent(
-                                                image.thumbnail
-                                              )
-                                            )
-                                          ) {
-                                            e.target.src = `/api/proxy-image?url=${encodeURIComponent(
-                                              image.thumbnail
-                                            )}`;
-                                          }
-                                        }}
-                                      />
-                                    </div>
-                                    <div className="absolute top-2 right-2">
-                                      <span
-                                        className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                          image.source === "Behance"
-                                            ? "bg-blue-600 text-white"
-                                            : "bg-pink-600 text-white"
-                                        }`}
-                                      >
-                                        {image.source}
-                                      </span>
-                                    </div>
-                                    <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-40 rounded-lg transition-all duration-200 flex items-center justify-center">
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <svg
-                                          className="w-6 h-6 text-white"
-                                          fill="none"
-                                          stroke="currentColor"
-                                          viewBox="0 0 24 24"
-                                        >
-                                          <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                          />
-                                        </svg>
-                                      </div>
-                                    </div>
-                                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                                      <p className="text-white text-xs truncate">
-                                        {image.title || "Design inspiration"}
-                                      </p>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                              <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
-                                <span>Click any image to view source</span>
-                                {inspirationImages.length > 10 && (
-                                  <span>
-                                    {inspirationImages.length - 10} more
-                                    available
-                                  </span>
+                                  <b>Using tool</b> {step.name}
+                                </span>
+                                {step.status === "running" && (
+                                  <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                                 )}
                               </div>
+                              {hasDetailedInfo(step) && (
+                                <button
+                                  onClick={() =>
+                                    setSelectedTool({
+                                      ...step,
+                                      thinkingProcess:
+                                        step.name === "Real Model Thinking"
+                                          ? thinkingProcess
+                                          : null,
+                                    })
+                                  }
+                                  className="ml-2 px-3 py-1.5 bg-white text-gray-600 rounded-md text-xs font-medium hover:bg-gray-50 hover:text-blue-600 transition-colors flex items-center gap-1 border border-gray-200"
+                                >
+                                  <svg
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                    />
+                                    <path
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                    />
+                                  </svg>
+                                  View Details
+                                </button>
+                              )}
                             </div>
-                          )}
-                      </>
-                    ))}
+                            
+                            {/* Add conversational text if available */}
+                            {/* {step.conversationalText && (
+                              <div className="px-3 pb-3 border-t border-gray-100 pt-2">
+                                <p className="text-sm text-gray-700">
+                                  💬 {step.conversationalText}
+                                </p>
+                              </div>
+                            )} */}
+                          </div>
+
+                          {/* ✅ UPDATED: Inspiration images with full width */}
+                          {(step.name == "Design Inspiration Finder" || step.name == "Slide Design Inspiration Finder") &&
+                            isAI &&
+                            inspirationImages &&
+                            inspirationImages.length > 0 && (
+                              <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                                <div className="p-4 border-b border-gray-100">
+                                  <div className="flex items-center justify-between">
+                                    <h5 className="font-medium text-gray-800 flex items-center gap-2">
+                                      🎨 Design Inspiration
+                                      <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
+                                        {inspirationImages.length} found
+                                      </span>
+                                    </h5>
+                                    <div className="text-xs text-gray-500">
+                                      From Behance & Dribbble
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="p-4">
+                                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                                    {inspirationImages.map((image, index) => (
+                                      <div
+                                        key={index}
+                                        className="relative group cursor-pointer hover:transform hover:scale-105 transition-all duration-200"
+                                        onClick={() =>
+                                          window.open(image.link, "_blank")
+                                        }
+                                      >
+                                        <div className="aspect-square overflow-hidden rounded-lg border-2 border-gray-200 group-hover:border-blue-400">
+                                          <img
+                                            src={`/api/proxy-image?url=${encodeURIComponent(
+                                              image.original
+                                            )}`}
+                                            alt={
+                                              image.title || "Design inspiration"
+                                            }
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                              if (
+                                                image.thumbnail &&
+                                                !e.target.src.includes(
+                                                  encodeURIComponent(
+                                                    image.thumbnail
+                                                  )
+                                                )
+                                              ) {
+                                                e.target.src = `/api/proxy-image?url=${encodeURIComponent(
+                                                  image.thumbnail
+                                                )}`;
+                                              }
+                                            }}
+                                          />
+                                        </div>
+                                        <div className="absolute top-2 right-2">
+                                          <span
+                                            className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                              image.source === "Behance"
+                                                ? "bg-blue-600 text-white"
+                                                : "bg-pink-600 text-white"
+                                            }`}
+                                          >
+                                            {image.source}
+                                          </span>
+                                        </div>
+                                        <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-40 rounded-lg transition-all duration-200 flex items-center justify-center">
+                                          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <svg
+                                              className="w-6 h-6 text-white"
+                                              fill="none"
+                                              stroke="currentColor"
+                                              viewBox="0 0 24 24"
+                                            >
+                                              <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                              />
+                                            </svg>
+                                          </div>
+                                        </div>
+                                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                                          <p className="text-white text-xs truncate">
+                                            {image.title || "Design inspiration"}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
+                                    <span>Click any image to view source</span>
+                                    {inspirationImages.length > 10 && (
+                                      <span>
+                                        {inspirationImages.length - 10} more
+                                        available
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                        </>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
 
-              {/* ✅ REORDERED: Text rendering THIRD (after inspiration images) */}
+              {/* ✅ UPDATED: Text rendering with proper spacing when tool steps are present */}
               {finalTextToShow && (
                 <div
                   className={`prose prose-sm max-w-none ${
                     isError ? "text-red-600" : ""
-                  }`}
+                  } ${toolSteps && toolSteps.length > 0 ? "mt-4" : ""}`}
                 >
                   <ReactMarkdown components={markdownComponents}>
                     {finalTextToShow.replace(/\\n/g, "\n")}

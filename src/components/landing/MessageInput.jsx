@@ -9,8 +9,10 @@ import { LuUserRound } from "react-icons/lu";
 
 import { Settings, Paperclip, Mic, Send, User, MicOff } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove, onPromptSubmit }) {
+  const router = useRouter();
   const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -20,8 +22,10 @@ export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove, onP
     e.preventDefault();
     if (message.trim()) {
       console.log("Sending message:", message);
+
+      router.push(`/dashboard/Ai-Agent/super-agent?Prompt=${encodeURIComponent(message)}`);
       
-      // Call the callback to hide template if provided
+      // Call the callback to hide templatlete if provided
       if (onPromptSubmit) {
         onPromptSubmit(message);
       }

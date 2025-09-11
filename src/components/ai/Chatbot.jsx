@@ -28,6 +28,9 @@ export default function ChatPage({
   const [conversationId, setConversationId] = useState("")
   const [finalMessageQueue, setFinalMessageQueue] = useState(null);
   const searchParams = useSearchParams();
+  const hasProcessedPrompt = useRef(false);
+
+
 
   const [isCompleting, setIsCompleting] = useState(false);
 
@@ -40,8 +43,21 @@ export default function ChatPage({
   const [isStreaming, setIsStreaming] = useState(false);
 
   // ✅ GET CONVERSATION ID FROM URL ON COMPONENT MOUNT
+
+  const checkForPrompt = async () => {
+    const Prompt = searchParams.get("Prompt");
+    if (Prompt && !hasProcessedPrompt.current) {
+      hasProcessedPrompt.current = true;
+      let fetchedUserId = await verifyTokenForFetchingMessages();
+      console.warn(`Fetched User ID: ${fetchedUserId}`);
+      handleSendWithStreaming(Prompt, fetchedUserId);
+    }
+  }
+
   useEffect(() => {
+    checkForPrompt();
     const urlConversationId = searchParams.get('conversationId');
+    
     if (urlConversationId) {
       console.log("[DEBUG] Setting conversationId from URL:", urlConversationId);
       setConversationId(urlConversationId);
@@ -49,6 +65,7 @@ export default function ChatPage({
       console.log("[DEBUG] No conversationId in URL, starting fresh");
       setConversationId("");
     }
+
   }, [searchParams]);
 
   // ✅ NEW: Handle completion logic in useEffect to avoid race conditions
@@ -305,7 +322,7 @@ const generateImmediateResponse = async (userInput) => {
   };
 
 
-  const handleSendWithStreaming = async (msg) => {
+  const handleSendWithStreaming = async (msg, fetchedUserId) => {
     // ✅ ADD: Variables to store data outside streaming loop (RELIABLE)
     let preservedSearchResults = null;
     let preservedInspirationImages = null;
@@ -347,8 +364,13 @@ const generateImmediateResponse = async (userInput) => {
       console.log(`🔍 Current conversationId: ${conversationId}`);
 
       const pythonApiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || "http://127.0.0.1:8000";
-      const userId = UserId;
-
+      let userId;
+      if (fetchedUserId) {
+        userId = fetchedUserId
+      }
+      else {
+        userId = UserId
+      }
       let endpoint;
       switch (aiName.toLowerCase()) {
         case "zara":
@@ -362,6 +384,9 @@ const generateImmediateResponse = async (userInput) => {
           break;
         case "mira":
           endpoint = "strategist/stream";
+          break;
+        case "super agent":
+          endpoint = "super-agent/stream";
           break;
         default:
           endpoint = "brand-designer/stream";

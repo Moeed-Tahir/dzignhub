@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Chatbot from "@/components/ChatBot/ChatBot";
 import { useEffect } from "react";
 import Link from "next/link";
+import { ModernInput } from "@/components/landing/MessageInput";
 function Page() {
   const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -61,7 +62,7 @@ function Page() {
     {
       name: "Pitch Deck",
       icon: "/aiAgent/presention-chart.svg",
-            href: "/dashboard/Ai-Agent/pitch-deck",
+      href: "/dashboard/Ai-Agent/pitch-deck",
 
       bg: "#EBF3F8",
     },
@@ -189,6 +190,8 @@ function Page() {
       <Navbar />
 
       <div className="px-8 mx-auto max-w-[1440px] py-6">
+        <ModernInput />
+
         <div className="flex justify-between mb-5 items-center">
           {ai.map((item, index) => (
             <Link
