@@ -3,7 +3,7 @@ import Navbar from "@/components/common/Navbar";
 import Image from "next/image";
 import React from "react";
 import All from "@/app/assets/All";
-import Ui from "@/app/assets/UI";
+import Ui from "@/app/assets/Ui";
 import Seo from "@/app/assets/Seo";
 import Brand from "@/app/assets/Brand";
 import Content from "@/app/assets/Ai";

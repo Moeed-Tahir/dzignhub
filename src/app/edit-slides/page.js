@@ -1,9 +1,10 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import {DocumentEditor} from "@onlyoffice/document-editor-react";
 import { useSearchParams } from 'next/navigation';
 import React from 'react'
-export default function page() {
+export default function Page() {
   const [config, setConfig] = useState(null);
   const searchParams = useSearchParams();
   const slideUrl = searchParams.get("slideUrl");
@@ -30,7 +31,7 @@ export default function page() {
     <div style={{ width: "100vw", height: "100vh" }}>
       <DocumentEditor
         id="docEditor"
-        documentServerUrl={process.env.NEXT_PUBLIC_DOC_SERVER_ADDRESS} // your Docs Cloud or self-hosted server
+        documentServerUrl={process.env.NEXT_PUBLIC_DOC_SERVER_ADDRESS}
         config={config}
         type="desktop"
         events_onDocumentReady={() => console.log("Document ready")}
