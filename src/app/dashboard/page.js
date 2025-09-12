@@ -109,6 +109,13 @@ function Page() {
 
       bg: "#FEFAF7",
     },
+    {
+      name: "Fashion Designer",
+      icon: "/aiAgent/fashion.svg",
+      href: "/dashboard/Ai-Agent/fashion-ai",
+
+      bg: "#2416E40D",
+    },
   ];
 
   const [cardsPerView, setCardsPerView] = useState(5);
@@ -208,7 +215,7 @@ function Page() {
               >
                 <Image src={item.icon} alt={item.name} width={24} height={24} />
               </div>
-              <span className="ml-2">{item.name}</span>
+              <span className="ml-2 w-[80%] text-center mt-1">{item.name}</span>
             </Link>
           ))}
         </div>
