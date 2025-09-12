@@ -271,10 +271,10 @@ function Pricing({ pricingPlans = [] }) {
                 </motion.div>
 
                 {/* CTA Button */}
-                <Link href={plan.link} >
+                <Link href={plan.link} className="flex items-center justify-center" >
                 <motion.button
                  
-                  className={`px-6 py-3 xl:max-w-[368px] w-full lg:w-[90%] mt-5 mx-auto text-[16px] font-medium ${
+                  className={`px-6 py-3   w-full lg:w-[90%] mt-5 mx-auto text-[16px] font-medium ${
                     syne.className
                   } cursor-pointer rounded-[40px] border backdrop-blur-[12px] shadow-[0px_8px_10.9px_#0003121F,0px_1px_1px_#0003124D] ${
                     isPro

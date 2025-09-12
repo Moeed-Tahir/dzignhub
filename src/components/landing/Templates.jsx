@@ -348,11 +348,11 @@ function Templates({ templates = [] }) {
 
             {/* Brands Section */}
             <motion.div
-              className="col-span-1 md:col-span-2 bg-[#E4E7FA] rounded-[20px] h-auto md:h-[362px] relative"
+              className="col-span-1 overflow-hidden md:col-span-2 bg-[#E4E7FA] rounded-[20px] h-auto md:h-[362px] relative"
               variants={sectionVariants}
               whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
             >
-              <div className="top-[20px] left-[20px] flex flex-col gap-[8px] absolute">
+              <div className="top-[20px] mb-2 left-[20px] flex flex-col gap-[8px] absolute">
                 <p className="text-[30px] text-[#C209C1]  font-semibold md:font-medium ">
                   {templateData.brands.title}
                 </p>
@@ -362,32 +362,34 @@ function Templates({ templates = [] }) {
               </div>
 
               {/* Mobile Layout */}
-              <div className="md:hidden mt-10 p-[20px] pt-[100px] flex gap-[16px]">
+              <div className="md:hidden w-full h-[300px] mt-10 p-[20px] pt-[100px] flex gap-[16px]">
                 <div className="flex-1 flex flex-col gap-[14px]">
                   {templateData.brands.images
                     .slice(0, 2)
                     .map((image, index) => (
                       <div key={index} className="w-full">
                         <img
-                          src={image}
+                          src={`/landing/templates/${index + 1}.jpg`}
                           alt={`${templateData.brands.title} ${index + 1}`}
-                          className="h-[120px] rounded-[10.88px] w-full object-cover"
+                          className={` ${
+                            index === 1 ? "bottom-20" : "bottom-[-50px]"
+                          }  h-[120px] absolute left-[-200px]  rounded-[10.88px] w-full object-cover`}
                         />
                       </div>
                     ))}
                 </div>
                 <div className="flex-1">
                   <img
-                    src={templateData.brands.images[2]}
+                    src={"/landing/templates/3.jpg"}
                     alt={`${templateData.brands.title} 3`}
-                    className="h-[254px] rounded-[10.88px] w-full object-cover"
+                    className="h-[254px] absolute right-[-40px] bottom-[-50px] w-[200px] rounded-[10.88px]  object-cover"
                   />
                 </div>
               </div>
 
               {/* Desktop Layout */}
-              <div className="hidden md:block">
-                <div className="h-[246px] top-[100px] left-[32.31px] flex flex-col gap-[14.5px] absolute overflow-hidden">
+              <div className="hidden  md:block">
+                <div className="h-[246px] top-[110px] left-[32.31px] flex flex-col gap-[14.5px] absolute overflow-hidden">
                   {templateData.brands.images
                     .slice(0, 2)
                     .map((image, index) => (
@@ -395,19 +397,19 @@ function Templates({ templates = [] }) {
                         <img
                           src={image}
                           alt={`${templateData.brands.title} ${index + 1}`}
-                          className="h-[130.5px] rounded-[10.88px] w-full object-cover"
+                          className="h-[125.5px] rounded-[10.88px] w-full object-cover"
                         />
                       </div>
                     ))}
                 </div>
-                <div className="w-[335.43px]  flex items-start justify-start top-[97.57px] left-[433.64px] rounded-[10.88px] absolute">
+                <div className="w-[335.43px]  flex items-start justify-start top-[110px] left-[433.64px] rounded-[10.88px] absolute">
                   <Image
                     src={templateData.brands.images[2]}
                     alt={`${templateData.brands.title} 3`}
                     // layout="fill"
                     width={10000}
                     height={250}
-                    className="!rounded-[10.88px] w-full h-[257px] object-cover"
+                    className="!rounded-[10.88px] w-full h-[240px] object-cover"
                   />
                 </div>
               </div>
