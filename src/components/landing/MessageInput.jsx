@@ -10,9 +10,19 @@ import { LuUserRound } from "react-icons/lu";
 import { Settings, Paperclip, Mic, Send, User, MicOff } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
-export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove, onPromptSubmit }) {
+export function ModernInput({
+  isAi,
+  selectedTemplateImage,
+  onTemplateRemove,
+  onPromptSubmit,
+}) {
   const router = useRouter();
+  const params = useParams();
+  console.log("Current route parameters:", params);
+  const { agent } = params || {};
+  console.log("Agent parameter:", agent);
   const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -22,14 +32,19 @@ export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove, onP
     e.preventDefault();
     if (message.trim()) {
       console.log("Sending message:", message);
+      if (agent != "pitch-deck") {
+        router.push(
+          `/dashboard/Ai-Agent/super-agent?Prompt=${encodeURIComponent(
+            message
+          )}`
+        );
+      }
 
-      router.push(`/dashboard/Ai-Agent/super-agent?Prompt=${encodeURIComponent(message)}`);
-      
       // Call the callback to hide templatlete if provided
       if (onPromptSubmit) {
         onPromptSubmit(message);
       }
-      
+
       setMessage("");
     }
   };
@@ -93,31 +108,31 @@ export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove, onP
     >
       <form onSubmit={handleSubmit} className="relative">
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
-            {/* Selected template image */}
-            {selectedTemplateImage && (
-              <div className="px-4  py-3">
-                <div className="relative inline-block">
-                  <Image
-                    src={selectedTemplateImage}
-                    alt="Selected template"
-                    width={120}
-                    height={80}
-                    className="rounded-lg border border-gray-200"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onTemplateRemove) {
-                        onTemplateRemove();
-                      }
-                    }}
-                    className="absolute -top-2 -right-2 bg-gray-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-gray-600"
-                  >
-                    ×
-                  </button>
-                </div>
+          {/* Selected template image */}
+          {selectedTemplateImage && (
+            <div className="px-4  py-3">
+              <div className="relative inline-block">
+                <Image
+                  src={selectedTemplateImage}
+                  alt="Selected template"
+                  width={120}
+                  height={80}
+                  className="rounded-lg border border-gray-200"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onTemplateRemove) {
+                      onTemplateRemove();
+                    }
+                  }}
+                  className="absolute -top-2 -right-2 bg-gray-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-gray-600"
+                >
+                  ×
+                </button>
               </div>
-            )}
+            </div>
+          )}
           <div className="px-4 py-3">
             <textarea
               type="text"
@@ -131,11 +146,14 @@ export function ModernInput({ isAi, selectedTemplateImage, onTemplateRemove, onP
             />
           </div>
 
-
           {/* Options section on bottom with justify-between */}
-          <div className={`flex items-center ${isAi?"justify-end":"justify-between"} px-4 py-3 border-t border-gray-100`}>
+          <div
+            className={`flex items-center ${
+              isAi ? "justify-end" : "justify-between"
+            } px-4 py-3 border-t border-gray-100`}
+          >
             {/* Left side icons */}
-            <div className={` ${isAi?"hidden":"flex"}  items-center gap-2`}>
+            <div className={` ${isAi ? "hidden" : "flex"}  items-center gap-2`}>
               {/* <Avatar className="h-8 w-8">
                 <AvatarFallback className="bg-gray-100">
                   <User className="w-[18px] h-[18px]  text-gray-600" />
