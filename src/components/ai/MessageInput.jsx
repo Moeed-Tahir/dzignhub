@@ -5,6 +5,7 @@ import { SlWrench } from "react-icons/sl";
 import { IoLayersOutline } from "react-icons/io5";
 import { RiAttachment2 } from "react-icons/ri";
 import ToolsModal from "./ToolsModal";
+import PersonalizationModals from "./PersonalizedModal";
 
 export default function MessageInput({
   onSend,
@@ -37,6 +38,8 @@ export default function MessageInput({
     }
   };
   const [isOpen, setIsOpen] = useState(false);
+  const [showPersonalizationModal, setShowPersonalizationModal] =
+    useState(false);
 
   return (
     <div
@@ -110,7 +113,10 @@ export default function MessageInput({
                 <div className="w-8 h-8 flex justify-center border cursor-pointer items-center bg-white  rounded-[8px]">
                   <RiAttachment2 className="text-lg " />
                 </div>
-                <div className="w-8 h-8 flex justify-center border cursor-pointer items-center bg-white  rounded-[8px]">
+                <div
+                  onClick={() => setShowPersonalizationModal(true)}
+                  className="w-8 h-8 flex justify-center border cursor-pointer items-center bg-white  rounded-[8px]"
+                >
                   <IoLayersOutline className="text-lg " />
                 </div>
                 <div
@@ -172,6 +178,10 @@ export default function MessageInput({
       )}
 
       <ToolsModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <PersonalizationModals
+        showFirstModal={showPersonalizationModal}
+        setShowFirstModal={setShowPersonalizationModal}
+      />
     </div>
   );
 }
