@@ -13,6 +13,7 @@ export default function MessageInput({
   placeholder,
   isSuperAgent,
   isPitch,
+  isAI
 }) {
   const [message, setMessage] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(true);

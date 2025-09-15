@@ -418,7 +418,6 @@ export default function MessageBubble({
                           {/* ✅ UPDATED: Inspiration images with full width */}
                           {(step.name == "Design Inspiration Finder" ||
                             step.name == "Slide Design Inspiration Finder") &&
-                            isAI &&
                             inspirationImages &&
                             inspirationImages.length > 0 && (
                               <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
