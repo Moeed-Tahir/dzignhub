@@ -499,10 +499,10 @@ export default function MessageBubble({
                                           </div>
                                         </div>
                                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                                          <p className="text-white text-xs truncate">
+                                          {/* <p className="text-white text-xs truncate">
                                             {image.title ||
                                               "Design inspiration"}
-                                          </p>
+                                          </p> */}
                                         </div>
                                       </div>
                                     ))}
