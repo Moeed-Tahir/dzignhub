@@ -463,7 +463,7 @@ export default function ChatPage({
         for (const line of lines) {
           if (line.startsWith("data: ")) {
             try {
-              const data = JSON.parse(line.slice(6));
+              const data = JSON.parse(line?.slice(6));
               console.log("📡 Streaming data:", data);
 
               switch (data.type) {
