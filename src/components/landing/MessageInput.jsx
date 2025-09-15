@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 
 export function ModernInput({
-  isAi,
+  isAi = false,
   selectedTemplateImage,
   onTemplateRemove,
   onPromptSubmit,
@@ -104,7 +104,7 @@ export function ModernInput({
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full max-w-[929px] mb-5 sm:mb-10 mx-auto p-6"
+      className="w-full max-w-[929px] mb-5 sm:mb-10 mx-auto p-6 -z-10"
     >
       <form onSubmit={handleSubmit} className="relative">
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">

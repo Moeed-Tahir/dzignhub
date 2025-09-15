@@ -27,7 +27,7 @@ export default function MessageBubble({
   thinkingProcess,
   searchResults,
   inspirationImages,
-  shouldTypeText = false, 
+  shouldTypeText = false,
 }) {
   const { Avatar } = useUserStore();
   console.log("[DEBUG MessageBubble] Received props:");
@@ -73,7 +73,7 @@ export default function MessageBubble({
     return { displayedText, isTyping };
   };
 
-  const isAI = sender != "user";
+  const isAI = sender !== "user";
   const userIcon = Avatar || "/avatar.png";
   const [selected, setSelected] = useState(null);
 
@@ -291,7 +291,7 @@ export default function MessageBubble({
           isAI ? "justify-start " : "justify-end "
         } px-4 py-2`}
       >
-        {!isPitch && isAI  ? (
+        {!isPitch && isAI ? (
           <div className="flex items-end mr-2">
             <Image
               src={aiIcon}
@@ -337,8 +337,12 @@ export default function MessageBubble({
               {/* ✅ REORDERED: Tool steps display FIRST
               /* ✅ UPDATED: Tool steps display with full width */}
               {isAI && toolSteps && toolSteps.length > 0 && (
-                <div className="mt-2 -mx-3 -mb-3"> {/* Negative margins to extend full width */}
-                  <div className="bg-gray-50 rounded-b-[12px] p-4 min-h-[60px]"> {/* Full width background */}
+                <div className="mt-2 -mx-3 -mb-3">
+                  {" "}
+                  {/* Negative margins to extend full width */}
+                  <div className="bg-gray-50 rounded-b-[12px] p-4 min-h-[60px]">
+                    {" "}
+                    {/* Full width background */}
                     <div className="space-y-3">
                       {toolSteps.map((step, index) => (
                         <>
@@ -400,7 +404,7 @@ export default function MessageBubble({
                                 </button>
                               )}
                             </div>
-                            
+
                             {/* Add conversational text if available */}
                             {/* {step.conversationalText && (
                               <div className="px-3 pb-3 border-t border-gray-100 pt-2">
@@ -412,7 +416,8 @@ export default function MessageBubble({
                           </div>
 
                           {/* ✅ UPDATED: Inspiration images with full width */}
-                          {(step.name == "Design Inspiration Finder" || step.name == "Slide Design Inspiration Finder") &&
+                          {(step.name == "Design Inspiration Finder" ||
+                            step.name == "Slide Design Inspiration Finder") &&
                             isAI &&
                             inspirationImages &&
                             inspirationImages.length > 0 && (
@@ -446,7 +451,8 @@ export default function MessageBubble({
                                               image.original
                                             )}`}
                                             alt={
-                                              image.title || "Design inspiration"
+                                              image.title ||
+                                              "Design inspiration"
                                             }
                                             className="w-full h-full object-cover"
                                             onError={(e) => {
@@ -495,7 +501,8 @@ export default function MessageBubble({
                                         </div>
                                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
                                           <p className="text-white text-xs truncate">
-                                            {image.title || "Design inspiration"}
+                                            {image.title ||
+                                              "Design inspiration"}
                                           </p>
                                         </div>
                                       </div>
