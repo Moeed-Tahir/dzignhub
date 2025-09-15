@@ -3,7 +3,6 @@ const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://rational-growt
 
 export const fetchLandingPageData = async () => {
   try {
-    // Fetch with populate to get nested components and media
     const response = await fetch(
       `${STRAPI_URL}/api/landing-pages?populate[hero_section][populate]=*&populate[carousal_images][populate]=*&populate[stack][populate][card][populate]=*&populate[work_card][populate]=*&populate[templates][populate]=*&populate[download_section][populate]=*&populate[cards][populate]=*&populate[pricing_plans][populate][benefits][populate]=*&populate[testimonial_section][populate][testimonial][populate]=*&populate[assistant_section][populate][assistants][populate]=*&populate[faq_section][populate][faqs][populate]=*`
     );
