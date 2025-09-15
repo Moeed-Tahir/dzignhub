@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 
 export function ModernInput({
-  isAi = false,
+  isAi,
   selectedTemplateImage,
   onTemplateRemove,
   onPromptSubmit,
@@ -104,7 +104,7 @@ export function ModernInput({
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full max-w-[929px] mb-5 sm:mb-10 mx-auto p-6 -z-10"
+      className="w-full max-w-[929px] mb-5 sm:mb-10 mx-auto p-6 z-0"
     >
       <form onSubmit={handleSubmit} className="relative">
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
@@ -186,7 +186,7 @@ export function ModernInput({
                 onClick={handleFileAttach}
                 className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
               >
-                <Image src={"/clip.svg"} height={18} width={18} alt="" />
+                {/* <Image src={"/clip.svg"} height={18} width={18} alt="" /> */}
               </button>
               <button
                 type="button"

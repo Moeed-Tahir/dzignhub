@@ -762,6 +762,7 @@ const ChatbotSidebar = ({
                   src={"/aiAgent/ai.svg"}
                   height={13}
                   width={18}
+                  alt=""
                 />
               </button>
               {/* <button

@@ -73,7 +73,7 @@ export default function MessageBubble({
     return { displayedText, isTyping };
   };
 
-  const isAI = sender !== "user";
+  const isAI = sender != "user";
   const userIcon = Avatar || "/avatar.png";
   const [selected, setSelected] = useState(null);
 

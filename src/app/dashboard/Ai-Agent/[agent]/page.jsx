@@ -27,6 +27,7 @@ import FashionPreview from "@/components/ai/FashionPreview";
 const page = () => {
   const { agent } = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const [bot, setBot] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -389,8 +390,6 @@ const page = () => {
     return notFound();
   }
 
-  const router = useRouter();
-
   const renderContent = () => {
     if (bot.name !== "Pitch Deck" && bot.name !== "Fashion Ai") {
       return (
@@ -432,7 +431,6 @@ const page = () => {
             </p>
             <ModernInput
               isAi={true}
-              
               selectedTemplateImage={selectedTemplateImage}
               onTemplateRemove={() => setSelectedTemplateImage(null)}
               onPromptSubmit={handlePromptSubmit}
