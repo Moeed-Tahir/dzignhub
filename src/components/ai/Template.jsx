@@ -25,7 +25,7 @@ const templates = [
   {
     id: 1,
     title: "Business Analytics Dashboard",
-    slug:"pearl",
+    slug: "pearl",
     category: "Business",
     theme: "Dark",
     popularity: 95,
@@ -38,7 +38,7 @@ const templates = [
     id: 2,
     title: "Zonex Brand Identity",
     category: "Branding",
-    slug:"vortex",
+    slug: "vortex",
     theme: "Green",
     popularity: 88,
     image: "/slides/2.png",
@@ -50,7 +50,7 @@ const templates = [
     id: 3,
     title: "Finmetrics Presentation",
     category: "Business",
-    slug:"chisel",
+    slug: "chisel",
     theme: "Orange",
     popularity: 92,
     image: "/slides/3.png",
@@ -62,7 +62,7 @@ const templates = [
     id: 4,
     title: "Personal Portfolio",
     category: "Portfolio",
-    slug:"stardust",
+    slug: "stardust",
     theme: "Light",
     popularity: 85,
     image: "/slides/4.png",
@@ -74,7 +74,7 @@ const templates = [
     id: 5,
     title: "Creative Agency",
     category: "Agency",
-    slug:"seafoam",
+    slug: "seafoam",
     theme: "Orange",
     popularity: 90,
     image: "/slides/1.png",
@@ -86,7 +86,7 @@ const templates = [
     id: 6,
     title: "Who We Are",
     category: "About",
-    slug:"nebulae",
+    slug: "nebulae",
     theme: "Dark",
     popularity: 87,
     image: "/slides/2.png",
@@ -98,7 +98,7 @@ const templates = [
     id: 7,
     title: "Finmetrics Presentation",
     category: "Business",
-    slug:"creme",
+    slug: "creme",
     theme: "Orange",
     popularity: 92,
     image: "/slides/3.png",
@@ -110,7 +110,7 @@ const templates = [
     id: 8,
     title: "Personal Portfolio",
     category: "Portfolio",
-    slug:"lux",
+    slug: "lux",
     theme: "Light",
     popularity: 85,
     image: "/slides/4.png",
@@ -120,7 +120,10 @@ const templates = [
   },
 ];
 
-export default function Template({setSelectedTemplateName, onTemplateSelect }) {
+export default function Template({
+  setSelectedTemplateName,
+  onTemplateSelect,
+}) {
   const scrollRef = useRef(null);
 
   const handleScrollToEnd = () => {
@@ -247,62 +250,55 @@ export default function Template({setSelectedTemplateName, onTemplateSelect }) {
 
           {/* Templates Grid */}
           <div className="flex-1 overflow-y-auto p-4">
-            <div className="flex flex-wrap  gap-2">
-              {/* Create Blank Slides */}
-              <Card className="group w-[252px] h-[144px] bg-transparent rounded-[12px]  cursor-pointer border-2 hover:shadow-md border-muted-foreground/25 border-dashed transition-shadow">
-                <CardContent className="p-4 flex flex-col items-center justify-center h-32   ">
-                  <Plus className="h-8 w-8 text-muted-foreground mb-2" />
-                  <span className="text-[#393E44] font-medium text-[16px">
-                    Create Blank Slides
-                  </span>
-                </CardContent>
-              </Card>
-
-              {/* Template Cards */}
-              {filteredTemplates.map((template) => (
-                <Card
-                  key={template.id}
-                  className="group cursor-pointer w-[252px] h-[144px] rounded-[12px]  hover:shadow-md transition-shadow overflow-hidden"
-                >
-                  <CardContent className="p-0 relative">
-                    <div className="relative overflow-hidden">
-                      <Image
-                        src={template.image || "/placeholder.svg"}
-                        alt={template.title}
-                        width={252}
-                        height={144}
-                        className="w-[252px] h-[144px] rounded-[12px] object-cover transition-transform group-hover:scale-105"
-                      />
-                      {/* Hover Button */}
-                      <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <Button
-                          size="sm"
-                          onClick={() => setSelectedTemplate(template)}
-                          className="bg-[#BDFF00] hover:bg-[#BDFF00] py-[12px] px-[16px] !cursor-pointer rounded-full text-black text-[16px] "
-                        >
-                          {/* <Eye className="h-4 w-4 mr-2" /> */}
-                       
-                          Apply
-                        </Button>
-                      </div>
-                    </div>
-                    {/* <div className="p-3">
-                      <h3 className="text-sm font-medium text-foreground truncate">
-                        {template.title}
-                      </h3>
-                      <div className="flex items-center justify-between mt-1">
-                        <Badge variant="outline" className="text-xs">
-                          {template.category}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">
-                          {template.popularity}%
-                        </span>
-                      </div>
-                    </div> */}
+            {activeTab === "explore" && (
+              <div className="flex flex-wrap  gap-2">
+                <Card className="group w-[252px] h-[144px] bg-transparent rounded-[12px]  cursor-pointer border-2 hover:shadow-md border-muted-foreground/25 border-dashed transition-shadow">
+                  <CardContent className="p-4 flex flex-col items-center justify-center h-32   ">
+                    <Plus className="h-8 w-8 text-muted-foreground mb-2" />
+                    <span className="text-[#393E44] font-medium text-[16px">
+                      Create Blank Slides
+                    </span>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
+
+                {filteredTemplates.map((template) => (
+                  <Card
+                    key={template.id}
+                    className="group cursor-pointer w-[252px] h-[144px] rounded-[12px]  hover:shadow-md transition-shadow overflow-hidden"
+                  >
+                    <CardContent className="p-0 relative">
+                      <div className="relative overflow-hidden">
+                        <Image
+                          src={template.image || "/placeholder.svg"}
+                          alt={template.title}
+                          width={252}
+                          height={144}
+                          className="w-[252px] h-[144px] rounded-[12px] object-cover transition-transform group-hover:scale-105"
+                        />
+
+                        <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <Button
+                            size="sm"
+                            onClick={() => setSelectedTemplate(template)}
+                            className="bg-[#BDFF00] hover:bg-[#BDFF00] py-[12px] px-[16px] !cursor-pointer rounded-full text-black text-[16px] "
+                          >
+                            Apply
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {activeTab === "my-templates" && (
+              <div className="flex flex-wrap gap-2">
+                <span className="text-sm text-muted-foreground">
+                  You have no templates yet.
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>

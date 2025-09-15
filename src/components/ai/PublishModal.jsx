@@ -5,7 +5,7 @@ import Glove from "@/app/assets/globe";
 const PublishModal = ({ open, onClose }) => {
   if (!open) return null;
   return (
-    <div className="absolute top-12 right-5 z-50 flex items-center justify-center  bg-opacity-40">
+    <div className="absolute top-12 right-5 z-50000 flex items-center justify-center  bg-opacity-40">
       <div className="bg-white rounded-xl shadow-lg w-[420px] py-4 relative">
         <h2 className="text-xl font-medium text-[#344054] mx-6 mb-4">
           Publish

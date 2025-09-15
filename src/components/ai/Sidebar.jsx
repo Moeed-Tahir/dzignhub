@@ -223,7 +223,7 @@ const ChatbotSidebar = ({
       novi: "seo-specialist",
       mira: "strategist",
       "pitch-deck": "pitch-deck",
-      "super-agent": "super-agent"
+      "super-agent": "super-agent",
     };
 
     setIsSearching(true);
@@ -231,7 +231,8 @@ const ChatbotSidebar = ({
       const userId = UserId;
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_PYTHON_API_URL
+        `${
+          process.env.NEXT_PUBLIC_PYTHON_API_URL
         }/agents/conversations/search?query=${encodeURIComponent(
           query
         )}&user_id=${userId}&agent=${agents[aiName.toLowerCase()]}&limit=10`,
@@ -309,7 +310,8 @@ const ChatbotSidebar = ({
             setActiveChat(updatedConversations[0]._id);
             // Navigate to the new conversation
             router.push(
-              `/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${updatedConversations[0]._id
+              `/dashboard/Ai-Agent/${aiName.toLowerCase()}?conversationId=${
+                updatedConversations[0]._id
               }`
             );
           } else {
@@ -352,7 +354,7 @@ const ChatbotSidebar = ({
       {isOpen && (
         <div
           className="fixed inset-0 h-screen bg-black/50 bg-opacity-50 z-40 md:hidden"
-        // onClick={() => setIsOpen(false)}
+          // onClick={() => setIsOpen(false)}
         />
       )}
 
@@ -396,17 +398,19 @@ const ChatbotSidebar = ({
           className={`bg-white h-screen   transition-all duration-300 flex flex-col overflow-hidden
             ${isOpen ? "w-80" : "w-16"}
             md:relative md:translate-x-0
-            ${isOpen
-              ? "fixed translate-x-0"
-              : "fixed -translate-x-full md:translate-x-0"
+            ${
+              isOpen
+                ? "fixed translate-x-0"
+                : "fixed -translate-x-full md:translate-x-0"
             }
           `}
         >
           <div className="flex items-center justify-between p-4 ">
             <div className="flex items-center h-[40px] space-x-3">
               <div
-                className={`${isOpen ? "flex" : "hidden"
-                  } transition-all duration-300 ease-in-out items-end mr-2`}
+                className={`${
+                  isOpen ? "flex" : "hidden"
+                } transition-all duration-300 ease-in-out items-end mr-2`}
               >
                 <Image
                   src={img}
@@ -441,8 +445,9 @@ const ChatbotSidebar = ({
             <button
               ref={plusButtonRef}
               onClick={toggleChatModal}
-              className={`flex items-center justify-center space-x-3 px-4 py-3 bg-[#FCF3FC]  text-white rounded-full transition-colors ${isOpen ? "w-full" : "w-8 h-8 !p-0"
-                }`}
+              className={`flex items-center justify-center space-x-3 px-4 py-3 bg-[#FCF3FC]  text-white rounded-full transition-colors ${
+                isOpen ? "w-full" : "w-8 h-8 !p-0"
+              }`}
             >
               <Plus className="w-5 text-[#c209c1] h-5" />
               {isOpen && <span>New Chat</span>}
@@ -725,26 +730,27 @@ const ChatbotSidebar = ({
               //   )}
               // </div>
               // Collapsed sidebar view
-              <div className="px-2 space-y-1">
-                {conversations.slice(0, 8).map((conversation) => (
-                  <div
-                    key={conversation._id}
-                    onClick={() => setActiveChat(conversation._id)}
-                    className={`w-8 h-8 mx-auto rounded-lg cursor-pointer transition-all flex items-center justify-center ${activeChat === conversation._id
-                        ? "bg-blue-100 border border-blue-200"
-                        : "bg-gray-100 hover:bg-gray-200"
-                      }`}
-                    title={conversation.title}
-                  >
-                    <MessageSquare
-                      className={`w-4 h-4 ${activeChat === conversation._id
-                          ? "text-blue-600"
-                          : "text-gray-600"
-                        }`}
-                    />
-                  </div>
-                ))}
-              </div>
+              // <div className="px-2 space-y-1">
+              //   {conversations.slice(0, 8).map((conversation) => (
+              //     <div
+              //       key={conversation._id}
+              //       onClick={() => setActiveChat(conversation._id)}
+              //       className={`w-8 h-8 mx-auto rounded-lg cursor-pointer transition-all flex items-center justify-center ${activeChat === conversation._id
+              //           ? "bg-blue-100 border border-blue-200"
+              //           : "bg-gray-100 hover:bg-gray-200"
+              //         }`}
+              //       title={conversation.title}
+              //     >
+              //       <MessageSquare
+              //         className={`w-4 h-4 ${activeChat === conversation._id
+              //             ? "text-blue-600"
+              //             : "text-gray-600"
+              //           }`}
+              //       />
+              //     </div>
+              //   ))}
+              // </div><>]
+              <></>
             )}
           </div>
         </div>
@@ -753,7 +759,7 @@ const ChatbotSidebar = ({
           {!isOpen && (
             <>
               <button
-                // onClick={() => setIsOpen(true)}
+                onClick={() => router.push(`/dashboard`)}
                 className="  bg-[#1B1F3C] fixed top-5 left-4 z-50 flex justify-center items-center  w-8 h-8 rounded-md transition-colors"
                 title="Collapse sidebar"
               >

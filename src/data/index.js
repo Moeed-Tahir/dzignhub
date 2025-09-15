@@ -60,7 +60,7 @@ const aiBots = {
   },
   kano: {
     name: "Kano",
-    img: "/Ai/ellie.png",
+    img: "/aiAgent/code.svg",
     placeholder: "I need help designing a clean interface for my app",
 
     tagline:
