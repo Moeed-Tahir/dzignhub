@@ -432,6 +432,7 @@ const page = () => {
             </p>
             <ModernInput
               isAi={true}
+              
               selectedTemplateImage={selectedTemplateImage}
               onTemplateRemove={() => setSelectedTemplateImage(null)}
               onPromptSubmit={handlePromptSubmit}
