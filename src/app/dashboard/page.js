@@ -116,6 +116,13 @@ function Page() {
 
       bg: "#2416E40D",
     },
+    {
+      name: "All Agents",
+      icon: "/aiAgent/spark.svg",
+      href: "/dashboard/Ai-Agent/agentics",
+
+      bg: "#504F4F0D",
+    },
   ];
 
   const [cardsPerView, setCardsPerView] = useState(5);
@@ -197,6 +204,8 @@ function Page() {
       <Navbar />
 
       <div className="px-8 mx-auto max-w-[1440px] py-6">
+
+        <h1 className="text-[34px] font-semibold text-center">AMAI SuperAI </h1>
         <ModernInput />
 
         <div className="flex justify-between mb-5 items-center">
@@ -215,7 +224,7 @@ function Page() {
               >
                 <Image src={item.icon} alt={item.name} width={24} height={24} />
               </div>
-              <span className="ml-2 w-[80%] text-center mt-1">{item.name}</span>
+              <span className=" w-[80%] text-center mt-1">{item.name}</span>
             </Link>
           ))}
         </div>
