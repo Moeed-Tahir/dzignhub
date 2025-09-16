@@ -13,7 +13,13 @@ import Colors from "./Colors";
 import { useUserStore } from "@/store/store";
 import { toast } from "react-toastify";
 
-const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefresh }) => {
+const Sidebar = ({
+  onGenerate,
+  isImagePage,
+  showClose = false,
+  onClose,
+  onRefresh,
+}) => {
   const router = useRouter();
   const [textValue, setTextValue] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -60,7 +66,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
         url: url,
         prompt: prompt,
         isMultiple: isMultiple,
-        size: size
+        size: size,
       };
       const req = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/save-generation`,
@@ -75,7 +81,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
       );
 
       const res = await req.json();
-      
     } catch (error) {
       console.error("Error saving generation:", error);
     }
@@ -147,7 +152,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
         console.log(res);
         if (res.type == "success" || res.type == "partial_success") {
           if (onGenerate) onGenerate();
-          
+
           // Save the generation to the database
           if (selectedQuality > 1) {
             await saveGeneration("image", res.images, textValue, true);
@@ -155,7 +160,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
             await saveGeneration("image", res.images[0], textValue, false);
           }
           SetGenerateImages(res.images);
-          
+
           // Refresh the generations data to include the new image
           if (onRefresh) {
             await onRefresh();
@@ -235,8 +240,14 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
           SetGenerateVideo([res.video]);
 
           // Save the generation to the database
-          await saveGeneration("video", res.video.videoUrl, textValue, false, res.video.fileSize);
-          
+          await saveGeneration(
+            "video",
+            res.video.videoUrl,
+            textValue,
+            false,
+            res.video.fileSize
+          );
+
           // Refresh the generations data to include the new video
           if (onRefresh) {
             await onRefresh();
@@ -275,7 +286,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
             height={100}
             className="w-[108px] h-[25px] object-contain"
           />
-        
         </div>
         {showClose && (
           <button
@@ -355,7 +365,9 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
       </div>
 
       {/* Size */}
-      <Size selected={selectedSize} onChange={setSelectedSize} />
+      {isImagePage && (
+        <Size selected={selectedSize} onChange={setSelectedSize} />
+      )}
 
       {/* {isImagePage && (
         <>
