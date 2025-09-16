@@ -569,7 +569,7 @@ const page = () => {
             <button
               ref={inviteButtonRef}
               className="bg-white rounded-[8px] h-[38px] w-[108px] justify-center flex items-center gap-2 border-[#202126] border"
-              onClick={() => setShowInviteModal((prev) => !prev)}
+              // onClick={() => setShowInviteModal((prev) => !prev)}
             >
               <Image
                 src={"/profile-add.svg"}
@@ -582,11 +582,23 @@ const page = () => {
             </button>
             <button
               ref={publishButtonRef}
-              className="bg-[#C209C1] ml-2 rounded-[8px] h-[38px] w-[108px] justify-center flex items-center gap-2 "
-              onClick={() => setShowPublishModal((prev) => !prev)}
+              className="bg-[#BDFF00] ml-2 rounded-[8px] h-[38px] px-4 justify-center flex items-center gap-2 "
+              // onClick={() => setShowPublishModal((prev) => !prev)}
             >
-              <Globe fill="#ffffff" />
-              <p className="text-white font-medium text-[14px]">Publish</p>
+              {bot.name === "Pitch Deck" ? (
+                <Image
+                  src={"/allAgents/export.svg"}
+                  alt={bot.name}
+                  width={20}
+                  height={20}
+                  // className="rounded"
+                />
+              ) : (
+                <Globe fill="#202126" />
+              )}
+              <p className="text-[#202126] font-medium text-[14px]">
+                {bot.name === "Pitch Deck" ? "View & Export" : "Publish"}
+              </p>
             </button>
             {showInviteModal && (
               <div ref={inviteModalRef}>
@@ -597,7 +609,7 @@ const page = () => {
               </div>
             )}
             {showPublishModal && (
-              <div ref={publishModalRef}>
+              <div ref={publishModalRef} className="z-10000">
                 <PublishModal
                   open={showPublishModal}
                   onClose={() => setShowPublishModal(false)}

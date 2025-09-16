@@ -422,15 +422,15 @@ export default function MessageBubble({
                             inspirationImages.length > 0 && (
                               <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                                 <div className="p-4 border-b border-gray-100">
-                                  <div className="flex items-center justify-between">
-                                    <h5 className="font-medium text-gray-800 flex items-center gap-2">
+                                  <div className="flex flex-col items-start justify-start">
+                                    <h5 className="font-medium text-gray-800  gap-2">
                                       🎨 Design Inspiration
-                                      <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
+                                    </h5>
+                                    <div className="text-xs flex items-center justify-between w-full text-gray-500">
+                                      <p>From Behance & Dribbble</p>
+                                      <span className="bg-blue-100 text-blue-700 text-xs whitespace-nowrap px-2 py-1 rounded-full">
                                         {inspirationImages.length} found
                                       </span>
-                                    </h5>
-                                    <div className="text-xs text-gray-500">
-                                      From Behance & Dribbble
                                     </div>
                                   </div>
                                 </div>
@@ -471,7 +471,7 @@ export default function MessageBubble({
                                           />
                                         </div>
                                         <div className="absolute top-2 right-2">
-                                          <span
+                                          {/* <span
                                             className={`px-2 py-1 text-xs font-medium rounded-full ${
                                               image.source === "Behance"
                                                 ? "bg-blue-600 text-white"
@@ -479,7 +479,7 @@ export default function MessageBubble({
                                             }`}
                                           >
                                             {image.source}
-                                          </span>
+                                          </span> */}
                                         </div>
                                         <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-40 rounded-lg transition-all duration-200 flex items-center justify-center">
                                           <div className="opacity-0 group-hover:opacity-100 transition-opacity">
@@ -499,10 +499,10 @@ export default function MessageBubble({
                                           </div>
                                         </div>
                                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                                          <p className="text-white text-xs truncate">
+                                          {/* <p className="text-white text-xs truncate">
                                             {image.title ||
                                               "Design inspiration"}
-                                          </p>
+                                          </p> */}
                                         </div>
                                       </div>
                                     ))}
