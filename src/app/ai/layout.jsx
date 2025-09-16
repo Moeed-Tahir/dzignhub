@@ -16,6 +16,7 @@ import { usePathname } from "next/navigation";
 import { notFound } from "next/navigation";
 import { fetchAssistantPageData, fetchFAQData } from "@/utils/strapi";
 
+
 export default function RootLayout({ children }) {
   console.log('Layout: Component rendering');
   const [sidebarOpen, setSidebarOpen] = useState(false);
