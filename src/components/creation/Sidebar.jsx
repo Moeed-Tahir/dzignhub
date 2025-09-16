@@ -365,9 +365,12 @@ const Sidebar = ({
       </div>
 
       {/* Size */}
-      {isImagePage && (
-        <Size selected={selectedSize} onChange={setSelectedSize} />
-      )}
+
+      <Size
+        selected={selectedSize}
+        onChange={setSelectedSize}
+        isImagePage={isImagePage}
+      />
 
       {/* {isImagePage && (
         <>

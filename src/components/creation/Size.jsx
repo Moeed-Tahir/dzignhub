@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-const Size = ({ selected, onChange }) => {
+const Size = ({ selected, onChange, isImagePage }) => {
   const sizes = [
     {
       key: "landscape",
@@ -17,13 +17,13 @@ const Size = ({ selected, onChange }) => {
       width: 16,
       height: 29,
     },
-    {
+    ...(isImagePage ? [{
       key: "square",
       label: "Square (1:1)",
       icon: "/creation/square.svg",
       width: 29,
       height: 29,
-    },
+    }] : []),
   ];
   return (
     <div>
@@ -45,7 +45,7 @@ const Size = ({ selected, onChange }) => {
         {sizes.map((size) => (
           <div
             key={size.key}
-            className={`flex items-center rounded-[8px] gap-2 py-[12px] px-[8px] bg-[#F7F8F8] justify-center flex-col w-[32%] h-[98px] cursor-pointer border-2 ${
+            className={`flex items-center rounded-[8px] gap-2 py-[12px] px-[8px] bg-[#F7F8F8] justify-center flex-col ${isImagePage?"w-[32%]":"w-[48%]"}  h-[98px] cursor-pointer border-2 ${
               selected === size.key ? "border-[#C209C1]" : "border-transparent"
             }`}
             onClick={() => onChange && onChange(size.key)}
