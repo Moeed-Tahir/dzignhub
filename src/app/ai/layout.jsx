@@ -14,8 +14,7 @@ import AiResults from "@/components/common/ai/AiResults";
 import SmartSupport from "@/components/common/ai/SmartSupport";
 import { usePathname } from "next/navigation";
 import { notFound } from "next/navigation";
-import { fetchAssistantPageData, fetchFAQData } from "@/utils/strapi";
-
+import { fetchAssistantPageData } from "@/utils/strapi";
 
 export default function RootLayout({ children }) {
   console.log('Layout: Component rendering');
