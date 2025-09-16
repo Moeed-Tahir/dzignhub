@@ -5,10 +5,10 @@ import { getStrapiImageUrl } from "@/utils/strapi";
 function Download({ downloadSection }) {
   // Default fallback data
   const defaultData = {
-    preTitle: "Download the app",
-    title: "and start creating with AI — anytime, anywhere.",
+    preTitle: "10,000+",
+    title: "ready-to-use designs",
     description:
-      "Your complete AI team in your pocket.      8 specialists ready to launch your brand  — wherever you are.",
+      "Websites, apps, and brands you can launch in minutes. Pick a template and make it yours.",
     appStoreImage: "/landing/download/app-store.svg",
     appStoreUrl: "#",
     googlePlayImage: "/landing/download/google-play.svg",

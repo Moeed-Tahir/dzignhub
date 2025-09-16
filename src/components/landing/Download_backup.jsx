@@ -135,22 +135,16 @@ function Download() {
                   transition={{ duration: 0.6, delay: 0.3 }}
                   viewport={{ once: true }}
                 >
-                  Download the app{" "}
+                  10,000+
                 </motion.span>
-                <span className="">
-                  and start creating with AI — anytime, anywhere.
-                </span>
+                <span className="">ready-to-use designs</span>
               </motion.div>
               <motion.p
                 className="max-w-[525px] text-[20px]  xl:text-[24px] font-semibold"
                 variants={textVariants}
               >
-                Our AI-powered creative app gives you access to your personal
-                team of assistants — wherever you are.
+                Websites, apps, and brands you can launch in minutes. Pick a template and make it yours.
                 <br />
-                Design logos, create social media content, generate marketing
-                strategies, and get real-time insights — all in one place. No
-                skills required. Just your ideas.
               </motion.p>
             </motion.div>
             <motion.div

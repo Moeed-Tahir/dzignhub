@@ -7,7 +7,7 @@ function Work({ workCards = [] }) {
   // Default fallback data
   const defaultCardData = [
     {
-      title: "Describe your idea",
+      title: "Share your idea",
       description:
         "Start your project by uploading assets or choosing a template. You control the direction from the very beginning, shaping your vision exactly the way you want.",
       mobileManualImage: "/landing/work/mobile/manual-1.png",

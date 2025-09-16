@@ -18,23 +18,27 @@ const CardsAnimation = ({ cards = [] }) => {
     {
       id: 1,
       image: "/landing/feature/1.png",
-      title: "AI Marketing Assistant",
+      title: "AI Fashion Designer",
       description:
-        "Transform your marketing strategy with AI-powered insights and automated content creation that drives engagement and conversions.",
+        "From lookbooks to social posts, your AI assistant creates stunning product visuals, styled campaigns, and launch-ready assets that elevate your brand.",
       features: [
-        "Campaign Optimization",
-        "Content Generation",
-        "Audience Analysis",
+        "Editorial-quality visuals",
+        "Styled lookbooks and line sheets",
+        "Ready-to-post campaigns",
       ],
       borderImage: "/Border.svg",
     },
     {
       id: 2,
       image: "/landing/feature/2.png",
-      title: "SEO Intelligence",
+      title: "AI Marketing Assistant ",
       description:
-        "Boost your search rankings with intelligent SEO recommendations and real-time optimization strategies.",
-      features: ["Keyword Research", "Content Optimization", "Rank Tracking"],
+        "From social posts to launch ads, your AI assistant creates on-brand content, optimizes campaigns, and helps you reach the right audience — fast.",
+      features: [
+        "Smart campaign ideas",
+        "Ready-to-post content",
+        "Audience insights that work",
+      ],
       borderImage: "/Border.svg",
     },
     {
@@ -42,17 +46,25 @@ const CardsAnimation = ({ cards = [] }) => {
       image: "/landing/feature/3.png",
       title: "UI/UX Design Tool",
       description:
-        "Create stunning user interfaces with AI-driven design suggestions and user experience optimization.",
-      features: ["Design Systems", "User Testing", "Prototyping"],
+        "Your AI design assistant helps you build stunning layouts, test ideas, and refine user flows so every interaction feels natural and polished",
+      features: [
+        "Complete design systems",
+        "Simple user testing",
+        "Fast prototyping",
+      ],
       borderImage: "/Border.svg",
     },
     {
       id: 4,
       image: "/landing/feature/4.png",
-      title: "Image Generation",
+      title: "AI Fashion Visuals",
       description:
-        "Generate professional-quality images and graphics with advanced AI models tailored to your brand.",
-      features: ["Custom Styles", "Brand Consistency", "High Resolution"],
+        "From campaign shots to lookbook spreads, your AI assistant creates polished fashion images in seconds — styled to match your brand.",
+      features: [
+        "Lookbook and catalog ready",
+        "Consistent brand styling",
+        "High-resolution for web and print",
+      ],
       borderImage: "/Border.svg",
     },
   ];

@@ -15,7 +15,7 @@ function Templates({ templates = [] }) {
     website: {
       title: "Website",
       description:
-        "Complete responsive sites with mobile optimization and hosting.",
+        "Beautiful, responsive sites with mobile optimization built in. Hosting included.",
       images: [
         "/landing/templates/1/1.png",
         "/landing/templates/1/2.png",
@@ -26,8 +26,9 @@ function Templates({ templates = [] }) {
       ],
     },
     lummi: {
-      title: "Mobile Apps",
-      description: "Cross-platform apps ready for App Store and Google Play.",
+      title: "Web/ Mobile apps",
+      description:
+        "Launch-ready apps for iOS and Android. Designed for fashion commerce, portfolios, and communities.",
       images: [
         "/landing/templates/2/1.png",
         "/landing/templates/2/2.png",
@@ -35,8 +36,9 @@ function Templates({ templates = [] }) {
       ],
     },
     brands: {
-      title: "Brand Identity",
-      description: "Logos, colors, typography, and complete visual guidelines.",
+      title: "Brand identity/ Product prototyping",
+      description:
+        "Logos, colors, typography, and prototypes that bring your brand to life.",
       images: [
         // "/landing/templates/3/1.jpg",
         // "/landing/templates/3/2.jpg",
@@ -47,15 +49,17 @@ function Templates({ templates = [] }) {
     },
     social: {
       title: "Business Strategy",
-      description: "Plans, pitch decks, financial models, and market analysis.",
+      description:
+        "Investor-ready pitch decks, financial models, and growth plans — built in minutes.",
       images: [
         "/landing/templates/4/Image-9.png",
         "/landing/templates/4/Image-10.png",
       ],
     },
     slides: {
-      title: "Marketing",
-      description: "Content, SEO, social media, and automated campaigns.",
+      title: "Marketing/ sales",
+      description:
+        "Social posts, SEO, ads, and campaigns to showcase your products and grow your audience.",
       slides: [
         "/landing/templates/5/1.png",
         "/landing/templates/5/2.png",
@@ -187,7 +191,7 @@ function Templates({ templates = [] }) {
     >
       <div className="max-w-[1280px] gap-[64px] p-[30px] flex flex-col mx-auto">
         <motion.div
-          className="max-w-[1280px] h-[218px] flex flex-col"
+          className="max-w-[1280px] h-max flex flex-col"
           variants={headerVariants}
         >
           <motion.div
@@ -197,7 +201,6 @@ function Templates({ templates = [] }) {
             }}
             className=" font-semibold text-[25px] lg:text-[48px] lg:w-[80%] text-black"
           >
-            Over{" "}
             <motion.span
               className="text-[#C209C1]"
               initial={{ opacity: 0, scale: 0.8 }}
@@ -207,13 +210,12 @@ function Templates({ templates = [] }) {
             >
               10,000+{" "}
             </motion.span>{" "}
-            ready-made solutions to choose from{" "}
+            ready-to-use designs
           </motion.div>
           <motion.div className="p-2" variants={headerVariants}>
             <p className="leading-[22px] font-[400] text-[20px] align-middle text-[#3D4050] font-[general-sans]">
-              Discover our curated collection featuring websites, apps,
-              <br />
-              and brands to match your vision and goals.
+              Websites, apps, and brands you can launch in minutes. Pick a
+              template and make it yours.
             </p>
           </motion.div>
         </motion.div>

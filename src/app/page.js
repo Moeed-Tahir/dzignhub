@@ -23,9 +23,9 @@ export default function Landing() {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [landingData, setLandingData] = useState({
-    mainHeading: "AMAI SuperAI",
+    mainHeading: "AllMyAI SuperAI",
     mainDescription:
-      "Your All In One AI Co-Creator ",
+      "Your all-in-one AI Co-Creator. Bring your brand, products, and presentations to life. Instantly.",
     heroSection: null,
     carouselImages: [],
     stackSections: [],
@@ -109,9 +109,8 @@ export default function Landing() {
   return (
     <>
       <div
-        className={`overflow-hidden w-full h-auto  ${
-          sidebarOpen ? "" : ""
-        }`}
+        className={`overflow-hidden w-full h-auto  ${sidebarOpen ? "" : ""
+          }`}
         style={{
           // background: "linear-gradient(to bottom, #1B1F3B 66%, #c209c1 100%)",
           backgroundImage: `url('/Frame.svg')`,

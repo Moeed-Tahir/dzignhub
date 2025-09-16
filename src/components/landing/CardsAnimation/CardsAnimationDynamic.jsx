@@ -18,56 +18,82 @@ const CardsAnimation = ({ cards = [] }) => {
     {
       id: 1,
       image: "/landing/feature/1.png",
-      title: "AI Marketing Assistant",
+      title: "AI Fashion Designer",
       description:
-        "Transform your marketing strategy with AI-powered insights and automated content creation that drives engagement and conversions.",
+        "From lookbooks to social posts, your AI assistant creates stunning product visuals, styled campaigns, and launch-ready assets that elevate your brand.",
       features: [
-        "Campaign Optimization",
-        "Content Generation",
-        "Audience Analysis",
+        "Editorial-quality visuals",
+        "Styled lookbooks and line sheets",
+        "Ready-to-post campaigns",
       ],
-      borderImage: "/Border.svg"
+      borderImage: "/Border.svg",
     },
     {
       id: 2,
       image: "/landing/feature/2.png",
-      title: "SEO Intelligence",
+      title: "AI Marketing Assistant ",
       description:
-        "Boost your search rankings with intelligent SEO recommendations and real-time optimization strategies.",
-      features: ["Keyword Research", "Content Optimization", "Rank Tracking"],
-      borderImage: "/Border.svg"
+        "From social posts to launch ads, your AI assistant creates on-brand content, optimizes campaigns, and helps you reach the right audience — fast.",
+      features: [
+        "Smart campaign ideas",
+        "Ready-to-post content",
+        "Audience insights that work",
+      ],
+      borderImage: "/Border.svg",
     },
     {
       id: 3,
       image: "/landing/feature/3.png",
       title: "UI/UX Design Tool",
       description:
-        "Create stunning user interfaces with AI-driven design suggestions and user experience optimization.",
-      features: ["Design Systems", "User Testing", "Prototyping"],
-      borderImage: "/Border.svg"
+        "Your AI design assistant helps you build stunning layouts, test ideas, and refine user flows so every interaction feels natural and polished",
+      features: [
+        "Complete design systems",
+        "Simple user testing",
+        "Fast prototyping",
+      ],
+      borderImage: "/Border.svg",
     },
     {
       id: 4,
       image: "/landing/feature/4.png",
-      title: "Image Generation",
+      title: "AI Fashion Visuals",
       description:
-        "Generate professional-quality images and graphics with advanced AI models tailored to your brand.",
-      features: ["Custom Styles", "Brand Consistency", "High Resolution"],
-      borderImage: "/Border.svg"
+        "From campaign shots to lookbook spreads, your AI assistant creates polished fashion images in seconds — styled to match your brand.",
+      features: [
+        "Lookbook and catalog ready",
+        "Consistent brand styling",
+        "High-resolution for web and print",
+      ],
+      borderImage: "/Border.svg",
     },
   ];
 
   // Process Strapi cards data or use defaults
-  const cardsData = cards.length > 0 
-    ? cards.map((card, index) => ({
-        id: index + 1,
-        image: getStrapiImageUrl(card.image) || defaultCardsData[index]?.image || "/landing/feature/1.png",
-        title: card.title || defaultCardsData[index]?.title || `Card ${index + 1}`,
-        description: card.description || defaultCardsData[index]?.description || "Default description",
-        features: card.features?.map(feature => feature.text || feature) || defaultCardsData[index]?.features || [],
-        borderImage: getStrapiImageUrl(card.borderImage) || defaultCardsData[index]?.borderImage || "/Border.svg"
-      }))
-    : defaultCardsData;
+  const cardsData =
+    cards.length > 0
+      ? cards.map((card, index) => ({
+          id: index + 1,
+          image:
+            getStrapiImageUrl(card.image) ||
+            defaultCardsData[index]?.image ||
+            "/landing/feature/1.png",
+          title:
+            card.title || defaultCardsData[index]?.title || `Card ${index + 1}`,
+          description:
+            card.description ||
+            defaultCardsData[index]?.description ||
+            "Default description",
+          features:
+            card.features?.map((feature) => feature.text || feature) ||
+            defaultCardsData[index]?.features ||
+            [],
+          borderImage:
+            getStrapiImageUrl(card.borderImage) ||
+            defaultCardsData[index]?.borderImage ||
+            "/Border.svg",
+        }))
+      : defaultCardsData;
 
   useLayoutEffect(() => {
     const container = containerRef.current;
@@ -106,9 +132,12 @@ const CardsAnimation = ({ cards = [] }) => {
         });
 
         // Set border images to opacity 0 initially
-        gsap.set(contents.map(content => content.querySelector(".border-image")), {
-          opacity: 0,
-        });
+        gsap.set(
+          contents.map((content) => content.querySelector(".border-image")),
+          {
+            opacity: 0,
+          }
+        );
 
         // Set first card visible
         gsap.set(images[0], { opacity: 0, x: "100vw" });
@@ -132,9 +161,14 @@ const CardsAnimation = ({ cards = [] }) => {
       }
 
       // Set border images to opacity 0 initially for all cards
-      gsap.set(contents.map(content => content?.querySelector(".border-image")).filter(Boolean), {
-        opacity: 0,
-      });
+      gsap.set(
+        contents
+          .map((content) => content?.querySelector(".border-image"))
+          .filter(Boolean),
+        {
+          opacity: 0,
+        }
+      );
 
       gsap.set(images[0], { opacity: 1 });
 
@@ -148,7 +182,7 @@ const CardsAnimation = ({ cards = [] }) => {
           anticipatePin: 1,
         },
       });
-      
+
       cardsData.forEach((_, index) => {
         const progress = index / (cardsData.length - 1);
 
@@ -345,7 +379,7 @@ const CardsAnimation = ({ cards = [] }) => {
           );
         }
       });
-      
+
       // Background color change
       tl.to(
         background,
@@ -428,7 +462,7 @@ const CardsAnimation = ({ cards = [] }) => {
                     >
                       {card.title}
                     </h3>
-                    <div 
+                    <div
                       className="text-gray-300 w-full lg:w-[400px] text-sm lg:text-lg mb-4 lg:mb-6 sm:text-center lg:text-right leading-relaxed"
                       dangerouslySetInnerHTML={{ __html: card.description }}
                     />
@@ -441,12 +475,12 @@ const CardsAnimation = ({ cards = [] }) => {
                         ))}
                       </ul>
                     )}
-                    <Image 
-                      src={card.borderImage} 
-                      alt="Border" 
-                      className={`border-image image-${index} absolute right-0 -top-10`}  
-                      width={56} 
-                      height={56} 
+                    <Image
+                      src={card.borderImage}
+                      alt="Border"
+                      className={`border-image image-${index} absolute right-0 -top-10`}
+                      width={56}
+                      height={56}
                     />
                   </div>
                 </div>
