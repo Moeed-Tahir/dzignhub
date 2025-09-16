@@ -138,6 +138,11 @@ const Page = () => {
     }
   };
 
+  // Function to refresh generations data after new image is generated
+  const refreshGenerations = async () => {
+    await getUserGenerations();
+  };
+
   useEffect(() => {
     getGenerationsFromLocalStorage();
     getUserGenerations();
@@ -165,6 +170,7 @@ const Page = () => {
         <Sidebar
           isImagePage={true}
           onGenerate={() => setShowSuggestion(false)}
+          onRefresh={refreshGenerations}
         />
       </div>
 
@@ -182,6 +188,7 @@ const Page = () => {
               setShowSuggestion(false);
               setIsSidebarOpen(false);
             }}
+            onRefresh={refreshGenerations}
           />
         </div>
       )}
@@ -200,7 +207,7 @@ const Page = () => {
         {showSuggestion ? (
           // <StartingSuggestion />
 
-<>asd</>
+<></>
         ) : (
           <ImagesResults generations={generations} localGenerations={localGenerations} />
         )}
