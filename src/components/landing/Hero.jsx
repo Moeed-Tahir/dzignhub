@@ -87,8 +87,8 @@ export default function Hero({
 }) {
   // Use dynamic hero section data if available, otherwise use props or fallback
   const heroData = heroSection || {
-    mainHeading: mainHeading || "AMAI SuperAI",
-    mainDescription: mainDescription || "Your All In One AI Co-Creator ",
+    mainHeading: mainHeading || "AllMyAI SuperAI",
+    mainDescription: mainDescription || "Your all-in-one AI Co-Creator. Bring your brand, products, and presentations to life. Instantly.",
     announcementIcon: null,
     announcementText: "New Agent Release",
     earlyAccessText: "Get early access",
@@ -107,7 +107,7 @@ export default function Hero({
     mainDescription:
       heroData.mainDescription ||
       mainDescription ||
-      "Your All In One AI Co-Creator ",
+      "Your all-in-one AI Co-Creator. Bring your brand, products, and presentations to life. Instantly.",
     announcementIcon: heroData.announcementIcon,
     announcementText: heroData.announcementText || "New Agent Release!",
     earlyAccessText: heroData.earlyAccessText || "Get early access",

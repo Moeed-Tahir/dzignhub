@@ -13,7 +13,7 @@ import Colors from "./Colors";
 import { useUserStore } from "@/store/store";
 import { toast } from "react-toastify";
 
-const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
+const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefresh }) => {
   const router = useRouter();
   const [textValue, setTextValue] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -150,11 +150,16 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
           
           // Save the generation to the database
           if (selectedQuality > 1) {
-            saveGeneration("image", res.images, textValue, true);
+            await saveGeneration("image", res.images, textValue, true);
           } else {
-            saveGeneration("image", res.images[0], textValue, false);
+            await saveGeneration("image", res.images[0], textValue, false);
           }
           SetGenerateImages(res.images);
+          
+          // Refresh the generations data to include the new image
+          if (onRefresh) {
+            await onRefresh();
+          }
         }
         setIsLoading(false);
       } catch (error) {
@@ -230,7 +235,12 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose }) => {
           SetGenerateVideo([res.video]);
 
           // Save the generation to the database
-          saveGeneration("video", res.video.videoUrl, textValue, false, res.video.fileSize);
+          await saveGeneration("video", res.video.videoUrl, textValue, false, res.video.fileSize);
+          
+          // Refresh the generations data to include the new video
+          if (onRefresh) {
+            await onRefresh();
+          }
         } else {
           setError(`${res.message}`);
           setIsError(true);

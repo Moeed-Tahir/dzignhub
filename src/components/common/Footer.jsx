@@ -16,11 +16,11 @@ const syne = Syne({
   weight: ["400", "500", "600", "700"],
   variable: "--font-syne",
 });
-    function Footer({ footerData = null }) {
+function Footer({ footerData = null }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { 
+  const isInView = useInView(ref, {
     threshold: 0.1,
-    once: true
+    once: true,
   });
 
   // State for dynamic footer data
@@ -36,7 +36,7 @@ const syne = Syne({
           const data = await fetchFooterData();
           setDynamicFooterData(data);
         } catch (error) {
-          console.error('Error loading footer data:', error);
+          console.error("Error loading footer data:", error);
         } finally {
           setDataLoading(false);
         }
@@ -51,19 +51,41 @@ const syne = Syne({
     logo: "/common/footer/logo-with-name.svg",
     logoAlt: "Company Logo",
     socialLinks: [
-      { platform: "Facebook", icon: "/common/footer/facebook.svg", url: "#", alt: "Facebook" },
-      { platform: "Twitter", icon: "/common/footer/twitter.svg", url: "#", alt: "Twitter" },
-      { platform: "Instagram", icon: "/common/footer/instagram.svg", url: "#", alt: "Instagram" },
+      {
+        platform: "Facebook",
+        icon: "/common/footer/facebook.svg",
+        url: "#",
+        alt: "Facebook",
+      },
+      {
+        platform: "Twitter",
+        icon: "/common/footer/twitter.svg",
+        url: "#",
+        alt: "Twitter",
+      },
+      {
+        platform: "Instagram",
+        icon: "/common/footer/instagram.svg",
+        url: "#",
+        alt: "Instagram",
+      },
       // { platform: "LinkedIn", icon: "/common/footer/linkedin.svg", url: "#", alt: "LinkedIn" },
-      { platform: "YouTube", icon: "/common/footer/youtube.svg", url: "#", alt: "YouTube" },
+      {
+        platform: "YouTube",
+        icon: "/common/footer/youtube.svg",
+        url: "#",
+        alt: "YouTube",
+      },
       // { platform: "Pinterest", icon: "/common/footer/pinterest.svg", url: "#", alt: "Pinterest" },
     ],
     footerSections: [
       {
         title: "Explore",
         links: [
-          { label: "Image Tools", href: "/dashboard/image-creation" },
-          { label: "Video Tools", href: "/dashboard/video-creation" },
+          { label: "Image Creation", href: "/image-creation" },
+          { label: "Video Creation", href: "/video-creation" },
+          { label: "Pricing", href: "/pricing" },
+          { label: "Blogs", href: "/blog" },
           // { label: "Design Tools", href: "#" },
           // { label: "AI Tools", href: "#" },
           // { label: "Templates", href: "#" },
@@ -77,22 +99,34 @@ const syne = Syne({
           // { label: "Support", href: "#" },
           // { label: "Careers", href: "#" },
           // { label: "About us", href: "#" },
-          { label: "Latest Blog", href: "/blog" },
-          { label: "Pricing", href: "/pricing" },
-          { label: "Contact Us", href: "/contact-us" },
+          // { label: "Latest Blog", href: "/blog" },
+          { label: "About", href: "#" },
+          { label: "Contact", href: "/contact-us" },
           // { label: "Press Center", href: "#" },
         ],
       },
       {
         title: "AI assistants",
         links: [
-          { label: "Zara - brand designer", href: "/dashboard/Ai-Agent/zara" },
-          { label: "Sana - Content writer", href: "/dashboard/Ai-Agent/sana" },
-          { label: "Mira - Strategy assistant", href: "/dashboard/Ai-Agent/mira" },
+          { label: "Zara - Brand Designer", href: "/dashboard/Ai-Agent/zara" },
+          { label: "Sana - Content Writer", href: "/dashboard/Ai-Agent/sana" },
+          {
+            label: "Mira - Strategy Assistant",
+            href: "/dashboard/Ai-Agent/mira",
+          },
           { label: "Kano - UI/UX Designer", href: "/dashboard/Ai-Agent/kano" },
-          { label: "Ellie - Pitch Deck Designer", href: "/dashboard/Ai-Agent/ellie" },
-          // { label: "Devine - Software Developer", href: "/dashboard/Ai-Agent/devine" },
-          // { label: "Lina - Marketing assistant", href: "/dashboard/Ai-Agent/lina" },
+          {
+            label: "Ellie - Pitch Deck Designer",
+            href: "/dashboard/Ai-Agent/ellie",
+          },
+          {
+            label: "Devine - Software Developer",
+            href: "/dashboard/Ai-Agent/devine",
+          },
+          {
+            label: "Lina - Marketing Assistant",
+            href: "/dashboard/Ai-Agent/lina",
+          },
         ],
       },
     ],
@@ -105,74 +139,107 @@ const syne = Syne({
       // { label: "Articles", href: "#" },
     ],
     copyrightText: "© 2025 Copyright by",
-    companyName: "AllmyAi"
+    companyName: "AllmyAi",
   };
 
   // Ensure we have valid data for each section with additional fallbacks
   const safeFooterData = {
     logo: currentFooterData.logo || "/common/footer/logo-with-name.svg",
     logoAlt: currentFooterData.logoAlt || "Company Logo",
-    socialLinks: (currentFooterData.socialLinks && currentFooterData.socialLinks.length > 0) 
-      ? currentFooterData.socialLinks 
-      : [
-          { platform: "Facebook", icon: "/common/footer/facebook.svg", url: "#", alt: "Facebook" },
-          { platform: "Twitter", icon: "/common/footer/twitter.svg", url: "#", alt: "Twitter" },
-          { platform: "Instagram", icon: "/common/footer/instagram.svg", url: "#", alt: "Instagram" },
-          { platform: "LinkedIn", icon: "/common/footer/linkedin.svg", url: "#", alt: "LinkedIn" },
-          { platform: "YouTube", icon: "/common/footer/youtube.svg", url: "#", alt: "YouTube" },
-          { platform: "Pinterest", icon: "/common/footer/pinterest.svg", url: "#", alt: "Pinterest" },
-        ],
-    footerSections: (currentFooterData.footerSections && currentFooterData.footerSections.length > 0)
-      ? currentFooterData.footerSections
-      : [
-          {
-            title: "Explore",
-            links: [
-              { label: "Image Tools", href: "#" },
-              { label: "Video Tools", href: "#" },
-              // { label: "Design Tools", href: "#" },
-              // { label: "AI Tools", href: "#" },
-              // { label: "Templates", href: "#" },
-              // { label: "Colors", href: "#" },
-              // { label: "Fonts", href: "#" },
-            ],
-          },
-          {
-            title: "Solutions",
-            links: [
-              { label: "For Businesses", href: "#" },
-              { label: "For Developers", href: "#" },
-              { label: "For Google Drive", href: "#" },
-              { label: "For specific Industries", href: "#" },
-              { label: "Quicktools", href: "#" },
-              { label: "AI Avatar", href: "#" },
-              { label: "Pricing", href: "#" },
-            ],
-          },
-          {
-            title: "Company",
-            links: [
-              { label: "Support", href: "#" },
-              { label: "Careers", href: "#" },
-              { label: "About us", href: "#" },
-              { label: "Affiliate Program", href: "#" },
-              { label: "Blog", href: "#" },
-              { label: "Press Center", href: "#" },
-            ],
-          },
-        ],
-    navigationItems: (currentFooterData.navigationItems && currentFooterData.navigationItems.length > 0)
-      ? currentFooterData.navigationItems
-      : [
-          { label: "Use Case", href: "#" },
-          { label: "Feature", href: "#" },
-          { label: "Testimonial", href: "#" },
-          { label: "FAQ", href: "#" },
-          { label: "Pricing", href: "#" },
-          { label: "Articles", href: "#" },
-        ],
-    copyrightText: currentFooterData.copyrightText || "© 2025 Copyright by",
-    companyName: currentFooterData.companyName || "Aiyaiya"
+    socialLinks:
+      currentFooterData.socialLinks && currentFooterData.socialLinks.length > 0
+        ? currentFooterData.socialLinks
+        : [
+            {
+              platform: "Facebook",
+              icon: "/common/footer/facebook.svg",
+              url: "#",
+              alt: "Facebook",
+            },
+            {
+              platform: "Twitter",
+              icon: "/common/footer/twitter.svg",
+              url: "#",
+              alt: "Twitter",
+            },
+            {
+              platform: "Instagram",
+              icon: "/common/footer/instagram.svg",
+              url: "#",
+              alt: "Instagram",
+            },
+            {
+              platform: "LinkedIn",
+              icon: "/common/footer/linkedin.svg",
+              url: "#",
+              alt: "LinkedIn",
+            },
+            {
+              platform: "YouTube",
+              icon: "/common/footer/youtube.svg",
+              url: "#",
+              alt: "YouTube",
+            },
+            {
+              platform: "Pinterest",
+              icon: "/common/footer/pinterest.svg",
+              url: "#",
+              alt: "Pinterest",
+            },
+          ],
+    footerSections:
+      currentFooterData.footerSections &&
+      currentFooterData.footerSections.length > 0
+        ? currentFooterData.footerSections
+        : [
+            {
+              title: "Explore",
+              links: [
+                { label: "Image Creation", href: "/image-creation" },
+                { label: "Video Creation", href: "/video-creation" },
+                { label: "Pricing", href: "/pricing" },
+                { label: "Blogs", href: "/blog" },
+                // { label: "Templates", href: "#" },
+                // { label: "Colors", href: "#" },
+                // { label: "Fonts", href: "#" },
+              ],
+            },
+            {
+              title: "Solutions",
+              links: [
+                { label: "For Businesses", href: "#" },
+                { label: "For Developers", href: "#" },
+                { label: "For Google Drive", href: "#" },
+                { label: "For specific Industries", href: "#" },
+                { label: "Quicktools", href: "#" },
+                { label: "AI Avatar", href: "#" },
+                { label: "Pricing", href: "#" },
+              ],
+            },
+            {
+              title: "Company",
+              links: [
+                { label: "About", href: "#" },
+                { label: "Contact", href: "/contact-us" },
+              ],
+            },
+          ],
+    navigationItems:
+      currentFooterData.navigationItems &&
+      currentFooterData.navigationItems.length > 0
+        ? currentFooterData.navigationItems
+        : [
+            { label: "Use Case", href: "#" },
+            { label: "Feature", href: "#" },
+            { label: "Testimonial", href: "#" },
+            { label: "FAQ", href: "#" },
+            { label: "Pricing", href: "#" },
+            { label: "Articles", href: "#" },
+          ],
+    copyrightText:
+      currentFooterData.copyrightText ||
+      "AllMyAI © 2025 Your all in one AI co creator",
+    companyName: currentFooterData.companyName || "AllMyAI",
   };
 
   const containerVariants = {
@@ -181,9 +248,9 @@ const syne = Syne({
       opacity: 1,
       transition: {
         delayChildren: 0.2,
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const logoSectionVariants = {
@@ -193,9 +260,9 @@ const syne = Syne({
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const linksSectionVariants = {
@@ -206,9 +273,9 @@ const syne = Syne({
       transition: {
         duration: 0.6,
         ease: "easeOut",
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const bottomSectionVariants = {
@@ -218,13 +285,13 @@ const syne = Syne({
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   return (
-    <motion.div 
+    <motion.div
       ref={ref}
       variants={containerVariants}
       initial="hidden"
@@ -233,7 +300,7 @@ const syne = Syne({
     >
       <div className="max-w-[1440px] mx-auto gap-[42px]  md:py-[64px] md:px-[80px] py-[32px] px-[24px] md:gap-[64px]   flex flex-col ">
         <div className="max-w-[1280px] w-full mx-auto  gap-[42px] md:gap-[64px]  flex md:flex-row flex-wrap flex-col justify-between">
-          <motion.div 
+          <motion.div
             variants={logoSectionVariants}
             className="max-w-[320px] w-full border-black  flex flex-col  gap-[32px]"
           >
@@ -253,7 +320,7 @@ const syne = Syne({
               <LanguageDropdown />
             </div>
           </motion.div>
-          <motion.div 
+          <motion.div
             variants={linksSectionVariants}
             className="flex  flex-wrap gap-[120px]"
           >
@@ -273,12 +340,10 @@ const syne = Syne({
             ))}
           </motion.div>
         </div>
-        <motion.div 
+        <motion.div
           variants={bottomSectionVariants}
           className="max-w-[1280px] w-full mx-auto  flex flex-col gap-[16px] border-t border-[#E0E0E0]"
-        >
-        
-        </motion.div>
+        ></motion.div>
         <motion.div
           variants={bottomSectionVariants}
           className={`max-w-[1280px] w-full mx-auto gap-[24px]  flex flex-col md:flex-row justify-between  flex-wrap text-[16px] text-[#FFFFFF] ${syne.className} `}

@@ -4,7 +4,7 @@
 export const sampleLandingPageData = {
   MainHeading: "Create Amazing Visuals with AI",
   MainDescription: "Transform your ideas into stunning visuals using our advanced AI technology. Perfect for designers, marketers, and creators.",
-  
+
   carousal_images: [
     {
       images1: [
@@ -19,11 +19,11 @@ export const sampleLandingPageData = {
       ]
     }
   ],
-  
+
   stack: [
     {
       titleline1: "Endless",
-      titleline2: "possibilities", 
+      titleline2: "possibilities",
       subtitle: "with AI art",
       card: [
         {
@@ -34,7 +34,7 @@ export const sampleLandingPageData = {
           image: { url: "/ai-assistants/brand-designer/zara.jpg" }
         },
         {
-          heading: "Kano", 
+          heading: "Kano",
           type: "Video Creation",
           num: "02",
           para: "Developing software that optimizes business and ensures a smooth user experience.",
@@ -43,10 +43,10 @@ export const sampleLandingPageData = {
       ]
     }
   ],
-  
+
   work_card: [
     {
-      title: "Describe your idea",
+      title: "Share your idea",
       description: "Start your project by uploading assets or choosing a template. You control the direction from the very beginning, shaping your vision exactly the way you want.",
       mobileManualImage: { url: "/landing/work/mobile/manual-1.png" },
       desktopManualImage: { url: "/landing/work/desktop/manual-1.jpg" },
@@ -54,7 +54,7 @@ export const sampleLandingPageData = {
       desktopProImage: { url: "/landing/work/desktop/pro-1.jpg" }
     },
     {
-      title: "Let the System do your work", 
+      title: "Let the System do your work",
       description: "Access powerful manual tools for image editing, video creation, or content design. You guide the process — the platform provides the flexibility and tools you need.",
       mobileManualImage: { url: "/landing/work/mobile/manual-2.jpg" },
       desktopManualImage: { url: "/landing/work/desktop/manual-2.jpg" },
@@ -70,7 +70,7 @@ export const sampleLandingPageData = {
       desktopProImage: { url: "/landing/work/desktop/pro-3.jpg" }
     }
   ],
-  
+
   templates: [
     {
       title: "Website",
@@ -98,7 +98,7 @@ export const sampleLandingPageData = {
     {
       title: "Brands",
       description: "Get on-brand, consistent designs with every iteration.",
-      layout: "brands", 
+      layout: "brands",
       images: [
         { url: "/landing/templates/3/1.jpg" },
         { url: "/landing/templates/3/2.jpg" },
@@ -125,11 +125,11 @@ export const sampleLandingPageData = {
       ]
     }
   ],
-  
+
   download_section: {
-    preTitle: "Download the app",
-    title: "and start creating with AI — anytime, anywhere.",
-    description: "Our AI-powered creative app gives you access to your personal team of assistants — wherever you are.<br/>Design logos, create social media content, generate marketing strategies, and get real-time insights — all in one place. No skills required. Just your ideas.",
+    preTitle: "10,000+",
+    title: "ready-to-use designs",
+    description: "Websites, apps, and brands you can launch in minutes. Pick a template and make it yours.",
     appStoreImage: { url: "/landing/download/app-store.svg" },
     appStoreUrl: "https://apps.apple.com/app/your-app",
     googlePlayImage: { url: "/landing/download/google-play.svg" },

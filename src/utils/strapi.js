@@ -6,20 +6,20 @@ export const fetchLandingPageData = async () => {
     const response = await fetch(
       `${STRAPI_URL}/api/landing-pages?populate[hero_section][populate]=*&populate[carousal_images][populate]=*&populate[stack][populate][card][populate]=*&populate[work_card][populate]=*&populate[templates][populate]=*&populate[download_section][populate]=*&populate[cards][populate]=*&populate[pricing_plans][populate][benefits][populate]=*&populate[testimonial_section][populate][testimonial][populate]=*&populate[assistant_section][populate][assistants][populate]=*&populate[faq_section][populate][faqs][populate]=*`
     );
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    
+
     // Return the first landing page data if available
     if (data.data && data.data.length > 0) {
       const landingPage = data.data[0];
-      
+
       return {
         mainHeading: landingPage.MainHeading || "AMAI SuperAI",
-        mainDescription: landingPage.MainDescription || "Your All In One AI Co-Creator ",
+        mainDescription: landingPage.MainDescription || "Your All In One AI Co-Creator. Bring your brand, products, and presentations to life. Instantly.",
         heroSection: landingPage.hero_section || null,
         carouselImages: landingPage.carousal_images || [],
         stackSections: landingPage.stack || [],
@@ -33,11 +33,11 @@ export const fetchLandingPageData = async () => {
         faqSection: landingPage.faq_section && landingPage.faq_section[0] ? landingPage.faq_section[0] : null
       };
     }
-    
+
     // Return fallback data if no data from Strapi
     return {
       mainHeading: "AMAI SuperAI",
-      mainDescription: "Your All In One AI Co-Creator ",
+      mainDescription: "Your All In One AI Co-Creator. Bring your brand, products, and presentations to life. Instantly. ",
       heroSection: null,
       carouselImages: [],
       stackSections: [],
@@ -50,14 +50,14 @@ export const fetchLandingPageData = async () => {
       assistantSection: null,
       faqSection: null
     };
-    
+
   } catch (error) {
     console.error('Error fetching landing page data from Strapi:', error);
-    
+
     // Return fallback data in case of error
     return {
       mainHeading: "AMAI SuperAI",
-      mainDescription: "Your All In One AI Co-Creator ",
+      mainDescription: "Your All In One AI Co-Creator. Bring your brand, products, and presentations to life. Instantly. ",
       heroSection: null,
       carouselImages: [],
       stackSections: [],
@@ -76,16 +76,16 @@ export const fetchLandingPageData = async () => {
 // Helper function to get full image URL from Strapi
 export const getStrapiImageUrl = (image) => {
   if (!image) return null;
-  
+
   // Handle both direct URL and Strapi media object
   if (typeof image === 'string') {
     return image.startsWith('http') ? image : `${STRAPI_URL}${image}`;
   }
-  
+
   if (image.url) {
     return image.url.startsWith('http') ? image.url : `${STRAPI_URL}${image.url}`;
   }
-  
+
   return null;
 };
 
@@ -95,34 +95,34 @@ export const fetchBlogPageData = async () => {
     const response = await fetch(
       `${STRAPI_URL}/api/blog-pages?populate[posts][populate][posts][populate]=*`
     );
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
     console.log('Blog page API response:', data);
-    
+
     if (data.data && data.data.length > 0) {
       const blogPage = data.data[0];
-      
+
       // Extract the nested posts structure
       const postsSection = blogPage.posts && blogPage.posts[0];
       const posts = postsSection?.posts || [];
-      
+
       return {
         heroTitle: postsSection?.heroTitle || "Latest Blog",
         heroSubtitle: postsSection?.heroSubtitle || "News and articles",
         posts: posts
       };
     }
-    
+
     return {
       heroTitle: "Latest Blog",
-      heroSubtitle: "News and articles", 
+      heroSubtitle: "News and articles",
       posts: []
     };
-    
+
   } catch (error) {
     console.error('Error fetching blog page data from Strapi:', error);
     return {
@@ -139,29 +139,29 @@ export const fetchBlogPostBySlug = async (slug) => {
     const response = await fetch(
       `${STRAPI_URL}/api/blog-pages?populate[posts][populate][posts][populate]=*`
     );
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
     console.log('Blog post API response:', data);
-    
+
     if (data.data && data.data.length > 0) {
       const blogPage = data.data[0];
       const postsSection = blogPage.posts && blogPage.posts[0];
       const posts = postsSection?.posts || [];
-      
+
       // Find the post with matching slug
       const post = posts.find(p => p.slug === slug);
-      
+
       if (post) {
         return post;
       }
     }
-    
+
     return null;
-    
+
   } catch (error) {
     console.error('Error fetching blog post from Strapi:', error);
     return null;
@@ -174,28 +174,28 @@ export const fetchContactPageData = async () => {
     const response = await fetch(
       `${STRAPI_URL}/api/contact-pages?populate[form][populate]=*&populate[faq_section][populate][faqs][populate]=*`
     );
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
     console.log('Contact page API response:', data);
-    
+
     if (data.data && data.data.length > 0) {
       const contactPage = data.data[0];
-      
+
       return {
         form: contactPage.form || null,
         faqSection: contactPage.faq_section && contactPage.faq_section[0] ? contactPage.faq_section[0] : null
       };
     }
-    
+
     return {
       form: null,
       faqSection: null
     };
-    
+
   } catch (error) {
     console.error('Error fetching contact page data from Strapi:', error);
     return {
@@ -212,20 +212,20 @@ export const fetchAssistantPageData = async () => {
     const response = await fetch(
       `${STRAPI_URL}/api/assistant-pages?populate[hero_section][populate]=*&populate[work_section][populate][cards][populate]=*&populate[image_card][populate]=*&populate[content_section][populate][steps][populate]=*&populate[content_section][populate][flexCards][populate]=*&populate[workflow_section][populate][workflow][populate]=*&populate[smartsupport_section][populate][features][populate]=*&populate[faq_section][populate][faqs][populate]=*`
     );
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
     console.log('Strapi: API response received:', data);
-    
+
     if (data.data && data.data.length > 0) {
       // Create a map of key to sections data for easy lookup
       const assistantData = {};
       data.data.forEach(item => {
         console.log('Strapi: Processing item:', item);
-        
+
         // Process hero_section array
         if (item.hero_section && item.hero_section.length > 0) {
           item.hero_section.forEach(heroSection => {
@@ -237,7 +237,7 @@ export const fetchAssistantPageData = async () => {
             }
           });
         }
-        
+
         // Process work_section array
         if (item.work_section && item.work_section.length > 0) {
           item.work_section.forEach(workSection => {
@@ -249,7 +249,7 @@ export const fetchAssistantPageData = async () => {
             }
           });
         }
-        
+
         // Process image_card array
         if (item.image_card && item.image_card.length > 0) {
           item.image_card.forEach(imageCard => {
@@ -261,7 +261,7 @@ export const fetchAssistantPageData = async () => {
             }
           });
         }
-        
+
         // Process content_section array
         if (item.content_section && item.content_section.length > 0) {
           item.content_section.forEach(contentSection => {
@@ -273,7 +273,7 @@ export const fetchAssistantPageData = async () => {
             }
           });
         }
-        
+
         // Process workflow_section array
         if (item.workflow_section && item.workflow_section.length > 0) {
           item.workflow_section.forEach(workflowSection => {
@@ -285,7 +285,7 @@ export const fetchAssistantPageData = async () => {
             }
           });
         }
-        
+
         // Process smartsupport_section array
         if (item.smartsupport_section && item.smartsupport_section.length > 0) {
           item.smartsupport_section.forEach(smartSupportSection => {
@@ -317,10 +317,10 @@ export const fetchAssistantPageData = async () => {
       console.log('Strapi: Final assistant data:', assistantData);
       return assistantData;
     }
-    
+
     console.log('Strapi: No data found, returning empty object');
     return {};
-    
+
   } catch (error) {
     console.error('Strapi: Error fetching assistant page data:', error);
     return {};
@@ -334,20 +334,20 @@ export const fetchMediaPageData = async () => {
     const response = await fetch(
       `${STRAPI_URL}/api/media-pages?populate[hero_section][populate]=*&populate[scroll_section][populate][cards][populate]=*&populate[creation_section][populate][cards][populate]=*&populate[toolkit_section][populate][tabs][populate]=*&populate[faq_section][populate][faqs][populate]=*&populate[download_section][populate]=*`
     );
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
     console.log('Strapi: Media page API response received:', data);
-    
+
     if (data.data && data.data.length > 0) {
       // Create a map of key to sections data for easy lookup
       const mediaData = {};
       data.data.forEach(item => {
         console.log('Strapi: Processing media page item:', item);
-        
+
         // Process hero_section array
         if (item.hero_section && item.hero_section.length > 0) {
           item.hero_section.forEach(heroSection => {
@@ -367,7 +367,7 @@ export const fetchMediaPageData = async () => {
             }
           });
         }
-        
+
         // Process scroll_section array
         if (item.scroll_section && item.scroll_section.length > 0) {
           item.scroll_section.forEach(scrollSection => {
@@ -382,7 +382,7 @@ export const fetchMediaPageData = async () => {
             }
           });
         }
-        
+
         // Process creation_section array
         if (item.creation_section && item.creation_section.length > 0) {
           item.creation_section.forEach(creationSection => {
@@ -460,10 +460,10 @@ export const fetchMediaPageData = async () => {
       console.log('Strapi: Final media data:', mediaData);
       return mediaData;
     }
-    
+
     console.log('Strapi: No media data found, returning empty object');
     return {};
-    
+
   } catch (error) {
     console.error('Strapi: Error fetching media page data:', error);
     return {};
@@ -477,14 +477,14 @@ export const fetchFAQData = async (pageKey) => {
     const response = await fetch(
       `${STRAPI_URL}/api/global?populate[faq_section][populate][faqs][populate]=*`
     );
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
     console.log('Strapi: FAQ API response received:', data);
-    
+
     // Find FAQ section that matches the pageKey
     if (data.data?.faq_section && data.data.faq_section.length > 0) {
       const matchingFAQ = data.data.faq_section.find(faq => faq.key === pageKey);
@@ -496,10 +496,10 @@ export const fetchFAQData = async (pageKey) => {
         };
       }
     }
-    
+
     console.log('Strapi: No FAQ data found for key:', pageKey);
     return null;
-    
+
   } catch (error) {
     console.error('Strapi: Error fetching FAQ data:', error);
     return null;
@@ -510,12 +510,12 @@ export const fetchFAQData = async (pageKey) => {
 export const fetchLoginPageData = async () => {
   try {
     const apiUrl = `${STRAPI_URL}/api/login-pages?populate[side][populate]=*&populate=googleIcon&populate=appleIcon`;
-    
+
     // Add timeout to the fetch request
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-    
-    const response = await fetch(apiUrl, { 
+
+    const response = await fetch(apiUrl, {
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
@@ -526,17 +526,17 @@ export const fetchLoginPageData = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const apiData = await response.json();
-    
+
     if (apiData.data && apiData.data.length > 0) {
       const loginPage = apiData.data[0];
-      
+
       // Handle side as array (Strapi returns it as array)
-      const sideData = loginPage.side && Array.isArray(loginPage.side) && loginPage.side.length > 0 
-        ? loginPage.side[0] 
+      const sideData = loginPage.side && Array.isArray(loginPage.side) && loginPage.side.length > 0
+        ? loginPage.side[0]
         : loginPage.side;
-      
+
       return {
         heading: loginPage.heading || "Welcome back!",
         subheading: loginPage.subheading || "Sign in to your allmyai account to access all allmyai products.",
@@ -598,7 +598,7 @@ export const fetchLoginPageData = async () => {
         }
       };
     }
-    
+
     // Return fallback data if no data from Strapi
     return {
       heading: "Welcome back!",
@@ -623,7 +623,7 @@ export const fetchLoginPageData = async () => {
             description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
           },
           {
-            title: "Powerful NLP Features", 
+            title: "Powerful NLP Features",
             description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
           },
           {
@@ -638,10 +638,10 @@ export const fetchLoginPageData = async () => {
         backgroundImage: null
       }
     };
-    
+
   } catch (error) {
     console.error('Error fetching login page data:', error);
-    
+
     // Return fallback data in case of error
     return {
       heading: "Welcome back!",
@@ -670,7 +670,7 @@ export const fetchLoginPageData = async () => {
             description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
           },
           {
-            title: "Seamless Collaboration", 
+            title: "Seamless Collaboration",
             description: "allmyai dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
           },
           {
@@ -687,12 +687,12 @@ export const fetchLoginPageData = async () => {
 export const fetchPricingPageData = async () => {
   try {
     const apiUrl = `${STRAPI_URL}/api/pricing-pages?populate[hero_section][populate]=*&populate[plan_section][populate]=*&populate[plans][populate][plan_header][populate]=*&populate[plans][populate][plan_sections][populate][features][populate]=*&populate[testimonials_section][populate][testimonial][populate]=*&populate[faq_section][populate][faqs][populate]=*`;
-    
+
     // Add timeout to the fetch request
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-    
-    const response = await fetch(apiUrl, { 
+
+    const response = await fetch(apiUrl, {
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
@@ -703,35 +703,35 @@ export const fetchPricingPageData = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const apiData = await response.json();
-    
+
     if (apiData.data && apiData.data.length > 0) {
       const pricingPage = apiData.data[0];
-      
+
       // Handle hero_section as array or object
-      const heroData = pricingPage.hero_section && Array.isArray(pricingPage.hero_section) && pricingPage.hero_section.length > 0 
-        ? pricingPage.hero_section[0] 
+      const heroData = pricingPage.hero_section && Array.isArray(pricingPage.hero_section) && pricingPage.hero_section.length > 0
+        ? pricingPage.hero_section[0]
         : pricingPage.hero_section;
-      
+
       // Handle plan_section as array or object
-      const planData = pricingPage.plan_section && Array.isArray(pricingPage.plan_section) 
-        ? pricingPage.plan_section 
+      const planData = pricingPage.plan_section && Array.isArray(pricingPage.plan_section)
+        ? pricingPage.plan_section
         : (pricingPage.plan_section ? [pricingPage.plan_section] : []);
-      
+
       // Handle plans data
       const plansData = pricingPage.plans || null;
-      
+
       // Handle testimonials_section as array or object
-      const testimonialsData = pricingPage.testimonials_section && Array.isArray(pricingPage.testimonials_section) && pricingPage.testimonials_section.length > 0 
-        ? pricingPage.testimonials_section[0] 
+      const testimonialsData = pricingPage.testimonials_section && Array.isArray(pricingPage.testimonials_section) && pricingPage.testimonials_section.length > 0
+        ? pricingPage.testimonials_section[0]
         : pricingPage.testimonials_section;
-      
+
       // Handle faq_section as array or object
-      const faqData = pricingPage.faq_section && Array.isArray(pricingPage.faq_section) && pricingPage.faq_section.length > 0 
-        ? pricingPage.faq_section[0] 
+      const faqData = pricingPage.faq_section && Array.isArray(pricingPage.faq_section) && pricingPage.faq_section.length > 0
+        ? pricingPage.faq_section[0]
         : pricingPage.faq_section;
-      
+
       return {
         heroSection: heroData ? {
           title: heroData.title || "Pricing",
@@ -760,12 +760,12 @@ export const fetchPricingPageData = async () => {
         faqSection: faqData ? {
           key: faqData.key || "pricing",
           title: faqData.title || "Have questions?",
-          subtitle: faqData.subtitle || "Have questions about how our pricing works? Find the answers to the most common inquiries below.",
+          subtitle: faqData.subtitle || "Here are answers to what founders ask most. If you do not see your question, reach out to us anytime.",
           faqs: faqData.faqs || []
         } : null
       };
     }
-    
+
     // Return fallback data if no data from Strapi
     return {
       heroSection: {
@@ -777,10 +777,10 @@ export const fetchPricingPageData = async () => {
       testimonialsSection: null,
       faqSection: null
     };
-    
+
   } catch (error) {
     console.error('Error fetching pricing page data:', error);
-    
+
     // Return fallback data in case of error
     return {
       heroSection: {
@@ -799,12 +799,12 @@ export const fetchPricingPageData = async () => {
 export const fetchFooterData = async () => {
   try {
     const apiUrl = `${STRAPI_URL}/api/footers?populate[socialLinks][populate]=*&populate[footerSections][populate][links][populate]=*&populate[navigationItems][populate]=*&populate=logo`;
-    
+
     // Add timeout to the fetch request
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-    
-    const response = await fetch(apiUrl, { 
+
+    const response = await fetch(apiUrl, {
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
@@ -815,12 +815,12 @@ export const fetchFooterData = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const apiData = await response.json();
-    
+
     if (apiData.data && apiData.data.length > 0) {
       const footer = apiData.data[0];
-      
+
       return {
         logo: footer.logo ? getStrapiImageUrl(footer.logo) : "/common/footer/logo-with-name.svg",
         logoAlt: footer.logoAlt || "Company Logo",
@@ -845,10 +845,10 @@ export const fetchFooterData = async () => {
         companyName: footer.companyName || "Aiyaiya"
       };
     }
-    
+
     // Return fallback data if no data from Strapi
     return null;
-    
+
   } catch (error) {
     console.error('Error fetching footer data:', error);
     return null;
@@ -861,22 +861,22 @@ export const fetchSignupPageData = async () => {
     const response = await fetch(
       `${STRAPI_URL}/api/signup-pages?populate[submitButton][populate]=*&populate[LoginLink][populate]=*&populate[email_field][populate]=*&populate[mobile_field][populate]=*&populate[password_field][populate]=*&populate[confirmpassword_field][populate]=*`
     );
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
     console.log('Signup page data structure:', JSON.stringify(data, null, 2));
-    
+
     // Check if data exists and has at least one item (since it's a collection)
     if (!data?.data || !Array.isArray(data.data) || data.data.length === 0) {
       console.log('No signup page data found, using fallback');
       return getSignupPageFallbackData();
     }
-    
+
     const signupPage = data.data[0];
-    
+
     // Transform the data to match the expected structure
     return {
       pageTitle: signupPage.pageTitle || "Let's Create Your Account",
@@ -895,7 +895,7 @@ export const fetchSignupPageData = async () => {
         url: signupPage.LoginLink.url || "/auth/login"
       } : {
         preText: "Already have an account?",
-        linkText: "Login", 
+        linkText: "Login",
         url: "/auth/login"
       },
       emailField: signupPage.email_field ? {

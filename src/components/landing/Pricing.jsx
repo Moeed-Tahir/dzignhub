@@ -17,57 +17,62 @@ function Pricing({ pricingPlans = [] }) {
       plan: "Basic",
       price: "$0 /mo",
       benefits: [
-        "Up to 500 characters per conversion",
-        "Access to basic voices",
-        "Limited to 5 conversions per month",
-        "No API access",
-        "24/7 support for onboarding",
+        "1 month access",
+        "3 AI agents",
+        "One landing website launch",
+        "Brand identity included",
+        "Community support",
       ],
-      buttonLabel: "Get started for free",
-      link: "/auth/sign-up"
+      buttonLabel: "Get started free",
+      link: "/auth/sign-up",
     },
     {
       plan: "Pro Plan",
       price: "$19.99 /mo",
       benefits: [
-        "Up to 50,000 characters per conversion",
-        "Access to premium voices (multiple accents)",
-        "Unlimited conversions",
-        "Priority customer support",
-        "API integration",
-        "24/7 support for onboarding",
+        "Unlimited launches",
+        "All agents included",
+        "Mobile app creation",
+        "Brand guidelines",
+        "Priority support",
+        "No watermarks",
       ],
-      buttonLabel: "Upgrade to Pro",
-      link: "/pricing"
+      buttonLabel: "Launch Now",
+      link: "/pricing",
     },
     {
       plan: "Enterprise Plan",
-      price: "Custom (Contact Us)",
+      price: "Custom (Contact Sales)",
       benefits: [
-        "Unlimited characters per conversion",
-        "Custom voice creation",
-        "Dedicated account manager",
-        "Advanced API access",
-        "SLA-backed performance guarantees",
-        "24/7 premium support",
-        "Priority customer support",
+        "White label platform",
+        "Custom AI training",
+        " Dedicated support",
+        "Team collaboration",
+        "Advanced integrations",
+        "SLA guarantees",
       ],
-      buttonLabel: "Contact us",
-      link: "/contact-us"
+      buttonLabel: "Contact sales",
+      link: "/contact-us",
     },
   ];
 
   // Process Strapi pricing plans data or use defaults
-  const pricing = pricingPlans.length > 0 
-    ? pricingPlans.map((plan, index) => ({
-        plan: plan.plan || defaultPricing[index]?.plan || "Plan",
-        price: plan.price || defaultPricing[index]?.price || "$0 /mo",
-        benefits: plan.benefits?.map(benefit => benefit.text || benefit) || defaultPricing[index]?.benefits || [],
-        buttonLabel: plan.buttonLabel || defaultPricing[index]?.buttonLabel || "Get Started",
-        link: plan.link || defaultPricing[index]?.link || "#"
-      }))
-    : defaultPricing;
-
+  const pricing =
+    pricingPlans.length > 0
+      ? pricingPlans.map((plan, index) => ({
+          plan: plan.plan || defaultPricing[index]?.plan || "Plan",
+          price: plan.price || defaultPricing[index]?.price || "$0 /mo",
+          benefits:
+            plan.benefits?.map((benefit) => benefit.text || benefit) ||
+            defaultPricing[index]?.benefits ||
+            [],
+          buttonLabel:
+            plan.buttonLabel ||
+            defaultPricing[index]?.buttonLabel ||
+            "Get Started",
+          link: plan.link || defaultPricing[index]?.link || "#",
+        }))
+      : defaultPricing;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -76,31 +81,31 @@ function Pricing({ pricingPlans = [] }) {
       transition: {
         duration: 0.6,
         staggerChildren: 0.2,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   };
 
   const headingVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 40 
+    hidden: {
+      opacity: 0,
+      y: 40,
     },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.7,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const cardVariants = {
-    hidden: { 
-      opacity: 0, 
+    hidden: {
+      opacity: 0,
       y: 60,
-      scale: 0.9
+      scale: 0.9,
     },
     visible: {
       opacity: 1,
@@ -108,53 +113,53 @@ function Pricing({ pricingPlans = [] }) {
       scale: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const benefitVariants = {
-    hidden: { 
-      opacity: 0, 
-      x: -20 
+    hidden: {
+      opacity: 0,
+      x: -20,
     },
     visible: {
       opacity: 1,
       x: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const buttonVariants = {
-    hidden: { 
-      opacity: 0, 
-      scale: 0.9 
+    hidden: {
+      opacity: 0,
+      scale: 0.9,
     },
     visible: {
       opacity: 1,
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
+        ease: "easeOut",
+      },
     },
     hover: {
       scale: 1.05,
       transition: {
         duration: 0.2,
-        ease: "easeInOut"
-      }
+        ease: "easeInOut",
+      },
     },
     tap: {
-      scale: 0.95
-    }
+      scale: 0.95,
+    },
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="w-full bg-[#FAFAFA]"
       initial="hidden"
       whileInView="visible"
@@ -163,24 +168,25 @@ function Pricing({ pricingPlans = [] }) {
     >
       <div className="max-w-[1440px] px-[20px] py-[40px] xl:p-[80px] gap-[56px] flex flex-col mx-auto">
         {/* Heading */}
-        <motion.div 
+        <motion.div
           className="xl:text-[48px] text-[26px] font-semibold flex gap-[10px]"
           variants={headingVariants}
         >
-          <motion.span 
+          Simple
+          <motion.span
             className="text-[#C209C1]"
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            Flexible
+            pricing
           </motion.span>
-          <span className="text-[#000000]">Pricing</span>
+          <span className="text-[#000000]"> built for creators</span>
         </motion.div>
 
         {/* Pricing Cards */}
-        <motion.div 
+        <motion.div
           className=" flex-col xl:flex-row gap-[28px] justify-center items-center flex"
           variants={containerVariants}
         >
@@ -202,22 +208,22 @@ function Pricing({ pricingPlans = [] }) {
                     : undefined
                 }
                 variants={cardVariants}
-                whileHover={{ 
-                  scale: 1.05, 
+                whileHover={{
+                  scale: 1.05,
                   y: -10,
-                  transition: { duration: 0.3 } 
+                  transition: { duration: 0.3 },
                 }}
               >
-                <motion.div 
+                <motion.div
                   className="max-w-[368px] xl:h-[460px] gap-[24px] flex flex-col"
                   variants={containerVariants}
                 >
                   {/* Plan title and price */}
-                  <motion.div 
+                  <motion.div
                     className="xl:h-[98px] gap-[16px] flex flex-col"
                     variants={headingVariants}
                   >
-                    <motion.button 
+                    <motion.button
                       className="w-fit self-start py-[6px] px-[12px] h-[36px] rounded-[50px] bg-white/10 text-[#EAEDFA] text-[16px]"
                       variants={buttonVariants}
                       whileHover={{ scale: 1.1 }}
@@ -225,7 +231,7 @@ function Pricing({ pricingPlans = [] }) {
                     >
                       {plan.plan}
                     </motion.button>
-                    <motion.h2 
+                    <motion.h2
                       className="text-[#EAEDFA] text-[34px] font-semibold"
                       variants={headingVariants}
                     >
@@ -234,23 +240,23 @@ function Pricing({ pricingPlans = [] }) {
                   </motion.div>
 
                   {/* Benefits */}
-                  <motion.div 
+                  <motion.div
                     className="w-full h-full flex flex-col gap-[18px] text-[#FFFFFF] text-[16px]"
                     variants={containerVariants}
                   >
-                    <motion.h2 
+                    <motion.h2
                       className="font-medium text-[30px]"
                       variants={headingVariants}
                     >
                       Included Benefits
                     </motion.h2>
-                    <motion.div 
+                    <motion.div
                       className="flex flex-col gap-[15px]"
                       variants={containerVariants}
                     >
                       {plan.benefits.map((benefit, i) => (
-                        <motion.div 
-                          key={i} 
+                        <motion.div
+                          key={i}
                           className="flex gap-[8px] items-start"
                           variants={benefitVariants}
                         >
@@ -271,23 +277,25 @@ function Pricing({ pricingPlans = [] }) {
                 </motion.div>
 
                 {/* CTA Button */}
-                <Link href={plan.link} className="flex items-center justify-center" >
-                <motion.button
-                 
-                  className={`px-6 py-3   w-full lg:w-[90%] mt-5 mx-auto text-[16px] font-medium ${
-                    syne.className
-                  } cursor-pointer rounded-[40px] border backdrop-blur-[12px] shadow-[0px_8px_10.9px_#0003121F,0px_1px_1px_#0003124D] ${
-                    isPro
-                      ? "bg-[#BDFF00]  text-[#1B1F3B]"
-                      : "bg-white/5 border-[#C6F1F7] text-white"
-                  }`}
-                  variants={buttonVariants}
-                  whileHover="hover"
-                  whileTap="tap"
+                <Link
+                  href={plan.link}
+                  className="flex items-center justify-center"
                 >
-                  {plan.buttonLabel}
-                </motion.button>
-                  </Link>
+                  <motion.button
+                    className={`px-6 py-3   w-full lg:w-[90%] mt-5 mx-auto text-[16px] font-medium ${
+                      syne.className
+                    } cursor-pointer rounded-[40px] border backdrop-blur-[12px] shadow-[0px_8px_10.9px_#0003121F,0px_1px_1px_#0003124D] ${
+                      isPro
+                        ? "bg-[#BDFF00]  text-[#1B1F3B]"
+                        : "bg-white/5 border-[#C6F1F7] text-white"
+                    }`}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
+                    {plan.buttonLabel}
+                  </motion.button>
+                </Link>
               </motion.div>
             );
           })}

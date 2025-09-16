@@ -8,26 +8,26 @@ function Work({ workCards = [] }) {
   // Default fallback data
   const defaultCardData = [
     {
-      title: "Describe your idea",
+      title: "Share your idea",
       description:
-        "Enter your business concept or paste your URL. We build your brand DNA instantly.",
+        "Drop in your concept or website link. We build your brand DNA instantly.",
       mobileManualImage: "/landing/work/mobile/manual-1.jpg",
       desktopManualImage: "/landing/work/desktop/manual-1.jpg",
       mobileProImage: "/landing/work/mobile/pro-1.svg",
       desktopProImage: "/landing/work/desktop/pro-1.svg",
     },
     {
-      title: "AI team builds everything",
+      title: "AI builds it all",
       description:
-        "Our Ai agents create your brand, website, app, UX/UI, and content automatically.",
+        "Your AI team designs your brand, website, app, and content.",
       mobileManualImage: "/landing/work/mobile/manual-2.jpg",
       desktopManualImage: "/landing/work/desktop/manual-2.jpg",
       mobileProImage: "/landing/work/mobile/pro-2.jpg",
       desktopProImage: "/landing/work/desktop/pro-2.jpg",
     },
     {
-      title: "Launch & own",
-      description: "Download everything. Your business is ready to go live.",
+      title: "Launch & own it",
+      description: "Download everything, ready to go live. It’s all yours.",
       mobileManualImage: "/landing/work/mobile/manual-3.jpg",
       desktopManualImage: "/landing/work/desktop/manual-3.jpg",
       mobileProImage: "/landing/work/mobile/pro-3.jpg",

@@ -174,7 +174,7 @@ Each component includes comprehensive fallback data to ensure the site functions
 ```javascript
 cards: [
   {
-    title: "AI Marketing Assistant",
+    title: "AI Fashion Designer",
     description: "Transform your marketing strategy...",
     image: { url: "/uploads/feature1.png" },
     borderImage: { url: "/uploads/border.svg" },

@@ -569,7 +569,7 @@ const page = () => {
             <button
               ref={inviteButtonRef}
               className="bg-white rounded-[8px] h-[38px] w-[108px] justify-center flex items-center gap-2 border-[#202126] border"
-              // onClick={() => setShowInviteModal((prev) => !prev)}
+              onClick={() => setShowInviteModal((prev) => !prev)}
             >
               <Image
                 src={"/profile-add.svg"}
@@ -583,7 +583,7 @@ const page = () => {
             <button
               ref={publishButtonRef}
               className="bg-[#BDFF00] ml-2 rounded-[8px] h-[38px] px-4 justify-center flex items-center gap-2 "
-              // onClick={() => setShowPublishModal((prev) => !prev)}
+              onClick={() => setShowPublishModal((prev) => !prev)}
             >
               {bot.name === "Pitch Deck" ? (
                 <Image
