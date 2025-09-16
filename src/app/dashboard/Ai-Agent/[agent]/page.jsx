@@ -536,7 +536,7 @@ const page = () => {
       )}
 
       <div className="w-full mx-auto">
-        <div className="flex justify-between absolute top-0 w-[80%] left-1/2 -translate-x-1/2 items-center py-4">
+        <div className="flex justify-between absolute z-[10000] top-0 w-[80%] left-1/2 -translate-x-1/2 items-center py-4">
           <div className="flex relative gap-2">
             <div className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center">
               <HiArrowLongLeft
