@@ -1,8 +1,9 @@
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import { Syne } from "next/font/google";
 import Link from "next/link";
-import { getStrapiImageUrl } from "@/utils/strapi";
+// import { getStrapiImageUrl } from "@/utils/strapi";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -42,7 +43,7 @@ function Pricing({ pricingPlans = [] }) {
     },
     {
       plan: "Enterprise Plan",
-      price: "Custom (Contact Sales)",
+      price: "Custom (Contact Us)",
       benefits: [
         "White label platform",
         "Custom AI training",
@@ -58,21 +59,22 @@ function Pricing({ pricingPlans = [] }) {
 
   // Process Strapi pricing plans data or use defaults
   const pricing =
-    pricingPlans.length > 0
-      ? pricingPlans.map((plan, index) => ({
-          plan: plan.plan || defaultPricing[index]?.plan || "Plan",
-          price: plan.price || defaultPricing[index]?.price || "$0 /mo",
-          benefits:
-            plan.benefits?.map((benefit) => benefit.text || benefit) ||
-            defaultPricing[index]?.benefits ||
-            [],
-          buttonLabel:
-            plan.buttonLabel ||
-            defaultPricing[index]?.buttonLabel ||
-            "Get Started",
-          link: plan.link || defaultPricing[index]?.link || "#",
-        }))
-      : defaultPricing;
+    // pricingPlans.length > 0
+    //   ? pricingPlans.map((plan, index) => ({
+    //       plan: plan.plan || defaultPricing[index]?.plan || "Plan",
+    //       price: plan.price || defaultPricing[index]?.price || "$0 /mo",
+    //       benefits:
+    //         plan.benefits?.map((benefit) => benefit.text || benefit) ||
+    //         defaultPricing[index]?.benefits ||
+    //         [],
+    //       buttonLabel:
+    //         plan.buttonLabel ||
+    //         defaultPricing[index]?.buttonLabel ||
+    //         "Get Started",
+    //       link: plan.link || defaultPricing[index]?.link || "#",
+    //     }))
+    //   :
+    defaultPricing;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -215,7 +217,7 @@ function Pricing({ pricingPlans = [] }) {
                 }}
               >
                 <motion.div
-                  className="max-w-[368px] xl:h-[460px] gap-[24px] flex flex-col"
+                  className="max-w-[368px] gap-[24px] flex flex-col"
                   variants={containerVariants}
                 >
                   {/* Plan title and price */}
@@ -232,7 +234,7 @@ function Pricing({ pricingPlans = [] }) {
                       {plan.plan}
                     </motion.button>
                     <motion.h2
-                      className="text-[#EAEDFA] text-[34px] font-semibold"
+                      className="text-[#EAEDFA] text-[34px] font-semibold break-words"
                       variants={headingVariants}
                     >
                       {plan.price}

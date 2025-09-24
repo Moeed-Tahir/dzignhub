@@ -110,7 +110,7 @@ const cardsData = [
 ];
 const CreationWork = ({ isImage, mediaData, loading }) => {
   // Get the creation section data based on the current page type
-  const currentKey = isImage ? 'imageCreation' : 'videoCreation';
+  const currentKey = isImage ? "imageCreation" : "videoCreation";
   const strapiCreationSection = mediaData?.[currentKey]?.creation;
 
   // Static fallback data
@@ -119,49 +119,62 @@ const CreationWork = ({ isImage, mediaData, loading }) => {
       id: 1,
       id_number: "01",
       title: "Enter Your Prompt",
-      text: "Describe your video idea in detail. The more specific your prompt, the better the results.",
-      image: "/video-creation/work1.svg"
+      text: "Describe your idea. The clearer the prompt, the better the result.",
+      image: "/video-creation/work1.svg",
     },
     {
       id: 2,
-      id_number: "02", 
-      title: `Let AI Generate Your ${isImage ? "Image" : "Video"}`,
-      text: `Provide a clear text description of the ${isImage ? "image" : "video"} you want to generate.`,
-      image: "/video-creation/work2.svg"
+      id_number: "02",
+      title: `Watch AI create your ${isImage ? "Image" : "Video"}`,
+      text: `Your clip is generated in seconds, styled to match your brand.`,
+      image: "/video-creation/work2.svg",
     },
     {
       id: 3,
       id_number: "03",
       title: "Download and Share",
-      text: `Choose your format, download your ${isImage ? "image" : "video"}, and share it instantly with your audience or team.`,
-      image: "/video-creation/work3.svg"
+      text: `Choose your format, save your ${
+        isImage ? "image" : "video"
+      }, and share it anywhere`,
+      image: "/video-creation/work3.svg",
     },
   ];
 
   // Use Strapi data if available, otherwise fallback to static data
   const getTitle = () => {
-    if (strapiCreationSection?.titlePre || strapiCreationSection?.titleHighlight || strapiCreationSection?.titlePost) {
+    if (
+      strapiCreationSection?.titlePre ||
+      strapiCreationSection?.titleHighlight ||
+      strapiCreationSection?.titlePost
+    ) {
       return {
         pre: strapiCreationSection.titlePre || "",
-        highlight: strapiCreationSection.titleHighlight || (isImage ? "Image" : "Video"),
-        post: strapiCreationSection.titlePost || ""
+        highlight:
+          strapiCreationSection.titleHighlight || (isImage ? "Image" : "Video"),
+        post: strapiCreationSection.titlePost || "",
       };
     }
     return {
       pre: "How",
-      highlight: isImage ? "Image" : "Video", 
-      post: "Creation works"
+      highlight: isImage ? "Image" : "Video",
+      post: "Creation works",
     };
   };
 
   const getCards = () => {
-    if (strapiCreationSection?.cards && strapiCreationSection.cards.length > 0) {
+    if (
+      strapiCreationSection?.cards &&
+      strapiCreationSection.cards.length > 0
+    ) {
       return strapiCreationSection.cards.map((card, index) => ({
         id: card.id || index + 1,
         id_number: card.id_number || `0${index + 1}`,
         title: card.title || staticCardsData[index]?.title || "",
         text: card.text || staticCardsData[index]?.text || "",
-        image: getStrapiImageUrl(card.image) || staticCardsData[index]?.image || "/video-creation/work1.svg"
+        image:
+          getStrapiImageUrl(card.image) ||
+          staticCardsData[index]?.image ||
+          "/video-creation/work1.svg",
       }));
     }
     return staticCardsData;
@@ -170,10 +183,13 @@ const CreationWork = ({ isImage, mediaData, loading }) => {
   const titleData = getTitle();
   const cardsData = getCards();
   const ctaLabel = strapiCreationSection?.ctaLabel || "Try Now";
-  const ctaSecondaryLabel = strapiCreationSection?.ctaSecondaryLabel || "Join Our Team";
-  const statsImage = getStrapiImageUrl(strapiCreationSection?.statsImage) || "/video-creation/md.png";
-  const statsHeading = strapiCreationSection?.statsHeading || "+18 Million Creators using AllmyAI";
-  const statsParagraph = strapiCreationSection?.statsParagraph || "Our users love using Allmyai to build their marketing assets. We empower them to create assets at scale, faster than ever, with cutting-edge technology.";
+  const ctaSecondaryLabel = "Join Our Community";
+  const statsImage =
+    getStrapiImageUrl(strapiCreationSection?.statsImage) ||
+    "/video-creation/md.png";
+  const statsHeading = "+18 Million Creators use AllmyAI";
+  const statsParagraph =
+    "From fashion founders to digital creators, our community builds and launches with AllMyAI every day.";
   return (
     <>
       <motion.div
@@ -272,7 +288,9 @@ const CreationWork = ({ isImage, mediaData, loading }) => {
                   {card.title}
                 </h3>
               </div>
-              <p className="text-[16px] text-center mt-2  text-gray-400">{card.text}</p>
+              <p className="text-[16px] text-center mt-2  text-gray-400">
+                {card.text}
+              </p>
             </motion.div>
           ))}
         </motion.div>

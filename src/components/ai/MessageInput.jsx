@@ -13,7 +13,7 @@ export default function MessageInput({
   placeholder,
   isSuperAgent,
   isPitch,
-  isAI
+  isAI,
 }) {
   const [message, setMessage] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(true);
@@ -87,7 +87,13 @@ export default function MessageInput({
               </div>
             )}
             <div className="flex w-full items-center gap-2">
-              <Image src="/Ai/Star.svg" width={20} height={20} alt="Send" />
+              <Image
+                src="/Ai/Star.svg"
+                width={20}
+                height={20}
+                onError={console.log("ni aya")}
+                alt="Send"
+              />
 
               <input
                 type="text"
@@ -111,9 +117,10 @@ export default function MessageInput({
             </div>
             {isSuperAgent && (
               <div className="w-full flex- items-center gap-2 flex ">
-                <div className="w-8 h-8 flex justify-center border cursor-pointer items-center bg-white  rounded-[8px]">
-                  <RiAttachment2 className="text-lg " />
+                <div className="w-8 h-8 flex justify-center border cursor-pointer items-center bg-white rounded-[8px]">
+                  <RiAttachment2 className="text-3xl text-red-500" />
                 </div>
+
                 <div
                   onClick={() => setShowPersonalizationModal(true)}
                   className="w-8 h-8 flex justify-center border cursor-pointer items-center bg-white  rounded-[8px]"

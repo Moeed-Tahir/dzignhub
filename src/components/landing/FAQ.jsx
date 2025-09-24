@@ -31,7 +31,7 @@ const faqData = [
       "Our AI agents are trained to deliver high-quality visuals that stay on-brand.",
   },
   {
-    question: "How long does it take?",
+    question: "How long does it take to generate?",
     answer: "Most creations are ready in seconds.",
   },
   {
@@ -111,7 +111,7 @@ function FAQ({
     if (pageContext === "pricing") {
       return "Have questions about our pricing plans? Find the answers to the most common pricing and billing inquiries below. If you don't see your question, feel free to reach out!";
     }
-    return "Have questions about how our Text-to-Image AI works? Find the answers to the most common inquiries below. If you don't see your question, feel free to reach out!";
+    return "Here are the most common things founders ask. If you don’t see your question, reach out and we will help right away.";
   };
 
   // Use passed faqData or fallback to default data based on context

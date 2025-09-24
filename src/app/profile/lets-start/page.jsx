@@ -96,7 +96,7 @@ const page = () => {
         // Always get latest data from ref
         let latestTab2Data = designDirectionRef.current?.getData?.() || {};
         const brandWords = latestTab2Data.brandWords || [];
-        console.log('Latest brandWords:', brandWords);
+        console.log("Latest brandWords:", brandWords);
         const brandTone = latestTab2Data.brandTone || [];
         const designStyle = latestTab2Data.designStyle || [];
         let errorMsg = "";
@@ -134,10 +134,11 @@ const page = () => {
               hideProgressBar: false,
               closeOnClick: false,
               pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });          }
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
         }
       }
       setTimeout(() => {

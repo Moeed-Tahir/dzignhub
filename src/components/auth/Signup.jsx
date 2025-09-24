@@ -8,15 +8,14 @@ import { useRouter } from "next/navigation";
 const Signup = () => {
   // Hardcoded processed signup data
   const processedSignupData = {
-    pageTitle: "Let's Create Your Account",
-    pageDescription:
-      "Get started with allmyai and start using our AI assistance",
+    pageTitle: "Create your AllMyAI account",
+    pageDescription: "Get started and meet your AI co creator team",
     submitButton: {
       text: "Create Account",
       loadingText: "Creating...",
     },
     termsText:
-      "By clicking the Create Account button, you acknowledge that you have read and agree to our Terms of Use and Privacy Policy.",
+      "By creating an account you agree to our Terms of Use and Privacy Policy",
     loginLink: {
       preText: "Already have an account?",
       linkText: "Login",

@@ -6,11 +6,24 @@ import { motion } from "framer-motion";
 // import { Input } from "@/components/ui/input";
 // import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { LuUserRound } from "react-icons/lu";
+import dynamic from "next/dynamic";
+
+const AttachmentIcon = dynamic(
+  () => import("react-icons/ri").then((mod) => mod.RiAttachment2),
+  { ssr: false }
+);
+
+const LayersIcon = dynamic(
+  () => import("react-icons/io5").then((mod) => mod.IoLayersOutline),
+  { ssr: false }
+);
 
 import { Settings, Paperclip, Mic, Send, User, MicOff } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import { RiAttachment2 } from "react-icons/ri";
+import { IoLayersOutline } from "react-icons/io5";
 
 export function ModernInput({
   isAi,
@@ -133,16 +146,24 @@ export function ModernInput({
               </div>
             </div>
           )}
-          <div className="px-4 py-3">
+          <div className="relative w-full">
+            <div className="absolute left-2 top-2.5 pointer-events-none">
+              <Image
+                src="/Ai/Star.svg"
+                alt="Star Vector"
+                width={18}
+                height={18}
+              />
+            </div>
+
             <textarea
-              type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Ask anything, create anything"
-              className={` ${
+              className={`${
                 isAi ? "h-[80px] resize-none" : "resize-none"
-              }   w-full border-0 bg-transparent text-base placeholder:text-gray-400 
-             focus:outline-none focus:ring-0 focus:ring-offset-0 px-0`}
+              } w-full border-0 bg-transparent text-base placeholder:text-gray-400 
+       focus:outline-none focus:ring-0 focus:ring-offset-0 pl-8 pt-2.5 leading-5`}
             />
           </div>
 
@@ -163,31 +184,39 @@ export function ModernInput({
                 type="button"
                 variant="ghost"
                 size="sm"
+                onClick={handleFileAttach}
                 className="h-[34px] w-[34px] p-0 text-[#1C1C1E] border border-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
               >
-                <LuUserRound className="w-[18px] h-[18px] " />
+                <RiAttachment2 className="w-[18px] h-[18px] " />
               </button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleFileChange}
+                multiple // optional, allows selecting multiple files
+              />
               <button
                 type="button"
                 variant="ghost"
                 size="sm"
                 className="h-[34px] w-[34px] p-0 text-[#1C1C1E] border border-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
               >
-                <Settings className="w-[18px] h-[18px] " />
+                <IoLayersOutline className="w-[18px] h-[18px] " />
               </button>
             </div>
 
             {/* Right side icons */}
             <div className="flex items-center gap-2">
-              <button
+              {/* <button
                 type="button"
                 variant="ghost"
                 size="sm"
                 onClick={handleFileAttach}
                 className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
-              >
-                {/* <Image src={"/clip.svg"} height={18} width={18} alt="" /> */}
-              </button>
+              > */}
+              {/* <Image src={"/clip.svg"} height={18} width={18} alt="" /> */}
+              {/* </button> */}
               <button
                 type="button"
                 variant="ghost"
@@ -207,28 +236,24 @@ export function ModernInput({
               </button>
               <button
                 type="submit"
-                variant="ghost"
-                size="sm"
-                className="h-[34px] w-[34px] p-0 text-[#1C1C1E] bg-[#F3F3F3] flex justify-center items-center rounded-full hover:text-gray-700"
+                className="h-[24px] w-[24px] p-0 text-white flex justify-center items-center hover:bg-[#4DE64D] bg-[#5CFF5C]"
                 disabled={!message.trim()}
               >
-                {/* <Send className="w-[18px] h-[18px] " /> */}
-
-                <Image src={"/send.svg"} height={18} width={18} alt="" />
+                <Image src="/send.svg" width={18} height={18} alt="Send" />
               </button>
             </div>
           </div>
         </div>
 
         {/* Hidden file input */}
-        <input
+        {/* <input
           ref={fileInputRef}
           type="file"
           multiple
           onChange={handleFileChange}
           className="hidden"
           accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"
-        />
+        /> */}
       </form>
     </motion.div>
   );

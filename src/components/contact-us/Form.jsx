@@ -19,7 +19,7 @@ const defaultFormConfig = {
   formTitle: "Need to contact us?",
   contactImage: null,
   firstNameLabel: "First name",
-  lastNameLabel: "Last name", 
+  lastNameLabel: "Last name",
   emailLabel: "Email",
   messageLabel: "Message",
   firstNamePlaceholder: "",
@@ -28,15 +28,15 @@ const defaultFormConfig = {
   messagePlaceholder: "",
   submitButtonLabel: "Submit",
   successMessage: "Submitted Successfully",
-  failureMessage: "Error Submitting"
+  failureMessage: "Error Submitting",
 };
 
 function Form({ formData }) {
-  console.log('Form component received data:', formData);
-  
+  console.log("Form component received data:", formData);
+
   // Use Strapi form data if available, otherwise use default
   const formConfig = formData || defaultFormConfig;
-  
+
   // Initialize form state for the four main fields
   const [formState, setFormState] = useState({
     firstName: "",
@@ -65,9 +65,9 @@ function Form({ formData }) {
       opacity: 1,
       transition: {
         duration: 0.6,
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -77,9 +77,9 @@ function Form({ formData }) {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const imageVariants = {
@@ -90,9 +90,9 @@ function Form({ formData }) {
       x: 0,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const formVariants = {
@@ -104,25 +104,29 @@ function Form({ formData }) {
       transition: {
         duration: 0.8,
         ease: "easeOut",
-        delay: 0.2
-      }
-    }
+        delay: 0.2,
+      },
+    },
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="lg:py-[64px] lg:px-[80px] py-[40px] px-[20px]"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       <div className="flex lg:flex-row flex-col items-center justify-center">
-        <motion.div 
+        <motion.div
           className="relative md:w-[600px] md:h-[616px] w-[98%]"
           variants={imageVariants}
         >
           <img
-            src={formConfig.contactImage ? getStrapiImageUrl(formConfig.contactImage) : "/contact/contactForm.jpg"}
+            src={
+              formConfig.contactImage
+                ? getStrapiImageUrl(formConfig.contactImage)
+                : "/contact/contactForm.jpg"
+            }
             className="w-full h-full object-cover lg:rounded-tl-[40px] lg:rounded-bl-[40px] rounded-tr-[20px] rounded-tl-[20px] lg:rounded-tr-[0px]"
             alt="Contact form"
           />
@@ -141,27 +145,36 @@ function Form({ formData }) {
           />
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="bg-[#272c51] lg:rounded-tr-[40px] lg:rounded-br-[40px] rounded-br-[20px] rounded-bl-[20px] lg:rounded-bl-[0px] md:max-h-[616px] md:max-w-[600px] w-[98%] md:w-full"
           variants={formVariants}
         >
-          <form onSubmit={handleSubmit} className="flex flex-col md:gap-[40px] gap-[16px] md:p-[40px] p-[10px] text-white">
-            <motion.h2 
-              className="md:font-semibold font-medium md:text-[34px] text-[30px] text-center"
-              variants={itemVariants}
-            >
-              {formConfig.formTitle || "Need to contact us?"}
-            </motion.h2>
-            <motion.div 
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col md:gap-[40px] gap-[16px] md:p-[40px] p-[10px] text-white"
+          >
+            {/* Headline + Subheadline */}
+            <motion.div className="text-center" variants={itemVariants}>
+              <motion.h2 className="md:font-semibold font-medium md:text-[34px] text-[30px]">
+                Let’s talk
+              </motion.h2>
+              <motion.p className="md:text-[18px] text-[16px] mt-2 text-[#CCCCCC]">
+                Questions, feedback, or ideas? We’d love to hear from you
+              </motion.p>
+            </motion.div>
+
+            {/* Form container */}
+            <motion.div
               className="rounded-[16px] md:p-[32px] p-[15px] bg-[#2b3874]"
               variants={itemVariants}
             >
               <div className="flex flex-col gap-[24px]">
-                <motion.div 
+                {/* First & Last Name */}
+                <motion.div
                   className="flex md:flex-row flex-col gap-[16px] text-[14px]"
                   variants={itemVariants}
                 >
-                  <motion.div 
+                  <motion.div
                     className="md:w-[48%]"
                     whileHover={{ scale: 1.02 }}
                     whileFocus={{ scale: 1.02 }}
@@ -177,13 +190,14 @@ function Form({ formData }) {
                       onChange={handleChange}
                       placeholder={formConfig.firstNamePlaceholder || ""}
                       className="bg-[#2f4290] rounded-[10px] w-full h-[40px] mt-3 p-3"
-                      whileFocus={{ 
+                      whileFocus={{
                         boxShadow: "0px 0px 0px 2px #BDFF00 inset",
-                        transition: { duration: 0.2 }
+                        transition: { duration: 0.2 },
                       }}
                     />
                   </motion.div>
-                  <motion.div 
+
+                  <motion.div
                     className="md:w-[48%]"
                     whileHover={{ scale: 1.02 }}
                     whileFocus={{ scale: 1.02 }}
@@ -199,13 +213,15 @@ function Form({ formData }) {
                       onChange={handleChange}
                       placeholder={formConfig.lastNamePlaceholder || ""}
                       className="bg-[#2f4290] rounded-[10px] w-full h-[40px] mt-3 p-3"
-                      whileFocus={{ 
+                      whileFocus={{
                         boxShadow: "0px 0px 0px 2px #BDFF00 inset",
-                        transition: { duration: 0.2 }
+                        transition: { duration: 0.2 },
                       }}
                     />
                   </motion.div>
                 </motion.div>
+
+                {/* Email */}
                 <motion.div variants={itemVariants}>
                   <h3 className={`${syne.className} font-medium`}>
                     {formConfig.emailLabel || "Email"}
@@ -218,13 +234,15 @@ function Form({ formData }) {
                     onChange={handleChange}
                     placeholder={formConfig.emailPlaceholder || ""}
                     className="bg-[#2f4290] w-full rounded-[10px] h-[40px] mt-3 p-3"
-                    whileFocus={{ 
+                    whileFocus={{
                       boxShadow: "0px 0px 0px 2px #BDFF00 inset",
-                      transition: { duration: 0.2 }
+                      transition: { duration: 0.2 },
                     }}
                     whileHover={{ scale: 1.01 }}
                   />
                 </motion.div>
+
+                {/* Message */}
                 <motion.div variants={itemVariants}>
                   <h3 className={`${syne.className} font-medium`}>
                     {formConfig.messageLabel || "Message"}
@@ -236,21 +254,23 @@ function Form({ formData }) {
                     onChange={handleChange}
                     placeholder={formConfig.messagePlaceholder || ""}
                     className="bg-[#2f4290] w-full rounded-[10px] h-[100px] mt-3 p-3 resize-none"
-                    whileFocus={{ 
+                    whileFocus={{
                       boxShadow: "0px 0px 0px 2px #BDFF00 inset",
-                      transition: { duration: 0.2 }
+                      transition: { duration: 0.2 },
                     }}
                     whileHover={{ scale: 1.01 }}
                   />
                 </motion.div>
+
+                {/* Submit button */}
                 <motion.button
                   type="submit"
                   className="w-full rounded-[999px] h-[56px] flex items-center justify-center bg-[#BDFF00] font-medium text-black"
                   variants={itemVariants}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.05,
                     boxShadow: "0px 0px 20px rgba(189, 255, 0, 0.3)",
-                    transition: { duration: 0.2 }
+                    transition: { duration: 0.2 },
                   }}
                   whileTap={{ scale: 0.95 }}
                 >
