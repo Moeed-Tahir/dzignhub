@@ -10,43 +10,51 @@ const LetsStart = forwardRef(({ onDataChange }, ref) => {
       id: 1,
       value: "founder-entrepreneur",
       icon: "/onboarding/paintbucket.svg",
-      title: "Founder/Entrepreneur",
-      description: "Who wanna learn for school",
+      title: "Founder or Entrepreneur",
+      description: "Building a brand or launching a new idea",
     },
     {
       id: 2,
       value: "creative-designer",
       icon: "/onboarding/pen-tool.svg",
       title: "Creative or Designer",
-      description: "Who wanna do some work",
+      description: "Shaping fashion, visuals, products, or experiences",
     },
     {
       id: 3,
-      value: "marketer-agency",
-      icon: "/onboarding/bezier.svg",
-      title: "Marketer or Agency",
-      description: "Who wanna do some work",
+      value: "fashion-entrepreneur",
+      icon: "/onboarding/mask.svg",
+      title: "Fashion Entrepreneur",
+      description:
+        "Designing collections, campaigns, and brands that stand out",
     },
     {
       id: 4,
-      value: "coach-consultant",
-      icon: "/onboarding/mask.svg",
-      title: "Coach or Consultant",
-      description: "Who wanna do some business",
+      value: "marketer-agency",
+      icon: "/onboarding/bezier.svg",
+      title: "Marketer or Agency",
+      description: "Helping brands grow and connect with audiences",
     },
     {
       id: 5,
-      value: "small-business-brand-owner",
+      value: "coach-consultant",
       icon: "/onboarding/color-swatch.svg",
-      title: "Small Business/Brand Owner",
-      description: "Who wanna do some project",
+      title: "Coach or Consultant",
+      description: "Guiding others to achieve their goals",
     },
     {
       id: 6,
+      value: "small-business-brand-owner",
+      icon: "/onboarding/designtools.svg",
+      title: "Small Business or Brand Owner",
+      description: "Running a company and ready to scale",
+    },
+    {
+      id: 7,
       value: "other",
       icon: "/onboarding/designtools.svg",
       title: "Other",
-      description: "Who wanna do some project",
+      description: "Tell us more about your journey",
     },
   ];
 
@@ -55,7 +63,7 @@ const LetsStart = forwardRef(({ onDataChange }, ref) => {
       id: 1,
       value: "exploring-creative-direction",
       icon: "🎨",
-      label: "Just exploring creative direction",
+      label: "Explore creative direction",
     },
     {
       id: 2,
@@ -85,33 +93,33 @@ const LetsStart = forwardRef(({ onDataChange }, ref) => {
 
   // State for selected user types (multiple selection)
   const [selectedCards, setSelectedCards] = useState([]);
-  
+
   // State for selected creation goals (multiple selection)
   const [selectedCreation, setSelectedCreation] = useState([]);
 
-    // Notify parent of selection changes
-    React.useEffect(() => {
-      if (onDataChange) {
-        onDataChange({
-          userTypeCount: selectedCards.length,
-          creationGoalsCount: selectedCreation.length,
-          userType: getSelectedUserTypes(),
-          creationGoals: getSelectedCreationGoals()
-        });
-      }
-    }, [selectedCards, selectedCreation]);
+  // Notify parent of selection changes
+  React.useEffect(() => {
+    if (onDataChange) {
+      onDataChange({
+        userTypeCount: selectedCards.length,
+        creationGoalsCount: selectedCreation.length,
+        userType: getSelectedUserTypes(),
+        creationGoals: getSelectedCreationGoals(),
+      });
+    }
+  }, [selectedCards, selectedCreation]);
 
   // Function to get values from selected IDs
   const getSelectedUserTypes = () => {
-    return selectedCards.map(id => 
-      cardOptions.find(card => card.id === id)?.value
-    ).filter(Boolean);
+    return selectedCards
+      .map((id) => cardOptions.find((card) => card.id === id)?.value)
+      .filter(Boolean);
   };
 
   const getSelectedCreationGoals = () => {
-    return selectedCreation.map(id => 
-      creationOptions.find(option => option.id === id)?.value
-    ).filter(Boolean);
+    return selectedCreation
+      .map((id) => creationOptions.find((option) => option.id === id)?.value)
+      .filter(Boolean);
   };
 
   // Function to save tab 1 data
@@ -121,14 +129,16 @@ const LetsStart = forwardRef(({ onDataChange }, ref) => {
 
     // Validation: At least two selections required from both
     if (userTypes.length < 2 || creationGoals.length < 2) {
-      toast.error("Please select at least two options from both sections before proceeding.");
+      toast.error(
+        "Please select at least two options from both sections before proceeding."
+      );
       return false;
     }
 
     const tab1Data = {
       userType: userTypes,
       creationGoals: creationGoals,
-      currentStep: 0
+      currentStep: 0,
     };
 
     // Call parent function to handle data change
@@ -137,25 +147,28 @@ const LetsStart = forwardRef(({ onDataChange }, ref) => {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/update-onboarding`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(tab1Data)
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/update-onboarding`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(tab1Data),
+        }
+      );
 
       const data = await response.json();
-      if (data.type === 'success') {
-        console.log('Tab 1 data saved successfully');
+      if (data.type === "success") {
+        console.log("Tab 1 data saved successfully");
         return true;
       } else {
-        console.error('Error saving tab 1 data:', data.message);
+        console.error("Error saving tab 1 data:", data.message);
         return false;
       }
     } catch (error) {
-      console.error('Error saving tab 1 data:', error);
+      console.error("Error saving tab 1 data:", error);
       return false;
     }
   };
@@ -165,8 +178,8 @@ const LetsStart = forwardRef(({ onDataChange }, ref) => {
     saveData: saveTab1Data,
     getData: () => ({
       userType: getSelectedUserTypes(),
-      creationGoals: getSelectedCreationGoals()
-    })
+      creationGoals: getSelectedCreationGoals(),
+    }),
   }));
 
   return (
@@ -238,6 +251,6 @@ const LetsStart = forwardRef(({ onDataChange }, ref) => {
   );
 });
 
-LetsStart.displayName = 'LetsStart';
+LetsStart.displayName = "LetsStart";
 
 export default LetsStart;

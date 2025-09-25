@@ -5,62 +5,62 @@ import { getStrapiImageUrl } from "@/utils/strapi";
 function Workflow({ currentKey, assistantData, loading }) {
   const workflowFeatures = {
     strategyAssistant: {
-      text: "Meet your intelligent business advisor—built to support strategists and entrepreneurs in mapping growth. Whether you're launching, scaling, or pivoting, this AI helps you build plans with confidence.",
+      text: "Meet Mira, your AI strategy partner. Whether you’re launching, scaling, or pivoting, Mira helps you build clear growth plans and stay on track with confidence.",
       workflow: [
         {
           id: 1,
           icon: "/ai-assistants/workflow/strategy-assistant/1.svg",
-          text: "Market-aware strategy models",
+          text: "Smart strategy models",
         },
         {
           id: 2,
           icon: "/ai-assistants/workflow/strategy-assistant/2.svg",
-          text: "Evolves with performance",
+          text: "Adapts as you grow ",
         },
         {
           id: 3,
           icon: "/ai-assistants/workflow/strategy-assistant/3.svg",
-          text: "Real-time KPI tracking",
+          text: "Real-time tracking",
         },
         {
           id: 4,
           icon: "/ai-assistants/workflow/strategy-assistant/4.svg",
-          text: "Integrates with CRM tools",
+          text: "Easy integrations",
         },
         {
           id: 5,
           icon: "/ai-assistants/workflow/strategy-assistant/5.svg",
-          text: "Dynamic goal customization",
+          text: "Custom goals",
         },
       ],
     },
     brandDesigner: {
-      text: "Meet your intelligent brand companion—built to support designers in creating logos, color palettes, and full brand systems. Whether you’re launching a startup or refreshing a legacy, this AI brings clarity and creativity to every design.",
+      text: "Meet your brand companion. Zara helps you design logos, palettes, and full brand kits that keep your style clear and consistent.",
       workflow: [
         {
           id: 1,
-          icon: "/ai-assistants/workflow/brand-designer/1.svg",
-          text: "Advanced branding intelligence",
+          icon: "/ai-assistants/workflow/strategy-assistant/1.svg",
+          text: "Smart branding intelligence",
         },
         {
           id: 2,
-          icon: "/ai-assistants/workflow/brand-designer/2.svg",
-          text: "Flexible style and tone presets",
+          icon: "/ai-assistants/workflow/strategy-assistant/2.svg",
+          text: "Style and tone presets",
         },
         {
           id: 3,
-          icon: "/ai-assistants/workflow/brand-designer/3.svg",
-          text: "Instant visual mockups",
+          icon: "/ai-assistants/workflow/strategy-assistant/3.svg",
+          text: "Instant mockups",
         },
         {
           id: 4,
-          icon: "/ai-assistants/workflow/brand-designer/4.svg",
-          text: "Seamless design tool sync",
+          icon: "/ai-assistants/workflow/strategy-assistant/4.svg",
+          text: "Seamless sync.",
         },
         {
           id: 5,
-          icon: "/ai-assistants/workflow/brand-designer/5.svg",
-          text: "Learns from brand trends",
+          icon: "/ai-assistants/workflow/strategy-assistant/5.svg",
+          text: "Trend aware",
         },
       ],
     },
@@ -126,68 +126,75 @@ function Workflow({ currentKey, assistantData, loading }) {
       ],
     },
     seo: {
-      text: "Meet your intelligent SEO expert—built to support specialists in optimizing visibility and traffic. Whether you’re targeting keywords, fixing technical issues, or tracking rankings, this AI brings clarity to your SEO game.",
+      text: "Meet Novi, your SEO expert. From keywords to rankings, Novi keeps your content optimized and your traffic growing.",
       workflow: [
         {
           id: 1,
           icon: "/ai-assistants/workflow/seo/1.svg",
-          text: "Data-driven keyword analysis",
+          text: "Smart keyword analysis",
         },
         {
           id: 2,
           icon: "/ai-assistants/workflow/seo/2.svg",
-          text: "Tailored optimization tactics",
+          text: "Optimization tactics",
         },
         {
           id: 3,
           icon: "/ai-assistants/workflow/seo/3.svg",
-          text: "Live performance monitoring",
+          text: "Live monitoring",
         },
         {
           id: 4,
           icon: "/ai-assistants/workflow/seo/4.svg",
-          text: "Syncs with analytics tools",
+          text: "Analytics sync",
         },
         {
           id: 5,
           icon: "/ai-assistants/workflow/seo/5.svg",
-          text: "Adapts to algorithm updates",
+          text: "Always up to date",
         },
         // Add more if needed
       ],
     },
   };
 
-  // Get dynamic data from Strapi or fallback to static data
-  const strapiWorkflowSection = assistantData[currentKey]?.workflowSection;
-  
-  // Use Strapi data if available, with individual field fallbacks
-  const fallbackData = workflowFeatures[currentKey];
-  
-  const workflowData = strapiWorkflowSection ? {
-    title: strapiWorkflowSection.title || "AI Companions",
-    text: strapiWorkflowSection.text || fallbackData?.text,
-    workflow: (strapiWorkflowSection.workflow && strapiWorkflowSection.workflow.length > 0) ? 
-      strapiWorkflowSection.workflow.map((item, index) => ({
-        id: item.id || index + 1,
-        icon: getStrapiImageUrl(item.icon) || fallbackData?.workflow?.[index]?.icon,
-        text: item.text || fallbackData?.workflow?.[index]?.text
-      })) : fallbackData?.workflow || []
-  } : fallbackData;
+  // const strapiWorkflowSection = assistantData[currentKey]?.workflowSection;
 
-  // Show loading state while fetching data
+  const fallbackData = workflowFeatures[currentKey];
+
+  // const workflowData = strapiWorkflowSection
+  //   ? {
+  //       title: strapiWorkflowSection.title || "AI Companions",
+  //       text: strapiWorkflowSection.text || fallbackData?.text,
+  //       workflow:
+  //         strapiWorkflowSection.workflow &&
+  //         strapiWorkflowSection.workflow.length > 0
+  //           ? strapiWorkflowSection.workflow.map((item, index) => ({
+  //               id: item.id || index + 1,
+  //               icon:
+  //                 getStrapiImageUrl(item.icon) ||
+  //                 fallbackData?.workflow?.[index]?.icon,
+  //               text: item.text || fallbackData?.workflow?.[index]?.text,
+  //             }))
+  //           : fallbackData?.workflow || [],
+  //     }
+  //   :
+  const workflowData = fallbackData;
+
   if (loading) {
     return (
       <div className="py-10 mx-auto flex items-center justify-center">
-        <div className="text-[#1B1F3B] text-lg">Loading workflow section...</div>
+        <div className="text-[#1B1F3B] text-lg">
+          Loading workflow section...
+        </div>
       </div>
     );
   }
 
   const ref = useRef(null);
-  const isInView = useInView(ref, { 
+  const isInView = useInView(ref, {
     threshold: 0.1,
-    once: true
+    once: true,
   });
 
   const containerVariants = {
@@ -196,9 +203,9 @@ function Workflow({ currentKey, assistantData, loading }) {
       opacity: 1,
       transition: {
         delayChildren: 0.2,
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const titleVariants = {
@@ -208,9 +215,9 @@ function Workflow({ currentKey, assistantData, loading }) {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const descriptionVariants = {
@@ -220,9 +227,9 @@ function Workflow({ currentKey, assistantData, loading }) {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const cardVariants = {
@@ -233,13 +240,13 @@ function Workflow({ currentKey, assistantData, loading }) {
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   return (
-    <motion.div 
+    <motion.div
       ref={ref}
       variants={containerVariants}
       initial="hidden"
@@ -248,13 +255,13 @@ function Workflow({ currentKey, assistantData, loading }) {
     >
       <div className="flex flex-col gap-[35px]">
         <div className="flex flex-col gap-[9px]">
-          <motion.div 
+          <motion.div
             variants={titleVariants}
             className="md:font-medium md:text-[30px] text-[24px]  font-semibold text-center"
           >
             <span className="text-[#C209C1]">{workflowData.title}</span>
           </motion.div>
-          <motion.p 
+          <motion.p
             variants={descriptionVariants}
             className="md:text-[18px] text-[20px] text-[#1B1F3B] lg:max-w-[60%] text-center mx-auto"
           >

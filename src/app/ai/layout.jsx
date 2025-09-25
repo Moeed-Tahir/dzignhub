@@ -17,7 +17,7 @@ import { notFound } from "next/navigation";
 import { fetchAssistantPageData, fetchFAQData } from "@/utils/strapi";
 
 export default function RootLayout({ children }) {
-  console.log('Layout: Component rendering');
+  console.log("Layout: Component rendering");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [assistantData, setAssistantData] = useState({});
   const [faqData, setFaqData] = useState(null);
@@ -25,55 +25,57 @@ export default function RootLayout({ children }) {
   const pathname = usePathname();
   const slug = pathname?.split("/").pop();
 
-  console.log('Layout: Current slug:', slug);
+  console.log("Layout: Current slug:", slug);
 
   const slugToKeyMap = {
     "brand-designer": "brandDesigner",
     "content-writer": "contentWriter",
     "ui-ux": "ui_ux",
-    "seo": "seo",
-    "strategy-assistant":"strategyAssistant"
+    seo: "seo",
+    "strategy-assistant": "strategyAssistant",
     // add more as needed
   };
   const currentKey = slugToKeyMap[slug];
-   if (!currentKey) {
+  if (!currentKey) {
     notFound(); // navigate to 404
   }
 
-  console.log('Layout: About to define useEffect');
-  
+  console.log("Layout: About to define useEffect");
+
   // Simple test effect to check if useEffect works at all
   useEffect(() => {
-    console.log('*** SIMPLE TEST EFFECT RUNNING ***');
+    console.log("*** SIMPLE TEST EFFECT RUNNING ***");
   }, []);
-  
-  // Fetch assistant data on component mount
+
   useEffect(() => {
-    console.log('**** USEEFFECT CALLBACK EXECUTING ****');
-    console.log('Layout: useEffect starting for slug:', slug);
-    
+    console.log("**** USEEFFECT CALLBACK EXECUTING ****");
+    console.log("Layout: useEffect starting for slug:", slug);
+
     const loadAssistantData = async () => {
       try {
         setLoading(true);
-        console.log('Layout: Starting to fetch assistant data...');
+        console.log("Layout: Starting to fetch assistant data...");
         const data = await fetchAssistantPageData();
-        console.log('Layout: Fetched assistant data:', data);
-        console.log('Layout: Data type:', typeof data);
-        console.log('Layout: Data keys:', Object.keys(data));
+        console.log("Layout: Fetched assistant data:", data);
+        console.log("Layout: Data type:", typeof data);
+        console.log("Layout: Data keys:", Object.keys(data));
         setAssistantData(data);
       } catch (error) {
-        console.error('Layout: Error loading assistant data:', error);
-        console.error('Layout: Error stack:', error.stack);
+        console.error("Layout: Error loading assistant data:", error);
+        console.error("Layout: Error stack:", error.stack);
       } finally {
         setLoading(false);
-        console.log('Layout: Loading complete, final assistantData status');
+        console.log("Layout: Loading complete, final assistantData status");
       }
     };
 
     loadAssistantData();
   }, []);
-  
-  console.log('Layout: useEffect defined, current assistantData:', assistantData);
+
+  console.log(
+    "Layout: useEffect defined, current assistantData:",
+    assistantData
+  );
   return (
     <>
       <div
@@ -89,30 +91,54 @@ export default function RootLayout({ children }) {
             />
           </div>
           <div className="max-w-[1440px] mx-auto">
-            <Hero currentKey={currentKey} assistantData={assistantData} loading={loading} />
+            <Hero
+              currentKey={currentKey}
+              assistantData={assistantData}
+              loading={loading}
+            />
           </div>
         </div>
       </div>
       <div className="bg-[#1B1F3B]">
         <div className="max-w-[1440px] mx-auto">
-          <Work currentKey={currentKey} assistantData={assistantData} loading={loading} />
+          <Work
+            currentKey={currentKey}
+            assistantData={assistantData}
+            loading={loading}
+          />
         </div>
       </div>
       <div className="max-w-[1440px] mx-auto">
-        <Card currentKey={currentKey} assistantData={assistantData} loading={loading} />
+        <Card
+          currentKey={currentKey}
+          assistantData={assistantData}
+          loading={loading}
+        />
       </div>
       <div className="bg-[#1B1F3B]">
         <div className="max-w-[1440px] mx-auto">
-          <ContentCreation currentKey={currentKey} assistantData={assistantData} loading={loading} />
+          <ContentCreation
+            currentKey={currentKey}
+            assistantData={assistantData}
+            loading={loading}
+          />
         </div>
       </div>
       <div className="max-w-[1440px] mx-auto">
-        <Workflow currentKey={currentKey} assistantData={assistantData} loading={loading} />
+        <Workflow
+          currentKey={currentKey}
+          assistantData={assistantData}
+          loading={loading}
+        />
         <AiResults />
-        <SmartSupport currentKey={currentKey} assistantData={assistantData} loading={loading} />
+        <SmartSupport
+          currentKey={currentKey}
+          assistantData={assistantData}
+          loading={loading}
+        />
         <Users />
-        <FAQ 
-          faqData={assistantData?.[currentKey]?.faqSection?.faqs} 
+        <FAQ
+          faqData={assistantData?.[currentKey]?.faqSection?.faqs}
           title={assistantData?.[currentKey]?.faqSection?.title}
           subtitle={assistantData?.[currentKey]?.faqSection?.subtitle}
           loading={loading}

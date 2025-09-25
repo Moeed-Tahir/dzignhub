@@ -1,26 +1,25 @@
-'use client';
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import { getStrapiImageUrl } from "@/utils/strapi";
 
-function Hero({currentKey, assistantData, loading}) {
-
+function Hero({ currentKey, assistantData, loading }) {
   // Get data from Strapi or fallback to static data
-  const strapiContent = assistantData[currentKey]?.hero;
-  
+  // const strapiContent = assistantData[currentKey]?.hero;
+
   const heroContentData = {
     brandDesigner: {
       title: "Meet Zara - Brand designer",
       description:
-        "Effortlessly craft logos, brand systems, and visual assets that align with your creative direction. Zara helps you maintain consistency and save time, so you can focus on building memorable brand identities.",
+        "Zara creates logos, moodboards, and full brand kits that keep your look consistent across every deck, campaign, and channel. Fast, polished, and always on brand.",
       mainImage: "/ai-assistants/brand-designer/zara.jpg",
       leftImage: "/ai-assistants/brand-designer/hero-1.png",
       rightImage: "/ai-assistants/brand-designer/hero-3.png",
     },
-     strategyAssistant: {
+    strategyAssistant: {
       title: "Meet Mira - Strategy assistant",
       description:
-        "Streamline your workflow with smart layout suggestions, auto wireframes, and consistent UI support. Mano lets you spend less time on repetitive tasks and more time designing great user experiences.",
+        "Mira helps you define goals, shape offers, and plan your next steps. From launch strategies to growth roadmaps, Mira gives you clarity and direction so you can focus on building your brand.",
       mainImage: "/ai-assistants/strategy-assistant/mira.jpg",
       leftImage: "/ai-assistants/strategy-assistant/hero-1.png",
       rightImage: "/ai-assistants/strategy-assistant/hero-3.png",
@@ -33,39 +32,27 @@ function Hero({currentKey, assistantData, loading}) {
       leftImage: "/ai-assistants/content-writer/hero-1.png",
       rightImage: "/ai-assistants/content-writer/hero-3.png",
     },
-    ui_ux:{
-      title:"Meet Kano – UI/UX Design Companion",
-      description:"Streamline your workflow with smart layout suggestions, auto wireframes, and consistent UI support. Mano lets you spend less time on repetitive tasks and more time designing great user experiences.",
-         mainImage: "/ai-assistants/ui-ux/kano.jpg",
+    ui_ux: {
+      title: "Meet Kano – UI/UX Design Companion",
+      description:
+        "Streamline your workflow with smart layout suggestions, auto wireframes, and consistent UI support. Mano lets you spend less time on repetitive tasks and more time designing great user experiences.",
+      mainImage: "/ai-assistants/ui-ux/kano.jpg",
       leftImage: "/ai-assistants/ui-ux/hero-1.png",
       rightImage: "/ai-assistants/ui-ux/hero-3.png",
     },
-    seo:{
-      title:"Meet Novi – SEO companion",
-      description:"Optimize your website content with smart keyword suggestions, SEO-optimized structure, and real-time performance tips. Novi saves time on manual research, so you can focus on ranking higher and growing organic traffic.",
-         mainImage: "/ai-assistants/seo/novi.jpg",
+    seo: {
+      title: "Meet Novi – SEO companion",
+      description:
+        "Novi suggests keywords, optimizes structure, and tracks performance so your content ranks higher and reaches more people. No manual research, just faster growth.",
+      mainImage: "/ai-assistants/seo/novi.jpg",
       leftImage: "/ai-assistants/seo/hero-1.png",
       rightImage: "/ai-assistants/seo/hero-3.png",
-    }
+    },
   };
 
-  // Use Strapi data if available, otherwise fallback to static data
-  const fallbackContent = heroContentData[currentKey];
-  
-  const content = strapiContent ? {
-    title: strapiContent.title || fallbackContent?.title,
-    description: strapiContent.description || fallbackContent?.description,
-    mainImage: getStrapiImageUrl(strapiContent.mainImage) || fallbackContent?.mainImage,
-    leftImage: getStrapiImageUrl(strapiContent.leftImage) || fallbackContent?.leftImage,
-    rightImage: getStrapiImageUrl(strapiContent.rightImage) || fallbackContent?.rightImage,
-    mainImageAlt: strapiContent.mainImageAlt || "",
-    leftImageAlt: strapiContent.leftImageAlt || "",
-    rightImageAlt: strapiContent.rightImageAlt || ""
-  } : fallbackContent;
-
+  const content = heroContentData[currentKey];
   if (!content) return null;
 
-  // Show loading state while fetching data
   if (loading) {
     return (
       <div className="w-full h-[400px] flex items-center justify-center">
@@ -80,16 +67,16 @@ function Hero({currentKey, assistantData, loading}) {
       opacity: 1,
       transition: {
         delayChildren: 0.2,
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const imageVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       scale: 0.8,
-      y: 20
+      y: 20,
     },
     visible: {
       opacity: 1,
@@ -97,31 +84,31 @@ function Hero({currentKey, assistantData, loading}) {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const textVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
-      y: 30
+      y: 30,
     },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const sideImageVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       x: -50,
-      scale: 0.9
+      scale: 0.9,
     },
     visible: {
       opacity: 1,
@@ -129,16 +116,16 @@ function Hero({currentKey, assistantData, loading}) {
       scale: 1,
       transition: {
         duration: 0.7,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const rightImageVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       x: 50,
-      scale: 0.9
+      scale: 0.9,
     },
     visible: {
       opacity: 1,
@@ -146,9 +133,9 @@ function Hero({currentKey, assistantData, loading}) {
       scale: 1,
       transition: {
         duration: 0.7,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const floatingVariants = {
@@ -157,9 +144,9 @@ function Hero({currentKey, assistantData, loading}) {
       transition: {
         duration: 3,
         repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+        ease: "easeInOut",
+      },
+    },
   };
 
   const floatingVariantsReverse = {
@@ -168,17 +155,13 @@ function Hero({currentKey, assistantData, loading}) {
       transition: {
         duration: 3.5,
         repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+        ease: "easeInOut",
+      },
+    },
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <motion.div variants={containerVariants} initial="hidden" animate="visible">
       <motion.div
         variants={imageVariants}
         style={{
@@ -194,7 +177,7 @@ function Hero({currentKey, assistantData, loading}) {
         />
       </motion.div>
 
-      <motion.div 
+      <motion.div
         variants={sideImageVariants}
         initial="hidden"
         animate="visible"
@@ -209,7 +192,7 @@ function Hero({currentKey, assistantData, loading}) {
         />
       </motion.div>
 
-      <motion.div 
+      <motion.div
         variants={rightImageVariants}
         initial="hidden"
         animate="visible"
@@ -224,18 +207,18 @@ function Hero({currentKey, assistantData, loading}) {
         />
       </motion.div>
 
-      <motion.div 
+      <motion.div
         variants={textVariants}
         className="absolute max-w-[1300px] w-full left-1/2 -translate-x-1/2 lg:top-[28%] xl:top-[15%] top-[35%]"
       >
         <div className="flex flex-col gap-[19px] text-center text-[#FFFFFF]">
-          <motion.h2 
+          <motion.h2
             variants={textVariants}
             className="font-bold lg:text-[40px] xl:text-[68px] mx-auto  text-[36px]  "
           >
             {content.title}
           </motion.h2>
-          <motion.p 
+          <motion.p
             variants={textVariants}
             className="md:text-[20px] text-[18px] md:max-w-[70%] max-w-[90%] mx-auto"
           >

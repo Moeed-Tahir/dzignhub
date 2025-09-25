@@ -6,6 +6,8 @@ import { MoveLeft } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import SideComponent from "@/components/auth/SideComponent";
 import { fetchLoginPageData } from "@/utils/strapi";
+import { title } from "process";
+import { Description } from "node_modules/@radix-ui/react-dialog/dist";
 
 export default function AuthLayout({ children }) {
   const pathname = usePathname();
@@ -15,15 +17,83 @@ export default function AuthLayout({ children }) {
 
   const isSignupPage = pathname === "/auth/sign-up";
 
-  // Fetch login page data for side component
   useEffect(() => {
     const loadLoginPageData = async () => {
       try {
         setDataLoading(true);
         const data = await fetchLoginPageData();
+        let newSlides = [];
+        if (pathname === "/auth/login") {
+          newSlides = [
+            {
+              title: "Your AI co creator is ready",
+              description:
+                "Access your full team of AI assistants and start building lookbooks, pitch decks, and product visuals in minutes",
+            },
+            {
+              title: "Your AI team, always ready",
+              description:
+                "From brand design to launch plans, get everything done faster in one place.",
+            },
+            {
+              title: "Smarter tools, simpler work",
+              description:
+                "AI assistants that think with you, so you can create and launch faster.",
+            },
+            {
+              title: "Collaboration made simple",
+              description:
+                "Work with your team, clients, or investors in one shared space.",
+            },
+            {
+              title: "Always evolving with you",
+              description:
+                "Our AI learns from every project, getting smarter so your work keeps getting better.",
+            },
+          ];
+        }
+        if (pathname === "/auth/forget-password") {
+          newSlides = [
+            {
+              title: "We have you covered",
+              description:
+                "Your AI co creator will get you back in quickly so you can keep building your brand",
+            },
+          ];
+        }
+        if (pathname === "/auth/password-reset") {
+          newSlides = [
+            {
+              title: "Back to creating in seconds",
+              description:
+                "Once verified, you can reset your password and return to your AI co creator without losing your flow.",
+            },
+          ];
+        }
+        if (pathname === "/auth/sign-up") {
+          newSlides = [
+            {
+              title: "Your creative team is ready",
+              description:
+                "Sign up today and start building lookbooks, pitch decks, and product visuals in minutes with your AI co creator",
+            },
+          ];
+        }
+        if (pathname === "/auth/login") {
+          newSlides = [
+            {
+              title: "Your AI co creator is here",
+              description:
+                "Pick up right where you left off. Build lookbooks, pitch decks, and product visuals in minutes.",
+            },
+          ];
+        }
+        if (data?.side) {
+          data.side.slides = newSlides;
+        }
         setLoginPageData(data);
       } catch (error) {
-        console.error('Error loading login page data for layout:', error);
+        console.error("Error loading login page data:", error);
       } finally {
         setDataLoading(false);
       }
@@ -69,9 +139,11 @@ export default function AuthLayout({ children }) {
         <AuthFooter />
       </div>
       <div className="lg:w-[50%] sticky top-0 h-fit">
-        <SideComponent 
-          isProfilePage={true} 
-          sideData={!dataLoading && loginPageData?.side ? loginPageData.side : null}
+        <SideComponent
+          isProfilePage={true}
+          sideData={
+            !dataLoading && loginPageData?.side ? loginPageData.side : null
+          }
         />
       </div>
     </div>

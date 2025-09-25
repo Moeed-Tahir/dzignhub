@@ -204,8 +204,12 @@ function Page() {
       <Navbar />
 
       <div className="px-8 mx-auto max-w-[1440px] py-6">
-
-        <h1 className="text-[34px] font-semibold text-center">AMAI SuperAI </h1>
+        <h1 className="text-[34px] font-semibold text-center">
+          Your brand workspace
+        </h1>
+        <p className="text-center text-lg text-gray-600 mt-2">
+          All your lookbooks, pitch decks, and product visuals in one place
+        </p>
         <ModernInput />
 
         <div className="flex justify-between mb-5 items-center">

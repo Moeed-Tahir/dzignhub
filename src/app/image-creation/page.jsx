@@ -21,12 +21,12 @@ const page = () => {
     const loadMediaData = async () => {
       try {
         setLoading(true);
-        console.log('ImageCreation: Starting to fetch media data...');
+        console.log("ImageCreation: Starting to fetch media data...");
         const data = await fetchMediaPageData();
-        console.log('ImageCreation: Fetched media data:', data);
+        console.log("ImageCreation: Fetched media data:", data);
         setMediaData(data);
       } catch (error) {
-        console.error('ImageCreation: Error loading media data:', error);
+        console.error("ImageCreation: Error loading media data:", error);
       } finally {
         setLoading(false);
       }
@@ -50,28 +50,37 @@ const page = () => {
       </div>
       <div className="mt-[55px] md:w-full w-[90%] mx-auto  ">
         <p className="text-[30px] font-medium  md:text-[48px] md:font-semibold text-center text-black">
-          <span className="text-[#C209C1] ">Most advanced</span> tools for Image
+          <span className="text-[#C209C1] ">Powerful tools </span>
+          in one place
           <br />
-          editing in one place
         </p>
         <p className="text-[18px] text-center text-[#3d4050] mt-2">
-          We constantly add new features and improve existing ones.
+          From editorial looks to social-ready posts, choose styles and presets
+          that make your brand stand out.
         </p>
       </div>
       <div className=" md:mt-[-200px] ">
-        <GSAPScrollSection isImage={true} mediaData={mediaData} loading={loading} />
+        <GSAPScrollSection
+          isImage={true}
+          mediaData={mediaData}
+          loading={loading}
+        />
       </div>
 
       <div className="mx-auto ">
         <CreationWork isImage={true} mediaData={mediaData} loading={loading} />
         <ToolKit isImage={true} mediaData={mediaData} loading={loading} />
-        <FAQ 
-          faqData={mediaData?.imageCreation?.faq?.faqs} 
+        <FAQ
+          faqData={mediaData?.imageCreation?.faq?.faqs}
           title={mediaData?.imageCreation?.faq?.title}
           subtitle={mediaData?.imageCreation?.faq?.subtitle}
           loading={loading}
         />
-        <DownloadSection isImage={true} mediaData={mediaData} loading={loading} />
+        <DownloadSection
+          isImage={true}
+          mediaData={mediaData}
+          loading={loading}
+        />
         <Footer />
       </div>
     </div>

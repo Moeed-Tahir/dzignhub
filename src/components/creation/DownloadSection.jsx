@@ -4,18 +4,22 @@ import { getStrapiImageUrl } from "@/utils/strapi";
 
 const DownloadSection = ({ isImage, mediaData, loading }) => {
   // Get the appropriate key based on isImage prop
-  const currentKey = isImage ? 'imageCreation' : 'videoCreation';
-  
+  const currentKey = isImage ? "imageCreation" : "videoCreation";
+
   // Get Strapi data for download section
   const strapiDownloadSection = mediaData?.[currentKey]?.download;
 
   // Prepare data with fallbacks
   const getTitle = () => {
-    return strapiDownloadSection?.title || "Download Your One & Only App Now";
+    // return strapiDownloadSection?.title ||
+    return "Download the AllMyAI App";
   };
 
   const getSubtitle = () => {
-    return strapiDownloadSection?.subtitle || "Chose from a selection of high-quality AI models and experiment a selection of settings and presets.";
+    return (
+      // strapiDownloadSection?.subtitle || "Your full creative team in your pocket. Create lookbooks, pitch decks, and product visuals anytime, anywhere."
+      "Your full creative team in your pocket. Create lookbooks, pitch decks, and product visuals anytime, anywhere."
+    );
   };
 
   const getCtaLabel = () => {
@@ -27,15 +31,24 @@ const DownloadSection = ({ isImage, mediaData, loading }) => {
   };
 
   const getBackgroundImage = () => {
-    return getStrapiImageUrl(strapiDownloadSection?.backgroundImage) || "/video-creation/bg.png";
+    return (
+      getStrapiImageUrl(strapiDownloadSection?.backgroundImage) ||
+      "/video-creation/bg.png"
+    );
   };
 
   const getArrowImage = () => {
-    return getStrapiImageUrl(strapiDownloadSection?.arrowImage) || "/video-creation/arrow.png";
+    return (
+      getStrapiImageUrl(strapiDownloadSection?.arrowImage) ||
+      "/video-creation/arrow.png"
+    );
   };
 
   const getHeroImage = () => {
-    return getStrapiImageUrl(strapiDownloadSection?.heroImage) || "/Black-Titanium.svg";
+    return (
+      getStrapiImageUrl(strapiDownloadSection?.heroImage) ||
+      "/Black-Titanium.svg"
+    );
   };
 
   const title = getTitle();
@@ -63,7 +76,7 @@ const DownloadSection = ({ isImage, mediaData, loading }) => {
           <p className="text-[14px] md:text-[16px] font-normal mb-6">
             {subtitle}
           </p>
-          <a 
+          <a
             href={ctaLink}
             className="w-[186px] mt-[90px]  md:mt-[30px]  h-[56px]  rounded-[999px] text-black cursor-pointer bg-[#BDFF00] font-medium text-[18px] flex items-center justify-center no-underline"
           >

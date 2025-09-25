@@ -13,9 +13,9 @@ const containerVariants = {
     transition: {
       duration: 0.8,
       ease: "easeOut",
-      staggerChildren: 0.2
-    }
-  }
+      staggerChildren: 0.2,
+    },
+  },
 };
 
 const headingVariants = {
@@ -25,9 +25,9 @@ const headingVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const tabsVariants = {
@@ -38,9 +38,9 @@ const tabsVariants = {
     transition: {
       duration: 0.5,
       ease: "easeOut",
-      staggerChildren: 0.1
-    }
-  }
+      staggerChildren: 0.1,
+    },
+  },
 };
 
 const tabItemVariants = {
@@ -50,9 +50,9 @@ const tabItemVariants = {
     y: 0,
     transition: {
       duration: 0.3,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const contentVariants = {
@@ -63,9 +63,9 @@ const contentVariants = {
     transition: {
       duration: 0.6,
       ease: "easeOut",
-      staggerChildren: 0.15
-    }
-  }
+      staggerChildren: 0.15,
+    },
+  },
 };
 
 const contentItemVariants = {
@@ -75,9 +75,9 @@ const contentItemVariants = {
     y: 0,
     transition: {
       duration: 0.4,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const imageVariants = {
@@ -88,9 +88,9 @@ const imageVariants = {
     x: 0,
     transition: {
       duration: 0.7,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const badgeVariants = {
@@ -100,32 +100,32 @@ const badgeVariants = {
     scale: 1,
     transition: {
       duration: 0.4,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const tabData = {
   "Image Creation": {
-    title: "Envision The Extraordinary",
+    title: "Create images that match your vision",
     content: [
-      "Take creativity a step further with the transformative power of our Image Generation tool. It's not just about bringing your concepts to life — redefine the impossible. From beginners to professionals, we offer a spectrum of settings that can be intuitively tailored to your needs.",
+      "From campaign shots to product images, create high quality visuals that match your brand style. Simple tools let you choose styles, colors, and formats so every image feels polished and consistent.",
       "Discover an unprecedented fusion of simplicity and power, designed to cater to creative minds at all levels.",
     ],
     image: "/video-creation/toolkit.png",
   },
   "Brand Design": {
-    title: "Build Your Brand Identity",
+    title: "Build a brand identity that lasts",
     content: [
-      "Create stunning brand identities with our comprehensive design toolkit. From logos to complete brand guidelines, our AI-powered tools help you establish a cohesive visual presence that resonates with your audience.",
+      "From logos to full guidelines, create a cohesive identity that feels polished and true to your vision. Build a brand presence that connects with your audience and stands out in the market.",
       "Transform your vision into a professional brand that stands out in today's competitive marketplace.",
     ],
     image: "/video-creation/toolkit.png",
   },
   "Content Creation": {
-    title: "Craft Compelling Content",
+    title: "Content that connects",
     content: [
-      "Generate engaging content that captivates your audience across all platforms. Our advanced content creation tools help you produce high-quality copy, social media posts, and marketing materials effortlessly.",
+      "From product descriptions to social posts to campaign scripts, craft content that sells your vision and connects with your audience. Keep your messaging consistent across every lookbook, pitch deck, and channel.",
       "Streamline your content workflow and maintain consistent messaging across all your communications.",
     ],
     image: "/video-creation/toolkit.png",
@@ -134,31 +134,37 @@ const tabData = {
 
 export default function DzignhubToolkit({ isImage, mediaData, loading }) {
   // Get the appropriate key based on isImage prop
-  const currentKey = isImage ? 'imageCreation' : 'videoCreation';
-  
+  const currentKey = isImage ? "imageCreation" : "videoCreation";
+
   // Get Strapi data for toolkit section
   const strapiToolkitSection = mediaData?.[currentKey]?.toolkit;
 
   // Prepare heading from Strapi or fallback to static
   const getHeading = () => {
-    return strapiToolkitSection?.heading || (isImage ? "Allmyai Toolkit" : "Allmyai Toolkit");
+    return (
+      strapiToolkitSection?.heading ||
+      (isImage ? "Allmyai Toolkit" : "Allmyai Toolkit")
+    );
   };
 
   // Prepare tab data from Strapi or fallback to static
   const getTabData = () => {
     if (strapiToolkitSection?.tabs && strapiToolkitSection.tabs.length > 0) {
       const dynamicTabData = {};
-      strapiToolkitSection.tabs.forEach(tab => {
+      strapiToolkitSection.tabs.forEach((tab) => {
         // Convert paragraphs objects to text strings
-        const content = tab.paragraphs?.map(paragraph => 
-          typeof paragraph === 'string' ? paragraph : paragraph.text || paragraph
-        ) || [];
-        
+        const content =
+          tab.paragraphs?.map((paragraph) =>
+            typeof paragraph === "string"
+              ? paragraph
+              : paragraph.text || paragraph
+          ) || [];
+
         dynamicTabData[tab.label] = {
           title: tab.title,
           content: content,
           image: getStrapiImageUrl(tab.image),
-          slug: tab.slug
+          slug: tab.slug,
         };
       });
       return dynamicTabData;
@@ -169,14 +175,14 @@ export default function DzignhubToolkit({ isImage, mediaData, loading }) {
 
   const currentTabData = getTabData();
   const heading = getHeading();
-  
+
   const [activeTab, setActiveTab] = useState(() => {
     const tabKeys = Object.keys(currentTabData);
     return tabKeys.length > 0 ? tabKeys[0] : "Image Creation";
   });
 
   return (
-    <motion.section 
+    <motion.section
       className="bg-[#1B1F3B] md:py-16 px-[15px]  py-[24px] md:px-6"
       variants={containerVariants}
       initial="hidden"
@@ -185,21 +191,24 @@ export default function DzignhubToolkit({ isImage, mediaData, loading }) {
     >
       <div className="max-w-[1440px] mx-auto">
         <motion.div className="text-center mb-12" variants={headingVariants}>
-          <motion.h1 
+          <motion.h1
             className="text-[30px] md:text-[48px] font-medium md:font-semibold mb-8"
             variants={headingVariants}
           >
-            {heading.includes('Allmyai') ? (
+            {heading.includes("Allmyai") ? (
               <>
                 <span className="text-[#C209C1]">Allmyai</span>
-                <span className="text-white"> {heading.replace('Allmyai', '').trim()}</span>
+                <span className="text-white">
+                  {" "}
+                  {heading.replace("Allmyai", "").trim()}
+                </span>
               </>
             ) : (
               <span className="text-white">{heading}</span>
             )}
           </motion.h1>
 
-          <motion.div 
+          <motion.div
             className="flex justify-center w-full md:justify-start"
             variants={tabsVariants}
           >
@@ -214,9 +223,9 @@ export default function DzignhubToolkit({ isImage, mediaData, loading }) {
                       : "text-gray-300 border-transparent hover:text-white"
                   }`}
                   variants={tabItemVariants}
-                  whileHover={{ 
+                  whileHover={{
                     y: -2,
-                    transition: { duration: 0.2 }
+                    transition: { duration: 0.2 },
                   }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -229,7 +238,7 @@ export default function DzignhubToolkit({ isImage, mediaData, loading }) {
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <AnimatePresence mode="wait">
-            <motion.div 
+            <motion.div
               key={activeTab}
               className="space-y-6 w-full max-w-xl"
               variants={contentVariants}
@@ -237,20 +246,20 @@ export default function DzignhubToolkit({ isImage, mediaData, loading }) {
               animate="visible"
               exit="hidden"
             >
-              <motion.p 
+              <motion.p
                 className="text-[#BDFF00] text-[16px] inline-block rounded-full border-gray-700 border bg-[#312e62] px-4 py-1"
                 variants={badgeVariants}
                 whileHover={{
                   scale: 1.05,
                   backgroundColor: "#BDFF00",
                   color: "#000",
-                  transition: { duration: 0.2 }
+                  transition: { duration: 0.2 },
                 }}
               >
                 {activeTab}
               </motion.p>
 
-              <motion.h2 
+              <motion.h2
                 className="text-[20px] md:text-[24px] font-medium md:font-semibold text-white leading-tight"
                 variants={contentItemVariants}
               >
@@ -271,9 +280,9 @@ export default function DzignhubToolkit({ isImage, mediaData, loading }) {
               </motion.div>
             </motion.div>
           </AnimatePresence>
-          
+
           <AnimatePresence mode="wait">
-            <motion.div 
+            <motion.div
               key={`image-${activeTab}`}
               className="relative"
               variants={imageVariants}
@@ -282,11 +291,11 @@ export default function DzignhubToolkit({ isImage, mediaData, loading }) {
               exit="hidden"
             >
               <div className="relative rounded-2xl overflow-hidden ">
-                <motion.div 
+                <motion.div
                   className=" rounded-xl overflow-hidden"
                   whileHover={{
                     scale: 1.02,
-                    transition: { duration: 0.3, ease: "easeOut" }
+                    transition: { duration: 0.3, ease: "easeOut" },
                   }}
                 >
                   <Image

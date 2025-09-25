@@ -130,9 +130,9 @@ const LoginForm = () => {
       </h2>
       <p className="text-[#44444A] text-[14px] mb-6 text-center">
         {dataLoading
-          ? "Sign in to your allmyai account to access all allmyai products."
+          ? "Sign in to your AllMyAI account and continue creating with your AI team."
           : loginPageData?.subheading ||
-            "Sign in to your allmyai account to access all allmyai products."}
+            "Sign in to your AllMyAI account and continue creating with your AI team."}
       </p>
       <form onSubmit={handleSubmit}>
         <CustomInput
