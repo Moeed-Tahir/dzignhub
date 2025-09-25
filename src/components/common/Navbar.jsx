@@ -15,6 +15,10 @@ import { MoveLeft } from "lucide-react";
 
 const Navbar = ({ isCreationPage, isSettingPage }) => {
   const protectedRoutes = ["/dashboard", "/settings", "/profile"];
+  const unprotectedDashboardRoutes = [
+    "/dashboard/image-creation",
+    "/dashboard/video-creation",
+  ];
   const router = useRouter();
   const pathname = usePathname();
   const { IsLogin, SetIsLogin, SetEmail, SetUserId, SetAvatar, Avatar } =
@@ -67,19 +71,20 @@ const Navbar = ({ isCreationPage, isSettingPage }) => {
     checkAuth();
   }, [pathname]);
 
-  // Separate useEffect for handling redirects after auth check completes
   useEffect(() => {
-    // Don't redirect while still checking auth
     if (isAuthChecking) return;
 
     const isProtected = protectedRoutes.some((route) =>
       pathname.startsWith(route)
     );
 
+    const isException = unprotectedDashboardRoutes.some((route) =>
+      pathname.startsWith(route)
+    );
+
     const token = localStorage.getItem("token");
 
-    // Only redirect if we're on a protected route and not logged in
-    if (isProtected && (!token || !IsLogin)) {
+    if (isProtected && !isException && (!token || !IsLogin)) {
       router.push("/auth/login");
     }
   }, [IsLogin, isAuthChecking, pathname]);

@@ -161,16 +161,16 @@ const page = () => {
       <div className="bg-white m-5 xl:w-[56%] w-full mx-auto pt-[10px] lg:pt-[40px] overflow-x-hidden px-[20px] lg:px-[40px] min-h-[95vh] flex flex-col justify-between rounded-3xl">
         <div
           onClick={() => router.push("/")}
-          className="flex justify-start items-center gap-2"
+          className="flex justify-start items-center gap-2 cursor-pointer"
         >
           <Image
             src="/Logo.svg"
             alt="Logo"
-            width={100}
-            height={100}
-            className="w-[25px] h-[25px] object-contain"
+            width={0}
+            height={0}
+            className="w-[120px] h-auto object-contain"
           />
-          <span className="font-medium text-[16px] leading-none">allmyai</span>
+          {/* <span className="font-medium text-[16px] leading-none">allmyai</span> */}
         </div>
 
         <div className="relative min-h-[40px] flex items-center justify-center">

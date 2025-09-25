@@ -236,7 +236,7 @@ export function ModernInput({
               </button>
               <button
                 type="submit"
-                className="h-[24px] w-[24px] p-0 text-white flex justify-center items-center hover:bg-[#4DE64D] bg-[#5CFF5C]"
+                className="h-[24px] w-[24px] p-0 text-white rounded-sm flex justify-center items-center bg-[#BDFF00]"
                 disabled={!message.trim()}
               >
                 <Image src="/send.svg" width={18} height={18} alt="Send" />

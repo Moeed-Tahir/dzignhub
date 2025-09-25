@@ -58,6 +58,18 @@ export default function Landing() {
     loadLandingData();
   }, []);
 
+  // useEffect(() => {
+  //   if (sidebarOpen) {
+  //     document.body.style.overflow = "hidden"; // Freeze background
+  //   } else {
+  //     document.body.style.overflow = "auto"; // Restore scroll
+  //   }
+
+  //   return () => {
+  //     document.body.style.overflow = "auto"; // Cleanup
+  //   };
+  // }, [sidebarOpen]);
+
   const sectionVariants = {
     hidden: {
       opacity: 0,
@@ -100,7 +112,6 @@ export default function Landing() {
       x: 0,
       transition: {
         duration: 0.5,
-
         ease: "easeOut",
       },
     },
@@ -109,10 +120,10 @@ export default function Landing() {
   return (
     <>
       <div
-        className={`overflow-hidden w-full h-auto  ${sidebarOpen ? "" : ""
-          }`}
+        className={`overflow-hidden w-full h-auto overflow-y-auto  ${
+          sidebarOpen ? "" : ""
+        }`}
         style={{
-          // background: "linear-gradient(to bottom, #1B1F3B 66%, #c209c1 100%)",
           backgroundImage: `url('/Frame.svg')`,
           backgroundSize: "cover",
           backgroundPosition: "bottom",
@@ -136,17 +147,18 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* <Carousel carouselImages={landingData.carouselImages} /> */}
-
-
-      {/* <StackingImages stackSections={landingData.stackSections} /> */}
       <Work workCards={landingData.workCards} />
       <Templates templates={landingData.templates} />
-      <Download downloadSection={landingData.downloadSection} />
-      {/* <FeatureSection /> */}
-      <CardsAnimation cards={landingData.cards} />
-      {/* <div className=" mt-[-800px] sm:mt-[-400px] z-1000 relative "> */}
-      <div className="  relative ">
+
+      <div className="pb-0 mb-0">
+        <Download downloadSection={landingData.downloadSection} />
+      </div>
+
+      <div>
+        <CardsAnimation cards={landingData.cards} />
+      </div>
+
+      <div className="relative">
         <Pricing pricingPlans={landingData.pricingPlans} />
       </div>
 
@@ -157,7 +169,6 @@ export default function Landing() {
         subtitle={landingData.faqSection?.subtitle}
       />
 
-      {/* <Assistants assistantSection={landingData.assistantSection} /> */}
       <Footer />
     </>
   );

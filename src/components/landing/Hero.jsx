@@ -131,9 +131,7 @@ export default function Hero({
         initial="hidden"
         animate="visible"
       >
-        {/* Top section (announcement + heading + paragraph) */}
         <div className="flex flex-col lg:gap-[16px] mx-auto gap-5 sm:gap-[32px]">
-          {/* Announcement */}
           {processedHeroData.showAnnouncement && (
             <motion.div
               className="lg:w-auto lg:px-3 lg:gap-4 lg:h-[42px] w-[250px] h-[44px] flex items-center justify-around rounded-full mx-auto bg-[#212e62] "
@@ -141,7 +139,7 @@ export default function Hero({
             >
               <div
                 className="w-[28px] h-[20px] rounded-sm bg-gradient-to-tr from-[#5AE2B9] via-[#DCCC3A] to-[#1A76FF]"
-                style={{ boxShadow: "0 0 6px #5AE2B9" }} // subtle green glow
+                style={{ boxShadow: "0 0 6px #5AE2B9" }}
               >
                 <div className="w-full h-full bg-black rounded-sm flex items-center justify-center">
                   {processedHeroData.announcementIcon ? (
@@ -154,7 +152,7 @@ export default function Hero({
                       className="w-[13px] h-[13px]"
                     />
                   ) : (
-                    <MdTranslate className="w-[13px] h-[13px] text-white" />
+                    <MdTranslate className="w-[13px] h-[13px] text-white shadow-[#BDFF00] shadow-2xl" />
                   )}
                 </div>
               </div>

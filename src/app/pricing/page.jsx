@@ -85,9 +85,8 @@ function page() {
               }`}
               style={{ transitionDelay: "600ms" }}
             >
-              Synthesia is the world's #1 rated AI video software. It's used by
-              50,000+ teams to create videos at scale, saving up to 80% of their
-              time and budget.
+              Trusted by founders, creators, and teams building the future of
+              brands.
             </p>
           </div>
         </div>
