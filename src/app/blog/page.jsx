@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+
 import Hero from "@/components/common/Hero";
 import Sidebar from "@/components/landing/Sidebar";
 import Card from "@/components/blog/Card";
@@ -11,46 +12,58 @@ import { fetchBlogPageData, getStrapiImageUrl } from "@/utils/strapi";
 // Fallback blog data for when Strapi is not available
 const fallbackBlogData = [
   {
-    date: "May 22, 2025",
+    publishDate: "2025-05-22",
     title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
-    image: "/blog/1.jpg",
-    link: "/blog-detail/1",
-    slug: "team-spirit-ai-art"
+    description: "Explore how AI technology is revolutionizing fan art creation during the NBA playoffs season.",
+    cover: "/blog/1.jpg",
+    slug: "article-1",
+    author: "Admin",
+    categories: "technology"
   },
   {
-    date: "May 22, 2025",
-    title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
-    image: "/blog/2.jpg",
-    link: "/blog-detail/2",
-    slug: "ai-art-creations"
+    publishDate: "2025-05-21",
+    title: "The Future of Creative AI Tools in Sports Marketing",
+    description: "Discover the latest trends in AI-powered creative tools for sports marketing campaigns.",
+    cover: "/blog/2.jpg",
+    slug: "article-2",
+    author: "Admin",
+    categories: "marketing"
   },
   {
-    date: "May 22, 2025",
-    title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
-    image: "/blog/3.jpg",
-    link: "/blog-detail/3",
-    slug: "nba-playoffs-fan"
+    publishDate: "2025-05-20",
+    title: "Building Engaging Fan Communities with AI",
+    description: "Learn how artificial intelligence can help create more engaging fan communities.",
+    cover: "/blog/3.jpg",
+    slug: "article-3",
+    author: "Admin",
+    categories: "community"
   },
   {
-    date: "May 22, 2025",
-    title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
-    image: "/blog/4.jpg",
-    link: "/blog-detail/4",
-    slug: "team-spirit-art"
+    publishDate: "2025-05-19",
+    title: "AI Art Generation: From Concept to Creation",
+    description: "A comprehensive guide to creating stunning AI-generated artwork for your projects.",
+    cover: "/blog/4.jpg",
+    slug: "article-4",
+    author: "Admin",
+    categories: "design"
   },
   {
-    date: "May 22, 2025",
-    title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
-    image: "/blog/5.jpg",
-    link: "/blog-detail/5",
-    slug: "ai-fan-creations"
+    publishDate: "2025-05-18",
+    title: "Personalized Content Creation with AI",
+    description: "Harness the power of AI to create personalized content that resonates with your audience.",
+    cover: "/blog/5.jpg",
+    slug: "article-5",
+    author: "Admin",
+    categories: "content"
   },
   {
-    date: "May 22, 2025",
-    title: "Turn Your Team Spirit Into AI Art: NBA Playoffs Fan Creations",
-    image: "/blog/6.jpg",
-    link: "/blog-detail/6",
-    slug: "playoffs-ai-art"
+    publishDate: "2025-05-17",
+    title: "The Evolution of Digital Fan Experiences",
+    description: "Explore how digital technology is transforming the way fans engage with their favorite teams.",
+    cover: "/blog/6.jpg",
+    slug: "article-6",
+    author: "Admin",
+    categories: "technology"
   },
 ];
 
@@ -135,16 +148,19 @@ function Page() {
         >
           {blogData.posts.map((item, index) => {
             // Format date for display
-            const formattedDate = item.date 
-              ? new Date(item.date).toLocaleDateString('en-US', { 
+            const formattedDate = item.publishDate 
+              ? new Date(item.publishDate).toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
                 })
               : item.date || 'May 22, 2025';
 
-            // Prioritize slug-based URL over the static link field
-            const postLink = item.slug ? `/blog/${item.slug}` : (item.link || `/blog-detail/${index + 1}`);
+            // Use slug for URL
+            const postLink = item.slug ? `/blog/${item.slug}` : `/blog-detail/${index + 1}`;
+
+            // Get cover image URL
+            const coverImage = item.cover ? getStrapiImageUrl(item.cover) : "/blog/1.jpg";
 
             return (
               <Link key={index} href={postLink}>
@@ -159,9 +175,9 @@ function Page() {
                   <Card
                     title={item.title}
                     date={formattedDate}
-                    image={item.featuredImage ? getStrapiImageUrl(item.featuredImage) : (item.image || "/blog/1.jpg")}
+                    image={coverImage}
                     link={postLink}
-                    excerpt={item.excerpt}
+                    excerpt={item.description}
                   />
                 </motion.div>
               </Link>

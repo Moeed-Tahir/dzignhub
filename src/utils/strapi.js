@@ -90,7 +90,7 @@ export const getStrapiImageUrl = (image) => {
   return null;
 };
 
-// Fetch blog page data with all posts
+// Fetch blog page data with all posts using the new structure
 export const fetchBlogPageData = async () => {
   try {
     const response = await fetch(
@@ -106,15 +106,12 @@ export const fetchBlogPageData = async () => {
 
     if (data.data && data.data.length > 0) {
       const blogPage = data.data[0];
-
-      // Extract the nested posts structure
-      const postsSection = blogPage.posts && blogPage.posts[0];
-      const posts = postsSection?.posts || [];
+      const postsComponent = blogPage.posts;
 
       return {
-        heroTitle: postsSection?.heroTitle || "Latest Blog",
-        heroSubtitle: postsSection?.heroSubtitle || "News and articles",
-        posts: posts
+        heroTitle: postsComponent?.heroTitle || "Latest Blog",
+        heroSubtitle: postsComponent?.heroSubtitle || "News and articles",
+        posts: postsComponent?.posts || []
       };
     }
 
@@ -134,7 +131,7 @@ export const fetchBlogPageData = async () => {
   }
 };
 
-// Fetch individual blog post by slug
+// Fetch individual blog post by slug using the new structure
 export const fetchBlogPostBySlug = async (slug) => {
   try {
     const response = await fetch(
@@ -150,8 +147,8 @@ export const fetchBlogPostBySlug = async (slug) => {
 
     if (data.data && data.data.length > 0) {
       const blogPage = data.data[0];
-      const postsSection = blogPage.posts && blogPage.posts[0];
-      const posts = postsSection?.posts || [];
+      const postsComponent = blogPage.posts;
+      const posts = postsComponent?.posts || [];
 
       // Find the post with matching slug
       const post = posts.find(p => p.slug === slug);
@@ -990,4 +987,28 @@ const getSignupPageFallbackData = () => {
       required: true
     }
   };
+};
+
+// Utility function to generate auto-incrementing slugs
+export const generateBlogSlug = async () => {
+  try {
+    const blogData = await fetchBlogPageData();
+    const posts = blogData.posts || [];
+    
+    // Find the highest article number
+    let highestNumber = 0;
+    posts.forEach(post => {
+      if (post.slug && post.slug.startsWith('article-')) {
+        const number = parseInt(post.slug.replace('article-', ''));
+        if (!isNaN(number) && number > highestNumber) {
+          highestNumber = number;
+        }
+      }
+    });
+    
+    return `article-${highestNumber + 1}`;
+  } catch (error) {
+    console.error('Error generating blog slug:', error);
+    return `article-${Date.now()}`; // Fallback to timestamp-based slug
+  }
 };

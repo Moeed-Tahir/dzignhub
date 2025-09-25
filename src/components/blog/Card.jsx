@@ -21,13 +21,10 @@ function Card({ date, title, image, link, excerpt }) {
             <p className="text-[16px] text-[#666] line-clamp-3">{excerpt}</p>
           )}
         </div>
-        <Link
-          href={link || "/blog"}
-          className={`flex gap-[10px] cursor-pointer group ${syne.className}`}
-        >
+        <div className={`flex gap-[10px] cursor-pointer group ${syne.className}`}>
           <p className="text-[20px] group-hover:underline">Read More</p>
           <img src="/blog/arrow.svg" className="" alt="Arrow" />
-        </Link>
+        </div>
       </div>
     </div>
   );
