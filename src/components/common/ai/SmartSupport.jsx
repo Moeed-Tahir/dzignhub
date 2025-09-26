@@ -4,14 +4,15 @@ import { getStrapiImageUrl } from "@/utils/strapi";
 
 function SmartSupport({ currentKey, assistantData, loading }) {
   // Get Strapi data for smart support section
-  const strapiSmartSupportSection = assistantData?.[currentKey]?.smartSupportSection;
+  // const strapiSmartSupportSection =
+  //   assistantData?.[currentKey]?.smartSupportSection;
 
   // Static content fallback data
   const content = {
     strategyAssistant: {
       heading: ["Strategy AI:", "Insight", "into Action"],
       description:
-        "Big goals need smart planning. Your AI assistant helps analyze data, map strategies, and align execution—so you can focus on outcomes, not guesswork.",
+        "Big goals need clear plans. Mira helps you analyze data, map strategies, and align execution so you can focus on outcomes, not guesswork.",
     },
     brandDesigner: {
       heading: ["Brand Designer AI:", "Build Brands", "That Stand Out"],
@@ -26,12 +27,12 @@ function SmartSupport({ currentKey, assistantData, loading }) {
     ui_ux: {
       heading: ["UI/UX Designer AI:", "Design", "Flows with Ease"],
       description:
-        "Streamline your product design process from wireframe to prototype. Generate clean layouts, build user flows, and refine UX with intelligent feedback—your design partner at every step.",
+        "From first sketch to final asset, Zara helps you design powerful, consistent visuals. Create logos, moodboards, and full brand kits faster and always on brand.",
     },
     seo: {
-      heading: ["SEO Assistant AI: Rank", "Higher", "Work Less"],
+      heading: ["SEO Assistant AI: Rank", "Higher", " With Less Effort"],
       description:
-        "Let your AI assistant handle the SEO hustle. From keyword research to metadata and technical audits, get smart recommendations that keep your content discoverable and your rankings strong.",
+        "Novi takes the guesswork out of SEO. From keyword research to metadata and audits, get smart tips that keep your fashion site discoverable and your rankings strong.",
     },
   };
 
@@ -41,29 +42,29 @@ function SmartSupport({ currentKey, assistantData, loading }) {
         image: "/ai-assistants/smart-support/strategy-assistant/1.png",
         classname:
           "rounded-[9px] h-[66px] w-[66px] bg-[#edd1e0] rotate-[-12deg]",
-        text: "Generate moodboards, palettes, and style tiles.",
+        text: "Spot market trends",
       },
       {
-        text: "Create logos, social kits, and print-ready files.",
+        text: "Build roadmaps",
         image: "/ai-assistants/smart-support/strategy-assistant/2.png",
       },
       {
-        text: " Apply brand rules automatically across visuals.",
+        text: " Track KPIs in real time",
         image: "/ai-assistants/smart-support/strategy-assistant/3.png",
       },
       {
         image: "/ai-assistants/smart-support/strategy-assistant/4.png",
         classname:
           "rounded-[999px] h-[66px] w-[66px] bg-[#edd1e0] rotate-[-12deg]",
-        text: "Collaborate with teams or clients in real-time.",
+        text: "Collaborate easily",
       },
       {
         image: "/ai-assistants/smart-support/strategy-assistant/5.svg",
-        text: "Export in all major formats, instantly.",
+        text: "Export and share",
       },
       {
         image: "/ai-assistants/smart-support/6.png",
-        text: "Stay inspired with design trend insights.",
+        text: "Stay Future ready",
       },
     ],
     brandDesigner: [
@@ -131,48 +132,48 @@ function SmartSupport({ currentKey, assistantData, loading }) {
         image: "/ai-assistants/smart-support/ui-ux/1.png",
         classname:
           "rounded-[9px] h-[66px] w-[66px] bg-[#edd1e0] rotate-[-12deg]",
-        text: "Generate wireframes, flows, and mockups.",
+        text: "Generate moodboards, palettes, and style tiles",
       },
       {
-        text: "Instantly design for mobile, web, or tablet.",
+        text: "Create logos, social kits, and print-ready files.",
         image: "/ai-assistants/smart-support/ui-ux/2.png",
       },
       {
-        text: " Get accessibility and usability suggestions.",
+        text: "Apply brand rules across every asset",
         image: "/ai-assistants/smart-support/ui-ux/3.svg",
       },
       {
         image: "/ai-assistants/smart-support/ui-ux/4.png",
         classname: "rounded-[999px] h-[66px] w-[66px] bg-white ",
-        text: "Connect with devs via code-ready handoffs.",
+        text: "Collaborate with teams or clients in real time.",
       },
       {
         image: "/ai-assistants/smart-support/ui-ux/5.svg",
-        text: "Create component libraries effortlessly.",
+        text: "Export in all major formats instantly",
       },
       {
         image: "/ai-assistants/smart-support/6.png",
-        text: "Test and iterate designs with AI feedback.",
+        text: "Stay inspired with design trend insights",
       },
     ],
     seo: [
       {
         image: "/ai-assistants/smart-support/seo/1.png",
         classname: "rounded-[9px] h-[66px] w-[66px] rotate-[-12deg]",
-        text: "Optimize SEO content with smart keyword tips.",
+        text: "Optimize content with keyword suggestions",
       },
       {
         text: "Track rankings and spot opportunities instantly.",
         image: "/ai-assistants/smart-support/seo/2.png",
       },
       {
-        text: "Generate SEO-friendly titles and meta descriptions.",
+        text: "Generate SEO-ready titles and descriptions",
         image: "/ai-assistants/smart-support/3.png",
       },
       {
         image: "/ai-assistants/smart-support/seo/4.png",
         classname: "rounded-[999px] h-[66px] w-[66px] bg-white ",
-        text: "Audit your site and fix issues with AI help.",
+        text: "Audit your site and fix issues quickly",
       },
       {
         image: "/ai-assistants/smart-support/seo/5.svg",
@@ -180,38 +181,45 @@ function SmartSupport({ currentKey, assistantData, loading }) {
       },
       {
         image: "/ai-assistants/smart-support/6.png",
-        text: "Stay ahead with algorithm update alerts.",
+        text: "Stay ahead with algorithm updates.",
       },
     ],
   };
 
-  // Prepare heading data from Strapi or fallback to static
   const getHeadingData = () => {
-    if (strapiSmartSupportSection?.headingPre || strapiSmartSupportSection?.headingHighlight || strapiSmartSupportSection?.headingPost) {
-      return [
-        strapiSmartSupportSection.headingPre || "",
-        strapiSmartSupportSection.headingHighlight || "",
-        strapiSmartSupportSection.headingPost || ""
-      ];
-    }
-    // Fallback to static content
+    // if (
+    //   strapiSmartSupportSection?.headingPre ||
+    //   strapiSmartSupportSection?.headingHighlight ||
+    //   strapiSmartSupportSection?.headingPost
+    // ) {
+    //   return [
+    //     strapiSmartSupportSection.headingPre || "",
+    //     strapiSmartSupportSection.headingHighlight || "",
+    //     strapiSmartSupportSection.headingPost || "",
+    //   ];
+    // }
     return content[currentKey]?.heading || ["", "", ""];
   };
 
   // Prepare description from Strapi or fallback to static
   const getDescription = () => {
-    return strapiSmartSupportSection?.description || content[currentKey]?.description || "";
+    return (
+      // strapiSmartSupportSection?.description ||
+      content[currentKey]?.description || ""
+    );
   };
 
-  // Prepare features data from Strapi or fallback to static
   const getFeaturesData = () => {
-    if (strapiSmartSupportSection?.features && strapiSmartSupportSection.features.length > 0) {
-      return strapiSmartSupportSection.features.map(feature => ({
-        image: getStrapiImageUrl(feature.icon),
-        text: feature.text,
-        classname: "" // You can add dynamic classname logic here if needed
-      }));
-    }
+    // if (
+    //   strapiSmartSupportSection?.features &&
+    //   strapiSmartSupportSection.features.length > 0
+    // ) {
+    //   return strapiSmartSupportSection.features.map((feature) => ({
+    //     image: getStrapiImageUrl(feature.icon),
+    //     text: feature.text,
+    //     classname: "", // You can add dynamic classname logic here if needed
+    //   }));
+    // }
     // Fallback to static features
     return features[currentKey] || [];
   };
@@ -333,9 +341,7 @@ function SmartSupport({ currentKey, assistantData, loading }) {
               className="md:text-[48px] text-[24px] font-semibold"
             >
               <span>{headingData[0]}</span>{" "}
-              <span className="text-[#C209C1]">
-                {headingData[1]}
-              </span>{" "}
+              <span className="text-[#C209C1]">{headingData[1]}</span>{" "}
               <span>{headingData[2] ?? ""}</span>
             </motion.div>
             <motion.p
@@ -364,7 +370,7 @@ function SmartSupport({ currentKey, assistantData, loading }) {
                 <img
                   src={feature.image}
                   className={`absolute top-[-20%] object-contain left-1/2 -translate-x-1/2 ${
-                    feature.classname || 'h-[65px]'
+                    feature.classname || "h-[65px]"
                   }`}
                   alt={feature.text}
                 />

@@ -9,17 +9,17 @@ function ContentCreation({ currentKey, assistantData, loading }) {
       {
         id: 1,
         content:
-          "Access instant insights on competitors, customer behavior, and emerging trends. Let your AI assistant surface what matters—so you can plan with clarity.",
+          "Get instant insights into markets, competitors, and customer behavior so you can plan with clarity.",
       },
       {
         id: 2,
         content:
-          "From business models to go-to-market plans, create structured strategies tailored to your goals, timelines, and target markets.",
+          "Turn goals into clear launch and growth plans with timelines and priorities that keep you on track.",
       },
       {
         id: 3,
         content:
-          "Monitor progress, adjust your plans in real time, and stay aligned with your key metrics—your AI assistant keeps you focused and future-ready.",
+          "Track progress, adapt in real time, and measure results against your key goals.",
       },
     ],
     brandDesigner: [
@@ -77,31 +77,31 @@ function ContentCreation({ currentKey, assistantData, loading }) {
       {
         id: 1,
         content:
-          "Identify high-impact keywords, analyze competition, and generate data-driven insights in seconds. Let AI do the research while you focus on strategy.",
+          "Discover search terms your audience is using to find fashion and lifestyle brands like yours.",
       },
       {
         id: 2,
         content:
-          "Craft optimized titles, meta descriptions, and headings for every page—instantly aligned with search trends and ranking factors.",
+          "Get titles, descriptions, and headings that boost rankings for your lookbooks, product pages, and campaign blogs.",
       },
       {
         id: 3,
         content:
-          "Track keyword performance, audit pages, and receive smart recommendations to improve visibility and stay ahead of algorithm updates.",
+          "Track performance and receive suggestions to keep your content visible and up to date.",
       },
     ],
   };
 
   const assistants = {
-     strategyAssistant: {
+    strategyAssistant: {
       id: 1,
       title: "Strategy Assistant",
       image: "/ai-assistants/strategy-assistant.png",
 
       steps: [
-        "Analyze trends and opportunities",
-        "Build smart business roadmaps",
-        "Forecast growth and track KPIs",
+        "Logos, lookbooks, and product shots in seconds.",
+        "From moodboards to brand kits, your assets stay consistent everywhere.",
+        "Work with assistants to test, refine, and export ready-to-use content.",
       ],
     },
     brandDesigner: {
@@ -148,35 +148,47 @@ function ContentCreation({ currentKey, assistantData, loading }) {
     },
   };
 
-  // Get dynamic data from Strapi or fallback to static data
-  const strapiContentSection = assistantData[currentKey]?.contentSection;
-  
-  // Debug logging
-  console.log('ContentCreation Debug:', {
+  // const strapiContentSection = assistantData[currentKey]?.contentSection;
+
+  console.log("ContentCreation Debug:", {
     currentKey,
-    assistantData,
-    strapiContentSection,
-    hasContentSection: !!strapiContentSection
+    // assistantData,
+    // strapiContentSection,
+    // hasContentSection: !!strapiContentSection,
   });
-  
-  // Use Strapi data if available, with individual field fallbacks
-  const currentAssistant = strapiContentSection ? {
-    id: strapiContentSection.id || assistants[currentKey]?.id,
-    title: strapiContentSection.title || assistants[currentKey]?.title,
-    image: getStrapiImageUrl(strapiContentSection.image) || assistants[currentKey]?.image,
-    steps: (strapiContentSection.steps && strapiContentSection.steps.length > 0) ? 
-      strapiContentSection.steps.map(step => step.text) : 
-      assistants[currentKey]?.steps || []
-  } : assistants[currentKey];
 
-  const currentFlexData = (strapiContentSection && strapiContentSection.flexCards && strapiContentSection.flexCards.length > 0) ? 
-    strapiContentSection.flexCards.map((card, index) => ({
-      id: index + 1,
-      content: card.text
-    })) : flexData[currentKey];
+  const currentAssistant =
+    // strapiContentSection
+    //   ? {
+    //       id: strapiContentSection.id || assistants[currentKey]?.id,
+    //       title: strapiContentSection.title || assistants[currentKey]?.title,
+    //       image:
+    //         getStrapiImageUrl(strapiContentSection.image) ||
+    //         assistants[currentKey]?.image,
+    //       steps:
+    //         strapiContentSection.steps && strapiContentSection.steps.length > 0
+    //           ? strapiContentSection.steps.map((step) => step.text)
+    //           : assistants[currentKey]?.steps || [],
+    //     }
+    //   :
+    assistants[currentKey];
 
-  const sectionTitle = (strapiContentSection && strapiContentSection.sectionTitle) ? 
-    strapiContentSection.sectionTitle : "CREATING CONTENT WITH OUR AI ASSISTANTS IS EASY";
+  const currentFlexData =
+    //   strapiContentSection &&
+    //   strapiContentSection.flexCards &&
+    //   strapiContentSection.flexCards.length > 0
+    //     ? strapiContentSection.flexCards.map((card, index) => ({
+    //         id: index + 1,
+    //         content: card.text,
+    //       }))
+    //     :
+    flexData[currentKey];
+
+  const sectionTitle =
+    // strapiContentSection && strapiContentSection.sectionTitle
+    //   ? strapiContentSection.sectionTitle
+    //   :
+    "Creating with AllMyAI is simple";
 
   // Show loading state while fetching data
   if (loading) {

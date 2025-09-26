@@ -17,26 +17,29 @@ export default function GSAPScrollSection({ isImage, mediaData, loading }) {
 
   // Prepare dynamic data or fallback to static
   const getDynamicCardData = () => {
-    if (strapiScrollData?.cards && strapiScrollData.cards.length > 0) {
-      return strapiScrollData.cards.map(card => ({
-        id: card.id_number || "01",
-        side: card.side || "left",
-        title: card.title || `${isImage ? "Image" : "Video"} Creation`,
-        subtitle: card.subtitle || "Default subtitle text",
-        color: "bg-[#EBEBEB]",
-        image: getStrapiImageUrl(card.image) || `/${isImage ? "image" : "video"}-creation/1.png`,
-        button: card.button_text || "Create",
-      }));
-    }
-    
+    // if (strapiScrollData?.cards && strapiScrollData.cards.length > 0) {
+    //   return strapiScrollData.cards.map((card) => ({
+    //     id: card.id_number || "01",
+    //     side: card.side || "left",
+    //     title: card.title || `${isImage ? "Image" : "Video"} Creation`,
+    //     subtitle: card.subtitle || "Default subtitle text",
+    //     color: "bg-[#EBEBEB]",
+    //     image:
+    //       getStrapiImageUrl(card.image) ||
+    //       `/${isImage ? "image" : "video"}-creation/1.png`,
+    //     button: card.button_text || "Create",
+    //   }));
+    // }
+
     // Fallback to static data
     return [
       {
         id: "01",
         side: "left",
         title: `${isImage ? "Image" : "Video"} Creation`,
-        subtitle:
-          "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+        subtitle: isImage
+          ? "Create product shots, lookbook spreads, and campaign images in seconds. Choose styles or upload your own work to make it yours."
+          : "Create campaign clips, reels, and product stories in minutes. Choose styles, adjust settings, or upload your own content to make it yours.",
         color: "bg-[#EBEBEB]",
         image: `/${isImage ? "image" : "video"}-creation/1.png`,
         button: "Create",
@@ -44,9 +47,10 @@ export default function GSAPScrollSection({ isImage, mediaData, loading }) {
       {
         id: "02",
         side: "right",
-        title: "Share your Video",
-        subtitle:
-          "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+        title: isImage ? "Share your image" : "Share your Video",
+        subtitle: isImage
+          ? "Showcase your lookbooks, product shots, and campaign visuals with the community. Get inspired and connect with other creators."
+          : "Show your work with the community. Upload your video, explore styles, and get inspired by other creators.",
         color: "bg-[#EBEBEB]",
         button: "Community",
         image: `/${isImage ? "image" : "video"}-creation/2.png`,
@@ -54,19 +58,21 @@ export default function GSAPScrollSection({ isImage, mediaData, loading }) {
       {
         id: "03",
         side: "left",
-        title: "Edit all vidoes",
-        subtitle:
-          "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+        title: isImage ? "Edit your images" : "Edit your videos",
+        subtitle: isImage
+          ? "Refine your visuals with simple tools. Adjust size, style, and quality to make every image match your brand."
+          : "Adjust size, style, quality, and duration with simple controls. Upload your own work or customize AI generated clips to fit your brand.",
         color: "bg-[#EBEBEB]",
-        button: "Customization",
+        button: isImage ? "Customize" : "Customization",
         image: `/${isImage ? "image" : "video"}-creation/3.png`,
       },
       {
         id: "04",
         side: "right",
-        title: "Save into your Folders",
-        subtitle:
-          "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+        title: isImage ? "Save your images" : "Save your work",
+        subtitle: isImage
+          ? "Keep your product shots, lookbooks, and campaign visuals organized in folders. Access them anytime in one place."
+          : "Keep every video, lookbook, and product visual organized in folders. Access your projects anytime and stay on top of your brand assets.",
         color: "bg-[#EBEBEB]",
         button: "Storage",
         image: `/${isImage ? "image" : "video"}-creation/4.png`,
@@ -74,11 +80,12 @@ export default function GSAPScrollSection({ isImage, mediaData, loading }) {
       {
         id: "05",
         side: "left",
-        title: "Download the Video",
-        subtitle:
-          "Chose from a selection of high-quality AI models and experiment a selection of settings and presets. Seamlessly incorporate style elements or upload your own work for ",
+        title: isImage ? "Download your image" : "Download your Video",
+        subtitle: isImage
+          ? "Export your product shots, lookbooks, and campaign visuals in the format you need. High quality and ready to share anywhere."
+          : "Export your creations in the format you need. Save campaign clips, reels, or product videos in high quality and ready to share anywhere.",
         color: "bg-[#EBEBEB]",
-        button: "Storage",
+        button: isImage ? "Download" : "Storage",
         image: `/${isImage ? "image" : "video"}-creation/5.png`,
       },
     ];

@@ -6,72 +6,72 @@ import { getStrapiImageUrl } from "@/utils/strapi";
 function Work({ currentKey, assistantData, loading }) {
   const sectionData = {
     strategyAssistant: {
-      heading: ["How ", "Mira", " Empowers Strategy Assistant"],
+      heading: ["How ", "Mira", " Helps you build strategy"],
       description:
-        "With Mira, you can enhance your strategic workflows using powerful AI support. From turning insights into actionable roadmaps to aligning teams around clear priorities, Mira helps you plan smarter, adapt faster, and make confident, data-driven decisions that move your business forward.",
+        "From insights to action, Mira gives you clear plans and growth paths so you can move forward with confidence.",
       data: [
         {
           id: 1,
           logo: "/ai-assistants/strategy-assistant/1.svg",
-          title: "Refine Strategic Thinking",
+          title: "Sharpen your vision",
           content:
-            "Generate market insights, SWOT analyses, and competitive positioning in seconds. Mira helps you focus on making bold, data-backed strategic moves.",
+            "Get clear insights and recommendations to guide your next move.",
         },
         {
           id: 2,
           logo: "/ai-assistants/strategy-assistant/2.svg",
-          title: "Visualize Actionable Roadmaps",
+          title: "Turn goals into plans",
           content:
-            "Transform goals into interactive strategic roadmaps, complete with timelines, milestones, and dependencies—perfectly aligned with business objectives.",
+            "See your big ideas mapped into simple, actionable roadmaps.",
         },
         {
           id: 3,
           logo: "/ai-assistants/strategy-assistant/3.svg",
-          title: "Built for Strategic Planners",
+          title: "Save time on planning",
           content:
-            "Automate research summaries, stakeholder alignment decks, and framework creation like OKRs or 7Ps—so you spend less time structuring and more time thinking.",
+            "Automate research and summaries so you can focus on execution.",
         },
         {
           id: 4,
           logo: "/ai-assistants/strategy-assistant/4.svg",
-          title: "Plan & Execute with Confidence",
+          title: "Move from plan to results",
           content:
-            "From idea to execution, Mira supports you in building clear strategies, measuring KPIs, and adapting plans in real-time—ensuring strategy turns into results.",
+            "Track progress, adapt in real time, and hit your growth goals.",
         },
       ],
     },
     brandDesigner: {
-      heading: ["How ", "Zara", " Empowers do Brand design"],
+      heading: ["How ", "Zara", " Helps you brand your design"],
       description:
-        "With Zara, you can unlock your brand design potential. Create distinctive visual identities with AI-powered support—whether you’re developing logos, brand guidelines, packaging, or digital assets. Streamline your design process and stay focused on crafting impactful, consistent brand experiences.",
+        "From logos to full brand kits, Zara makes sure your identity feels consistent and polished across every deck, campaign, and channel.",
       data: [
         {
           id: 1,
           logo: "/ai-assistants/brand-designer/1.svg",
-          title: "Elevate Your Artistic Expression",
+          title: "Bring your vision to life",
           content:
-            "Create stunning digital designs, concept art, portraits, and illustrations tailored to your unique style. Enhance your artistic workflow, maximize your creative output, and reduce time spent on ideation.",
+            "Create logos, color palettes, and brand systems that match your style.",
         },
         {
           id: 2,
           logo: "/ai-assistants/brand-designer/2.svg",
-          title: "Experiment with Endless Styles",
+          title: "Explore styles with ease",
           content:
-            "Rapidly explore and iterate on artistic concepts, discovering the perfect blend of style and subject that resonates with your vision and captivates your audience.",
+            "Test different looks, from minimal to editorial, until you find the perfect fit.",
         },
         {
           id: 3,
           logo: "/ai-assistants/brand-designer/3.svg",
-          title: "AI-First Tools, Designed For Artists",
+          title: "Stay consistent everywhere",
           content:
-            "Break free from conventional limitations and infuse your own artwork with unique personalized elements, ensuring your creations stand out in galleries, online platforms, and beyond.",
+            "Build guidelines that keep your look aligned across all platforms.",
         },
         {
           id: 4,
           logo: "/ai-assistants/brand-designer/4.svg",
-          title: "A New Way of Creating Digital Art",
+          title: "Design fast, look pro",
           content:
-            "Swiftly adjust visual concepts as you go, seamlessly integrating new ideas without breaking your creative momentum.",
+            "Skip long revisions and get brand assets you can use instantly.",
         },
       ],
     },
@@ -146,60 +146,47 @@ function Work({ currentKey, assistantData, loading }) {
       ],
     },
     seo: {
-      heading: ["How ", "Novi", " Empowers SEO Specialist"],
+      heading: ["How ", "Novi", " improves your SEO"],
       description:
         "Novi enhances your SEO strategy with AI-driven tools that help you write, refine, and optimize web content efficiently. From keyword planning to metadata creation and performance insights, Novi supports your workflow—so you can achieve better search rankings faster and smarter.",
       data: [
         {
           id: 1,
           logo: "/ai-assistants/seo/1.svg",
-          title: "Optimize Content with Confidence",
+          title: "Optimize content easily",
           content:
-            "Generate user flows, journey maps, and layout ideas instantly. Zara helps you stay focused on solving real problems with meaningful design",
+            "Get keyword ideas, headlines, and structure suggestions that make your content search friendly.",
         },
         {
           id: 2,
           logo: "/ai-assistants/seo/2.svg",
-          title: "Data-Backed Suggestions",
+          title: "Data-backed insights",
           content:
-            "Craft pixel-perfect UI with component suggestions, accessibility tips, and consistency checks—while keeping your brand’s design system intact.",
+            "See what’s working with analytics and suggestions for better performance.",
         },
         {
           id: 3,
           logo: "/ai-assistants/seo/3.svg",
-          title: "Built for Scalable SEO",
+          title: "Scalable SEO",
           content:
-            "Automate tedious tasks like responsive resizing, style clean-up, and annotation generation so you can focus on crafting better experiences.",
+            "Automate tasks like metadata, links, and formatting so your site is always optimized.",
         },
         {
           id: 4,
           logo: "/ai-assistants/seo/4.svg",
-          title: "Track & Improve Performance",
+          title: "Track and improve",
           content:
-            "Quickly turn wireframes into test-ready prototypes with interactive logic and user flow validation—getting you from concept to delivery in record time.",
+            "Measure rankings, monitor results, and refine your strategy in real time.",
         },
       ],
     },
   };
 
   // Get dynamic data from Strapi or fallback to static data
-  const strapiWorkData = assistantData[currentKey]?.work;
-  const fallbackSection = sectionData[currentKey];
-  
-  const currentSection = strapiWorkData ? {
-    heading: [
-      strapiWorkData.headingPre || fallbackSection?.heading[0],
-      strapiWorkData.headingHighlight || fallbackSection?.heading[1],
-      strapiWorkData.headingPost || fallbackSection?.heading[2]
-    ],
-    description: strapiWorkData.description || fallbackSection?.description,
-    data: strapiWorkData.cards?.map((card, index) => ({
-      id: card.id || index + 1,
-      logo: getStrapiImageUrl(card.logo) || fallbackSection?.data[index]?.logo,
-      title: card.title || fallbackSection?.data[index]?.title,
-      content: card.content || fallbackSection?.data[index]?.content
-    })) || fallbackSection?.data
-  } : fallbackSection;
+  // const strapiWorkData = assistantData[currentKey]?.work;
+  // const fallbackSection = sectionData[currentKey];
+
+  const currentSection = sectionData[currentKey];
 
   if (!currentSection) return null;
 
@@ -214,9 +201,9 @@ function Work({ currentKey, assistantData, loading }) {
 
   // Create ref and inView hook for scroll trigger
   const ref = useRef(null);
-  const isInView = useInView(ref, { 
+  const isInView = useInView(ref, {
     threshold: 0.1, // Trigger when 10% visible
-    once: true // Only trigger once
+    once: true, // Only trigger once
   });
 
   // Animation variants

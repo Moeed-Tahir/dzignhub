@@ -13,7 +13,13 @@ import Colors from "./Colors";
 import { useUserStore } from "@/store/store";
 import { toast } from "react-toastify";
 
-const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefresh }) => {
+const Sidebar = ({
+  onGenerate,
+  isImagePage,
+  showClose = false,
+  onClose,
+  onRefresh,
+}) => {
   const router = useRouter();
   const [textValue, setTextValue] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -60,7 +66,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
         url: url,
         prompt: prompt,
         isMultiple: isMultiple,
-        size: size
+        size: size,
       };
       const req = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/save-generation`,
@@ -75,7 +81,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
       );
 
       const res = await req.json();
-      
     } catch (error) {
       console.error("Error saving generation:", error);
     }
@@ -147,7 +152,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
         console.log(res);
         if (res.type == "success" || res.type == "partial_success") {
           if (onGenerate) onGenerate();
-          
+
           // Save the generation to the database
           if (selectedQuality > 1) {
             await saveGeneration("image", res.images, textValue, true);
@@ -155,7 +160,7 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
             await saveGeneration("image", res.images[0], textValue, false);
           }
           SetGenerateImages(res.images);
-          
+
           // Refresh the generations data to include the new image
           if (onRefresh) {
             await onRefresh();
@@ -235,8 +240,14 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
           SetGenerateVideo([res.video]);
 
           // Save the generation to the database
-          await saveGeneration("video", res.video.videoUrl, textValue, false, res.video.fileSize);
-          
+          await saveGeneration(
+            "video",
+            res.video.videoUrl,
+            textValue,
+            false,
+            res.video.fileSize
+          );
+
           // Refresh the generations data to include the new video
           if (onRefresh) {
             await onRefresh();
@@ -275,7 +286,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
             height={100}
             className="w-[108px] h-[25px] object-contain"
           />
-        
         </div>
         {showClose && (
           <button
@@ -287,7 +297,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
           </button>
         )}
       </div>
-
       {/* Tabs */}
       <div className="flex bg-[#F8F8F8] p-1 h-[40px] w-[310px] rounded-[8px] mt-4 ">
         <button
@@ -311,7 +320,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
           Image to {isImagePage ? "Image" : "Video"}
         </button>
       </div>
-
       <TextArea
         placeholder={
           isImagePage
@@ -325,7 +333,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
         uploadedImage={uploadedImageFromTextArea}
         onImageRemove={handleImageRemoveFromTextArea}
       />
-
       {!isImagePage && (
         <UploadImage
           startImage={startImage}
@@ -334,7 +341,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
           onEndImageChange={setEndImage}
         />
       )}
-
       {/* Collapsible Style Section */}
       <details open className="block lg:hidden">
         <summary className="font-medium text-[16px] mb-2 cursor-pointer">
@@ -353,49 +359,12 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
           isImagePage={isImagePage}
         />
       </div>
-
-      {/* Size */}
-      <Size selected={selectedSize} onChange={setSelectedSize} />
-
-      {/* {isImagePage && (
-        <>
-          <Colors selected={selectedColors} onChange={setSelectedColors} />
-
-          <div>
-            <div className="flex justify-start my-2 items-center gap-2">
-              <Image
-                src="/creation/layer.svg"
-                alt="Style"
-                width={100}
-                height={100}
-                className="w-[22px] h-[22px] object-cover rounded-md"
-              />
-              <span className="text-[18px] font-normal text-[#202126] ">
-                Quantity
-              </span>
-            </div>
-
-            <div className="bg-[#F7F8F8] flex justify-between items-center rounded-full px-[12px] py-[8px]">
-              <p
-                className="bg-white rounded-full flex justify-center items-center h-[28px] text-[18px] w-[28px]"
-                onClick={() =>
-                  selectedQuantity > 1 &&
-                  setSelectedQuantity(selectedQuantity - 1)
-                }
-              >
-                -
-              </p>
-              <p>{selectedQuantity}</p>
-              <p
-                className="bg-white rounded-full flex justify-center items-center h-[28px] w-[28px] text-[18px]"
-                onClick={() => setSelectedQuantity(selectedQuantity + 1)}
-              >
-                +
-              </p>
-            </div>
-          </div>
-        </>
-      )} */}
+      <Size
+        selected={selectedSize}
+        onChange={setSelectedSize}
+        isImagePage={isImagePage}
+      />
+     
 
       {!isImagePage && (
         <>
@@ -406,17 +375,12 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
           />
         </>
       )}
-
       {isError && (
         <p className="text-red-500 text-sm mt-2 ml-3 text-start">{error}</p>
       )}
-
-      {/* Generate Button */}
-
       <button
         type="submit"
-        className={`w-full bg-[#BDFF00]
-        } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
+        className={`w-full bg-[#BDFF00]         } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
         // disabled={!isValid}
         onClick={handleGenerate}
       >
@@ -426,7 +390,6 @@ const Sidebar = ({ onGenerate, isImagePage, showClose = false, onClose, onRefres
           "Generate"
         )}
       </button>
-
       <ProCard />
     </div>
   );

@@ -17,35 +17,35 @@ const ForgetPass = () => {
     email: "admin@example.com",
   };
 
-
   const sendResetOtp = async (email) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/forgot-password`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({email: email}),
-      });
-  
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/forgot-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: email }),
+        }
+      );
+
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       if (data.type === "success") {
-        router.push(`/auth/password-reset?email=${encodeURIComponent(formData.email)}`);
+        router.push(
+          `/auth/password-reset?email=${encodeURIComponent(formData.email)}`
+        );
       } else {
         setErrors({ email: data.message || "Failed to send reset link" });
       }
-    }
-    catch(error) {
+    } catch (error) {
       setErrors({ email: "Failed to send reset link" });
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
-  }
-
-
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -65,14 +65,12 @@ const ForgetPass = () => {
     const newErrors = {};
 
     if (formData.email == "" || formData.email == null) {
-      newErrors.email =
-        "Email is required";
+      newErrors.email = "Email is required";
     }
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // alert("Password reset link sent!");
       sendResetOtp(formData.email);
     }
   };
@@ -83,7 +81,7 @@ const ForgetPass = () => {
         Forgot Password?
       </h2>
       <p className="text-[#44444A] text-[14px] mb-6 text-center">
-        Just follow the steps to get back into your Koajo account!
+        Enter your email and we will send you a reset link right away
       </p>
 
       <form onSubmit={handleSubmit}>
@@ -99,15 +97,14 @@ const ForgetPass = () => {
 
         <button
           type="submit"
-           className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4 flex justify-center items-center"
+          className="w-full bg-[#BDFF00] cursor-pointer text-black text-[16px] font-semibold p-3 rounded-full mb-4 flex justify-center items-center"
           disabled={!formData.email || isLoading}
         >
-           {isLoading ? (
+          {isLoading ? (
             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
           ) : (
             "Reset Password"
           )}
-          
         </button>
 
         <button

@@ -1,9 +1,6 @@
-// app/api/auth/[...nextauth]/route.js
-
-
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import axios from 'axios';
+import axios from "axios";
 
 const handler = NextAuth({
   providers: [
@@ -20,12 +17,15 @@ const handler = NextAuth({
       // Only when logging in
       if (account && profile) {
         try {
-          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/social-login`, {
-            email: profile.email,
-            name: profile.name,
-            image: profile.picture,
-            provider: account.provider,
-          });
+          const res = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/social-login`,
+            {
+              email: profile.email,
+              name: profile.name,
+              image: profile.picture,
+              provider: account.provider,
+            }
+          );
 
           const { jwtToken, userId } = res.data;
 

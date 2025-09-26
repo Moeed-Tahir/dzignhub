@@ -88,7 +88,9 @@ export default function Hero({
   // Use dynamic hero section data if available, otherwise use props or fallback
   const heroData = heroSection || {
     mainHeading: mainHeading || "AllMyAI SuperAI",
-    mainDescription: mainDescription || "Your all-in-one AI Co-Creator. Bring your brand, products, and presentations to life. Instantly.",
+    mainDescription:
+      mainDescription ||
+      "Your all-in-one AI Co-Creator. Bring your brand, products, and presentations to life. Instantly.",
     announcementIcon: null,
     announcementText: "New Agent Release",
     earlyAccessText: "Get early access",
@@ -129,16 +131,17 @@ export default function Hero({
         initial="hidden"
         animate="visible"
       >
-        {/* Top section (announcement + heading + paragraph) */}
         <div className="flex flex-col lg:gap-[16px] mx-auto gap-5 sm:gap-[32px]">
-          {/* Announcement */}
           {processedHeroData.showAnnouncement && (
             <motion.div
               className="lg:w-auto lg:px-3 lg:gap-4 lg:h-[42px] w-[250px] h-[44px] flex items-center justify-around rounded-full mx-auto bg-[#212e62] "
               variants={announcementVariants}
             >
-              <div className="w-[24px] h-[24px] p-[1px] rounded-lg bg-gradient-to-tr from-[#5AE2B9] via-[#DCCC3A] to-[#1A76FF]">
-                <div className="w-full h-full bg-black rounded-lg flex items-center justify-center">
+              <div
+                className="w-[28px] h-[20px] rounded-sm bg-gradient-to-tr from-[#5AE2B9] via-[#DCCC3A] to-[#1A76FF]"
+                style={{ boxShadow: "0 0 6px #5AE2B9" }}
+              >
+                <div className="w-full h-full bg-black rounded-sm flex items-center justify-center">
                   {processedHeroData.announcementIcon ? (
                     <img
                       src={
@@ -149,10 +152,11 @@ export default function Hero({
                       className="w-[13px] h-[13px]"
                     />
                   ) : (
-                    <MdTranslate className="w-[13px] h-[13px] text-white" />
+                    <MdTranslate className="w-[13px] h-[13px] text-white shadow-[#BDFF00] shadow-2xl" />
                   )}
                 </div>
               </div>
+
               <p className="text-[#FFFFFF] text-[18px] font-medium">
                 {processedHeroData.announcementText}
               </p>

@@ -420,7 +420,7 @@ const CardsAnimation = ({ cards = [] }) => {
         <div className="max-w-[1440px] w-full mx-auto px-6 py-20 h-full flex flex-col justify-center relative z-10">
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-8 lg:gap-16 items-center min-h-[600px]">
             <div
-              className="relative h-[300px] lg:h-[500px] flex items-center justify-center order-1 lg:order-none"
+              className="relative h-[300px] lg:h-[300px] flex items-center justify-center order-1 lg:order-none"
               style={{ perspective: "1000px" }}
             >
               {cardsData.map((card, index) => (

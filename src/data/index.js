@@ -2,12 +2,12 @@ const aiBots = {
   zara: {
     name: "Zara",
     tagline:
-      "I specialize in brand design — logos, mood boards, and color palettes.",
+      "I shape your brand identity. From logos to moodboards, I give your vision a look that lasts.",
     description: "Describe what you need or choose a suggested prompt below",
     suggestions: [
-      "🖌️ Design a logo for a fashion brand",
-      "🎨 Pick brand colors for a tech company",
-      "🎯 Create a mood board for a fashion line",
+      "🖌️ Design a logo for my fashion brand",
+      "🎨 Create a moodboard for my new line",
+      "🎯 Pick colors and fonts for my identity",
     ],
     img: "/Ai/ai-dp.png",
     placeholder: "Hello, help me create things for a fashion brand",
@@ -19,12 +19,12 @@ const aiBots = {
     placeholder: "Hey, I need help with creating content for social media",
 
     tagline:
-      "I specialize in content creation — social media posts, blog ideas, and video scripts.",
+      "I turn ideas into words that connect. From posts to blogs to scripts, I create content your audience remembers.",
     description: "Describe what you need or choose a suggested prompt below",
     suggestions: [
-      "🖌️ Generate a blog post idea for my niche",
+      "🖌️ Generate a blog post idea for my brand",
       "🎨 Plan a week of social media content",
-      "🎯 Write a script for a short video or reel",
+      "🎯 Write a script for a video or reel",
     ],
   },
 
@@ -34,13 +34,13 @@ const aiBots = {
     placeholder: "Hi Mira, I want to grow my business, where should I start?",
 
     tagline:
-      "I specialize in Strategy — Defend goals,  clarify your audience,  and shape your path to growth.",
+      "I help you see the big picture. From goals to launch plans, I give your brand a clear path to grow.",
     description:
       "Tell me about your business or choose a prompt below to begin building your strategic roadmap.",
     suggestions: [
-      "🎯  Define my value proposition",
-      "🌱 Get growth ideas for my business",
-      "🚀 Build a launch plan step by step",
+      "🎯 Define my value proposition",
+      "🌱 Create a launch plan step by step",
+      "🚀 Find growth ideas for my business",
     ],
   },
   novi: {
@@ -49,13 +49,13 @@ const aiBots = {
     placeholder: "Can you help me optimize my website for search engines?",
 
     tagline:
-      "I specialize in SEO — keywords, metadata, content structure, and traffic strategies.",
+      "I help your brand get seen. From keywords to blog posts, I make sure your products and campaigns reach the right audience.",
     description:
       "Type your question or choose one of the suggested prompts below to get started.",
     suggestions: [
       "🔍 Suggest keywords for my website",
       "⚒️ Optimize a blog post for SEO",
-      "📈 Analyze and improve my homepage SEO",
+      "📈 Improve my homepage SEO",
     ],
   },
   kano: {
@@ -64,13 +64,13 @@ const aiBots = {
     placeholder: "I need help designing a clean interface for my app",
 
     tagline:
-      "I’m your UI/UX design companion — here to help you create intuitive flows, wireframes, design systems, and pixel-perfect interfaces.",
+      "I design smooth experiences. From layouts to flows, I make your apps and websites feel effortless. ",
     description:
       "Tell me about your product or select one of the prompts below to start designing faster and smarter.",
     suggestions: [
-      "🧭 Map out navigation for your product.",
-      "📝 Quickly sketch the structure of your app",
-      "🧭 Define your colors, and typography styles.",
+      "🧭Map the navigation for my product",
+      "📝 Sketch the layout for my app",
+      "🧭 Refine my design system",
     ],
   },
 
@@ -107,8 +107,7 @@ const aiBots = {
       "I'm Super AI, your versatile assistant ready to help with a wide range of tasks and inquiries.",
     description:
       "Whether you need assistance with writing, brainstorming, coding, or general questions, I'm here to make your life easier.",
-    suggestions: [
-    ],
+    suggestions: [],
   },
   "fashion-ai": {
     name: "Fashion Ai",
@@ -117,8 +116,7 @@ const aiBots = {
       "I'm Super AI, your versatile assistant ready to help with a wide range of tasks and inquiries.",
     description:
       "Whether you need assistance with writing, brainstorming, coding, or general questions, I'm here to make your life easier.",
-    suggestions: [
-    ],
+    suggestions: [],
   },
 };
 

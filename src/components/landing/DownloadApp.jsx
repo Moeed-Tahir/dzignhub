@@ -12,11 +12,11 @@ function DownloadApp() {
       <div className="flex flex-col md:gap-[12px] gap-[10px] w-full md:max-w-[50%]  px-[20px] py-[20px]  text-[#FFFFFF]">
         <h2 className="md:text-[20px] text-[18px] font-semibold">
           {" "}
-          Download Your One & Only App Now
+          Download the AllMyAI App
         </h2>
         <p className="md:text-[16px] text-[#b2b5c7] text-[14px]">
-          Chose from a selection of high-quality AI models and experiment a
-          selection of settings and presets.
+          Your full AI team on the go. Create lookbooks, pitch decks, and
+          product visuals anytime, anywhere.
         </p>
 
         <button className="absolute left-[20px] bottom-[10%] text-black w-[186px] h-[48px] px-[24px] py-[spacing-lg] rounded-[40px] border border-[#BDFF00] bg-[#BDFF00] backdrop-blur-[12px] shadow-[0px_8px_10.9px_#0003121F,0px_1px_1px_#0003124D]">

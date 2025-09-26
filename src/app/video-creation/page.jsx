@@ -16,17 +16,16 @@ const page = () => {
   const [mediaData, setMediaData] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // Fetch media data on component mount
   useEffect(() => {
     const loadMediaData = async () => {
       try {
         setLoading(true);
-        console.log('VideoCreation: Starting to fetch media data...');
+        console.log("VideoCreation: Starting to fetch media data...");
         const data = await fetchMediaPageData();
-        console.log('VideoCreation: Fetched media data:', data);
+        console.log("VideoCreation: Fetched media data:", data);
         setMediaData(data);
       } catch (error) {
-        console.error('VideoCreation: Error loading media data:', error);
+        console.error("VideoCreation: Error loading media data:", error);
       } finally {
         setLoading(false);
       }
@@ -34,6 +33,14 @@ const page = () => {
 
     loadMediaData();
   }, []);
+
+  const heroData = {
+    headline: mediaData?.videoCreation?.hero?.headline || "Video Creation",
+    subheadline:
+      "Create stunning videos with ease. From campaign clips to social reels, your AI assistant helps you tell stories that move your audience.",
+    ctaText: mediaData?.videoCreation?.hero?.ctaText || "Create video",
+  };
+
   return (
     <div className={`overflow-hidden w-full relative ${sidebarOpen ? "" : ""}`}>
       <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
@@ -45,33 +52,41 @@ const page = () => {
           />
         </div>
         <div className="max-w-[1440px] mx-auto">
-          <Hero isVideoPage={true} mediaData={mediaData} loading={loading} />
+          <Hero isVideoPage={true} heroData={heroData} loading={loading} />
         </div>
       </div>
       <div className="mt-[55px] md:w-full w-[90%] mx-auto  ">
         <p className="text-[30px] font-medium  md:text-[48px] md:font-semibold text-center text-black">
-          <span className="text-[#C209C1] ">Most advanced</span> tools for Image
+          <span className="text-[#C209C1] ">Powerful tools</span> for creators
           <br />
-          editing in one place
         </p>
         <p className="text-[18px] text-center text-[#3d4050] mt-2">
-          We constantly add new features and improve existing ones.
+          Edit, enhance, and bring your vision to life with smart AI features
+          that are always improving.
         </p>
       </div>
       <div className=" md:mt-[-200px] ">
-        <GSAPScrollSection isImage={false} mediaData={mediaData} loading={loading} />
+        <GSAPScrollSection
+          isImage={false}
+          mediaData={mediaData}
+          loading={loading}
+        />
       </div>
 
       <div className="mx-auto ">
         <CreationWork isImage={false} mediaData={mediaData} loading={loading} />
         <ToolKit isImage={false} mediaData={mediaData} loading={loading} />
-        <FAQ 
-          faqData={mediaData?.videoCreation?.faq?.faqs} 
+        <FAQ
+          faqData={mediaData?.videoCreation?.faq?.faqs}
           title={mediaData?.videoCreation?.faq?.title}
           subtitle={mediaData?.videoCreation?.faq?.subtitle}
           loading={loading}
         />
-        <DownloadSection isImage={false} mediaData={mediaData} loading={loading} />
+        <DownloadSection
+          isImage={false}
+          mediaData={mediaData}
+          loading={loading}
+        />
         <Footer />
       </div>
     </div>

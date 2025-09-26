@@ -8,14 +8,9 @@ import { toast } from "react-toastify";
 function Hero({ isImage, isVideoPage, mediaData, loading }) {
   const router = useRouter();
   const [prompt, setPrompt] = React.useState("");
-
-  // Determine the media key based on props
   const mediaKey = isImage ? "imageCreation" : "videoCreation";
-
-  // Get Strapi data for the current media type
   const strapiHeroData = mediaData?.[mediaKey]?.hero;
 
-  // Prepare dynamic content with fallbacks
   const getTitle = () => {
     return (
       strapiHeroData?.title || (isImage ? "Image Creation" : "Video Creation")
@@ -23,10 +18,7 @@ function Hero({ isImage, isVideoPage, mediaData, loading }) {
   };
 
   const getSubtitle = () => {
-    return (
-      strapiHeroData?.subtitle ||
-      "Create stunning videos effortlessly using powerful manual tools or let our AI assistants help you craft content faster."
-    );
+    return "Design campaign visuals, lookbook spreads, and product shots in seconds. Your AI assistant adapts to your style so every image feels on brand.";
   };
 
   const getPlaceholderPrompt = () => {
