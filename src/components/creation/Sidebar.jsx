@@ -364,43 +364,7 @@ const Sidebar = ({
         onChange={setSelectedSize}
         isImagePage={isImagePage}
       />
-      <>
-        <Colors selected={selectedColors} onChange={setSelectedColors} />
-
-        <div>
-          <div className="flex justify-start my-2 items-center gap-2">
-            <Image
-              src="/creation/layer.svg"
-              alt="Style"
-              width={100}
-              height={100}
-              className="w-[22px] h-[22px] object-cover rounded-md"
-            />
-            <span className="text-[18px] font-normal text-[#202126] ">
-              Quantity
-            </span>
-          </div>
-
-          <div className="bg-[#F7F8F8] flex justify-between items-center rounded-full px-[12px] py-[8px]">
-            <p
-              className="bg-white rounded-full flex justify-center items-center h-[28px] text-[18px] w-[28px]"
-              onClick={() =>
-                selectedQuantity > 1 &&
-                setSelectedQuantity(selectedQuantity - 1)
-              }
-            >
-              -
-            </p>
-            <p>{selectedQuantity}</p>
-            <p
-              className="bg-white rounded-full flex justify-center items-center h-[28px] w-[28px] text-[18px]"
-              onClick={() => setSelectedQuantity(selectedQuantity + 1)}
-            >
-              +
-            </p>
-          </div>
-        </div>
-      </>
+     
 
       {!isImagePage && (
         <>
