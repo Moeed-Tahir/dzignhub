@@ -273,187 +273,160 @@ const Sidebar = ({
   };
 
   return (
-    <div
-      className={`fixed top-0 right-0 h-full w-[320px] bg-white shadow-lg z-50 transition-transform duration-300 ${
-        open ? "translate-x-0" : "translate-x-full"
-      }`}
-    >
-      <div className="h-full overflow-y-auto p-4">
-        <div className="flex flex-col gap-4 p-4 bg-white rounded-[24px]">
-          <div className="flex items-center justify-between gap-2 ">
-            <div
-              onClick={() => router.push("/dashboard")}
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <Image
-                src="/Logo.svg"
-                alt="Logo"
-                width={100}
-                height={100}
-                className="w-[108px] h-[25px] object-contain"
-              />
-            </div>
-            {showClose && (
-              <button
-                className="ml-2 text-gray-500 hover:text-black text-lg px-2 py-1 rounded-full"
-                onClick={onClose}
-                aria-label="Close sidebar"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-
-          {/* Tabs */}
-          <div className="flex bg-[#F8F8F8] p-1 h-[40px] w-[310px] rounded-[8px] mt-4 ">
-            <button
-              className={`flex-1 px-4  text-sm font-medium rounded-[8px] transition-colors ${
-                activeTab === "text-to-image"
-                  ? "bg-white text-[#28282C] "
-                  : "text-[#68686B] hover:text-gray-800"
-              }`}
-              onClick={() => setActiveTab("text-to-image")}
-            >
-              Text to {isImagePage ? "Image" : "Video"}
-            </button>
-            <button
-              className={`flex-1 px-4  text-sm font-medium rounded-[8px] transition-colors ${
-                activeTab === "image-to-image"
-                  ? "bg-white text-[#28282C] "
-                  : "text-[#68686B] hover:text-gray-800"
-              }`}
-              onClick={() => setActiveTab("image-to-image")}
-            >
-              Image to {isImagePage ? "Image" : "Video"}
-            </button>
-          </div>
-
-          <TextArea
-            placeholder={
-              isImagePage
-                ? "Describe your image"
-                : "Generate for me an image with lion under the tree"
-            }
-            value={textValue}
-            onChange={(e) => setTextValue(e.target.value)}
-            showUploadIcon={activeTab === "image-to-image"}
-            onImageUpload={handleImageUploadFromTextArea}
-            uploadedImage={uploadedImageFromTextArea}
-            onImageRemove={handleImageRemoveFromTextArea}
+    <div className="flex flex-col gap-4 p-4 bg-white rounded-[24px]">
+      <div className="flex items-center justify-between gap-2 ">
+        <div
+          onClick={() => router.push("/dashboard")}
+          className="flex items-center gap-2 cursor-pointer"
+        >
+          <Image
+            src="/Logo.svg"
+            alt="Logo"
+            width={100}
+            height={100}
+            className="w-[108px] h-[25px] object-contain"
           />
-
-          {!isImagePage && (
-            <UploadImage
-              startImage={startImage}
-              endImage={endImage}
-              onStartImageChange={setStartImage}
-              onEndImageChange={setEndImage}
-            />
-          )}
-
-          {/* Collapsible Style Section */}
-          <details open className="block lg:hidden">
-            <summary className="font-medium text-[16px] mb-2 cursor-pointer">
-              Style
-            </summary>
-            <Style
-              selected={selectedStyle}
-              onChange={setSelectedStyle}
-              isImagePage={isImagePage}
-            />
-          </details>
-          <div className="hidden lg:block">
-            <Style
-              selected={selectedStyle}
-              onChange={setSelectedStyle}
-              isImagePage={isImagePage}
-            />
-          </div>
-
-          {/* Size */}
-
-          <Size
-            selected={selectedSize}
-            onChange={setSelectedSize}
-            isImagePage={isImagePage}
-          />
-
-          {/* {isImagePage && (
-        <>
-          <Colors selected={selectedColors} onChange={setSelectedColors} />
-
-          <div>
-            <div className="flex justify-start my-2 items-center gap-2">
-              <Image
-                src="/creation/layer.svg"
-                alt="Style"
-                width={100}
-                height={100}
-                className="w-[22px] h-[22px] object-cover rounded-md"
-              />
-              <span className="text-[18px] font-normal text-[#202126] ">
-                Quantity
-              </span>
-            </div>
-
-            <div className="bg-[#F7F8F8] flex justify-between items-center rounded-full px-[12px] py-[8px]">
-              <p
-                className="bg-white rounded-full flex justify-center items-center h-[28px] text-[18px] w-[28px]"
-                onClick={() =>
-                  selectedQuantity > 1 &&
-                  setSelectedQuantity(selectedQuantity - 1)
-                }
-              >
-                -
-              </p>
-              <p>{selectedQuantity}</p>
-              <p
-                className="bg-white rounded-full flex justify-center items-center h-[28px] w-[28px] text-[18px]"
-                onClick={() => setSelectedQuantity(selectedQuantity + 1)}
-              >
-                +
-              </p>
-            </div>
-          </div>
-        </>
-      )} */}
-
-          {!isImagePage && (
-            <>
-              <Quality
-                selected={selectedQuality}
-                onChange={setSelectedQuality}
-              />
-              <Duration
-                selected={selectedDuration}
-                onChange={setSelectedDuration}
-              />
-            </>
-          )}
-
-          {isError && (
-            <p className="text-red-500 text-sm mt-2 ml-3 text-start">{error}</p>
-          )}
-
-          {/* Generate Button */}
-
-          <button
-            type="submit"
-            className={`w-full bg-[#BDFF00]
-        } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
-            // disabled={!isValid}
-            onClick={handleGenerate}
-          >
-            {isLoading ? (
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
-            ) : (
-              "Generate"
-            )}
-          </button>
-
-          <ProCard />
         </div>
+        {showClose && (
+          <button
+            className="ml-2 text-gray-500 hover:text-black text-lg px-2 py-1 rounded-full"
+            onClick={onClose}
+            aria-label="Close sidebar"
+          >
+            ✕
+          </button>
+        )}
       </div>
+      {/* Tabs */}
+      <div className="flex bg-[#F8F8F8] p-1 h-[40px] w-[310px] rounded-[8px] mt-4 ">
+        <button
+          className={`flex-1 px-4  text-sm font-medium rounded-[8px] transition-colors ${
+            activeTab === "text-to-image"
+              ? "bg-white text-[#28282C] "
+              : "text-[#68686B] hover:text-gray-800"
+          }`}
+          onClick={() => setActiveTab("text-to-image")}
+        >
+          Text to {isImagePage ? "Image" : "Video"}
+        </button>
+        <button
+          className={`flex-1 px-4  text-sm font-medium rounded-[8px] transition-colors ${
+            activeTab === "image-to-image"
+              ? "bg-white text-[#28282C] "
+              : "text-[#68686B] hover:text-gray-800"
+          }`}
+          onClick={() => setActiveTab("image-to-image")}
+        >
+          Image to {isImagePage ? "Image" : "Video"}
+        </button>
+      </div>
+      <TextArea
+        placeholder={
+          isImagePage
+            ? "Describe your image"
+            : "Generate for me an image with lion under the tree"
+        }
+        value={textValue}
+        onChange={(e) => setTextValue(e.target.value)}
+        showUploadIcon={activeTab === "image-to-image"}
+        onImageUpload={handleImageUploadFromTextArea}
+        uploadedImage={uploadedImageFromTextArea}
+        onImageRemove={handleImageRemoveFromTextArea}
+      />
+      {!isImagePage && (
+        <UploadImage
+          startImage={startImage}
+          endImage={endImage}
+          onStartImageChange={setStartImage}
+          onEndImageChange={setEndImage}
+        />
+      )}
+      {/* Collapsible Style Section */}
+      <details open className="block lg:hidden">
+        <summary className="font-medium text-[16px] mb-2 cursor-pointer">
+          Style
+        </summary>
+        <Style
+          selected={selectedStyle}
+          onChange={setSelectedStyle}
+          isImagePage={isImagePage}
+        />
+      </details>
+      <div className="hidden lg:block">
+        <Style
+          selected={selectedStyle}
+          onChange={setSelectedStyle}
+          isImagePage={isImagePage}
+        />
+      </div>
+      <Size
+        selected={selectedSize}
+        onChange={setSelectedSize}
+        isImagePage={isImagePage}
+      />
+      <>
+        <Colors selected={selectedColors} onChange={setSelectedColors} />
+
+        <div>
+          <div className="flex justify-start my-2 items-center gap-2">
+            <Image
+              src="/creation/layer.svg"
+              alt="Style"
+              width={100}
+              height={100}
+              className="w-[22px] h-[22px] object-cover rounded-md"
+            />
+            <span className="text-[18px] font-normal text-[#202126] ">
+              Quantity
+            </span>
+          </div>
+
+          <div className="bg-[#F7F8F8] flex justify-between items-center rounded-full px-[12px] py-[8px]">
+            <p
+              className="bg-white rounded-full flex justify-center items-center h-[28px] text-[18px] w-[28px]"
+              onClick={() =>
+                selectedQuantity > 1 &&
+                setSelectedQuantity(selectedQuantity - 1)
+              }
+            >
+              -
+            </p>
+            <p>{selectedQuantity}</p>
+            <p
+              className="bg-white rounded-full flex justify-center items-center h-[28px] w-[28px] text-[18px]"
+              onClick={() => setSelectedQuantity(selectedQuantity + 1)}
+            >
+              +
+            </p>
+          </div>
+        </div>
+      </>
+
+      {!isImagePage && (
+        <>
+          <Quality selected={selectedQuality} onChange={setSelectedQuality} />
+          <Duration
+            selected={selectedDuration}
+            onChange={setSelectedDuration}
+          />
+        </>
+      )}
+      {isError && (
+        <p className="text-red-500 text-sm mt-2 ml-3 text-start">{error}</p>
+      )}
+      <button
+        type="submit"
+        className={`w-full bg-[#BDFF00]         } text-[#1B1F3B] text-[16px] font-medium p-3 rounded-full mb-4 flex justify-center items-center`}
+        // disabled={!isValid}
+        onClick={handleGenerate}
+      >
+        {isLoading ? (
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+        ) : (
+          "Generate"
+        )}
+      </button>
+      <ProCard />
     </div>
   );
 };
