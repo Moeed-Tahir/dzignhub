@@ -52,10 +52,10 @@ const page = () => {
   const updateNotificationSettings = async () => {
     setLoading(true);
 
-    console.log("Updated settings:", {
-      allEnabled,
-      checks,
-    });
+    // console.log("Updated settings:", {
+    //   allEnabled,
+    //   checks,
+    // });
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/update-notification-settings`,
@@ -77,7 +77,7 @@ const page = () => {
       const data = await response.json();
 
       if (data.type === "success") {
-        console.log("Notification settings updated successfully");
+        // console.log("Notification settings updated successfully");
       } else {
         console.error("Failed to update notification settings");
       }
@@ -124,7 +124,7 @@ const page = () => {
       const data = await response.json();
 
       if (data.type === "success") {
-        console.log("Notification settings fetched successfully");
+        // console.log("Notification settings fetched successfully");
         setAllEnabled(
           data.data.newNotifications &&
             data.data.softwareUpdatesNewsletter &&

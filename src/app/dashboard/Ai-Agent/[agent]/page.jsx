@@ -238,9 +238,9 @@ const page = () => {
 
         // Update the messages state
         setMessages(parsedMessages);
-        console.log(
-          `Loaded ${data.count} messages for conversation ${conversationId}`
-        );
+        // console.log(
+        //   `Loaded ${data.count} messages for conversation ${conversationId}`
+        // );
 
         // Return the messages for the callback
         return parsedMessages;
@@ -267,7 +267,7 @@ const page = () => {
         },
       });
       const data = await res.json();
-      console.log("Token verification response:", data);
+      // console.log("Token verification response:", data);
 
       if (data.type === "success") {
         console.log("Token is valid, user ID:", data.user._id);
@@ -366,7 +366,7 @@ const page = () => {
         },
       });
       const data = await res.json();
-      console.log("Token verification response:", data);
+      // console.log("Token verification response:", data);
 
       if (data.type === "success") {
         console.log("Token is valid, user ID:", data.user._id);
@@ -537,7 +537,11 @@ const page = () => {
 
       <div className="w-full mx-auto">
         <div className="flex justify-between absolute z-[10000] top-0 w-[80%] left-1/2 -translate-x-1/2 items-center py-4">
-          <div className="flex relative gap-2">
+          <div
+            className={` ${
+              isHistoryModalOpen ? "opacity-0" : "opacity-100"
+            } flex relative gap-2 `}
+          >
             <div className="w-8 h-8 bg-white border border-[#E3E3E3] rounded-full  flex justify-center cursor-pointer items-center">
               <HiArrowLongLeft
                 onClick={() => {

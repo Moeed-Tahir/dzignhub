@@ -167,7 +167,7 @@ const PitchDeckLayout = ({ initialPrompt,
         },
       });
       const data = await res.json();
-      console.log("Token verification response:", data);
+      // console.log("Token verification response:", data);
 
       if (data.type === "success") {
         console.log("Token is valid, user ID:", data.user._id);

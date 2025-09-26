@@ -92,7 +92,7 @@ const page = () => {
       const data = await res.json();
       
       if (data.type === "success") {
-        console.log(data.sessions);
+        // console.log(data.sessions);
         setSessions(data.sessions);
       }
     } catch (error) {

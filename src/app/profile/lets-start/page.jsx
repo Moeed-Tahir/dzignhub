@@ -26,7 +26,7 @@ const page = () => {
   const { SetIsLogin, SetEmail, SetUserId } = useUserStore();
 
   const verifyToken = async (token) => {
-    console.log("Verifying token:", token);
+    // console.log("Verifying token:", token);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
         method: "POST",
@@ -36,14 +36,14 @@ const page = () => {
         },
       });
       const data = await res.json();
-      console.log("Token verification response:", data);
+      // console.log("Token verification response:", data);
 
       if (data.type === "success") {
         SetIsLogin(true);
         SetEmail(data.user.email);
         SetUserId(data.user._id);
         let route = localStorage.getItem("route");
-        console.log("Route from localStorage:", route);
+        // console.log("Route from localStorage:", route);
         if (route !== null && route !== undefined) {
           localStorage.removeItem("route");
           router.push(route);
@@ -59,7 +59,7 @@ const page = () => {
   };
 
   const handleNext = async () => {
-    console.log("Current Tab:", currentTab);
+    // console.log("Current Tab:", currentTab);
     setFade(false); // Start fade out
     setLoading(true); // Show spinner and animate bars
     if (
@@ -87,7 +87,7 @@ const page = () => {
       if (currentTab === 0) {
         if (letsStartRef.current) {
           const success = await letsStartRef.current.saveData();
-          console.log("Tab 1 data saved:", success);
+          // console.log("Tab 1 data saved:", success);
           if (success) {
             setCurrentTab(currentTab + 1);
           }
@@ -96,7 +96,7 @@ const page = () => {
         // Always get latest data from ref
         let latestTab2Data = designDirectionRef.current?.getData?.() || {};
         const brandWords = latestTab2Data.brandWords || [];
-        console.log("Latest brandWords:", brandWords);
+        // console.log("Latest brandWords:", brandWords);
         const brandTone = latestTab2Data.brandTone || [];
         const designStyle = latestTab2Data.designStyle || [];
         let errorMsg = "";

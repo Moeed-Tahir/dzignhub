@@ -154,7 +154,7 @@ const ChatbotSidebar = ({
       const data = await response.json();
 
       if (data.success) {
-        console.log("[DEBUG] Title updated successfully");
+        // console.log("[DEBUG] Title updated successfully");
 
         // Update local state
         const updatedConversations = conversations.map((conv) =>
@@ -248,7 +248,7 @@ const ChatbotSidebar = ({
 
       if (data.success) {
         setSearchResults(data.results);
-        console.log(`Found ${data.count} conversation matches`);
+        // console.log(`Found ${data.count} conversation matches`);
       } else {
         console.error("Search failed:", data.error);
         setSearchResults([]);
@@ -279,7 +279,7 @@ const ChatbotSidebar = ({
     setConversationToDelete(null);
 
     try {
-      console.log(`[DEBUG] Deleting conversation: ${id}`);
+      // console.log(`[DEBUG] Deleting conversation: ${id}`);
 
       // Call backend API to delete conversation
       const response = await fetch(
@@ -295,7 +295,7 @@ const ChatbotSidebar = ({
       const data = await response.json();
 
       if (data.success) {
-        console.log("[DEBUG] Conversation deleted successfully");
+        // console.log("[DEBUG] Conversation deleted successfully");
 
         // Remove from local state
         const updatedConversations = conversations.filter(

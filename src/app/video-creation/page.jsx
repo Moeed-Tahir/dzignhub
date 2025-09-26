@@ -20,9 +20,9 @@ const page = () => {
     const loadMediaData = async () => {
       try {
         setLoading(true);
-        console.log("VideoCreation: Starting to fetch media data...");
+        // console.log("VideoCreation: Starting to fetch media data...");
         const data = await fetchMediaPageData();
-        console.log("VideoCreation: Fetched media data:", data);
+        // console.log("VideoCreation: Fetched media data:", data);
         setMediaData(data);
       } catch (error) {
         console.error("VideoCreation: Error loading media data:", error);

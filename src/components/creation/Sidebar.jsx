@@ -33,7 +33,7 @@ const Sidebar = ({
     c3: "#BFA293",
   });
   const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const { SetGenerateImages, SetGenerateVideo, AddGenerateVideos } =
+  const { SetGenerateImages, SetGenerateVideo, AddGenerateVideos, IsLogin } =
     useUserStore();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(
@@ -89,14 +89,14 @@ const Sidebar = ({
   const isValid = textValue.trim().split(/\s+/).length >= 6;
   const handleGenerate = async () => {
     setIsLoading(true);
-    console.log("Selected Style:", selectedStyle);
-    console.log("Selected Size:", selectedSize);
-    ``;
-    console.log("Selected Colors:", selectedColors);
-    console.log("Selected Quality:", selectedQuality);
-    console.log("Selected Duration:", selectedDuration);
-    console.log("Selected Quantity:", selectedQuantity);
-    console.log("Text Value:", textValue);
+    // console.log("Selected Style:", selectedStyle);
+    // console.log("Selected Size:", selectedSize);
+    // ``;
+    // console.log("Selected Colors:", selectedColors);
+    // console.log("Selected Quality:", selectedQuality);
+    // console.log("Selected Duration:", selectedDuration);
+    // console.log("Selected Quantity:", selectedQuantity);
+    // console.log("Text Value:", textValue);
 
     // const data = {
     //   prompt: textValue,
@@ -133,10 +133,10 @@ const Sidebar = ({
       // Add image file if it's image-to-image mode
       if (activeTab === "image-to-image" && uploadedImageFromTextArea) {
         formData.append("uploadedImageFromTextArea", uploadedImageFromTextArea);
-        console.log(
-          "Image file added to FormData:",
-          uploadedImageFromTextArea.name
-        );
+        // console.log(
+        //   "Image file added to FormData:",
+        //   uploadedImageFromTextArea.name
+        // );
       }
 
       try {
@@ -149,7 +149,7 @@ const Sidebar = ({
         );
 
         const res = await req.json();
-        console.log(res);
+        // console.log(res);
         if (res.type == "success" || res.type == "partial_success") {
           if (onGenerate) onGenerate();
 
@@ -160,6 +160,19 @@ const Sidebar = ({
             await saveGeneration("image", res.images[0], textValue, false);
           }
           SetGenerateImages(res.images);
+
+          // For non-logged-in users, save to localStorage
+          if (!IsLogin) {
+            const prevGenerations = JSON.parse(localStorage.getItem("generations") || "[]");
+            const newGenerations = res.images.map(url => ({
+              type: "image",
+              url: url.imageUrl,
+              prompt: textValue,
+              isMultiple: selectedQuantity > 1,
+              size: selectedSize || "1024x1024"
+            }));
+            localStorage.setItem("generations", JSON.stringify([...prevGenerations, ...newGenerations]));
+          }
 
           // Refresh the generations data to include the new image
           if (onRefresh) {
@@ -217,9 +230,9 @@ const Sidebar = ({
         formData.append("endImage", endImage);
       }
 
-      console.log("FormData contents:");
+      // console.log("FormData contents:");
       for (let [key, value] of formData.entries()) {
-        console.log(key, value);
+        // console.log(key, value);
       }
 
       try {
@@ -232,7 +245,7 @@ const Sidebar = ({
         );
 
         const res = await req.json();
-        console.log("Video generation response:", res);
+        // console.log("Video generation response:", res);
 
         if (res.type == "success") {
           if (onGenerate) onGenerate();

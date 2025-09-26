@@ -68,7 +68,7 @@ const ImageModal = ({
 
   // ✅ Handle suggestion click with full data update
   const handleSuggestionClick = (suggestionUrl) => {
-    console.log("[DEBUG] Suggestion clicked:", suggestionUrl);
+    // console.log("[DEBUG] Suggestion clicked:", suggestionUrl);
 
     // Find the full generation data for this suggestion
     const suggestionGeneration = allGenerations?.find(
@@ -76,7 +76,7 @@ const ImageModal = ({
     );
 
     if (suggestionGeneration) {
-      console.log("[DEBUG] Found suggestion generation:", suggestionGeneration);
+      // console.log("[DEBUG] Found suggestion generation:", suggestionGeneration);
 
       // Update all the modal content
       setCurrentMainPic(suggestionGeneration.url);
@@ -92,9 +92,9 @@ const ImageModal = ({
       );
       setCurrentTags(generateTags(suggestionGeneration));
     } else {
-      console.log(
-        "[DEBUG] Suggestion generation not found, updating image only"
-      );
+      // console.log(
+      //   "[DEBUG] Suggestion generation not found, updating image only"
+      // );
       // Fallback: just update the image
       setCurrentMainPic(suggestionUrl);
     }

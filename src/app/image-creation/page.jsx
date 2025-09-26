@@ -21,9 +21,9 @@ const page = () => {
     const loadMediaData = async () => {
       try {
         setLoading(true);
-        console.log("ImageCreation: Starting to fetch media data...");
+        // console.log("ImageCreation: Starting to fetch media data...");
         const data = await fetchMediaPageData();
-        console.log("ImageCreation: Fetched media data:", data);
+        // console.log("ImageCreation: Fetched media data:", data);
         setMediaData(data);
       } catch (error) {
         console.error("ImageCreation: Error loading media data:", error);

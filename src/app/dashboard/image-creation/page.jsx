@@ -84,7 +84,6 @@ const Page = () => {
     const storedGenerations = localStorage.getItem("generations");
     if (storedGenerations) {
       let generations = JSON.parse(storedGenerations);
-      console.log("Local Generations:", generations);
       setLocalGenerations(generations);
       if (generations.length > 0){
         saveLocalGenerations(generations);
@@ -108,7 +107,6 @@ const Page = () => {
       );
 
       const res = await req.json();
-      console.log(res);
 
       if(res.type =="success") {
         localStorage.removeItem("generations");
@@ -133,7 +131,6 @@ const Page = () => {
     const res = await req.json();
 
     if (res.type === "success") {
-      console.log(res.generations);
       setGenerations(res.generations);
     }
   };
@@ -141,6 +138,7 @@ const Page = () => {
   // Function to refresh generations data after new image is generated
   const refreshGenerations = async () => {
     await getUserGenerations();
+    getGenerationsFromLocalStorage(); // Also refresh local for non-logged-in
   };
 
   useEffect(() => {
@@ -148,7 +146,6 @@ const Page = () => {
     getUserGenerations();
   }, []);
   useEffect(() => {
-    console.log("User:", IsLogin);
     if (!IsLogin) {
       setShowLoginModal(true);
     }

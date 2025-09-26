@@ -55,10 +55,10 @@ const page = () => {
       formData.append("bio", bio);
 
       // Debug FormData contents - Use this instead of console.log(formData)
-      console.log("FormData contents:");
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
+      // console.log("FormData contents:");
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(key, value);
+      // }
 
       // Send to backend
       const response = await fetch(

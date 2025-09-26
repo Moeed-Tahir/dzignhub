@@ -104,7 +104,7 @@ const Page = () => {
       const res = await req.json();
 
       if (res.type === "success") {
-        console.log(res.generations);
+        // console.log(res.generations);
         setGenerations(res.generations);
       }
     } catch (error) {
@@ -123,7 +123,7 @@ const Page = () => {
 
   // Check if user is signed in and show modal if not
   useEffect(() => {
-    console.log("User:", IsLogin);
+    // console.log("User:", IsLogin);
     if (!IsLogin) {
       setShowLoginModal(true);
     }

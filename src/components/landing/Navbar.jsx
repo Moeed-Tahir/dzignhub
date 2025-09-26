@@ -79,7 +79,7 @@ function Navbar({ onOpenSidebar }) {
         },
       });
       const data = await res.json();
-      console.log("Token verification response:", data);
+      // console.log("Token verification response:", data);
 
       if (data.type === "success") {
         SetIsLogin(true);
@@ -91,7 +91,7 @@ function Navbar({ onOpenSidebar }) {
       }
     } catch (error) {
       SetIsLogin(false);
-      console.error("Token verification failed", error);
+      // console.error("Token verification failed", error);
     }
   };
 
