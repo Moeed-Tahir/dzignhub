@@ -1103,28 +1103,28 @@ const getSignupPageFallbackData = () => {
 };
 
 // Utility function to generate auto-incrementing slugs
-export const generateBlogSlug = async () => {
-  try {
-    const blogData = await fetchBlogPageData();
-    const posts = blogData.posts || [];
+// export const generateBlogSlug = async () => {
+//   try {
+//     const blogData = await fetchBlogPageData();
+//     const posts = blogData.posts || [];
     
-    // Find the highest article number
-    let highestNumber = 0;
-    posts.forEach(post => {
-      if (post.slug && post.slug.startsWith('article-')) {
-        const number = parseInt(post.slug.replace('article-', ''));
-        if (!isNaN(number) && number > highestNumber) {
-          highestNumber = number;
-        }
-      }
-    });
+//     // Find the highest article number
+//     let highestNumber = 0;
+//     posts.forEach(post => {
+//       if (post.slug && post.slug.startsWith('article-')) {
+//         const number = parseInt(post.slug.replace('article-', ''));
+//         if (!isNaN(number) && number > highestNumber) {
+//           highestNumber = number;
+//         }
+//       }
+//     });
     
-    return `article-${highestNumber + 1}`;
-  } catch (error) {
-    console.error('Error generating blog slug:', error);
-    return `article-${Date.now()}`; // Fallback to timestamp-based slug
-  }
-};
+//     return `article-${highestNumber + 1}`;
+//   } catch (error) {
+//     console.error('Error generating blog slug:', error);
+//     return `article-${Date.now()}`; // Fallback to timestamp-based slug
+//   }
+// };
 
 // Utility function to generate auto-incrementing slugs
 export const generateBlogSlug = async () => {

@@ -11,7 +11,11 @@ import Link from "next/link";
 import { Syne } from "next/font/google";
 import { notFound } from "next/navigation";
 import { motion } from "framer-motion";
-import { fetchBlogPostBySlug, fetchBlogPageData, getStrapiImageUrl } from "@/utils/strapi";
+import {
+  fetchBlogPostBySlug,
+  fetchBlogPageData,
+  getStrapiImageUrl,
+} from "@/utils/strapi";
 import { renderRichTextAsHTML } from "@/utils/richText";
 
 const syne = Syne({
@@ -23,31 +27,31 @@ const syne = Syne({
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: "easeOut" }
+  transition: { duration: 0.6, ease: "easeOut" },
 };
 
 const fadeIn = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  transition: { duration: 0.8, ease: "easeOut" }
+  transition: { duration: 0.8, ease: "easeOut" },
 };
 
 const slideInLeft = {
   initial: { opacity: 0, x: -30 },
   animate: { opacity: 1, x: 0 },
-  transition: { duration: 0.6, ease: "easeOut" }
+  transition: { duration: 0.6, ease: "easeOut" },
 };
 
 const slideInRight = {
   initial: { opacity: 0, x: 30 },
   animate: { opacity: 1, x: 0 },
-  transition: { duration: 0.6, ease: "easeOut" }
+  transition: { duration: 0.6, ease: "easeOut" },
 };
 
 const scaleIn = {
   initial: { opacity: 0, scale: 0.95 },
   animate: { opacity: 1, scale: 1 },
-  transition: { duration: 0.7, ease: "easeOut" }
+  transition: { duration: 0.7, ease: "easeOut" },
 };
 
 const quickLinks = [
@@ -70,16 +74,18 @@ const fallbackBlog = {
   author: "Admin",
   hint: "Essential reading",
   categories: "technology",
-  introduction: "Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere vulputate arcu amet, vitae nisi, tellus tincidunt. At feugiat sapien varius id.",
+  introduction:
+    "Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere vulputate arcu amet, vitae nisi, tellus tincidunt. At feugiat sapien varius id.",
   quotes: [
     {
-      text: "In a world older and more complete than ours they move finished and complete, gifted with extensions of the senses we have lost or never attained, living by voices we shall never hear."
-    }
+      text: "In a world older and more complete than ours they move finished and complete, gifted with extensions of the senses we have lost or never attained, living by voices we shall never hear.",
+    },
   ],
   media: ["/blog/blogDetail.jpg", "/blog/blogDetail2.jpg"],
-  conclusion: "Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies.",
+  conclusion:
+    "Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies.",
   metaTitle: "The Ultimate Guide",
-  metaDescription: "Essential guide for getting started"
+  metaDescription: "Essential guide for getting started",
 };
 
 function BlogDetailPage() {
@@ -88,17 +94,17 @@ function BlogDetailPage() {
   const [blog, setBlog] = useState(null);
   const [recentPosts, setRecentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   const { slug } = useParams();
 
   useEffect(() => {
     const loadBlogData = async () => {
       try {
         setLoading(true);
-        
+
         // Try to fetch the specific blog post by slug
         const blogPost = await fetchBlogPostBySlug(slug);
-        
+
         if (blogPost) {
           setBlog(blogPost);
         } else {
@@ -109,19 +115,18 @@ function BlogDetailPage() {
             setBlog(null);
           }
         }
-        
+
         // Fetch recent posts for the sidebar
         const blogPageData = await fetchBlogPageData();
         if (blogPageData.posts && blogPageData.posts.length > 0) {
           // Show 3 most recent posts excluding current one
           const otherPosts = blogPageData.posts
-            .filter(post => post.slug !== slug)
+            .filter((post) => post.slug !== slug)
             .slice(0, 3);
           setRecentPosts(otherPosts);
         }
-        
       } catch (error) {
-        console.error('Error loading blog data:', error);
+        console.error("Error loading blog data:", error);
         // Use fallback data for numeric slugs
         if (!isNaN(slug)) {
           setBlog(fallbackBlog);
@@ -142,7 +147,11 @@ function BlogDetailPage() {
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   if (!blog) {
@@ -150,13 +159,13 @@ function BlogDetailPage() {
   }
 
   // Format date for display
-  const formattedDate = blog.publishDate 
-    ? new Date(blog.publishDate).toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+  const formattedDate = blog.publishDate
+    ? new Date(blog.publishDate).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       })
-    : blog.date || 'May 22, 2025';
+    : blog.date || "May 22, 2025";
 
   // Use the utility function for rich text rendering
   const renderRichText = renderRichTextAsHTML;
@@ -172,7 +181,7 @@ function BlogDetailPage() {
         sidebarOpen={sidebarOpen}
       />
       <div className="max-w-[1440px] mx-auto">
-        <motion.div 
+        <motion.div
           className="lg:py-[64px] lg:px-[80px] py-[40px] px-[24px]"
           initial="initial"
           whileInView="animate"
@@ -188,7 +197,7 @@ function BlogDetailPage() {
             variants={scaleIn}
           />
         </motion.div>
-        <motion.div 
+        <motion.div
           className="p-[24px] lg:py-[80px] lg:pl-[90px] lg:pr-[80px]"
           initial="initial"
           whileInView="animate"
@@ -212,7 +221,7 @@ function BlogDetailPage() {
                 />
               </motion.div>
 
-              <motion.h1 
+              <motion.h1
                 className="md:text-[48px] text-[34px] font-semibold"
                 initial="initial"
                 whileInView="animate"
@@ -221,15 +230,17 @@ function BlogDetailPage() {
               >
                 Introduction
               </motion.h1>
-              <motion.div 
+              <motion.div
                 className="text-[#3D4050] prose prose-lg max-w-none"
                 initial="initial"
                 whileInView="animate"
                 viewport={{ once: true, rootMargin: "-20vh" }}
                 variants={fadeInUp}
-                dangerouslySetInnerHTML={{ __html: renderRichText(blog.introduction) }}
+                dangerouslySetInnerHTML={{
+                  __html: renderRichText(blog.introduction),
+                }}
               />
-              
+
               {/* Display main rich text body (text) if available */}
               {blog.text && (
                 <motion.div
@@ -238,14 +249,17 @@ function BlogDetailPage() {
                   whileInView="animate"
                   viewport={{ once: true, rootMargin: "-20vh" }}
                   variants={fadeInUp}
-                  dangerouslySetInnerHTML={{ __html: renderRichText(blog.text) }}
+                  dangerouslySetInnerHTML={{
+                    __html: renderRichText(blog.text),
+                  }}
                 />
               )}
 
               {/* Display quotes if available */}
-              {blog.quotes && blog.quotes.length > 0 && (
+              {blog.quotes &&
+                blog.quotes.length > 0 &&
                 blog.quotes.map((quote, index) => (
-                  <motion.div 
+                  <motion.div
                     key={index}
                     className="py-[15px] px-[25px] flex flex-col gap-[40px] border-l-[2px] border-[#C209C1]"
                     initial="initial"
@@ -255,13 +269,13 @@ function BlogDetailPage() {
                   >
                     <h1 className="text-[24px] font-semibold">{quote.text}</h1>
                   </motion.div>
-                ))
-              )}
+                ))}
 
               {/* Display media if available */}
-              {blog.media && blog.media.length > 0 && (
+              {blog.media &&
+                blog.media.length > 0 &&
                 blog.media.map((mediaItem, index) => (
-                  <motion.div 
+                  <motion.div
                     key={index}
                     className="flex flex-col gap-[10px]"
                     initial="initial"
@@ -275,11 +289,10 @@ function BlogDetailPage() {
                       alt={`Media ${index + 1}`}
                     />
                   </motion.div>
-                ))
-              )}
-              
+                ))}
+
               {blog.conclusion && (
-                <motion.div 
+                <motion.div
                   className="bg-[#E4E7FA] lg:py-[40px] lg:px-[40px] px-[20px] py-[20px] rounded-[20px] lg:gap-[30px] gap-[20px] flex flex-col"
                   initial="initial"
                   whileInView="animate"
@@ -287,22 +300,24 @@ function BlogDetailPage() {
                   variants={scaleIn}
                 >
                   <h1 className="font-medium text-[30px]">Conclusion</h1>
-                  <div 
+                  <div
                     className="text-[18px] text-[#3D4050] prose prose-lg max-w-none"
-                    dangerouslySetInnerHTML={{ __html: renderRichText(blog.conclusion) }}
+                    dangerouslySetInnerHTML={{
+                      __html: renderRichText(blog.conclusion),
+                    }}
                   />
                 </motion.div>
               )}
             </div>
-            
-            <motion.div 
+
+            <motion.div
               className="lg:flex hidden flex-col gap-[60px]"
               initial="initial"
               whileInView="animate"
               viewport={{ once: true, rootMargin: "-20vh" }}
               variants={slideInRight}
             >
-              <motion.div 
+              <motion.div
                 className="flex gap-[12px] flex-col xl:flex-row"
                 initial="initial"
                 whileInView="animate"
@@ -314,7 +329,10 @@ function BlogDetailPage() {
                     Subscribe to our
                     <br /> newsletter
                   </h1>
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-[26px]">
+                  <form
+                    onSubmit={handleSubmit}
+                    className="flex flex-col gap-[26px]"
+                  >
                     <input
                       type="email"
                       placeholder="Type your email"
@@ -322,12 +340,15 @@ function BlogDetailPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                    <button type="submit" className="py-[10px] px-[24px] bg-[#BDFF00] text-[18px] rounded-[100px]">
+                    <button
+                      type="submit"
+                      className="py-[10px] px-[24px] bg-[#BDFF00] text-[18px] rounded-[100px]"
+                    >
                       Contact us
                     </button>
                   </form>
                 </div>
-                <motion.div 
+                <motion.div
                   className="flex xl:flex-col flex-row justify-between"
                   initial="initial"
                   whileInView="animate"
@@ -357,7 +378,7 @@ function BlogDetailPage() {
                   </Link>
                 </motion.div>
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="flex flex-col gap-[23px]"
                 initial="initial"
                 whileInView="animate"
@@ -367,7 +388,7 @@ function BlogDetailPage() {
                 <h2 className="text-[24px] font-semibold">Quick links</h2>
                 <ul className="gap-[23px] flex flex-col">
                   {quickLinks.map((link, index) => (
-                    <motion.li 
+                    <motion.li
                       key={index}
                       initial="initial"
                       whileInView="animate"
@@ -392,16 +413,16 @@ function BlogDetailPage() {
             </motion.div>
           </div>
         </motion.div>
-        
+
         {recentPosts.length > 0 && (
-          <motion.div 
+          <motion.div
             className="lg:py-[64px] lg:px-[80px] p-[24px] flex flex-col gap-4"
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, rootMargin: "-20vh" }}
             variants={fadeIn}
           >
-            <motion.h1 
+            <motion.h1
               className="md:text-[48px] text-[34px] font-semibold"
               initial="initial"
               whileInView="animate"
@@ -412,13 +433,13 @@ function BlogDetailPage() {
             </motion.h1>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-[32px] gap-y-[43px] ">
               {recentPosts.map((item, index) => {
-                const postDate = item.publishDate 
-                  ? new Date(item.publishDate).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
+                const postDate = item.publishDate
+                  ? new Date(item.publishDate).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
                     })
-                  : 'May 22, 2025';
+                  : "May 22, 2025";
 
                 // Use slug for URL
                 const postLink = item.slug ? `/blog/${item.slug}` : "#";
@@ -435,7 +456,11 @@ function BlogDetailPage() {
                       <Card
                         title={item.title}
                         date={postDate}
-                        image={item.cover ? getStrapiImageUrl(item.cover) : "/blog/1.jpg"}
+                        image={
+                          item.cover
+                            ? getStrapiImageUrl(item.cover)
+                            : "/blog/1.jpg"
+                        }
                         link={postLink}
                         excerpt={item.description}
                       />
