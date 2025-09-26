@@ -134,7 +134,7 @@ export default function GSAPScrollSection({ isImage, mediaData, loading }) {
         end: "+=4000",
         // markers: true,
         onStart: () => {
-          console.log("Animation started");
+          // console.log("Animation started");
         },
         pin: true,
         scrub: 1,

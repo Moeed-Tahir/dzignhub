@@ -13,7 +13,7 @@ const ImagesResults = ({
   const { GenerateImages, GenerateVideo } = useUserStore();
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [imageDimensions, setImageDimensions] = useState({});
-  console.log("Generations:", generations);
+  // console.log("Generations:", generations);
 
   // Function to get random height for immediate display
   const getRandomHeight = () => {

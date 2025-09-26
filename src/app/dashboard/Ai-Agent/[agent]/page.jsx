@@ -238,9 +238,9 @@ const page = () => {
 
         // Update the messages state
         setMessages(parsedMessages);
-        console.log(
-          `Loaded ${data.count} messages for conversation ${conversationId}`
-        );
+        // console.log(
+        //   `Loaded ${data.count} messages for conversation ${conversationId}`
+        // );
 
         // Return the messages for the callback
         return parsedMessages;
@@ -267,7 +267,7 @@ const page = () => {
         },
       });
       const data = await res.json();
-      console.log("Token verification response:", data);
+      // console.log("Token verification response:", data);
 
       if (data.type === "success") {
         console.log("Token is valid, user ID:", data.user._id);
@@ -366,7 +366,7 @@ const page = () => {
         },
       });
       const data = await res.json();
-      console.log("Token verification response:", data);
+      // console.log("Token verification response:", data);
 
       if (data.type === "success") {
         console.log("Token is valid, user ID:", data.user._id);

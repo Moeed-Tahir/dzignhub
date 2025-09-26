@@ -23,7 +23,7 @@ export default function ChatPage({
   onStreamComplete,
   fetchMessages,
 }) {
-  console.log("Rendering ChatPage with name:", description);
+  // console.log("Rendering ChatPage with name:", description);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [conversationId, setConversationId] = useState("");
   const [finalMessageQueue, setFinalMessageQueue] = useState(null);
@@ -58,13 +58,13 @@ export default function ChatPage({
     const urlConversationId = searchParams.get("conversationId");
 
     if (urlConversationId) {
-      console.log(
-        "[DEBUG] Setting conversationId from URL:",
-        urlConversationId
-      );
+      // console.log(
+      //   "[DEBUG] Setting conversationId from URL:",
+      //   urlConversationId
+      // );
       setConversationId(urlConversationId);
     } else {
-      console.log("[DEBUG] No conversationId in URL, starting fresh");
+      // console.log("[DEBUG] No conversationId in URL, starting fresh");
       setConversationId("");
     }
   }, [searchParams]);
@@ -156,7 +156,7 @@ export default function ChatPage({
         },
       });
       const data = await res.json();
-      console.log("Token verification response:", data);
+      // console.log("Token verification response:", data);
 
       if (data.type === "success") {
         console.log("Token is valid, user ID:", data.user._id);
