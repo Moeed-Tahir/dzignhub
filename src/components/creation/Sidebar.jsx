@@ -33,7 +33,7 @@ const Sidebar = ({
     c3: "#BFA293",
   });
   const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const { SetGenerateImages, SetGenerateVideo, AddGenerateVideos } =
+  const { SetGenerateImages, SetGenerateVideo, AddGenerateVideos, IsLogin } =
     useUserStore();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(
@@ -160,6 +160,19 @@ const Sidebar = ({
             await saveGeneration("image", res.images[0], textValue, false);
           }
           SetGenerateImages(res.images);
+
+          // For non-logged-in users, save to localStorage
+          if (!IsLogin) {
+            const prevGenerations = JSON.parse(localStorage.getItem("generations") || "[]");
+            const newGenerations = res.images.map(url => ({
+              type: "image",
+              url: url.imageUrl,
+              prompt: textValue,
+              isMultiple: selectedQuantity > 1,
+              size: selectedSize || "1024x1024"
+            }));
+            localStorage.setItem("generations", JSON.stringify([...prevGenerations, ...newGenerations]));
+          }
 
           // Refresh the generations data to include the new image
           if (onRefresh) {

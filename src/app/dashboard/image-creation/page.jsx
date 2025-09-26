@@ -138,6 +138,7 @@ const Page = () => {
   // Function to refresh generations data after new image is generated
   const refreshGenerations = async () => {
     await getUserGenerations();
+    getGenerationsFromLocalStorage(); // Also refresh local for non-logged-in
   };
 
   useEffect(() => {
