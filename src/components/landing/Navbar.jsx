@@ -91,7 +91,7 @@ function Navbar({ onOpenSidebar }) {
       }
     } catch (error) {
       SetIsLogin(false);
-      console.error("Token verification failed", error);
+      // console.error("Token verification failed", error);
     }
   };
 

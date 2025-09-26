@@ -1,3 +1,6 @@
+"use client";
+import { useEffect } from "react";
+import { useUserStore } from "@/store/store";
 import React from "react";
 import { motion } from "framer-motion";
 import { getStrapiImageUrl } from "@/utils/strapi";
@@ -5,6 +8,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 function Carousel({ carouselImages = [] }) {
+  const { IsLogin, SetIsLogin, SetEmail, SetUserId, SetAvatar } = useUserStore();
   const defaultImages1 = [
     "/Latest/1.png",
     "/Latest/2.png",
@@ -15,6 +19,36 @@ function Carousel({ carouselImages = [] }) {
     "/Latest/7.png",
     "/Latest/8.png",
   ];
+
+  const verifyToken = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await res.json();
+      // console.log("Token verification response:", data);
+
+      if (data.type === "success") {
+        SetIsLogin(true);
+        SetEmail(data.user.email);
+        SetUserId(data.user.userId);
+        SetAvatar(data.user.avatar);
+      } else {
+        SetIsLogin(false);
+      }
+    } catch (error) {
+      SetIsLogin(false);
+      // console.error("Token verification failed", error);
+    }
+  };
+
+  useEffect(() => {
+    verifyToken();
+  }, []);
 
   const defaultImages2 = [
     "/landing/carousel-2/1.webp",
@@ -169,7 +203,10 @@ function Carousel({ carouselImages = [] }) {
                 ? "hidden sm:flex"
                 : ""
             } flex flex-col items-center h-[142px] w-[100px] duration-300 transition-all cursor-pointer`}
-            onClick={() => item.href && router.push(item.href)}
+            onClick={() =>
+              item.href &&
+              (IsLogin === true ? router.push(item.href) : router.push("/auth/login"))
+            }
           >
             <div
               style={{ backgroundColor: item.bg }}
