@@ -148,8 +148,8 @@ function BlogDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1B1F3B] to-[#2D1B3B]">
+        <div className="text-white text-xl">Loading...</div>
       </div>
     );
   }
@@ -171,16 +171,20 @@ function BlogDetailPage() {
   const renderRichText = renderRichTextAsHTML;
 
   return (
-    <div>
+    <div className="min-h-screen bg-white">
       <BlogStructuredData blog={blog} />
       <Sidebar onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
+
+      {/* Updated Hero usage without description */}
       <Hero
         title={blog.title}
-        subtitle={blog.description || formattedDate}
+        subtitle={formattedDate} // Using date as subtitle instead of description
         setSidebarOpen={setSidebarOpen}
         sidebarOpen={sidebarOpen}
       />
+
       <div className="max-w-[1440px] mx-auto">
+        {/* Featured Image */}
         <motion.div
           className="lg:py-[64px] lg:px-[80px] py-[40px] px-[24px]"
           initial="initial"
@@ -190,13 +194,16 @@ function BlogDetailPage() {
         >
           <motion.img
             src={blog.cover ? getStrapiImageUrl(blog.cover) : "/blog/3.jpg"}
-            className="md:rounded-tl-[20px] md:rounded-bl-[20px] md:rounded-tr-[140px] md:rounded-br-[20px] rounded-br-[12px] rounded-bl-[12px] rounded-tr-[60px] rounded-tl-[12px] w-full"
+            alt={blog.title}
+            className="md:rounded-tl-[20px] md:rounded-bl-[20px] md:rounded-tr-[140px] md:rounded-br-[20px] rounded-br-[12px] rounded-bl-[12px] rounded-tr-[60px] rounded-tl-[12px] w-full h-[400px] object-cover shadow-xl"
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, rootMargin: "-20vh" }}
             variants={scaleIn}
           />
         </motion.div>
+
+        {/* Main Content */}
         <motion.div
           className="p-[24px] lg:py-[80px] lg:pl-[90px] lg:pr-[80px]"
           initial="initial"
@@ -204,8 +211,9 @@ function BlogDetailPage() {
           viewport={{ once: true, rootMargin: "-20vh" }}
           variants={fadeIn}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="flex flex-col gap-[40px] lg:col-span-2 ">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Blog Content */}
+            <div className="flex flex-col gap-[40px] lg:col-span-2">
               {/* Blog Post Metadata */}
               <motion.div
                 initial="initial"
@@ -221,255 +229,270 @@ function BlogDetailPage() {
                 />
               </motion.div>
 
-              <motion.h1
-                className="md:text-[48px] text-[34px] font-semibold"
+              {/* Introduction Section */}
+              <motion.section
                 initial="initial"
                 whileInView="animate"
                 viewport={{ once: true, rootMargin: "-20vh" }}
                 variants={fadeInUp}
               >
-                Introduction
-              </motion.h1>
-              <motion.div
-                className="text-[#3D4050] prose prose-lg max-w-none"
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, rootMargin: "-20vh" }}
-                variants={fadeInUp}
-                dangerouslySetInnerHTML={{
-                  __html: renderRichText(blog.introduction),
-                }}
-              />
+                <h2 className="md:text-[48px] text-[34px] font-semibold mb-6 text-gray-900">
+                  Introduction
+                </h2>
+                <div
+                  className="text-[#3D4050] prose prose-lg max-w-none leading-relaxed"
+                  dangerouslySetInnerHTML={{
+                    __html: renderRichText(blog.introduction),
+                  }}
+                />
+              </motion.section>
 
-              {/* Display main rich text body (text) if available */}
+              {/* Main Content */}
               {blog.text && (
-                <motion.div
-                  className="text-[#3D4050] prose prose-lg max-w-none pt-[24px]"
+                <motion.section
+                  className="pt-[24px]"
                   initial="initial"
                   whileInView="animate"
                   viewport={{ once: true, rootMargin: "-20vh" }}
                   variants={fadeInUp}
-                  dangerouslySetInnerHTML={{
-                    __html: renderRichText(blog.text),
-                  }}
-                />
+                >
+                  <div
+                    className="text-[#3D4050] prose prose-lg max-w-none leading-relaxed"
+                    dangerouslySetInnerHTML={{
+                      __html: renderRichText(blog.text),
+                    }}
+                  />
+                </motion.section>
               )}
 
-              {/* Display quotes if available */}
-              {blog.quotes &&
-                blog.quotes.length > 0 &&
-                blog.quotes.map((quote, index) => (
-                  <motion.div
-                    key={index}
-                    className="py-[15px] px-[25px] flex flex-col gap-[40px] border-l-[2px] border-[#C209C1]"
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true, rootMargin: "-20vh" }}
-                    variants={slideInLeft}
-                  >
-                    <h1 className="text-[24px] font-semibold">{quote.text}</h1>
-                  </motion.div>
-                ))}
+              {/* Quotes */}
+              {blog.quotes && blog.quotes.length > 0 && (
+                <motion.section
+                  initial="initial"
+                  whileInView="animate"
+                  viewport={{ once: true, rootMargin: "-20vh" }}
+                  variants={slideInLeft}
+                >
+                  {blog.quotes.map((quote, index) => (
+                    <div
+                      key={index}
+                      className="py-[25px] px-[30px] border-l-4 border-[#C209C1] bg-gradient-to-r from-purple-50 to-pink-50 rounded-r-lg my-6"
+                    >
+                      <blockquote className="text-[24px] font-semibold text-gray-800 italic">
+                        "{quote.text}"
+                      </blockquote>
+                    </div>
+                  ))}
+                </motion.section>
+              )}
 
-              {/* Display media if available */}
-              {blog.media &&
-                blog.media.length > 0 &&
-                blog.media.map((mediaItem, index) => (
-                  <motion.div
-                    key={index}
-                    className="flex flex-col gap-[10px]"
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true, rootMargin: "-20vh" }}
-                    variants={scaleIn}
-                  >
-                    <img
-                      src={getStrapiImageUrl(mediaItem)}
-                      className="lg:rounded-tl-[80px] lg:rounded-tr-[20px] lg:rounded-br-[20px] lg:rounded-bl-[20px] rounded-tr-[15px] rounded-br-[16px] rounded-bl-[16px] rounded-tl-[32px] w-full"
-                      alt={`Media ${index + 1}`}
-                    />
-                  </motion.div>
-                ))}
-
-              {blog.conclusion && (
-                <motion.div
-                  className="bg-[#E4E7FA] lg:py-[40px] lg:px-[40px] px-[20px] py-[20px] rounded-[20px] lg:gap-[30px] gap-[20px] flex flex-col"
+              {/* Media Gallery */}
+              {blog.media && blog.media.length > 0 && (
+                <motion.section
+                  className="grid gap-6"
                   initial="initial"
                   whileInView="animate"
                   viewport={{ once: true, rootMargin: "-20vh" }}
                   variants={scaleIn}
                 >
-                  <h1 className="font-medium text-[30px]">Conclusion</h1>
+                  {blog.media.map((mediaItem, index) => (
+                    <div key={index} className="flex flex-col gap-3">
+                      <img
+                        src={getStrapiImageUrl(mediaItem)}
+                        alt={`${blog.title} - Image ${index + 1}`}
+                        className="lg:rounded-tl-[80px] lg:rounded-tr-[20px] lg:rounded-br-[20px] lg:rounded-bl-[20px] rounded-tr-[15px] rounded-br-[16px] rounded-bl-[16px] rounded-tl-[32px] w-full h-[300px] object-cover shadow-lg"
+                      />
+                    </div>
+                  ))}
+                </motion.section>
+              )}
+
+              {/* Conclusion */}
+              {blog.conclusion && (
+                <motion.section
+                  className="bg-gradient-to-br from-[#E4E7FA] to-[#F0E4FA] lg:py-[40px] lg:px-[40px] px-[20px] py-[20px] rounded-[20px]"
+                  initial="initial"
+                  whileInView="animate"
+                  viewport={{ once: true, rootMargin: "-20vh" }}
+                  variants={scaleIn}
+                >
+                  <h2 className="font-semibold text-[30px] mb-4 text-gray-900">
+                    Conclusion
+                  </h2>
                   <div
-                    className="text-[18px] text-[#3D4050] prose prose-lg max-w-none"
+                    className="text-[18px] text-[#3D4050] prose prose-lg max-w-none leading-relaxed"
                     dangerouslySetInnerHTML={{
                       __html: renderRichText(blog.conclusion),
                     }}
                   />
-                </motion.div>
+                </motion.section>
               )}
             </div>
 
-            <motion.div
-              className="lg:flex hidden flex-col gap-[60px]"
+            {/* Sidebar */}
+            <motion.aside
+              className="lg:flex hidden flex-col gap-[60px] sticky top-8 h-fit"
               initial="initial"
               whileInView="animate"
               viewport={{ once: true, rootMargin: "-20vh" }}
               variants={slideInRight}
             >
+              {/* Social Sharing */}
               <motion.div
-                className="flex gap-[12px] flex-col xl:flex-row"
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, rootMargin: "-20vh" }}
+                className="bg-white p-6 rounded-xl shadow-lg border border-gray-100"
                 variants={scaleIn}
               >
-                <div className="flex flex-col gap-[20px] rounded-[20px] bg-[#E4E7FA] py-[30px] px-[26px]">
-                  <h1 className="text-[20px] font-semibold">
-                    Subscribe to our
-                    <br /> newsletter
-                  </h1>
-                  <form
-                    onSubmit={handleSubmit}
-                    className="flex flex-col gap-[26px]"
-                  >
-                    <input
-                      type="email"
-                      placeholder="Type your email"
-                      className="p-3 bg-white rounded-[10px] h-[40px]"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <button
-                      type="submit"
-                      className="py-[10px] px-[24px] bg-[#BDFF00] text-[18px] rounded-[100px]"
+                <h3 className="text-[20px] font-semibold mb-4 text-gray-900">
+                  Share this post
+                </h3>
+                <div className="flex gap-3 justify-center">
+                  {[
+                    {
+                      icon: "/blog/insta.svg",
+                      label: "Instagram",
+                      link: "https://www.instagram.com/allmyai/",
+                    },
+                    {
+                      icon: "/blog/x.svg",
+                      label: "X",
+                      link: "https://x.com/AllMyAiofficial",
+                    },
+                    {
+                      icon: "/blog/linkedin.svg",
+                      label: "LinkedIn",
+                      link: "https://www.linkedin.com/company/all-my-ai/",
+                    },
+                    {
+                      icon: "/blog/pinterest.svg",
+                      label: "Pinterest",
+                      link: "https://www.pinterest.com/allmyai/",
+                    },
+                  ].map((social, index) => (
+                    <Link
+                      key={index}
+                      href={social.link}
+                      className="p-2 bg-gray-50 hover:bg-purple-50 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-md"
                     >
-                      Contact us
-                    </button>
-                  </form>
+                      <img
+                        src={social.icon}
+                        alt={social.label}
+                        className="w-10 h-10"
+                      />
+                    </Link>
+                  ))}
                 </div>
-                <motion.div
-                  className="flex xl:flex-col flex-row justify-between"
-                  initial="initial"
-                  whileInView="animate"
-                  viewport={{ once: true, rootMargin: "-20vh" }}
-                  variants={fadeIn}
-                >
-                  <Link href={"#"}>
-                    <img
-                      src="/blog/insta.svg"
-                      className="p-[4px] rounded-[8px]"
-                    />
-                  </Link>
-                  <Link href={"#"}>
-                    <img src="/blog/x.svg" className="p-[4px] rounded-[8px]" />
-                  </Link>
-                  <Link href={"#"}>
-                    <img
-                      src="/blog/linkedin.svg"
-                      className="p-[4px] rounded-[8px]"
-                    />
-                  </Link>
-                  <Link href={"#"}>
-                    <img
-                      src="/blog/pinterest.svg"
-                      className="p-[4px] rounded-[8px]"
-                    />
-                  </Link>
-                </motion.div>
               </motion.div>
-              <motion.div
-                className="flex flex-col gap-[23px]"
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, rootMargin: "-20vh" }}
+
+              {/* Quick Links */}
+              {/* <motion.div
+                className="bg-white p-6 rounded-xl shadow-lg border border-gray-100"
                 variants={fadeInUp}
               >
-                <h2 className="text-[24px] font-semibold">Quick links</h2>
-                <ul className="gap-[23px] flex flex-col">
+                <h3 className="text-[24px] font-semibold mb-6 text-gray-900">
+                  Quick links
+                </h3>
+                <ul className="space-y-4">
                   {quickLinks.map((link, index) => (
                     <motion.li
                       key={index}
-                      initial="initial"
-                      whileInView="animate"
-                      viewport={{ once: true, rootMargin: "-20vh" }}
                       variants={fadeInUp}
                       transition={{ delay: index * 0.1 }}
                     >
-                      <Link href={link.href}>
-                        <div className="flex items-start gap-[12px] pl-3 hover:pl-0">
-                          <img src="/blog/arrowRight.svg" />
-                          <h2
-                            className={`text-[16px] hover:text-[20px] hover:underline hover:font-semibold ${syne.className}`}
-                          >
+                      <Link href={link.href} className="group block">
+                        <div className="flex items-start gap-3 transition-all duration-300 group-hover:translate-x-1">
+                          <div className="w-2 h-2 bg-[#C209C1] rounded-full mt-2 flex-shrink-0 transition-transform group-hover:scale-150"></div>
+                          <span className="text-[16px] text-gray-700 group-hover:text-gray-900 group-hover:font-medium leading-relaxed">
                             {link.label}
-                          </h2>
+                          </span>
                         </div>
                       </Link>
                     </motion.li>
                   ))}
                 </ul>
-              </motion.div>
-            </motion.div>
+              </motion.div> */}
+
+              {/* Newsletter Signup */}
+              {/* <motion.div
+                className="bg-gradient-to-br from-[#1B1F3B] to-[#2D1B3B] p-6 rounded-xl text-white"
+                variants={fadeInUp}
+              >
+                <h3 className="text-[20px] font-semibold mb-3">Stay Updated</h3>
+                <p className="text-gray-300 mb-4">
+                  Get the latest articles delivered to your inbox
+                </p>
+                <form onSubmit={handleSubmit} className="space-y-3">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C209C1]"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="w-full bg-[#C209C1] hover:bg-[#A808A7] text-white py-2 rounded-lg transition-colors duration-300 font-medium"
+                  >
+                    Subscribe
+                  </button>
+                </form>
+              </motion.div> */}
+            </motion.aside>
           </div>
         </motion.div>
 
+        {/* Recent Posts Section */}
         {recentPosts.length > 0 && (
-          <motion.div
-            className="lg:py-[64px] lg:px-[80px] p-[24px] flex flex-col gap-4"
+          <motion.section
+            className="lg:py-[64px] lg:px-[80px] p-[24px] bg-gray-50"
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, rootMargin: "-20vh" }}
             variants={fadeIn}
           >
-            <motion.h1
-              className="md:text-[48px] text-[34px] font-semibold"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, rootMargin: "-20vh" }}
+            <motion.h2
+              className="md:text-[48px] text-[34px] font-semibold mb-8 text-gray-900"
               variants={fadeInUp}
             >
               Recent Posts
-            </motion.h1>
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-[32px] gap-y-[43px] ">
-              {recentPosts.map((item, index) => {
-                const postDate = item.publishDate
-                  ? new Date(item.publishDate).toLocaleDateString("en-US", {
+            </motion.h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+              {recentPosts.map((post, index) => {
+                const postDate = post.publishDate
+                  ? new Date(post.publishDate).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
                     })
                   : "May 22, 2025";
 
-                // Use slug for URL
-                const postLink = item.slug ? `/blog/${item.slug}` : "#";
+                const postLink = post.slug ? `/blog/${post.slug}` : "#";
 
                 return (
                   <Link key={index} href={postLink}>
                     <motion.div
-                      initial="initial"
-                      whileInView="animate"
-                      viewport={{ once: true, rootMargin: "-20vh" }}
                       variants={scaleIn}
                       transition={{ delay: index * 0.2 }}
+                      whileHover={{ y: -5, transition: { duration: 0.3 } }}
+                      className="h-full"
                     >
                       <Card
-                        title={item.title}
+                        title={post.title}
                         date={postDate}
                         image={
-                          item.cover
-                            ? getStrapiImageUrl(item.cover)
+                          post.cover
+                            ? getStrapiImageUrl(post.cover)
                             : "/blog/1.jpg"
                         }
                         link={postLink}
-                        excerpt={item.description}
+                        excerpt={post.description}
                       />
                     </motion.div>
                   </Link>
                 );
               })}
             </div>
-          </motion.div>
+          </motion.section>
         )}
       </div>
       <Footer />
