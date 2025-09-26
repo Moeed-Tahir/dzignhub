@@ -1,9 +1,8 @@
-"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import { Syne } from "next/font/google";
 import Link from "next/link";
-// import { getStrapiImageUrl } from "@/utils/strapi";
+import { getStrapiImageUrl } from "@/utils/strapi";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -18,10 +17,9 @@ function Pricing({ pricingPlans = [] }) {
       plan: "Basic",
       price: "$0 /mo",
       benefits: [
-        "1 month access",
-        "3 AI agents",
-        "One landing website launch",
-        "Brand identity included",
+        "Start creating with no cost.",
+        "1 brand launch included",
+        "Access to core AI agents",
         "Community support",
       ],
       buttonLabel: "Get started free",
@@ -29,14 +27,14 @@ function Pricing({ pricingPlans = [] }) {
     },
     {
       plan: "Pro Plan",
-      price: "$19.99 /mo",
+      price: "$29 /mo",
       benefits: [
+        "Everything you need to grow.",
         "Unlimited launches",
-        "All agents included",
-        "Mobile app creation",
-        "Brand guidelines",
+        "All agents unlocked",
+        "High-res exports",
         "Priority support",
-        "No watermarks",
+        "Remove watermarks",
       ],
       buttonLabel: "Launch Now",
       link: "/pricing",
@@ -45,36 +43,34 @@ function Pricing({ pricingPlans = [] }) {
       plan: "Enterprise Plan",
       price: "Custom (Contact Us)",
       benefits: [
-        "White label platform",
-        "Custom AI training",
+        "Tailored solutions for teams.",
+        "Custom training",
         " Dedicated support",
-        "Team collaboration",
         "Advanced integrations",
         "SLA guarantees",
       ],
-      buttonLabel: "Contact sales",
+      buttonLabel: "Contact Us",
       link: "/contact-us",
     },
   ];
 
   // Process Strapi pricing plans data or use defaults
   const pricing =
-    // pricingPlans.length > 0
-    //   ? pricingPlans.map((plan, index) => ({
-    //       plan: plan.plan || defaultPricing[index]?.plan || "Plan",
-    //       price: plan.price || defaultPricing[index]?.price || "$0 /mo",
-    //       benefits:
-    //         plan.benefits?.map((benefit) => benefit.text || benefit) ||
-    //         defaultPricing[index]?.benefits ||
-    //         [],
-    //       buttonLabel:
-    //         plan.buttonLabel ||
-    //         defaultPricing[index]?.buttonLabel ||
-    //         "Get Started",
-    //       link: plan.link || defaultPricing[index]?.link || "#",
-    //     }))
-    //   :
-    defaultPricing;
+    pricingPlans.length > 0
+      ? pricingPlans.map((plan, index) => ({
+          plan: plan.plan || defaultPricing[index]?.plan || "Plan",
+          price: plan.price || defaultPricing[index]?.price || "$0 /mo",
+          benefits:
+            plan.benefits?.map((benefit) => benefit.text || benefit) ||
+            defaultPricing[index]?.benefits ||
+            [],
+          buttonLabel:
+            plan.buttonLabel ||
+            defaultPricing[index]?.buttonLabel ||
+            "Get Started",
+          link: plan.link || defaultPricing[index]?.link || "#",
+        }))
+      : defaultPricing;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -217,7 +213,7 @@ function Pricing({ pricingPlans = [] }) {
                 }}
               >
                 <motion.div
-                  className="max-w-[368px] gap-[24px] flex flex-col"
+                  className="max-w-[368px] xl:h-[460px] gap-[24px] flex flex-col"
                   variants={containerVariants}
                 >
                   {/* Plan title and price */}
@@ -234,7 +230,7 @@ function Pricing({ pricingPlans = [] }) {
                       {plan.plan}
                     </motion.button>
                     <motion.h2
-                      className="text-[#EAEDFA] text-[34px] font-semibold break-words"
+                      className="text-[#EAEDFA] text-[34px] font-semibold"
                       variants={headingVariants}
                     >
                       {plan.price}

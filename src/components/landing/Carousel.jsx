@@ -117,6 +117,7 @@ function Carousel({ carouselImages = [] }) {
     {
       name: "Content Creation",
       icon: "/aiAgent/ruler&pen.svg",
+      href: "/dashboard/Ai-Agent/sana",
       bg: "#FF3B4B0D",
     },
     {

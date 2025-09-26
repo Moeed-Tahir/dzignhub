@@ -36,7 +36,7 @@ const SideComponent = ({ isProfilePage, title, desc, sideData }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [progress, setProgress] = useState(0);
 
-  const dynamicSlides = sideData?.slides || slides;
+  const dynamicSlides = slides;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -123,7 +123,7 @@ const SideComponent = ({ isProfilePage, title, desc, sideData }) => {
             <p className="text-[40px] text-[#BDFF00] font-semibold text-start">
               {title}{" "}
             </p>
-            <p className="text-[20px] text-white text-start opacity-70 mt-4">
+            <p className="text-[16px] text-white text-start opacity-70 mt-4">
               This is where your brand essence comes alive. Paste your website
               or share your vision. We capture your style and creative DNA so
               every lookbook, deck, and product visual feels authentically you.

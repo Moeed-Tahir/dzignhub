@@ -224,7 +224,8 @@ function FAQ({
                 className="font-semibold text-[26px] xl:text-[48px] text-black leading-tight"
               >
                 <span>Have </span>
-                <span className="text-[#C209C1]">questions?</span>
+                <span className="text-[#C209C1]">questions</span>
+                <span className="text-black-700">?</span>
               </motion.div>
               <motion.p variants={titleVariants} className="text-[18px]">
                 {currentSubtitle}
