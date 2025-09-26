@@ -3,6 +3,7 @@ const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL ||
   "https://rational-growth-935ad59588.strapiapp.com";
 
+
 export const fetchLandingPageData = async () => {
   try {
     const response = await fetch(
